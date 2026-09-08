@@ -1,13 +1,15 @@
 # recon: a Sage-based proteomics reconnaissance tool
 
+[![Sage](https://img.shields.io/badge/Sage-v0.15.0--beta.2-blue)](https://github.com/lazear/sage/releases/tag/v0.15.0-beta.2)
+
 `recon` is a reconnaissance tool for unfamiliar bottom-up proteomics data. It
 runs one wide open search plus one semi-enzymatic confirmation pass, then emits a
 single report that answers three questions about a file you have not worked with
-before: which modifications are present, where the MS1 signal went, and what mass
-tolerances the data actually supports. It is not a general-purpose search engine
-and it produces no protein list for publication. The intended user is a
-proteomics practitioner facing a new species, tissue, matrix, or instrument, who
-wants an unbiased first look before committing to a search strategy.
+before: which modifications are present, how completely the sample was digested,
+and what mass tolerances the data actually supports. It is not a general-purpose
+search engine and it produces no protein list for publication. The intended user
+is a proteomics practitioner facing a new species, tissue, matrix, or instrument,
+who wants an unbiased first look before committing to a search strategy.
 
 ```
 recon run <MZML> <FASTA> --enzyme <ENZYME>
