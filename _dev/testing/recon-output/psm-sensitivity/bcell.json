@@ -1,0 +1,93 @@
+{
+  "file": "testing\\search-output\\step1-open-bcell\\results.sage.tsv",
+  "q_threshold": 0.01,
+  "delta_da_threshold": 0.02,
+  "n_full": 32133,
+  "ms1_full_median_ppm": 0.70277596,
+  "ms1_full_mad": 0.42389321999999996,
+  "ms2_full_median_ppm": 1.8022456,
+  "ms2_full_mad": 0.5395808,
+  "tolerance_ppm": 0.5,
+  "draws": 500,
+  "seed": 42,
+  "grid": [
+    {
+      "n": 16,
+      "ms1_spread_90": 0.6349037699999999,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.7894497,
+      "ms2_stable": true
+    },
+    {
+      "n": 30,
+      "ms1_spread_90": 0.48384541000000003,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.62268715,
+      "ms2_stable": true
+    },
+    {
+      "n": 50,
+      "ms1_spread_90": 0.3948865549999999,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.46445464999999997,
+      "ms2_stable": true
+    },
+    {
+      "n": 75,
+      "ms1_spread_90": 0.32737515000000006,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.40126260000000014,
+      "ms2_stable": true
+    },
+    {
+      "n": 100,
+      "ms1_spread_90": 0.27153485,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.3323421,
+      "ms2_stable": true
+    },
+    {
+      "n": 150,
+      "ms1_spread_90": 0.2429591000000001,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.28656765000000006,
+      "ms2_stable": true
+    },
+    {
+      "n": 200,
+      "ms1_spread_90": 0.18660811999999993,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.23762410000000012,
+      "ms2_stable": true
+    },
+    {
+      "n": 300,
+      "ms1_spread_90": 0.16071170000000012,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.1997055000000001,
+      "ms2_stable": true
+    },
+    {
+      "n": 500,
+      "ms1_spread_90": 0.125565975,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.15807115000000005,
+      "ms2_stable": true
+    },
+    {
+      "n": 750,
+      "ms1_spread_90": 0.09526058999999998,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.11866840000000001,
+      "ms2_stable": true
+    },
+    {
+      "n": 1000,
+      "ms1_spread_90": 0.08864958499999998,
+      "ms1_stable": true,
+      "ms2_spread_90": 0.11057080000000008,
+      "ms2_stable": true
+    }
+  ],
+  "smallest_stable_n": 16
+}

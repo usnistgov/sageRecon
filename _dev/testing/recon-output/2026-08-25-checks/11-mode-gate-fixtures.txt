@@ -1,0 +1,8 @@
+PASS  A-narrow-pair    want shredded      got shredded       4.0 mDa pair: one population cut at a bin edge
+        A-narrow-pair Fixture                  2     4.0                    4.0    220,180         shredded
+PASS  B-true-doublet   want INCONCLUSIVE  got INCONCLUSIVE   19.3 mDa deamidation/neutron doublet: the old filter DISCARDED this
+        B-true-doublet Fixture                  2    19.3                   19.3    220,180     INCONCLUSIVE
+PASS  C-broad-single   want INCONCLUSIVE  got INCONCLUSIVE   one broad population over 3 bins: the power limit, not a doublet
+        C-broad-single Fixture                  3    20.0              10.0 10.0    300,300     INCONCLUSIVE
+
+All 3 fixtures classified correctly. The gate can report both verdicts.

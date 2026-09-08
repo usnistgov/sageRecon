@@ -1,0 +1,145 @@
+============================================================================================
+STEP 2 TIER GATES — decision rule fixed in advance: smallest X that passes every gate
+============================================================================================
+
+### X = 5%
+  serum  floor=   56.2 PSM   tier1= 9  tier2=11  below=27   gate1 violations=4   gate4 Gly in tiers=0
+      !! GATE1 +59.0276 (AEC-MAEC) placed above +14.0149 (Methyl); references say otherwise -> PTM-Shepherd: 28 vs 107, Mascot: 53 vs 117
+      !! GATE1 +53.9156 (Cation:Fe[II]) placed above +14.0149 (Methyl); references say otherwise -> PTM-Shepherd: 36 vs 107, Mascot: 35 vs 117
+      !! GATE1 +53.9156 (Cation:Fe[II]) placed above +21.9815 (Cation:Na); references say otherwise -> PTM-Shepherd: 36 vs 116, Mascot: 35 vs 46
+      !! GATE1 +162.0542 (UNANNOTATED) placed above +14.0149 (Methyl); references say otherwise -> PTM-Shepherd: 96 vs 107, Mascot: 54 vs 117
+  bcell  floor=  165.6 PSM   tier1= 7  tier2=16  below=21   gate1 violations=31   gate4 Gly in tiers=0
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 112 vs 398, Mascot: 4 vs 177
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +17.0257 (Ammonium); references say otherwise -> PTM-Shepherd: 112 vs 253, Mascot: 4 vs 69
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 112 vs 818, Mascot: 4 vs 543
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 112 vs 137, Mascot: 4 vs 97
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 112 vs 229, Mascot: 4 vs 145
+      !! GATE1 +59.0280 (AEC-MAEC) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 131 vs 398, Mascot: 91 vs 177
+      !! GATE1 +59.0280 (AEC-MAEC) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 131 vs 818, Mascot: 91 vs 543
+      !! GATE1 +59.0280 (AEC-MAEC) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 131 vs 137, Mascot: 91 vs 97
+      !! GATE1 +59.0280 (AEC-MAEC) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 131 vs 229, Mascot: 91 vs 145
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 19 vs 398, Mascot: 43 vs 177
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above +17.0257 (Ammonium); references say otherwise -> PTM-Shepherd: 19 vs 253, Mascot: 43 vs 69
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 19 vs 818, Mascot: 43 vs 543
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 19 vs 137, Mascot: 43 vs 97
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 19 vs 229, Mascot: 43 vs 145
+      !! GATE1 -89.0289 (Met-loss+Acetyl) placed above +43.0082 (Carbamyl); references say otherwise -> PTM-Shepherd: 19 vs 93, Mascot: 43 vs 111
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 18 vs 398, Mascot: 42 vs 177
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above +17.0257 (Ammonium); references say otherwise -> PTM-Shepherd: 18 vs 253, Mascot: 42 vs 69
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 18 vs 818, Mascot: 42 vs 543
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 18 vs 137, Mascot: 42 vs 97
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 18 vs 229, Mascot: 42 vs 145
+      !! GATE1 +53.9139 (Cation:Fe[II]) placed above +43.0082 (Carbamyl); references say otherwise -> PTM-Shepherd: 18 vs 93, Mascot: 42 vs 111
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 263 vs 398, Mascot: 36 vs 177
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 263 vs 818, Mascot: 36 vs 543
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 54 vs 398, Mascot: 14 vs 177
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above +17.0257 (Ammonium); references say otherwise -> PTM-Shepherd: 54 vs 253, Mascot: 14 vs 69
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 54 vs 818, Mascot: 14 vs 543
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 54 vs 137, Mascot: 14 vs 97
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 54 vs 229, Mascot: 14 vs 145
+      !! GATE1 -0.9804 (Glu-&gt;pyro-Glu+Methy) placed above +43.0082 (Carbamyl); references say otherwise -> PTM-Shepherd: 54 vs 93, Mascot: 14 vs 111
+      !! GATE1 -17.0257 (Gln-&gt;pyro-Glu) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 528 vs 818, Mascot: 349 vs 543
+      !! GATE1 +114.0432 (GG) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 816 vs 818, Mascot: 60 vs 543
+  b1906  floor=   62.6 PSM   tier1=10  tier2=18  below=18   gate1 violations=20   gate4 Gly in tiers=0
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 11 vs 172, Mascot: 3 vs 60
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above +37.9463 (Cation:Ca[II]); references say otherwise -> PTM-Shepherd: 11 vs 86, Mascot: 3 vs 15
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above +44.0092 (Delta:H(4)C(2)O(-1)S(1); references say otherwise -> PTM-Shepherd: 11 vs 18, Mascot: 3 vs 10
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above +17.9982 (Fluoro); references say otherwise -> PTM-Shepherd: 11 vs 13, Mascot: 3 vs 10
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above +21.9798 (Cation:Na); references say otherwise -> PTM-Shepherd: 11 vs 99, Mascot: 3 vs 27
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 11 vs 77, Mascot: 3 vs 52
+      !! GATE1 -1.0225 (Lys-&gt;Allysine) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 11 vs 111, Mascot: 3 vs 87
+      !! GATE1 +59.0277 (AEC-MAEC) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 29 vs 172, Mascot: 8 vs 60
+      !! GATE1 +59.0277 (AEC-MAEC) placed above +37.9463 (Cation:Ca[II]); references say otherwise -> PTM-Shepherd: 29 vs 86, Mascot: 8 vs 15
+      !! GATE1 +59.0277 (AEC-MAEC) placed above +21.9798 (Cation:Na); references say otherwise -> PTM-Shepherd: 29 vs 99, Mascot: 8 vs 27
+      !! GATE1 +59.0277 (AEC-MAEC) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 29 vs 77, Mascot: 8 vs 52
+      !! GATE1 +59.0277 (AEC-MAEC) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 29 vs 111, Mascot: 8 vs 87
+      !! GATE1 +128.0949 (Lys) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 22 vs 172, Mascot: 39 vs 60
+      !! GATE1 +128.0949 (Lys) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 22 vs 77, Mascot: 39 vs 52
+      !! GATE1 +128.0949 (Lys) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 22 vs 111, Mascot: 39 vs 87
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 42 vs 172, Mascot: 4 vs 60
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +37.9463 (Cation:Ca[II]); references say otherwise -> PTM-Shepherd: 42 vs 86, Mascot: 4 vs 15
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +21.9798 (Cation:Na); references say otherwise -> PTM-Shepherd: 42 vs 99, Mascot: 4 vs 27
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 42 vs 77, Mascot: 4 vs 52
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 42 vs 111, Mascot: 4 vs 87
+  GATE 2 — chemistries tier-1 on one file and below floor on another: 4
+      Carbamyl                                     bcell=T3  b1906=T1
+      Dioxidation                                  serum=T1  bcell=T3  b1906=T3
+      Lys                                          serum=T3  b1906=T1
+      Lys-&gt;Allysine                             serum=T3  bcell=T1  b1906=T1
+  ==> X=5%  gate1=55 violations, gate4=0 -> FAIL   (gate2 is read, not auto-failed)
+
+### X = 10%
+  serum  floor=  112.5 PSM   tier1= 6  tier2= 5  below=36   gate1 violations=0   gate4 Gly in tiers=0
+  bcell  floor=  331.1 PSM   tier1= 4  tier2= 4  below=36   gate1 violations=12   gate4 Gly in tiers=0
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +59.0280 (AEC-MAEC); references say otherwise -> PTM-Shepherd: 112 vs 131, Mascot: 4 vs 91
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above -17.0257 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 112 vs 528, Mascot: 4 vs 349
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +114.0432 (GG); references say otherwise -> PTM-Shepherd: 112 vs 816, Mascot: 4 vs 60
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 112 vs 398, Mascot: 4 vs 177
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +17.0257 (Ammonium); references say otherwise -> PTM-Shepherd: 112 vs 253, Mascot: 4 vs 69
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 112 vs 818, Mascot: 4 vs 543
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above +79.9661 (Phospho); references say otherwise -> PTM-Shepherd: 112 vs 137, Mascot: 4 vs 97
+      !! GATE1 -1.0290 (Lys-&gt;Allysine) placed above -18.0099 (Dehydrated); references say otherwise -> PTM-Shepherd: 112 vs 229, Mascot: 4 vs 145
+      !! GATE1 +58.0243 (UNANNOTATED) placed above -17.0257 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 263 vs 528, Mascot: 36 vs 349
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +114.0432 (GG); references say otherwise -> PTM-Shepherd: 263 vs 816, Mascot: 36 vs 60
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 263 vs 398, Mascot: 36 vs 177
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 263 vs 818, Mascot: 36 vs 543
+  b1906  floor=  125.3 PSM   tier1= 6  tier2= 3  below=37   gate1 violations=8   gate4 Gly in tiers=0
+      !! GATE1 +0.9818 (Deamidated) placed above +183.0353 (AEBS); references say otherwise -> PTM-Shepherd: 205 vs 332, Mascot: 141 vs 209
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +183.0353 (AEBS); references say otherwise -> PTM-Shepherd: 42 vs 332, Mascot: 4 vs 209
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +114.0426 (GG); references say otherwise -> PTM-Shepherd: 42 vs 277, Mascot: 4 vs 23
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 42 vs 172, Mascot: 4 vs 60
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +37.9463 (Cation:Ca[II]); references say otherwise -> PTM-Shepherd: 42 vs 86, Mascot: 4 vs 15
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +21.9798 (Cation:Na); references say otherwise -> PTM-Shepherd: 42 vs 99, Mascot: 4 vs 27
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 42 vs 77, Mascot: 4 vs 52
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 42 vs 111, Mascot: 4 vs 87
+  GATE 2 — chemistries tier-1 on one file and below floor on another: 4
+      Carbamyl                                     bcell=T3  b1906=T1
+      Cation:Fe[II]                                serum=T3  bcell=T3  b1906=T1
+      Dioxidation                                  serum=T1  bcell=T3  b1906=T3
+      Lys-&gt;Allysine                             serum=T3  bcell=T1  b1906=T3
+  ==> X=10%  gate1=20 violations, gate4=0 -> FAIL   (gate2 is read, not auto-failed)
+
+### X = 15%
+  serum  floor=  168.8 PSM   tier1= 4  tier2= 2  below=41   gate1 violations=3   gate4 Gly in tiers=0
+      !! GATE1 +31.9907 (Dioxidation) placed above +209.0205 (CarbamidomethylDTT); references say otherwise -> PTM-Shepherd: 274 vs 314, Mascot: 171 vs 199
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +209.0205 (CarbamidomethylDTT); references say otherwise -> PTM-Shepherd: 195 vs 314, Mascot: 17 vs 199
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +114.0457 (GG); references say otherwise -> PTM-Shepherd: 195 vs 492, Mascot: 17 vs 32
+  bcell  floor=  496.6 PSM   tier1= 2  tier2= 2  below=40   gate1 violations=4   gate4 Gly in tiers=0
+      !! GATE1 +58.0243 (UNANNOTATED) placed above -17.0257 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 263 vs 528, Mascot: 36 vs 349
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +114.0432 (GG); references say otherwise -> PTM-Shepherd: 263 vs 816, Mascot: 36 vs 60
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 263 vs 398, Mascot: 36 vs 177
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 263 vs 818, Mascot: 36 vs 543
+  b1906  floor=  187.9 PSM   tier1= 5  tier2= 2  below=39   gate1 violations=8   gate4 Gly in tiers=0
+      !! GATE1 +0.9818 (Deamidated) placed above +183.0353 (AEBS); references say otherwise -> PTM-Shepherd: 205 vs 332, Mascot: 141 vs 209
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +183.0353 (AEBS); references say otherwise -> PTM-Shepherd: 42 vs 332, Mascot: 4 vs 209
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +114.0426 (GG); references say otherwise -> PTM-Shepherd: 42 vs 277, Mascot: 4 vs 23
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +31.9895 (Dioxidation); references say otherwise -> PTM-Shepherd: 42 vs 172, Mascot: 4 vs 60
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +37.9463 (Cation:Ca[II]); references say otherwise -> PTM-Shepherd: 42 vs 86, Mascot: 4 vs 15
+      !! GATE1 +58.0237 (UNANNOTATED) placed above +21.9798 (Cation:Na); references say otherwise -> PTM-Shepherd: 42 vs 99, Mascot: 4 vs 27
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -18.0113 (Dehydrated); references say otherwise -> PTM-Shepherd: 42 vs 77, Mascot: 4 vs 52
+      !! GATE1 +58.0237 (UNANNOTATED) placed above -17.0266 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 42 vs 111, Mascot: 4 vs 87
+  GATE 2 — chemistries tier-1 on one file and below floor on another: 4
+      Carbamyl                                     bcell=T3  b1906=T1
+      Cation:Fe[III]                               serum=T1  bcell=T3
+      Cation:Fe[II]                                serum=T3  bcell=T3  b1906=T1
+      Dioxidation                                  serum=T1  bcell=T3  b1906=T3
+  ==> X=15%  gate1=15 violations, gate4=0 -> FAIL   (gate2 is read, not auto-failed)
+
+### X = 20%
+  serum  floor=  225.0 PSM   tier1= 2  tier2= 2  below=43   gate1 violations=4   gate4 Gly in tiers=0
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +0.9845 (Deamidated); references say otherwise -> PTM-Shepherd: 195 vs 212, Mascot: 17 vs 713
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +31.9907 (Dioxidation); references say otherwise -> PTM-Shepherd: 195 vs 274, Mascot: 17 vs 171
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +209.0205 (CarbamidomethylDTT); references say otherwise -> PTM-Shepherd: 195 vs 314, Mascot: 17 vs 199
+      !! GATE1 +58.0260 (UNANNOTATED) placed above +114.0457 (GG); references say otherwise -> PTM-Shepherd: 195 vs 492, Mascot: 17 vs 32
+  bcell  floor=  662.2 PSM   tier1= 2  tier2= 2  below=40   gate1 violations=4   gate4 Gly in tiers=0
+      !! GATE1 +58.0243 (UNANNOTATED) placed above -17.0257 (Gln-&gt;pyro-Glu); references say otherwise -> PTM-Shepherd: 263 vs 528, Mascot: 36 vs 349
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +114.0432 (GG); references say otherwise -> PTM-Shepherd: 263 vs 816, Mascot: 36 vs 60
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +31.9901 (Dioxidation); references say otherwise -> PTM-Shepherd: 263 vs 398, Mascot: 36 vs 177
+      !! GATE1 +58.0243 (UNANNOTATED) placed above +42.0109 (Acetyl); references say otherwise -> PTM-Shepherd: 263 vs 818, Mascot: 36 vs 543
+  b1906  floor=  250.6 PSM   tier1= 3  tier2= 1  below=42   gate1 violations=0   gate4 Gly in tiers=0
+  GATE 2 — chemistries tier-1 on one file and below floor on another: 4
+      Carbamyl                                     bcell=T3  b1906=T1
+      Cation:Fe[III]                               serum=T1  bcell=T3
+      Cation:Fe[II]                                serum=T3  bcell=T3  b1906=T1
+      Deamidated                                   serum=T3  bcell=T1  b1906=T3
+  ==> X=20%  gate1=8 violations, gate4=0 -> FAIL   (gate2 is read, not auto-failed)

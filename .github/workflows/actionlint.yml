@@ -1,0 +1,37 @@
+# Lint the workflow files themselves.
+#
+# Gated on `.github/workflows/**` so it runs ONLY when a workflow changes, not
+# on every code push. A broken workflow otherwise fails silently or burns a full
+# 4-target matrix before the error shows. This job is one short ubuntu step.
+#
+# actionlint also runs shellcheck on every embedded `run:` script, so the bash
+# in build.yml (Free Disk Space, Stage Release Archive, Create Release Archive)
+# is checked too. The rhysd/actionlint image bundles shellcheck.
+
+name: Lint workflows
+
+on:
+  push:
+    branches: [main]
+    paths: [".github/workflows/**"]
+  pull_request:
+    branches: [main]
+    paths: [".github/workflows/**"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  actionlint:
+    name: actionlint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      # Pinned image, matches the actionlint 1.7.12 run locally on 2026-09-03.
+      - uses: docker://rhysd/actionlint:1.7.12
+        with:
+          args: -color

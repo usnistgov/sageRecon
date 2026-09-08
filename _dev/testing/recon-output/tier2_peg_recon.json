@@ -1,0 +1,87 @@
+{
+  "contamination_level": "Very High (> 5%)",
+  "polymers": [
+    {
+      "name": "PEG+1H",
+      "pct_tic": 14.258093226346407,
+      "total_intensity": 200755860270.8606
+    },
+    {
+      "name": "PEG+2H",
+      "pct_tic": 0.6921257539812028,
+      "total_intensity": 9745223218.162354
+    },
+    {
+      "name": "Tween-60",
+      "pct_tic": 0.11208670417632112,
+      "total_intensity": 1578195791.3041992
+    },
+    {
+      "name": "Triton X-100 (Reduced)",
+      "pct_tic": 0.007448177053515081,
+      "total_intensity": 104871329.43310547
+    },
+    {
+      "name": "PPG",
+      "pct_tic": 0.007052049352754532,
+      "total_intensity": 99293798.40698242
+    },
+    {
+      "name": "Triton X-100",
+      "pct_tic": 0.003259666002131579,
+      "total_intensity": 45896533.4329834
+    },
+    {
+      "name": "Polysiloxane",
+      "pct_tic": 0.002866740523755059,
+      "total_intensity": 40364090.126464844
+    },
+    {
+      "name": "Tween-80",
+      "pct_tic": 0.0026516112605530075,
+      "total_intensity": 37335041.31762695
+    },
+    {
+      "name": "Triton X-100 (Reduced, Na)",
+      "pct_tic": 0.0022633672395568046,
+      "total_intensity": 31868513.557373047
+    },
+    {
+      "name": "Triton X-101",
+      "pct_tic": 0.0017242654514721275,
+      "total_intensity": 24277888.252685547
+    },
+    {
+      "name": "IGEPAL CA-630 (NP-40)",
+      "pct_tic": 0.0017242654514721275,
+      "total_intensity": 24277888.252685547
+    },
+    {
+      "name": "Triton X-101 (Reduced)",
+      "pct_tic": 0.0013167812464374338,
+      "total_intensity": 18540456.126953125
+    },
+    {
+      "name": "Tween-40",
+      "pct_tic": 0.0012953431989670375,
+      "total_intensity": 18238605.55029297
+    },
+    {
+      "name": "PEG+3H",
+      "pct_tic": 0.0012626957337542868,
+      "total_intensity": 17778924.872070312
+    },
+    {
+      "name": "Triton X-100 (Na)",
+      "pct_tic": 0.001024071584867432,
+      "total_intensity": 14419064.929321289
+    },
+    {
+      "name": "Tween-20",
+      "pct_tic": 0.0004599840393568541,
+      "total_intensity": 6476636.817138672
+    }
+  ],
+  "total_polymer_pct_tic": 15.096654702642523,
+  "total_tic": 1408013379376.0
+}

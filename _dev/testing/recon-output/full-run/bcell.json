@@ -1,0 +1,1940 @@
+{
+  "schema_version": "3.2.0",
+  "runtime_seconds": 261.796961459,
+  "generated_at": "2026-09-03T10:35:25.395082Z",
+  "tool_version": "0.1.1",
+  "git_commit": "b62c331-dirty",
+  "input": {
+    "mzml_file": "testing/inputs/B.naive_01steady-state.mzML.gz",
+    "sage_tsv": "testing/recon-output/full-run/bcell_search/results.sage.tsv",
+    "unimod_file": "<compiled into recon 0.1.1>",
+    "ms1_spectra": 12627,
+    "ms2_spectra": 92304,
+    "fasta_file": "testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta",
+    "enzyme": {
+      "name": "trypsin",
+      "cleave_at": "KR",
+      "restrict": "P",
+      "c_terminal": true
+    }
+  },
+  "mod_discovery": {
+    "total_psms": 72801,
+    "unmodified_pct": 58.94424527135616,
+    "peaks": [
+      {
+        "rank": 1,
+        "delta_mass": 0.0,
+        "count": 42532,
+        "count_pct": 58.42227441930743,
+        "intensity_sum": 110699411600.67133,
+        "intensity_pct": 79.36775663138623,
+        "prominence": 40442,
+        "confidence": {
+          "mean_hyperscore": 43.03617234793221,
+          "median_hyperscore": 41.03930215354379,
+          "mean_matched_intensity_pct": 30.15410126973216,
+          "mean_longest_b": 3.162301326060378,
+          "mean_longest_y": 7.215461299727264,
+          "hyperscore_vs_unmodified": null
+        },
+        "annotations": [
+          {
+            "unimod_id": null,
+            "name": "Unmodified",
+            "delta_mass": 0.0,
+            "mass_error_da": 0.0,
+            "mass_error_ppm": 0.0,
+            "sites": [],
+            "classification": "None",
+            "source": "intrinsic"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 635.0045640726581
+      },
+      {
+        "rank": 2,
+        "delta_mass": 57.02200575559884,
+        "count": 3379,
+        "count_pct": 4.6414197607175725,
+        "intensity_sum": 7496701213.5700035,
+        "intensity_pct": 5.374882746470114,
+        "prominence": 3117,
+        "confidence": {
+          "mean_hyperscore": 39.40349671428571,
+          "median_hyperscore": 37.95615103528759,
+          "mean_matched_intensity_pct": 23.954105388546925,
+          "mean_longest_b": 3.0452796685409886,
+          "mean_longest_y": 6.514353358981947,
+          "hyperscore_vs_unmodified": 1.0867339619164509
+        },
+        "annotations": [
+          {
+            "unimod_id": 4,
+            "name": "Carbamidomethyl",
+            "delta_mass": 57.021464,
+            "mass_error_da": 0.0005417555988387335,
+            "mass_error_ppm": 0.6565584150854155,
+            "sites": [
+              "C",
+              "N-term"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 977,
+            "name": "Carbofuran",
+            "delta_mass": 57.021464,
+            "mass_error_da": 0.0005417555988387335,
+            "mass_error_ppm": 0.6565584150854155,
+            "sites": [],
+            "classification": "Chemical derivative",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 1263,
+            "name": "Gly",
+            "delta_mass": 57.021464,
+            "mass_error_da": 0.0005417555988387335,
+            "mass_error_ppm": 0.6565584150854155,
+            "sites": [],
+            "classification": "Chemical derivative",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 825.1445513317401
+      },
+      {
+        "rank": 3,
+        "delta_mass": 15.99538184268223,
+        "count": 1430,
+        "count_pct": 1.9642587327097156,
+        "intensity_sum": 1854536138.8279998,
+        "intensity_pct": 1.329640065853058,
+        "prominence": 767,
+        "confidence": {
+          "mean_hyperscore": 36.560128244672136,
+          "median_hyperscore": 35.407218515474455,
+          "mean_matched_intensity_pct": 23.323956494125905,
+          "mean_longest_b": 2.418881118881119,
+          "mean_longest_y": 6.344055944055944,
+          "hyperscore_vs_unmodified": 1.0083149042227413
+        },
+        "annotations": [
+          {
+            "unimod_id": 35,
+            "name": "Oxidation",
+            "delta_mass": 15.994915,
+            "mass_error_da": 0.0004668426822291849,
+            "mass_error_ppm": 0.6302932035997715,
+            "sites": [
+              "H",
+              "M",
+              "W"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 740.6754183020262
+      },
+      {
+        "rank": 4,
+        "delta_mass": 58.024359815688406,
+        "count": 931,
+        "count_pct": 1.2788285875194023,
+        "intensity_sum": 623760975.2619995,
+        "intensity_pct": 0.4472156497031487,
+        "prominence": 523,
+        "confidence": {
+          "mean_hyperscore": 38.9733813443099,
+          "median_hyperscore": 37.63811336228149,
+          "mean_matched_intensity_pct": 24.337371501718604,
+          "mean_longest_b": 3.055853920515575,
+          "mean_longest_y": 6.0719656283566055,
+          "hyperscore_vs_unmodified": 1.0748715380436602
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 851.5285624789699
+      },
+      {
+        "rank": 5,
+        "delta_mass": 0.9820417444173491,
+        "count": 745,
+        "count_pct": 1.0233375915166,
+        "intensity_sum": 659681753.1000001,
+        "intensity_pct": 0.4729696398304028,
+        "prominence": 488,
+        "confidence": {
+          "mean_hyperscore": 36.27575794803045,
+          "median_hyperscore": 35.16247148214374,
+          "mean_matched_intensity_pct": 18.585032626845635,
+          "mean_longest_b": 2.2604026845637586,
+          "mean_longest_y": 5.864429530201343,
+          "hyperscore_vs_unmodified": 1.0004720759234769
+        },
+        "annotations": [
+          {
+            "unimod_id": 7,
+            "name": "Deamidated",
+            "delta_mass": 0.984016,
+            "mass_error_da": -0.0019742555826508523,
+            "mass_error_ppm": -3.089614699646981,
+            "sites": [
+              "N",
+              "Q"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 638.9973425736324
+      },
+      {
+        "rank": 6,
+        "delta_mass": 16.99726278506322,
+        "count": 394,
+        "count_pct": 0.5412013571242154,
+        "intensity_sum": 254524454.24699995,
+        "intensity_pct": 0.18248547710699647,
+        "prominence": 344,
+        "confidence": {
+          "mean_hyperscore": 36.765241781652485,
+          "median_hyperscore": 35.90361592750614,
+          "mean_matched_intensity_pct": 23.039775774365495,
+          "mean_longest_b": 2.5558375634517767,
+          "mean_longest_y": 6.063451776649746,
+          "hyperscore_vs_unmodified": 1.0139718602107244
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 935.6828268289436
+      },
+      {
+        "rank": 7,
+        "delta_mass": 0.9510412082638963,
+        "count": 374,
+        "count_pct": 0.5137292070163871,
+        "intensity_sum": 251207819.82300007,
+        "intensity_pct": 0.1801075617234092,
+        "prominence": 178,
+        "confidence": {
+          "mean_hyperscore": 36.420681689827006,
+          "median_hyperscore": 34.93325656240512,
+          "mean_matched_intensity_pct": 15.149211340106943,
+          "mean_longest_b": 2.4037433155080214,
+          "mean_longest_y": 5.548128342245989,
+          "hyperscore_vs_unmodified": 1.0044690194749668
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 613.2041096246601
+      },
+      {
+        "rank": 8,
+        "delta_mass": 1.9814495114973143,
+        "count": 373,
+        "count_pct": 0.5123555995109957,
+        "intensity_sum": 199247346.14499983,
+        "intensity_pct": 0.14285364890042485,
+        "prominence": 160,
+        "confidence": {
+          "mean_hyperscore": 36.33934171854644,
+          "median_hyperscore": 35.04692044484818,
+          "mean_matched_intensity_pct": 17.277344718230562,
+          "mean_longest_b": 2.2305630026809653,
+          "mean_longest_y": 5.694369973190349,
+          "hyperscore_vs_unmodified": 1.0022256929526319
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 697.8406642865452
+      },
+      {
+        "rank": 9,
+        "delta_mass": 52.91125147821962,
+        "count": 354,
+        "count_pct": 0.48625705690855897,
+        "intensity_sum": 129335959.47500007,
+        "intensity_pct": 0.09272953493491184,
+        "prominence": 341,
+        "confidence": {
+          "mean_hyperscore": 32.63933221711538,
+          "median_hyperscore": 31.809366682683518,
+          "mean_matched_intensity_pct": 18.53812608841809,
+          "mean_longest_b": 2.0649717514124295,
+          "mean_longest_y": 5.68361581920904,
+          "hyperscore_vs_unmodified": 0.900180790344765
+        },
+        "annotations": [
+          {
+            "unimod_id": 1870,
+            "name": "Cation:Fe[III]",
+            "delta_mass": 52.911464,
+            "mass_error_da": -0.00021252178038366765,
+            "mass_error_ppm": -0.36263697148158663,
+            "sites": [],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 586.0455416759919
+      },
+      {
+        "rank": 10,
+        "delta_mass": -1.028974086421004,
+        "count": 353,
+        "count_pct": 0.4848834494031675,
+        "intensity_sum": 188434609.867,
+        "intensity_pct": 0.1351012804910299,
+        "prominence": 220,
+        "confidence": {
+          "mean_hyperscore": 35.393013726668315,
+          "median_hyperscore": 34.70706452865092,
+          "mean_matched_intensity_pct": 17.419071179603396,
+          "mean_longest_b": 1.886685552407932,
+          "mean_longest_y": 6.048158640226629,
+          "hyperscore_vs_unmodified": 0.9761263146324
+        },
+        "annotations": [
+          {
+            "unimod_id": 352,
+            "name": "Lys->Allysine",
+            "delta_mass": -1.031634,
+            "mass_error_da": 0.002659913578995976,
+            "mass_error_ppm": 3.9545936055781854,
+            "sites": [],
+            "classification": "Post-translational",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 672.6136347471994
+      },
+      {
+        "rank": 11,
+        "delta_mass": -17.025658636232002,
+        "count": 309,
+        "count_pct": 0.4244447191659455,
+        "intensity_sum": 686359471.1839999,
+        "intensity_pct": 0.49209666684667625,
+        "prominence": 243,
+        "confidence": {
+          "mean_hyperscore": 36.83009811630032,
+          "median_hyperscore": 35.99738364199817,
+          "mean_matched_intensity_pct": 27.772993600647233,
+          "mean_longest_b": 0.6440129449838188,
+          "mean_longest_y": 8.815533980582524,
+          "hyperscore_vs_unmodified": 1.0157605740910756
+        },
+        "annotations": [
+          {
+            "unimod_id": 28,
+            "name": "Gln->pyro-Glu",
+            "delta_mass": -17.026549,
+            "mass_error_da": 0.0008903637679971155,
+            "mass_error_ppm": 1.2024257881900777,
+            "sites": [
+              "Q"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 385,
+            "name": "Ammonia-loss",
+            "delta_mass": -17.026549,
+            "mass_error_da": 0.0008903637679971155,
+            "mass_error_ppm": 1.2024257881900777,
+            "sites": [
+              "C"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 2143,
+            "name": "z-type-ion",
+            "delta_mass": -17.026549,
+            "mass_error_da": 0.0008903637679971155,
+            "mass_error_ppm": 1.2024257881900777,
+            "sites": [],
+            "classification": "Other",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 740.4729478875482
+      },
+      {
+        "rank": 12,
+        "delta_mass": -0.9800594822536054,
+        "count": 290,
+        "count_pct": 0.39834617656350874,
+        "intensity_sum": 131038625.66399997,
+        "intensity_pct": 0.09395028935229317,
+        "prominence": 68,
+        "confidence": {
+          "mean_hyperscore": 35.04186026561839,
+          "median_hyperscore": 33.890524802128866,
+          "mean_matched_intensity_pct": 12.789625351724139,
+          "mean_longest_b": 2.06551724137931,
+          "mean_longest_y": 5.372413793103449,
+          "hyperscore_vs_unmodified": 0.9664416311959397
+        },
+        "annotations": [
+          {
+            "unimod_id": 1827,
+            "name": "Glu->pyro-Glu+Methyl:2H(2)13C(1)",
+            "delta_mass": -0.979006,
+            "mass_error_da": -0.0010534822536053534,
+            "mass_error_ppm": -1.743167732952623,
+            "sites": [],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 2,
+            "name": "Amidated",
+            "delta_mass": -0.984016,
+            "mass_error_da": 0.0039565177463946055,
+            "mass_error_ppm": 6.546739678590878,
+            "sites": [
+              "C-term"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 2141,
+            "name": "c-type-ion",
+            "delta_mass": -0.984016,
+            "mass_error_da": 0.0039565177463946055,
+            "mass_error_ppm": 6.546739678590878,
+            "sites": [],
+            "classification": "Other",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 604.3493312149243
+      },
+      {
+        "rank": 13,
+        "delta_mass": 59.02803780032297,
+        "count": 287,
+        "count_pct": 0.3942253540473345,
+        "intensity_sum": 216567184.691,
+        "intensity_pct": 0.15527139088059547,
+        "prominence": 202,
+        "confidence": {
+          "mean_hyperscore": 39.36795834541923,
+          "median_hyperscore": 38.5230396052136,
+          "mean_matched_intensity_pct": 23.606301097560983,
+          "mean_longest_b": 3.059233449477352,
+          "mean_longest_y": 5.982578397212544,
+          "hyperscore_vs_unmodified": 1.0857538267604685
+        },
+        "annotations": [
+          {
+            "unimod_id": 472,
+            "name": "AEC-MAEC",
+            "delta_mass": 59.019355,
+            "mass_error_da": 0.00868280032297264,
+            "mass_error_ppm": 9.28632603480033,
+            "sites": [],
+            "classification": "Chemical derivative",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 935.0092049788054
+      },
+      {
+        "rank": 14,
+        "delta_mass": 0.9303668959093047,
+        "count": 263,
+        "count_pct": 0.3612587739179407,
+        "intensity_sum": 182773766.26300004,
+        "intensity_pct": 0.13104264593286857,
+        "prominence": 141,
+        "confidence": {
+          "mean_hyperscore": 35.68554125510317,
+          "median_hyperscore": 34.70989231568518,
+          "mean_matched_intensity_pct": 14.283687554752861,
+          "mean_longest_b": 2.193916349809886,
+          "mean_longest_y": 5.304182509505703,
+          "hyperscore_vs_unmodified": 0.9841941163874249
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 550.5651592780285
+      },
+      {
+        "rank": 15,
+        "delta_mass": 1.9388630807775218,
+        "count": 256,
+        "count_pct": 0.35164352138020083,
+        "intensity_sum": 173772704.41399994,
+        "intensity_pct": 0.12458918718430227,
+        "prominence": 111,
+        "confidence": {
+          "mean_hyperscore": 35.78012844491199,
+          "median_hyperscore": 34.85619306677953,
+          "mean_matched_intensity_pct": 14.911976877734375,
+          "mean_longest_b": 2.30859375,
+          "mean_longest_y": 5.33203125,
+          "hyperscore_vs_unmodified": 0.9868027963295332
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 592.4112113496358
+      },
+      {
+        "rank": 16,
+        "delta_mass": -0.07846158863575294,
+        "count": 220,
+        "count_pct": 0.3021936511861101,
+        "intensity_sum": 123423988.81600001,
+        "intensity_pct": 0.08849085072069,
+        "prominence": 112,
+        "confidence": {
+          "mean_hyperscore": 36.149433506120324,
+          "median_hyperscore": 35.10848547528944,
+          "mean_matched_intensity_pct": 14.406403762272731,
+          "mean_longest_b": 2.459090909090909,
+          "mean_longest_y": 5.2272727272727275,
+          "hyperscore_vs_unmodified": null
+        },
+        "annotations": [
+          {
+            "unimod_id": null,
+            "name": "Unmodified",
+            "delta_mass": 0.0,
+            "mass_error_da": -0.07846158863575294,
+            "mass_error_ppm": -132.59953474754522,
+            "sites": [],
+            "classification": "None",
+            "source": "intrinsic"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 591.7184308763608
+      },
+      {
+        "rank": 17,
+        "delta_mass": 0.9093878153332673,
+        "count": 206,
+        "count_pct": 0.28296314611063034,
+        "intensity_sum": 132618805.44599998,
+        "intensity_pct": 0.0950832251335964,
+        "prominence": 99,
+        "confidence": {
+          "mean_hyperscore": 36.53797133612069,
+          "median_hyperscore": 35.8281318960199,
+          "mean_matched_intensity_pct": 14.7426213907767,
+          "mean_longest_b": 2.4611650485436893,
+          "mean_longest_y": 5.451456310679611,
+          "hyperscore_vs_unmodified": 1.0077038248256887
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 587.6040432203154
+      },
+      {
+        "rank": 18,
+        "delta_mass": -89.02883252189221,
+        "count": 202,
+        "count_pct": 0.2774687160890647,
+        "intensity_sum": 579093740.8959997,
+        "intensity_pct": 0.41519074428317926,
+        "prominence": 190,
+        "confidence": {
+          "mean_hyperscore": 38.937935652503604,
+          "median_hyperscore": 37.72281539460951,
+          "mean_matched_intensity_pct": 32.09711118316832,
+          "mean_longest_b": 0.22277227722772278,
+          "mean_longest_y": 10.549504950495049,
+          "hyperscore_vs_unmodified": 1.0738939588869465
+        },
+        "annotations": [
+          {
+            "unimod_id": 766,
+            "name": "Met-loss+Acetyl",
+            "delta_mass": -89.02992,
+            "mass_error_da": 0.0010874781077916396,
+            "mass_error_ppm": 1.2786113603060663,
+            "sites": [],
+            "classification": "Co-translational",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 850.5149739412026
+      },
+      {
+        "rank": 19,
+        "delta_mass": 114.04314465434878,
+        "count": 200,
+        "count_pct": 0.2747215010782819,
+        "intensity_sum": 481551016.75000006,
+        "intensity_pct": 0.3452558902560492,
+        "prominence": 156,
+        "confidence": {
+          "mean_hyperscore": 40.07836953338978,
+          "median_hyperscore": 38.654210290836,
+          "mean_matched_intensity_pct": 24.64560158000001,
+          "mean_longest_b": 2.59,
+          "mean_longest_y": 7.25,
+          "hyperscore_vs_unmodified": 1.1053467063084683
+        },
+        "annotations": [
+          {
+            "unimod_id": 121,
+            "name": "GG",
+            "delta_mass": 114.042927,
+            "mass_error_da": 0.00021765434877352163,
+            "mass_error_ppm": 0.24815859519454575,
+            "sites": [],
+            "classification": "Other",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 1290,
+            "name": "Dicarbamidomethyl",
+            "delta_mass": 114.042927,
+            "mass_error_da": 0.00021765434877352163,
+            "mass_error_ppm": 0.24815859519454575,
+            "sites": [],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 877.0776148329253
+      },
+      {
+        "rank": 20,
+        "delta_mass": -1.0602883412260649,
+        "count": 194,
+        "count_pct": 0.26647985604593344,
+        "intensity_sum": 85383029.13900004,
+        "intensity_pct": 0.06121676149102149,
+        "prominence": 92,
+        "confidence": {
+          "mean_hyperscore": 34.0987955445854,
+          "median_hyperscore": 33.20517535256768,
+          "mean_matched_intensity_pct": 11.180986637113406,
+          "mean_longest_b": 2.1288659793814433,
+          "mean_longest_y": 5.087628865979381,
+          "hyperscore_vs_unmodified": 0.9404322526866398
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 574.5834002692733
+      },
+      {
+        "rank": 21,
+        "delta_mass": 1.9200772422899115,
+        "count": 192,
+        "count_pct": 0.2637326410351506,
+        "intensity_sum": 129879641.76299997,
+        "intensity_pct": 0.09311933685792866,
+        "prominence": 102,
+        "confidence": {
+          "mean_hyperscore": 36.550334162511625,
+          "median_hyperscore": 35.78265002122985,
+          "mean_matched_intensity_pct": 15.05335724635417,
+          "mean_longest_b": 2.4635416666666665,
+          "mean_longest_y": 5.234375,
+          "hyperscore_vs_unmodified": 1.008044787035254
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 619.1129770952069
+      },
+      {
+        "rank": 22,
+        "delta_mass": -0.9596898503643254,
+        "count": 187,
+        "count_pct": 0.25686460350819357,
+        "intensity_sum": 102805414.683,
+        "intensity_pct": 0.07370802622133903,
+        "prominence": 40,
+        "confidence": {
+          "mean_hyperscore": 35.96298174433206,
+          "median_hyperscore": 34.52389231874747,
+          "mean_matched_intensity_pct": 13.464803297326208,
+          "mean_longest_b": 2.299465240641711,
+          "mean_longest_y": 5.7272727272727275,
+          "hyperscore_vs_unmodified": 0.9918458231443648
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 595.5663325865311
+      },
+      {
+        "rank": 23,
+        "delta_mass": 53.91406228574833,
+        "count": 184,
+        "count_pct": 0.25274378099201933,
+        "intensity_sum": 42133570.05300004,
+        "intensity_pct": 0.030208353284126133,
+        "prominence": 109,
+        "confidence": {
+          "mean_hyperscore": 32.31560132080442,
+          "median_hyperscore": 31.640198791048228,
+          "mean_matched_intensity_pct": 19.505136278260874,
+          "mean_longest_b": 2.1032608695652173,
+          "mean_longest_y": 5.385869565217392,
+          "hyperscore_vs_unmodified": 0.8912524111683243
+        },
+        "annotations": [
+          {
+            "unimod_id": 952,
+            "name": "Cation:Fe[II]",
+            "delta_mass": 53.919289,
+            "mass_error_da": -0.005226714251669762,
+            "mass_error_ppm": -8.860705439524422,
+            "sites": [],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 589.8756354494382
+      },
+      {
+        "rank": 24,
+        "delta_mass": 73.01813400986823,
+        "count": 176,
+        "count_pct": 0.24175492094888806,
+        "intensity_sum": 209777143.21300003,
+        "intensity_pct": 0.15040315940808371,
+        "prominence": 149,
+        "confidence": {
+          "mean_hyperscore": 35.879812115268834,
+          "median_hyperscore": 33.481996122666324,
+          "mean_matched_intensity_pct": 19.994431989204557,
+          "mean_longest_b": 2.272727272727273,
+          "mean_longest_y": 6.454545454545454,
+          "hyperscore_vs_unmodified": 0.9895520353326289
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 856.1604496715477
+      },
+      {
+        "rank": 25,
+        "delta_mass": -0.09971040100249876,
+        "count": 161,
+        "count_pct": 0.22115080836801693,
+        "intensity_sum": 89755053.037,
+        "intensity_pct": 0.06435135564744572,
+        "prominence": 76,
+        "confidence": {
+          "mean_hyperscore": 36.25864111654135,
+          "median_hyperscore": 35.50045934432977,
+          "mean_matched_intensity_pct": 13.422965650310562,
+          "mean_longest_b": 2.4472049689440993,
+          "mean_longest_y": 5.267080745341615,
+          "hyperscore_vs_unmodified": null
+        },
+        "annotations": [
+          {
+            "unimod_id": null,
+            "name": "Unmodified",
+            "delta_mass": 0.0,
+            "mass_error_da": -0.09971040100249876,
+            "mass_error_ppm": -165.9644989287593,
+            "sites": [],
+            "classification": "None",
+            "source": "intrinsic"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 600.7935531158365
+      },
+      {
+        "rank": 26,
+        "delta_mass": 1.9027595843932579,
+        "count": 155,
+        "count_pct": 0.21290916333566848,
+        "intensity_sum": 87155762.94900003,
+        "intensity_pct": 0.06248775203713074,
+        "prominence": 79,
+        "confidence": {
+          "mean_hyperscore": 36.007016051090794,
+          "median_hyperscore": 34.777702763895654,
+          "mean_matched_intensity_pct": 15.54927877354839,
+          "mean_longest_b": 2.2516129032258063,
+          "mean_longest_y": 5.2709677419354835,
+          "hyperscore_vs_unmodified": 0.9930602731458746
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 606.7893940386497
+      },
+      {
+        "rank": 27,
+        "delta_mass": 31.99007758403766,
+        "count": 150,
+        "count_pct": 0.20604112580871142,
+        "intensity_sum": 133633183.18600006,
+        "intensity_pct": 0.09581049987188538,
+        "prominence": 143,
+        "confidence": {
+          "mean_hyperscore": 35.142980826898345,
+          "median_hyperscore": 35.17207836492072,
+          "mean_matched_intensity_pct": 23.96565267600001,
+          "mean_longest_b": 2.54,
+          "mean_longest_y": 5.98,
+          "hyperscore_vs_unmodified": 0.9692304991227585
+        },
+        "annotations": [
+          {
+            "unimod_id": 425,
+            "name": "Dioxidation",
+            "delta_mass": 31.989829,
+            "mass_error_da": 0.0002485840376600379,
+            "mass_error_ppm": 0.31216518404316396,
+            "sites": [
+              "M"
+            ],
+            "classification": "Post-translational",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 796.3221088283358
+      },
+      {
+        "rank": 28,
+        "delta_mass": 0.8898624203151227,
+        "count": 150,
+        "count_pct": 0.20604112580871142,
+        "intensity_sum": 96712376.88,
+        "intensity_pct": 0.06933952295197379,
+        "prominence": 74,
+        "confidence": {
+          "mean_hyperscore": 36.612804945022404,
+          "median_hyperscore": 35.61333115830133,
+          "mean_matched_intensity_pct": 15.22202408866667,
+          "mean_longest_b": 2.6,
+          "mean_longest_y": 5.18,
+          "hyperscore_vs_unmodified": 1.0097677082641545
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 605.0005515441223
+      },
+      {
+        "rank": 29,
+        "delta_mass": 2.049996487234072,
+        "count": 147,
+        "count_pct": 0.20192030329253718,
+        "intensity_sum": 107983267.37400004,
+        "intensity_pct": 0.07742037253203944,
+        "prominence": 60,
+        "confidence": {
+          "mean_hyperscore": 35.2671953171878,
+          "median_hyperscore": 33.97649821474771,
+          "mean_matched_intensity_pct": 12.831098044897962,
+          "mean_longest_b": 2.251700680272109,
+          "mean_longest_y": 5.312925170068027,
+          "hyperscore_vs_unmodified": 0.9726562891265871
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 608.9094781284731
+      },
+      {
+        "rank": 30,
+        "delta_mass": 17.025776106995597,
+        "count": 143,
+        "count_pct": 0.19642587327097155,
+        "intensity_sum": 251594146.45099998,
+        "intensity_pct": 0.18038454492817932,
+        "prominence": 86,
+        "confidence": {
+          "mean_hyperscore": 49.40428936905113,
+          "median_hyperscore": 49.79330435825591,
+          "mean_matched_intensity_pct": 33.72483918251753,
+          "mean_longest_b": 4.965034965034965,
+          "mean_longest_y": 7.818181818181818,
+          "hyperscore_vs_unmodified": 1.3625521488865913
+        },
+        "annotations": [
+          {
+            "unimod_id": 989,
+            "name": "Ammonium",
+            "delta_mass": 17.026549,
+            "mass_error_da": -0.0007728930044024196,
+            "mass_error_ppm": -0.9960207407499254,
+            "sites": [],
+            "classification": "Artefact",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 775.9808333112541
+      },
+      {
+        "rank": 31,
+        "delta_mass": 2.0304467361500516,
+        "count": 143,
+        "count_pct": 0.19642587327097155,
+        "intensity_sum": 86282854.47600004,
+        "intensity_pct": 0.06186190600737534,
+        "prominence": 72,
+        "confidence": {
+          "mean_hyperscore": 36.36908448282724,
+          "median_hyperscore": 34.664542799158255,
+          "mean_matched_intensity_pct": 12.85141035594406,
+          "mean_longest_b": 2.3426573426573425,
+          "mean_longest_y": 5.65034965034965,
+          "hyperscore_vs_unmodified": 1.0030459874635376
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 626.8276656764996
+      },
+      {
+        "rank": 32,
+        "delta_mass": 18.000532742471968,
+        "count": 140,
+        "count_pct": 0.1923050507547973,
+        "intensity_sum": 67913626.43599997,
+        "intensity_pct": 0.04869178703832095,
+        "prominence": 103,
+        "confidence": {
+          "mean_hyperscore": 36.73408777786309,
+          "median_hyperscore": 34.90718969705853,
+          "mean_matched_intensity_pct": 22.350273185714272,
+          "mean_longest_b": 2.6214285714285714,
+          "mean_longest_y": 5.614285714285714,
+          "hyperscore_vs_unmodified": 1.013112644232683
+        },
+        "annotations": [
+          {
+            "unimod_id": 127,
+            "name": "Fluoro",
+            "delta_mass": 17.990578,
+            "mass_error_da": 0.009954742471968814,
+            "mass_error_ppm": 12.003641128853886,
+            "sites": [],
+            "classification": "Non-standard residue",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 829.3102372112734
+      },
+      {
+        "rank": 33,
+        "delta_mass": 42.01093730954564,
+        "count": 120,
+        "count_pct": 0.16483290064696912,
+        "intensity_sum": 168377601.20199993,
+        "intensity_pct": 0.12072107955356008,
+        "prominence": 115,
+        "confidence": {
+          "mean_hyperscore": 36.63910636976649,
+          "median_hyperscore": 36.27365850741418,
+          "mean_matched_intensity_pct": 26.67601815250001,
+          "mean_longest_b": 0.9083333333333333,
+          "mean_longest_y": 8.366666666666667,
+          "hyperscore_vs_unmodified": 1.0104930918950399
+        },
+        "annotations": [
+          {
+            "unimod_id": 1,
+            "name": "Acetyl",
+            "delta_mass": 42.010565,
+            "mass_error_da": 0.0003723095456393821,
+            "mass_error_ppm": 0.4890426986794592,
+            "sites": [
+              "K",
+              "N-term"
+            ],
+            "classification": "Post-translational",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 761.3027382776871
+      },
+      {
+        "rank": 34,
+        "delta_mass": -1.0991364583329852,
+        "count": 119,
+        "count_pct": 0.16345929314157773,
+        "intensity_sum": 74384819.01700002,
+        "intensity_pct": 0.053331414570727174,
+        "prominence": 60,
+        "confidence": {
+          "mean_hyperscore": 35.72346171427326,
+          "median_hyperscore": 34.14172594595128,
+          "mean_matched_intensity_pct": 13.715058066386554,
+          "mean_longest_b": 2.3445378151260505,
+          "mean_longest_y": 5.336134453781512,
+          "hyperscore_vs_unmodified": 0.985239948718764
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 619.0452994228338
+      },
+      {
+        "rank": 35,
+        "delta_mass": 1.8799600362804387,
+        "count": 113,
+        "count_pct": 0.15521764810922928,
+        "intensity_sum": 73266516.39499997,
+        "intensity_pct": 0.05252962918578477,
+        "prominence": 53,
+        "confidence": {
+          "mean_hyperscore": 37.4555805912283,
+          "median_hyperscore": 35.13223148568103,
+          "mean_matched_intensity_pct": 16.14165373362832,
+          "mean_longest_b": 2.752212389380531,
+          "mean_longest_y": 5.415929203539823,
+          "hyperscore_vs_unmodified": 1.0330111509375044
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 614.3995299754434
+      },
+      {
+        "rank": 36,
+        "delta_mass": 18.030602251291555,
+        "count": 106,
+        "count_pct": 0.1456023955714894,
+        "intensity_sum": 64412363.43999998,
+        "intensity_pct": 0.04618149917544201,
+        "prominence": 77,
+        "confidence": {
+          "mean_hyperscore": 48.70075996998909,
+          "median_hyperscore": 48.36949829257637,
+          "mean_matched_intensity_pct": 36.78155511037737,
+          "mean_longest_b": 4.226415094339623,
+          "mean_longest_y": 7.169811320754717,
+          "hyperscore_vs_unmodified": 1.3431490665482109
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 831.1878439820147
+      },
+      {
+        "rank": 37,
+        "delta_mass": 115.04815121773399,
+        "count": 100,
+        "count_pct": 0.13736075053914096,
+        "intensity_sum": 49043877.60900001,
+        "intensity_pct": 0.03516281149146595,
+        "prominence": 66,
+        "confidence": {
+          "mean_hyperscore": 38.177592503433786,
+          "median_hyperscore": 37.76498556838352,
+          "mean_matched_intensity_pct": 24.543707179999988,
+          "mean_longest_b": 2.71,
+          "mean_longest_y": 6.59,
+          "hyperscore_vs_unmodified": 1.0529239741976155
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 826.0171162741191
+      },
+      {
+        "rank": 38,
+        "delta_mass": -0.1275205189934298,
+        "count": 96,
+        "count_pct": 0.1318663205175753,
+        "intensity_sum": 41679071.73599999,
+        "intensity_pct": 0.029882493270134727,
+        "prominence": 50,
+        "confidence": {
+          "mean_hyperscore": 36.32335525801496,
+          "median_hyperscore": 34.44267907197897,
+          "mean_matched_intensity_pct": 13.13248280208333,
+          "mean_longest_b": 2.3854166666666665,
+          "mean_longest_y": 5.229166666666667,
+          "hyperscore_vs_unmodified": 1.0017847922448504
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 618.2773019831731
+      },
+      {
+        "rank": 39,
+        "delta_mass": 270.10991574961054,
+        "count": 95,
+        "count_pct": 0.1304927130121839,
+        "intensity_sum": 174165958.1,
+        "intensity_pct": 0.12487113685678508,
+        "prominence": 94,
+        "confidence": {
+          "mean_hyperscore": 40.92325421885274,
+          "median_hyperscore": 41.10176693028052,
+          "mean_matched_intensity_pct": 33.97908995263158,
+          "mean_longest_b": 3.042105263157895,
+          "mean_longest_y": 6.5473684210526315,
+          "hyperscore_vs_unmodified": 1.1286483155096338
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 569.1046868246826
+      },
+      {
+        "rank": 40,
+        "delta_mass": 0.8720299339415042,
+        "count": 90,
+        "count_pct": 0.12362467548522685,
+        "intensity_sum": 52344785.15400001,
+        "intensity_pct": 0.03752945123151564,
+        "prominence": 47,
+        "confidence": {
+          "mean_hyperscore": 37.04674918734076,
+          "median_hyperscore": 36.084841180163025,
+          "mean_matched_intensity_pct": 14.651233725555562,
+          "mean_longest_b": 2.6333333333333333,
+          "mean_longest_y": 5.144444444444445,
+          "hyperscore_vs_unmodified": 1.0217357310293649
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 598.1552055479297
+      },
+      {
+        "rank": 41,
+        "delta_mass": 74.01947651247522,
+        "count": 86,
+        "count_pct": 0.11813024546366122,
+        "intensity_sum": 35294291.98499999,
+        "intensity_pct": 0.025304820831817114,
+        "prominence": 74,
+        "confidence": {
+          "mean_hyperscore": 34.42483552948998,
+          "median_hyperscore": 32.455942479849796,
+          "mean_matched_intensity_pct": 19.920329606976747,
+          "mean_longest_b": 3.0232558139534884,
+          "mean_longest_y": 4.883720930232558,
+          "hyperscore_vs_unmodified": 0.949424315678097
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 918.2465231924659
+      },
+      {
+        "rank": 42,
+        "delta_mass": 78.01313979519828,
+        "count": 81,
+        "count_pct": 0.11126220793670416,
+        "intensity_sum": 137297730.65600005,
+        "intensity_pct": 0.09843785721333449,
+        "prominence": 71,
+        "confidence": {
+          "mean_hyperscore": 40.837004301595094,
+          "median_hyperscore": 40.418498440340905,
+          "mean_matched_intensity_pct": 32.122516733333335,
+          "mean_longest_b": 2.123456790123457,
+          "mean_longest_y": 7.012345679012346,
+          "hyperscore_vs_unmodified": 1.126269574481242
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 501.5211690328339
+      },
+      {
+        "rank": 43,
+        "delta_mass": -18.009730614338142,
+        "count": 79,
+        "count_pct": 0.10851499292592134,
+        "intensity_sum": 79914435.29199997,
+        "intensity_pct": 0.057295963545588094,
+        "prominence": 67,
+        "confidence": {
+          "mean_hyperscore": 35.55698211967477,
+          "median_hyperscore": 34.07063491193929,
+          "mean_matched_intensity_pct": 21.32486101392406,
+          "mean_longest_b": 1.759493670886076,
+          "mean_longest_y": 6.810126582278481,
+          "hyperscore_vs_unmodified": 0.9806485026669552
+        },
+        "annotations": [
+          {
+            "unimod_id": 23,
+            "name": "Dehydrated",
+            "delta_mass": -18.010565,
+            "mass_error_da": 0.0008343856618573398,
+            "mass_error_ppm": 1.0200426850095763,
+            "sites": [
+              "C"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 27,
+            "name": "Glu->pyro-Glu",
+            "delta_mass": -18.010565,
+            "mass_error_da": 0.0008343856618573398,
+            "mass_error_ppm": 1.0200426850095763,
+            "sites": [
+              "E"
+            ],
+            "classification": "Artefact",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 2132,
+            "name": "b-type-ion",
+            "delta_mass": -18.010565,
+            "mass_error_da": 0.0008343856618573398,
+            "mass_error_ppm": 1.0200426850095763,
+            "sites": [],
+            "classification": "Other",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 817.9909273595805
+      },
+      {
+        "rank": 44,
+        "delta_mass": 2.910854874231343,
+        "count": 79,
+        "count_pct": 0.10851499292592134,
+        "intensity_sum": 67059120.229,
+        "intensity_pct": 0.04807913481464128,
+        "prominence": 49,
+        "confidence": {
+          "mean_hyperscore": 36.63126496292439,
+          "median_hyperscore": 35.14534533506348,
+          "mean_matched_intensity_pct": 13.03827679620253,
+          "mean_longest_b": 2.607594936708861,
+          "mean_longest_y": 5.531645569620253,
+          "hyperscore_vs_unmodified": 1.010276828775391
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 615.8230422021937
+      },
+      {
+        "rank": 45,
+        "delta_mass": 79.96606953103942,
+        "count": 77,
+        "count_pct": 0.10576777791513853,
+        "intensity_sum": 35132143.77700001,
+        "intensity_pct": 0.025188566017770024,
+        "prominence": 58,
+        "confidence": {
+          "mean_hyperscore": 36.54255266242618,
+          "median_hyperscore": 36.774108787516184,
+          "mean_matched_intensity_pct": 20.282599935064937,
+          "mean_longest_b": 1.9350649350649352,
+          "mean_longest_y": 6.415584415584416,
+          "hyperscore_vs_unmodified": 1.0078301761219428
+        },
+        "annotations": [
+          {
+            "unimod_id": 21,
+            "name": "Phospho",
+            "delta_mass": 79.966331,
+            "mass_error_da": -0.00026146896057355207,
+            "mass_error_ppm": -0.3775775753831585,
+            "sites": [
+              "S",
+              "T",
+              "Y"
+            ],
+            "classification": "Post-translational",
+            "source": "unimod"
+          },
+          {
+            "unimod_id": 40,
+            "name": "Sulfo",
+            "delta_mass": 79.956815,
+            "mass_error_da": 0.009254531039417202,
+            "mass_error_ppm": 13.364123158275875,
+            "sites": [
+              "S",
+              "T",
+              "Y"
+            ],
+            "classification": "Post-translational",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": true,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 692.4907028925602
+      },
+      {
+        "rank": 46,
+        "delta_mass": 43.0080421674961,
+        "count": 73,
+        "count_pct": 0.1002733478935729,
+        "intensity_sum": 83982744.19999997,
+        "intensity_pct": 0.060212804264454994,
+        "prominence": 55,
+        "confidence": {
+          "mean_hyperscore": 39.082011291236554,
+          "median_hyperscore": 37.5350950845901,
+          "mean_matched_intensity_pct": 27.800698542465756,
+          "mean_longest_b": 1.5342465753424657,
+          "mean_longest_y": 7.493150684931507,
+          "hyperscore_vs_unmodified": 1.077867512067549
+        },
+        "annotations": [
+          {
+            "unimod_id": 5,
+            "name": "Carbamyl",
+            "delta_mass": 43.005814,
+            "mass_error_da": 0.0022281674960993314,
+            "mass_error_ppm": 2.928471187850299,
+            "sites": [
+              "K",
+              "N-term"
+            ],
+            "classification": "Multiple",
+            "source": "unimod"
+          }
+        ],
+        "ambiguous": false,
+        "unannotated": false,
+        "folded_count": 0,
+        "representative_mz": 760.8637248485143
+      },
+      {
+        "rank": 47,
+        "delta_mass": 284.12562368777486,
+        "count": 67,
+        "count_pct": 0.09203170286122443,
+        "intensity_sum": 93993813.18899998,
+        "intensity_pct": 0.06739040417804072,
+        "prominence": 51,
+        "confidence": {
+          "mean_hyperscore": 40.587963264394325,
+          "median_hyperscore": 37.636979269315496,
+          "mean_matched_intensity_pct": 29.28988084626866,
+          "mean_longest_b": 3.0597014925373136,
+          "mean_longest_y": 6.477611940298507,
+          "hyperscore_vs_unmodified": 1.1194011141768334
+        },
+        "annotations": [],
+        "ambiguous": false,
+        "unannotated": true,
+        "folded_count": 0,
+        "representative_mz": 683.945948188324
+      }
+    ],
+    "discovery_settings": {
+      "bin_width_da": 0.01,
+      "min_peak_count": 5,
+      "peak_merge_tolerance_da": 0.01,
+      "prominence_threshold": 0.3,
+      "peak_assignment_mode": "merge",
+      "calibration_mode": "da-scalar",
+      "enable_neutron_folding": true,
+      "enable_satellite_folding": false
+    }
+  },
+  "signal_fate": {
+    "id_rate_by_count_pct": 66.25606690934303,
+    "id_rate_by_tic_pct": 24.45710968911614,
+    "identified_spectra": 61157,
+    "total_ms2_spectra": 92304,
+    "chimera_rate_pct": 19.039521232238336
+  },
+  "polymer": {
+    "total_pct_tic": 0.36278435756748756,
+    "contamination_level": "Moderate (0.1-1%)",
+    "top_polymers": [
+      {
+        "name": "PEG+2H",
+        "pct_tic": 0.10667692052709675
+      },
+      {
+        "name": "PEG+1H",
+        "pct_tic": 0.08365304030821147
+      },
+      {
+        "name": "PEG+3H",
+        "pct_tic": 0.04724045544243571
+      },
+      {
+        "name": "Tween-40",
+        "pct_tic": 0.04137698678577798
+      },
+      {
+        "name": "Tween-20",
+        "pct_tic": 0.0327892732413103
+      },
+      {
+        "name": "Triton X-100 (Na)",
+        "pct_tic": 0.018684633296124794
+      },
+      {
+        "name": "Polysiloxane",
+        "pct_tic": 0.008152173266236068
+      },
+      {
+        "name": "PPG",
+        "pct_tic": 0.005068965201537535
+      },
+      {
+        "name": "Triton X-100",
+        "pct_tic": 0.0043392089560640905
+      },
+      {
+        "name": "IGEPAL CA-630 (NP-40)",
+        "pct_tic": 0.0029362743289945404
+      }
+    ]
+  },
+  "oxonium": {
+    "glycopeptide_candidates": 101,
+    "glycopeptide_pct": 0.109421043508407
+  },
+  "digestion": {
+    "missed_cleavage_0_pct": 83.69939973352014,
+    "missed_cleavage_1_pct": 15.187978187112815,
+    "missed_cleavage_2plus_pct": 1.1126220793670416,
+    "ragged_ends_pct": 0.0
+  },
+  "mass_accuracy": {
+    "precursor_median_ppm": 0.9111848,
+    "precursor_p95_ppm": 147569.62,
+    "fragment_median_ppm": 2.16365,
+    "fragment_p95_ppm": 5.1904726
+  },
+  "alkylation": {
+    "fixed_mod_assumed": "Carbamidomethyl (+57.02 Da) on C",
+    "cys_psm_count": 6971,
+    "cys_psm_pct": 9.575417920083515,
+    "unalkylated_count": 1,
+    "unalkylated_pct": 0.014345144168698896,
+    "status": "✓ Alkylation appears complete"
+  },
+  "ms1_calibration": {
+    "clean_subset_n_psms": 19288,
+    "hyperscore_guard_applied": true,
+    "bias_ppm": 0.0,
+    "spread_mad_ppm": 0.6406832475523613,
+    "user_recommendation_tolerance_ppm": 10.0,
+    "user_recommendation_requirement_ppm": 3.2034162377618065,
+    "user_recommendation_exceeds_ladder": false,
+    "user_recommendation_low_ppm": -10.0,
+    "user_recommendation_high_ppm": 10.0,
+    "pass2_window_low_ppm": -3.2034162377618065,
+    "pass2_window_high_ppm": 3.2034162377618065,
+    "ms2_tolerance_low_ppm": -1.82220285,
+    "ms2_tolerance_high_ppm": 1.82220285,
+    "ms2_median_abs_ppm": 1.84409715,
+    "ms2_spread_mad_ppm": 0.5061080500000001
+  },
+  "recommendations": {
+    "fixed": [
+      {
+        "delta_mass": 57.02200575559884,
+        "count": 3379,
+        "count_pct": 4.6414197607175725,
+        "label": "Carbamidomethyl on C",
+        "category": "Common Fixed",
+        "role": "fixed",
+        "decided_by": "statistics",
+        "sites": "C",
+        "position": "Anywhere.",
+        "odds_ratio": 445.37836616663657,
+        "q_value": 0.0
+      }
+    ],
+    "variable": [
+      {
+        "delta_mass": 15.99538184268223,
+        "count": 1430,
+        "count_pct": 1.9642587327097156,
+        "label": "Oxidation on M",
+        "category": "Common Variable",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "M",
+        "position": "Anywhere.",
+        "odds_ratio": 28.917483818163603,
+        "q_value": 0.0
+      },
+      {
+        "delta_mass": 0.9820417444173491,
+        "count": 745,
+        "count_pct": 1.0233375915166,
+        "label": "Deamidation",
+        "category": "Common Artifact",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "NQ",
+        "position": "Anywhere.",
+        "odds_ratio": 3.257643884892086,
+        "q_value": 1.2298614545702869e-23
+      },
+      {
+        "delta_mass": 52.91125147821962,
+        "count": 354,
+        "count_pct": 0.48625705690855897,
+        "label": "Fe[III]",
+        "category": "Metal",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "DE",
+        "position": "Anywhere.",
+        "odds_ratio": 4.46603015577391,
+        "q_value": 8.234832731937785e-8
+      },
+      {
+        "delta_mass": -17.025658636232002,
+        "count": 309,
+        "count_pct": 0.4244447191659455,
+        "label": "Gln->pyro-Glu",
+        "category": "Common Biological",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "Q",
+        "position": "Peptide N-terminal.",
+        "odds_ratio": 305.21289752650176,
+        "q_value": 3.1614183975117633e-293
+      },
+      {
+        "delta_mass": -89.02883252189221,
+        "count": 202,
+        "count_pct": 0.2774687160890647,
+        "label": "Met-loss+Acetylation",
+        "category": "Common Biological",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "",
+        "position": "Protein N-terminal, Met loss.",
+        "odds_ratio": 4154.17625,
+        "q_value": 0.0
+      },
+      {
+        "delta_mass": 53.91406228574833,
+        "count": 184,
+        "count_pct": 0.25274378099201933,
+        "label": "Fe[II]",
+        "category": "Metal",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "DE",
+        "position": "Anywhere.",
+        "odds_ratio": 2.4252632928157913,
+        "q_value": 0.006166816019174317
+      },
+      {
+        "delta_mass": 42.01093730954564,
+        "count": 120,
+        "count_pct": 0.16483290064696912,
+        "label": "Acetylation",
+        "category": "Common Biological",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "",
+        "position": "Protein N-terminal.",
+        "odds_ratio": 156.9520295202952,
+        "q_value": 2.5115911315798876e-78
+      },
+      {
+        "delta_mass": -18.009730614338142,
+        "count": 79,
+        "count_pct": 0.10851499292592134,
+        "label": "Water Loss (Glu->pyro-Glu)",
+        "category": "Common Artifact",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "E",
+        "position": "Peptide N-terminal.",
+        "odds_ratio": 10.33210101999911,
+        "q_value": 3.270786414245094e-10
+      },
+      {
+        "delta_mass": 79.96606953103942,
+        "count": 77,
+        "count_pct": 0.10576777791513853,
+        "label": "Phosphorylation",
+        "category": "Common Biological",
+        "role": "variable",
+        "decided_by": "statistics",
+        "sites": "ST",
+        "position": "Anywhere.",
+        "odds_ratio": 29.363919663622926,
+        "q_value": 5.998320189092277e-6
+      }
+    ],
+    "not_recommended": [
+      {
+        "delta_mass": 58.024359815688406,
+        "count": 931,
+        "count_pct": 1.2788285875194023,
+        "reason": "satellite (+1 C13 of +57.0220)"
+      },
+      {
+        "delta_mass": 16.99726278506322,
+        "count": 394,
+        "count_pct": 0.5412013571242154,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 0.9510412082638963,
+        "count": 374,
+        "count_pct": 0.5137292070163871,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 1.9814495114973143,
+        "count": 373,
+        "count_pct": 0.5123555995109957,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": -1.028974086421004,
+        "count": 353,
+        "count_pct": 0.4848834494031675,
+        "reason": "below_floor_uncurated",
+        "label": "Lys->Allysine",
+        "name_source": "unimod",
+        "sites": "K",
+        "position": "Anywhere."
+      },
+      {
+        "delta_mass": -0.9800594822536054,
+        "count": 290,
+        "count_pct": 0.39834617656350874,
+        "reason": "below_floor",
+        "label": "Amidation",
+        "name_source": "curated",
+        "position": "Peptide C-terminal."
+      },
+      {
+        "delta_mass": 59.02803780032297,
+        "count": 287,
+        "count_pct": 0.3942253540473345,
+        "reason": "satellite (+2 C13 of +57.0220)",
+        "label": "AEC-MAEC",
+        "name_source": "unimod"
+      },
+      {
+        "delta_mass": 0.9303668959093047,
+        "count": 263,
+        "count_pct": 0.3612587739179407,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 1.9388630807775218,
+        "count": 256,
+        "count_pct": 0.35164352138020083,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 0.9093878153332673,
+        "count": 206,
+        "count_pct": 0.28296314611063034,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 114.04314465434878,
+        "count": 200,
+        "count_pct": 0.2747215010782819,
+        "reason": "failed_residue_test",
+        "label": "GG (Ubiquitination Site)",
+        "name_source": "curated",
+        "sites": "K",
+        "position": "Anywhere.",
+        "odds_ratio": 0.6595847021378937,
+        "q_value": 1.0
+      },
+      {
+        "delta_mass": -1.0602883412260649,
+        "count": 194,
+        "count_pct": 0.26647985604593344,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 1.9200772422899115,
+        "count": 192,
+        "count_pct": 0.2637326410351506,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": -0.9596898503643254,
+        "count": 187,
+        "count_pct": 0.25686460350819357,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 73.01813400986823,
+        "count": 176,
+        "count_pct": 0.24175492094888806,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 1.9027595843932579,
+        "count": 155,
+        "count_pct": 0.21290916333566848,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 31.99007758403766,
+        "count": 150,
+        "count_pct": 0.20604112580871142,
+        "reason": "below_floor",
+        "label": "Dioxidation",
+        "name_source": "curated",
+        "sites": "WPRKMFYC",
+        "position": "Anywhere."
+      },
+      {
+        "delta_mass": 0.8898624203151227,
+        "count": 150,
+        "count_pct": 0.20604112580871142,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 2.049996487234072,
+        "count": 147,
+        "count_pct": 0.20192030329253718,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 17.025776106995597,
+        "count": 143,
+        "count_pct": 0.19642587327097155,
+        "reason": "below_floor_uncurated",
+        "label": "Ammonium",
+        "name_source": "unimod",
+        "sites": "DE",
+        "position": "Anywhere."
+      },
+      {
+        "delta_mass": 2.0304467361500516,
+        "count": 143,
+        "count_pct": 0.19642587327097155,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 18.000532742471968,
+        "count": 140,
+        "count_pct": 0.1923050507547973,
+        "reason": "below_floor_uncurated",
+        "label": "Fluoro",
+        "name_source": "unimod",
+        "sites": "AFWY",
+        "position": "Anywhere."
+      },
+      {
+        "delta_mass": -1.0991364583329852,
+        "count": 119,
+        "count_pct": 0.16345929314157773,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 1.8799600362804387,
+        "count": 113,
+        "count_pct": 0.15521764810922928,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 18.030602251291555,
+        "count": 106,
+        "count_pct": 0.1456023955714894,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 115.04815121773399,
+        "count": 100,
+        "count_pct": 0.13736075053914096,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": -0.1275205189934298,
+        "count": 96,
+        "count_pct": 0.1318663205175753,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 270.10991574961054,
+        "count": 95,
+        "count_pct": 0.1304927130121839,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 0.8720299339415042,
+        "count": 90,
+        "count_pct": 0.12362467548522685,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 74.01947651247522,
+        "count": 86,
+        "count_pct": 0.11813024546366122,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 78.01313979519828,
+        "count": 81,
+        "count_pct": 0.11126220793670416,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 2.910854874231343,
+        "count": 79,
+        "count_pct": 0.10851499292592134,
+        "reason": "below_floor_uncurated"
+      },
+      {
+        "delta_mass": 43.0080421674961,
+        "count": 73,
+        "count_pct": 0.1002733478935729,
+        "reason": "below_floor",
+        "label": "Carbamyl",
+        "name_source": "curated",
+        "position": "Peptide N-terminal."
+      },
+      {
+        "delta_mass": 284.12562368777486,
+        "count": 67,
+        "count_pct": 0.09203170286122443,
+        "reason": "below_floor_uncurated"
+      }
+    ],
+    "notable_unannotated": [],
+    "carpet_margin_psms": 301.79999999999995,
+    "carpet_tallest_psms": 374,
+    "floor_psms": 675.8,
+    "floor_pct_of_top": 20.0,
+    "odds_ratio_min": 2.0,
+    "q_max": 0.05,
+    "annotation_source": "MetaMorpheus curated mod list (recon-tool/resources/mods/), dated snapshot",
+    "protein_context": {
+      "fasta": "testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta",
+      "proteins_indexed": 20596,
+      "psms_resolved": 55670,
+      "psms_total": 55670,
+      "resolved_pct": 100.0,
+      "protein_nterm_psms": 593
+    },
+    "caveats": [
+      "'fixed' and 'variable' are inherited labels, not recon measurements. They come from the curated list's MT field and are passed through as guidance for how to set each modification in your FINAL search. Recon makes no judgement of its own here: an open search assigns one delta per PSM, so residue occupancy cannot approach total occurrence and cannot decide the split. Treat the label as the curator's convention.",
+      "Modifications whose acceptors are unspecific (any residue at a terminus, or an acceptor set present in nearly every peptide) cannot be tested statistically. They are decided by abundance alone and carry no odds ratio.",
+      "Recommendations are not prevalence estimates. Recon reports which modifications to search for, not how much of each is present.",
+      "Peaks with no curated match are reported in the tail, never tiered. That is deliberate: a novel delta mass must stay visible."
+    ]
+  },
+  "analyzers": {
+    "instrument_model": "Q Exactive Plus",
+    "ms1_analyzers": [
+      "Orbitrap / FT-ICR"
+    ],
+    "ms2_analyzers": [
+      "Orbitrap / FT-ICR"
+    ],
+    "ms2_switched": false,
+    "pass1_fragment_tol": "±20 ppm",
+    "basis": "Detected",
+    "assumed": false,
+    "explanation": "MS2 analyzer is Orbitrap / FT-ICR; pass-1 fragment tolerance ±20 ppm."
+  }
+}

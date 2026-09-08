@@ -1,0 +1,106 @@
+{
+  "version": "0.15.0-beta.2",
+  "database": {
+    "bucket_size": 8192,
+    "enzyme": {
+      "missed_cleavages": 2,
+      "min_len": 7,
+      "max_len": 50,
+      "cleave_at": "KR",
+      "restrict": "P",
+      "c_terminal": true,
+      "semi_enzymatic": null
+    },
+    "peptide_min_mass": 500.0,
+    "peptide_max_mass": 5000.0,
+    "ion_kinds": [
+      "b",
+      "y"
+    ],
+    "min_ion_index": 2,
+    "static_mods": {},
+    "variable_mods": {},
+    "max_variable_mods": 1,
+    "decoy_tag": "rev_",
+    "generate_decoys": true,
+    "fasta": "file:///path/to/sageRecon/testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta",
+    "prefilter_chunk_size": 0,
+    "prefilter": false,
+    "prefilter_low_memory": true
+  },
+  "quant": {
+    "tmt": null,
+    "tmt_settings": {
+      "level": 3,
+      "sn": false
+    },
+    "lfq": false,
+    "lfq_settings": {
+      "peak_scoring": "Hybrid",
+      "integration": "Sum",
+      "spectral_angle": 0.7,
+      "ppm_tolerance": 5.0,
+      "mobility_pct_tolerance": 1.0,
+      "combine_charge_states": true,
+      "peptide_q_value": 0.01
+    }
+  },
+  "precursor_tol": {
+    "da": [
+      -500.0,
+      100.0
+    ]
+  },
+  "fragment_tol": {
+    "ppm": [
+      -20.0,
+      20.0
+    ]
+  },
+  "precursor_charge": [
+    2,
+    4
+  ],
+  "override_precursor_charge": false,
+  "isotope_errors": [
+    0,
+    0
+  ],
+  "deisotope": true,
+  "chimera": true,
+  "wide_window": false,
+  "min_peaks": 15,
+  "max_peaks": 150,
+  "max_fragment_charge": 1,
+  "min_matched_peaks": 4,
+  "report_psms": 2,
+  "predict_rt": false,
+  "mzml_paths": [
+    "file:///path/to/sageRecon/testing/inputs/2019-4-9_909c_0311.mzML.gz"
+  ],
+  "output_paths": [
+    "file:///path/to/sageRecon/testing/recon-output/full-run/serum_search/results.sage.tsv"
+  ],
+  "bruker_config": {
+    "ms2": {
+      "spectrum_processing_params": {
+        "smoothing_window": 1,
+        "centroiding_window": 1,
+        "calibration_tolerance": 0.1,
+        "calibrate": false
+      },
+      "frame_splitting_params": {
+        "Quadrupole": {
+          "Even": 1
+        }
+      }
+    },
+    "ms1": {
+      "mz_ppm": 5.0,
+      "ims_pct": 3.0
+    }
+  },
+  "protein_grouping": false,
+  "protein_grouping_peptide_fdr": 0.01,
+  "score_type": "SageHyperScore"
+}

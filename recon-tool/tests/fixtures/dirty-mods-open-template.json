@@ -1,0 +1,25 @@
+{
+  "_fixture_note": "NOT A USABLE SEARCH CONFIG. Built 2026-09-01 for no_mods_guard.rs. No committed template carries BOTH variable mods and a valid open-search isotope_errors [0,0]: every config with variable mods is a CLOSED-search config and carries [-1,3] or [0,2], which pass 1 now refuses outright. So the variable-mods half of the strip has no real file to test against, and this fixture supplies one. The static-mods, fasta and isotope guards are all tested against REAL committed configs; only this one is synthetic, and it only exercises a JSON transformation.",
+  "database": {
+    "bucket_size": 8192,
+    "enzyme": { "missed_cleavages": 2, "min_len": 7, "max_len": 50, "cleave_at": "KR", "restrict": "P" },
+    "fragment_min_mz": 200.0,
+    "fragment_max_mz": 2000.0,
+    "peptide_min_mass": 500.0,
+    "peptide_max_mass": 5000.0,
+    "static_mods": { "C": 57.0215 },
+    "variable_mods": { "M": [15.9949], "[": [42.010565] },
+    "max_variable_mods": 2,
+    "generate_decoys": true,
+    "fasta": "testing/inputs/A-DATABASE-THAT-WAS-NEVER-SEARCHED.fasta"
+  },
+  "precursor_tol": { "da": [-500.0, 100.0] },
+  "fragment_tol": { "ppm": [-20.0, 20.0] },
+  "isotope_errors": [0, 0],
+  "deisotope": false,
+  "chimera": false,
+  "min_peaks": 15,
+  "max_peaks": 150,
+  "report_psms": 1,
+  "output_directory": "."
+}

@@ -1,0 +1,119 @@
+================================================================================================
+PEAK ASSIGNMENT COMPARISON
+  input          testing\search-output\step1-open-b1906\results.sage.tsv
+  PSMs kept      28005
+  min_peak_count 5   q<=0.01
+================================================================================================
+
+--- Merge ---
+  peaks 48   PSMs claimed by all peaks 20721 of 28005 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000   14330   13236  Unmodified                     -       -       -      -
+    57.02186    1253    1154  Carbamidomethyl                C     96%     10%   9.27
+    15.99492     748     427  Oxidation                    HMW    100%     52%   1.93
+    43.00579     555     343  Carbamyl                       K     71%     61%   1.16
+    53.91857     341     313  Cation:Fe[II]                  -       -       -      -
+    58.02368     248     154  (unannotated)                  -       -       -      -
+     0.98180     228     131  Deamidated                    NQ     79%     67%   1.18
+    27.99465     192     105  Formyl                         -       -       -      -
+    16.99783     187     140  (unannotated)                  -       -       -      -
+   301.98628     186     155  Unknown:302                    -       -       -      -
+    73.01611     115      80  (unannotated)                  -       -       -      -
+    -1.02253     112      82  Lys-&gt;Allysine               -       -       -      -
+    -1.06207     109      46  (unannotated)                  -       -       -      -
+     0.95050     107      51  (unannotated)                  -       -       -      -
+     0.92998     102      44  (unannotated)                  -       -       -      -
+     1.96762      89      47  (unannotated)                  -       -       -      -
+     1.94841      80      44  (unannotated)                  -       -       -      -
+   183.03527      79      42  AEBS                           -       -       -      -
+    -1.07929      78      35  (unannotated)                  -       -       -      -
+   114.04259      76      61  GG                             -       -       -      -
+    -1.97147      76      41  (unannotated)                  -       -       -      -
+    59.02767      75      48  AEC-MAEC                       -       -       -      -
+    -2.04037      75      34  (unannotated)                  -       -       -      -
+    -0.09969      75      34  Unmodified                     -       -       -      -
+    54.92084      71      61  (unannotated)                  -       -       -      -
+   128.09485      68      35  Lys                            -       -       -      -
+   110.94026      66      65  (unannotated)                  -       -       -      -
+    -2.08709      66      28  (unannotated)                  -       -       -      -
+    -1.09832      63      31  (unannotated)                  -       -       -      -
+    -1.94923      63      24  (unannotated)                  -       -       -      -
+    31.98955      59      54  Dioxidation                    M     41%     23%   1.77
+    37.94630      59      43  Cation:Ca[II]                  -       -       -      -
+     1.91972      56      24  (unannotated)                  -       -       -      -
+    44.00917      55      45  Delta:H(4)C(2)O(-1)S(1)        -       -       -      -
+    17.99816      53      41  Fluoro                         -       -       -      -
+     0.89696      51      11  (unannotated)                  -       -       -      -
+    -1.11756      50      25  (unannotated)                  -       -       -      -
+     0.87928      50      24  (unannotated)                  -       -       -      -
+    21.97981      46      40  Cation:Na                     DE    100%     79%   1.27
+    -1.92001      44      17  (unannotated)                  -       -       -      -
+   -18.01126      41      38  Dehydrated                     C      0%     10%   0.00
+   -17.02658      41      30  Gln-&gt;pyro-Glu               Q     80%     45%   1.79
+    74.01899      39      33  (unannotated)                  -       -       -      -
+   100.02637      34      28  (unannotated)                  -       -       -      -
+    28.99827      34      24  Nitrosyl                       -       -       -      -
+    -2.10909      34      22  (unannotated)                  -       -       -      -
+   249.98068      33      30  Unknown:250                    -       -       -      -
+   302.98804      29      23  (unannotated)                  -       -       -      -
+
+--- Split ---
+  peaks 45   PSMs claimed by all peaks 20159 of 28005 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000   14330   13948  Unmodified                     -       -       -      -
+    57.02171    1174    1154  Carbamidomethyl                C     96%     10%   9.27
+    15.99353     436     427  Oxidation                    HMW    100%     52%   1.93
+    43.00647     347     343  Carbamyl                       K     70%     61%   1.15
+    15.99672     343     339  Oxidation                    HMW    100%     52%   1.93
+    53.91857     341     313  Cation:Fe[II]                  -       -       -      -
+    43.00389     231     225  Carbamyl                       K     72%     61%   1.18
+   301.98628     186     155  Unknown:302                    -       -       -      -
+    58.02303     166     154  (unannotated)                  -       -       -      -
+     0.98060     162     131  Deamidated                    NQ     78%     67%   1.17
+    16.99875     149     140  (unannotated)                  -       -       -      -
+    -1.02253     112      82  Lys-&gt;Allysine               -       -       -      -
+    -1.06207     109      46  (unannotated)                  -       -       -      -
+    27.99362     107     105  Formyl                         -       -       -      -
+     0.95050     107      51  (unannotated)                  -       -       -      -
+    58.02825     106     100  (unannotated)                  -       -       -      -
+    27.99770     104      99  Formyl                         -       -       -      -
+    57.02671     101      95  Carbamidomethyl                C     95%     10%   9.20
+     1.98265      81      47  (unannotated)                  -       -       -      -
+    73.01669      80      80  (unannotated)                  -       -       -      -
+     0.98756      78      78  Deamidated                    NQ     78%     67%   1.16
+   114.04259      76      61  GG                             -       -       -      -
+    59.02767      75      48  AEC-MAEC                       -       -       -      -
+     0.93221      75      44  (unannotated)                  -       -       -      -
+    54.92084      71      61  (unannotated)                  -       -       -      -
+   110.94026      66      65  (unannotated)                  -       -       -      -
+     0.92094      60      38  (unannotated)                  -       -       -      -
+    31.98955      59      54  Dioxidation                    M     41%     23%   1.77
+     1.94610      59      44  (unannotated)                  -       -       -      -
+    37.94630      59      43  Cation:Ca[II]                  -       -       -      -
+    16.99052      56      48  (unannotated)                  -       -       -      -
+    -1.97362      56      41  (unannotated)                  -       -       -      -
+    44.00917      55      45  Delta:H(4)C(2)O(-1)S(1)        -       -       -      -
+    -2.05265      54      37  (unannotated)                  -       -       -      -
+    17.99816      53      41  Fluoro                         -       -       -      -
+    -1.95909      52      39  (unannotated)                  -       -       -      -
+     1.96745      47      47  (unannotated)                  -       -       -      -
+    21.97981      46      40  Cation:Na                     DE    100%     79%   1.27
+     1.96002      45      45  (unannotated)                  -       -       -      -
+   183.03599      42      42  AEBS                           -       -       -      -
+    -2.03074      42      32  (unannotated)                  -       -       -      -
+   183.03395      41      39  AEBS                           -       -       -      -
+   -18.01126      41      38  Dehydrated                     C      0%     10%   0.00
+    73.01377      40      40  (unannotated)                  -       -       -      -
+    -2.04010      39      34  (unannotated)                  -       -       -      -
+
+================================================================================================
+  Merge   48 peaks    20721 PSM claims
+  Split   45 peaks    20159 PSM claims
+
+  'in-pk' is the share of the peak's PSMs whose peptide CONTAINS one of
+  the listed residues. 'bg' is the same share over the whole run, and 'enr'
+  is in-pk / bg. READ THE CEILING: enrichment cannot exceed 1/bg, so a
+  common residue set gives a low ceiling and a weak test — N or Q occurs in
+  most tryptic peptides by chance, capping enr near 1.2, while a rare
+  residue like C or W discriminates strongly. Sequence membership only; it
+  cannot say the mod SITS on that residue. A DIAGNOSTIC, not a gate.

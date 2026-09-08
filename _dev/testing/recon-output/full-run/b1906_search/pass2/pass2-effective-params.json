@@ -1,0 +1,109 @@
+{
+  "_recon_note": "BUNDLED DEFAULT, compiled into the recon binary. This is the pass-2 semi-enzymatic search on the identified subset. It carries NO database.fasta and NO mzml_paths on purpose: pass 2 always writes the generated subset FASTA and the run's own mzML. precursor_tol, fragment_tol, isotope_errors and the mods are ALSO overridden at runtime from what pass 1 measured — the values below are the fallback shape, not a record of what ran. That record is the pass2-effective-params.json written beside the search, and Sage's own results.json beside that. Every other field must match testing/configs/digestion-efficiency-pass2.json — bundled_default_matches_committed_template asserts it.",
+  "_recon_pass2_provenance": {
+    "applied_fragment_tol": {
+      "ppm": [
+        -4.8122567,
+        4.8122567
+      ]
+    },
+    "applied_isotope_errors": [
+      0,
+      3
+    ],
+    "applied_precursor_tol": {
+      "ppm": [
+        -4.246288276134216,
+        3.2167835278408146
+      ]
+    },
+    "mods_note": "Pass 2 searches with NO fixed and NO variable mods. It measures where trypsin cut, not what is modified, and pass 1 is an OPEN search whose modification set is unknown by design.",
+    "ms1_window_delta_ppm": {
+      "high": 4.246288276134216,
+      "low": -3.2167835278408146
+    },
+    "pass1_fragment_tol": {
+      "ppm": [
+        -20.0,
+        20.0
+      ]
+    },
+    "sign_note": "precursor_tol is INVERTED relative to the delta mass it produces; measured on serum 2026-08-29. See src/pass2.rs.",
+    "subset_fasta": "testing/recon-output/full-run/b1906_search/pass2/subset_identified_proteins.fasta",
+    "subset_proteins": 2298,
+    "template": "<bundled pass-2 default, recon 0.1.1>",
+    "template_fragment_tol": {
+      "ppm": [
+        -20.0,
+        20.0
+      ]
+    },
+    "template_isotope_errors": [
+      0,
+      3
+    ],
+    "template_precursor_tol": {
+      "ppm": [
+        -10.0,
+        10.0
+      ]
+    },
+    "template_static_mods": {},
+    "template_variable_mods": {}
+  },
+  "chimera": false,
+  "database": {
+    "bucket_size": 8192,
+    "decoy_tag": "rev_",
+    "enzyme": {
+      "c_terminal": true,
+      "cleave_at": "KR",
+      "max_len": 50,
+      "min_len": 8,
+      "missed_cleavages": 1,
+      "restrict": "P",
+      "semi_enzymatic": true
+    },
+    "fasta": "testing/recon-output/full-run/b1906_search/pass2/subset_identified_proteins.fasta",
+    "generate_decoys": true,
+    "ion_kinds": [
+      "b",
+      "y"
+    ],
+    "max_variable_mods": 0,
+    "min_ion_index": 2,
+    "peptide_max_mass": 5000.0,
+    "peptide_min_mass": 500.0,
+    "static_mods": {},
+    "variable_mods": {}
+  },
+  "deisotope": true,
+  "fragment_tol": {
+    "ppm": [
+      -4.8122567,
+      4.8122567
+    ]
+  },
+  "isotope_errors": [
+    0,
+    3
+  ],
+  "max_fragment_charge": 1,
+  "max_peaks": 150,
+  "min_matched_peaks": 4,
+  "min_peaks": 15,
+  "precursor_charge": [
+    2,
+    4
+  ],
+  "precursor_tol": {
+    "ppm": [
+      -4.246288276134216,
+      3.2167835278408146
+    ]
+  },
+  "predict_rt": false,
+  "protein_grouping": false,
+  "report_psms": 1,
+  "wide_window": false
+}

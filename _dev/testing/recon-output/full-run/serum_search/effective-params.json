@@ -1,0 +1,89 @@
+{
+  "_recon_fragment_tol_provenance": {
+    "applied": {
+      "ppm": [
+        -20.0,
+        20.0
+      ]
+    },
+    "assumed": false,
+    "basis": "Detected",
+    "explanation": "MS2 analyzer is Orbitrap / FT-ICR; pass-1 fragment tolerance ±20 ppm.",
+    "fasta_note": "database.fasta and mzml_paths are the values ACTUALLY searched, taken from --fasta/--mzml. Sage's -f flag and positional mzML beat the JSON, so the template's values are recorded separately and are NOT what ran.",
+    "mods_note": "Pass 1 searches with NO fixed and NO variable mods. A fixed Cys mod would put every alkylated peptide at delta 0 and hide the alkylation state this tool exists to report.",
+    "ms1_analyzers": [
+      "Orbitrap / FT-ICR"
+    ],
+    "ms2_analyzers": [
+      "Orbitrap / FT-ICR"
+    ],
+    "template": "<bundled open-search default, recon 0.1.1>",
+    "template_fasta": null,
+    "template_fragment_tol": {
+      "ppm": [
+        -20.0,
+        20.0
+      ]
+    },
+    "template_static_mods": {},
+    "template_variable_mods": {}
+  },
+  "_recon_note": "BUNDLED DEFAULT, compiled into the recon binary. This is the pass-1 alkylation-agnostic open search. It carries NO database.fasta and NO mzml_paths on purpose: both are always supplied at runtime from --fasta and the mzML argument, and Sage's -f flag and positional mzML beat the JSON anyway. A path here would be a ghost. The record of what actually ran is the effective-params.json written beside each search, and Sage's own results.json beside that. Every other field must match testing/configs/open-search-params.json — bundled_default_matches_committed_template asserts it.",
+  "chimera": true,
+  "database": {
+    "bucket_size": 8192,
+    "decoy_tag": "rev_",
+    "enzyme": {
+      "c_terminal": true,
+      "cleave_at": "KR",
+      "max_len": 50,
+      "min_len": 7,
+      "missed_cleavages": 2,
+      "restrict": "P"
+    },
+    "fasta": "testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta",
+    "generate_decoys": true,
+    "ion_kinds": [
+      "b",
+      "y"
+    ],
+    "max_variable_mods": 0,
+    "min_ion_index": 2,
+    "peptide_max_mass": 5000.0,
+    "peptide_min_mass": 500.0,
+    "static_mods": {},
+    "variable_mods": {}
+  },
+  "deisotope": true,
+  "fragment_tol": {
+    "ppm": [
+      -20.0,
+      20.0
+    ]
+  },
+  "isotope_errors": [
+    0,
+    0
+  ],
+  "max_fragment_charge": 1,
+  "max_peaks": 150,
+  "min_matched_peaks": 4,
+  "min_peaks": 15,
+  "mzml_paths": [
+    "testing/inputs/2019-4-9_909c_0311.mzML.gz"
+  ],
+  "precursor_charge": [
+    2,
+    4
+  ],
+  "precursor_tol": {
+    "da": [
+      -500.0,
+      100.0
+    ]
+  },
+  "predict_rt": false,
+  "protein_grouping": false,
+  "report_psms": 2,
+  "wide_window": false
+}

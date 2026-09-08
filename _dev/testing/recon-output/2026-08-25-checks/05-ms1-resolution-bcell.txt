@@ -1,0 +1,23 @@
+====================================================================================
+bcell  (testing/inputs/B.naive_01steady-state.mzML.gz)
+MS1 scans inspected: 4000
+====================================================================================
+
+Analyzer terms seen in cvParam names:
+   fourier transform ion cyclotron resonance mass spectrometer  (x1)
+
+scan-level 'mass resolution' (MS:1000011) on MS1 scans:
+   NOT RECORDED on MS1 scans.
+
+Distinct MS1 filter strings (MS:1000512):
+   [ 4000 scans] FTMS + p NSI Full ms [300.00-1650.00]
+
+   Thermo filter strings name the analyzer (FTMS = Orbitrap) but usually
+   NOT the resolution setting. If resolution is absent everywhere, record
+   that absence and take the value from the instrument method or the
+   publication's methods section rather than inferring it.
+
+WHAT TO DO WITH THIS:
+   Wilmarth digest: ~120,000 baseline-resolves the 19 mDa deamidation/M1
+   doublet; 60,000 blurs it, worse at higher charge. Record the value found,
+   or its absence, in NOTES.

@@ -1,0 +1,34 @@
+# Keep byte-for-byte regression artifacts LF so autocrlf can't corrupt the
+# Tier 3 snapshot comparison. The recon tool writes LF; without this, a Windows
+# checkout would convert these to CRLF and every snapshot would false-positive
+# as "changed" on re-run. See NOTES Phase 8 determinism entry.
+_dev/testing/regression-snapshots/*.json    -text
+_dev/testing/recon-output/step0_expected_anchors.json    -text
+recon-tool/tests/fixtures/*.tsv    -text
+
+# External PTM-Shepherd benchmark reference — keep verbatim (LF) as received from
+# the tool, so we compare against the actual output, not a CRLF-rewritten copy.
+_dev/testing/reference-data/ptm-shepherd/**/*.tsv    -text
+_dev/testing/reference-data/ptm-shepherd/**/*.txt    -text
+_dev/testing/reference-data/ptm-shepherd/**/*.params -text
+_dev/testing/reference-data/ptm-shepherd/**/*.config -text
+
+# Full-run reports + console logs: recon writes LF; keep committed copies byte-faithful
+# to what the tool emitted so a future re-run diffs cleanly.
+_dev/testing/recon-output/full-run/*.json    -text
+_dev/testing/recon-output/full-run/*.txt     -text
+
+# Shipped example report. recon writes LF. This copy is produced on whichever
+# machine ran the release binary, so without this guard a Windows run commits a
+# CRLF version and the file stops matching what the tool emits. Same failure as
+# the unimod.xml one below, in a file a reader is meant to open.
+examples/*.json    -text
+examples/*.html    -text
+
+# Unimod source data. THIRD_PARTY_LICENSES.md states this file ships UNMODIFIED,
+# and the Design Science License Section 3 obligation is to distribute the Source
+# Data as received. A Windows CI checkout applies autocrlf and rewrote all 46589
+# line endings, so the windows-64 release archive carried a 2553267-byte file
+# where every other target carried the pinned 2506678-byte one (found 2026-09-02
+# by hashing the four CI artifacts). Keep it LF everywhere.
+recon-tool/resources/unimod.xml    -text

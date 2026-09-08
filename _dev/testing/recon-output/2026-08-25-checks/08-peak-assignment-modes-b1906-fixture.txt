@@ -1,0 +1,34 @@
+================================================================================================
+PEAK ASSIGNMENT COMPARISON
+  input          tests/fixtures/determinism_psms.tsv
+  PSMs kept      2000
+  min_peak_count 5   q<=0.01
+================================================================================================
+
+--- Merge ---
+  peaks 3   PSMs claimed by all peaks 1909 of 2000 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000    1858    1737  Unmodified                     -       -       -      -
+    15.99552      35      18  Oxidation                    HMW     97%     50%   1.93
+     0.98355      16      10  Deamidated                    NQ     94%     81%   1.16
+
+--- Split ---
+  peaks 5   PSMs claimed by all peaks 1910 of 2000 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000    1858    1842  Unmodified                     -       -       -      -
+    15.99376      18      18  Oxidation                    HMW     94%     50%   1.88
+    15.99645      18      18  Oxidation                    HMW    100%     50%   1.99
+     0.98271      11      10  Deamidated                    NQ     91%     81%   1.12
+     0.98546       5       5  Deamidated                    NQ    100%     81%   1.23
+
+================================================================================================
+  Merge    3 peaks     1909 PSM claims
+  Split    5 peaks     1910 PSM claims
+
+  'in-pk' is the share of the peak's PSMs whose peptide CONTAINS one of
+  the listed residues. 'bg' is the same share over the whole run, and 'enr'
+  is in-pk / bg. READ THE CEILING: enrichment cannot exceed 1/bg, so a
+  common residue set gives a low ceiling and a weak test — N or Q occurs in
+  most tryptic peptides by chance, capping enr near 1.2, while a rare
+  residue like C or W discriminates strongly. Sequence membership only; it
+  cannot say the mod SITS on that residue. A DIAGNOSTIC, not a gate.

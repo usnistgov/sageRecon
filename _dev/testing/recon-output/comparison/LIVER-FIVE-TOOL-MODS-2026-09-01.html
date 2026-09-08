@@ -1,0 +1,829 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Rendered companion to LIVER-FIVE-TOOL-MODS-2026-09-01.md.
+     Generated from the producers named in the page footer; not hand-edited.
+     Standalone copy of the published artifact: the artifact host supplies its
+     own doctype/head/body wrapper and a CSS reset, so this file adds both to
+     render correctly on its own. Fonts load from Google Fonts when online and
+     fall back to the stacks declared in the CSS when not. -->
+<title>Liver Mod Discovery, Five Ways</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+
+<style>
+  :root {
+    --ground:        #f4f6f7;
+    --surface:       #ffffff;
+    --surface-sunk:  #eceff1;
+    --ink:           #14191c;
+    --ink-soft:      #495459;
+    --ink-faint:     #77848a;
+    --rule:          #d3dade;
+    --rule-strong:   #b3bec4;
+    --accent:        #10606b;
+    --accent-soft:   #d3e6e8;
+    --settled:       #2f6a45;
+    --settled-soft:  #dcebe1;
+    --caution:       #8a5b0c;
+    --caution-soft:  #f2e6cf;
+    --open:          #96382f;
+    --open-soft:     #f4dedb;
+
+    --sans:  "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --measure: 68ch;
+    --pad: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:        #101619;
+      --surface:       #171f23;
+      --surface-sunk:  #1e282d;
+      --ink:           #e7edef;
+      --ink-soft:      #a9b6bb;
+      --ink-faint:     #7d8a90;
+      --rule:          #2a363b;
+      --rule-strong:   #3d4b51;
+      --accent:        #5fc3ce;
+      --accent-soft:   #1b3a3e;
+      --settled:       #7cc196;
+      --settled-soft:  #1b3226;
+      --caution:       #dcae5e;
+      --caution-soft:  #33280f;
+      --open:          #e08a80;
+      --open-soft:     #3a201d;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:        #101619;
+    --surface:       #171f23;
+    --surface-sunk:  #1e282d;
+    --ink:           #e7edef;
+    --ink-soft:      #a9b6bb;
+    --ink-faint:     #7d8a90;
+    --rule:          #2a363b;
+    --rule-strong:   #3d4b51;
+    --accent:        #5fc3ce;
+    --accent-soft:   #1b3a3e;
+    --settled:       #7cc196;
+    --settled-soft:  #1b3226;
+    --caution:       #dcae5e;
+    --caution-soft:  #33280f;
+    --open:          #e08a80;
+    --open-soft:     #3a201d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: var(--pad) var(--pad) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .standfirst {
+    max-width: var(--measure);
+    margin: 0;
+    font-size: 1.06rem;
+    color: var(--ink-soft);
+  }
+
+  .sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0;
+    margin: 0.25rem 0 0;
+    list-style: none;
+  }
+
+  .sources li {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+
+  .sources li.self {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .runmeta {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+  }
+
+  /* ---------- verdict rail ---------- */
+
+  .verdicts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+  }
+
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--vc, var(--accent));
+    padding: 1.1rem 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .verdict.is-settled { --vc: var(--settled); }
+  .verdict.is-open    { --vc: var(--open); }
+
+  .verdict .state {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--vc, var(--accent));
+  }
+
+  .verdict .figure {
+    font-family: var(--sans);
+    font-size: 1.85rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .verdict p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- sections ---------- */
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--rule-strong);
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  h2 .num {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0.4rem 0 0;
+    letter-spacing: 0.005em;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+
+  .lede { font-size: 0.95rem; color: var(--ink-soft); }
+
+  strong { font-weight: 600; }
+  em.q { font-style: italic; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--surface-sunk);
+    padding: 0.08em 0.34em;
+    border-radius: 2px;
+  }
+
+  /* ---------- tables ---------- */
+
+  .tscroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 0.87rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  caption {
+    caption-side: bottom;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    padding: 0.65rem 0.85rem;
+    border-top: 1px solid var(--rule);
+    line-height: 1.5;
+  }
+
+  th, td {
+    padding: 0.55rem 0.85rem;
+    text-align: right;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+
+  thead th {
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-strong);
+    background: var(--surface-sunk);
+  }
+
+  th[scope="row"], td.lab, thead th:first-child {
+    text-align: left;
+    white-space: normal;
+  }
+
+  th[scope="row"] {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  tbody tr:last-child td,
+  tbody tr:last-child th { border-bottom: 0; }
+
+  tr.is-self th[scope="row"],
+  tr.is-self td { background: var(--accent-soft); }
+
+  tr.is-self th[scope="row"] { font-weight: 600; color: var(--accent); }
+
+  td.key { font-weight: 600; }
+  td.mono, th.mono { font-family: var(--mono); font-size: 0.82rem; }
+  td.dim { color: var(--ink-faint); }
+
+  /* ---------- spread strip ---------- */
+
+  .strip {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 1.1rem 1.15rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .strip-row {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, auto) 1fr minmax(4.5rem, auto);
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .strip-label {
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink-soft);
+  }
+
+  .track {
+    position: relative;
+    height: 0.6rem;
+    background: var(--surface-sunk);
+    border-radius: 1px;
+  }
+
+  .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 1px;
+    background: var(--rule-strong);
+  }
+
+  .bar.method { background: var(--accent); }
+
+  .strip-val {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .strip-foot {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.7rem;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ---------- notes ---------- */
+
+  .note {
+    border-left: 3px solid var(--nc, var(--rule-strong));
+    background: var(--ns, var(--surface));
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .note .tag {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--nc, var(--ink-faint));
+  }
+
+  .note.caution { --nc: var(--caution); --ns: var(--caution-soft); }
+  .note.settled { --nc: var(--settled); --ns: var(--settled-soft); }
+  .note.open    { --nc: var(--open);    --ns: var(--open-soft); }
+  .note p { max-width: none; }
+
+  pre {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule);
+    padding: 0.95rem 1.1rem;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  ul.plain {
+    margin: 0;
+    padding-left: 1.15rem;
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  ul.plain li::marker { color: var(--accent); }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink-faint);
+    line-height: 1.7;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible,
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+<style>
+  .conv { display: grid; grid-template-columns: repeat(auto-fit, minmax(17rem,1fr)); gap: 1rem; }
+  .conv-card { background: var(--surface); border: 1px solid var(--rule);
+    border-left: 3px solid var(--caution); padding: 1rem 1.1rem; display:flex;
+    flex-direction:column; gap:.55rem; }
+  .conv-card .tag { font-family: var(--mono); font-size:.66rem; letter-spacing:.12em;
+    text-transform:uppercase; font-weight:600; color: var(--caution); }
+  .conv-card h4 { font-family: var(--sans); font-size:.98rem; font-weight:600; margin:0; }
+  .conv-card p { font-size:.87rem; color: var(--ink-soft); margin:0; max-width:none; }
+  .conv-card pre { font-size:.72rem; padding:.6rem .7rem; }
+  .score { font-family: var(--mono); font-weight:600; font-size:.8rem;
+    padding:.16rem .45rem; border-radius:2px; white-space:nowrap; }
+  .s4 { background: var(--settled-soft); color: var(--settled); }
+  .s3 { background: var(--accent-soft);  color: var(--accent); }
+  .s2 { background: var(--caution-soft); color: var(--caution); }
+  .s1 { background: var(--open-soft);    color: var(--open); }
+  td.nm { font-family: var(--mono); font-size:.72rem; line-height:1.5;
+    color: var(--ink-soft); white-space:normal; min-width:19rem; }
+  td.nm b { color: var(--ink); font-weight:600; }
+  .verd { font-family: var(--mono); font-size:.72rem; white-space:nowrap; }
+  .verd.yes { color: var(--settled); font-weight:600; }
+  .verd.no  { color: var(--ink-faint); }
+  .legend { font-family: var(--mono); font-size:.72rem; color: var(--ink-faint);
+    display:flex; flex-wrap:wrap; gap:.35rem 1.1rem; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+<header class="masthead">
+  <p class="eyebrow">Mod discovery — liver only</p>
+  <h1>Five tools on one mass axis</h1>
+  <p class="standfirst">The <code>fourway_comparison.md</code> treatment, run on NIST RM 8461 liver <code>10mg_1_A_1</code> — which that file never covered — and with Byonic Preview added as a fifth arm. One global clustering across all five tools at 0.015 Da, window &minus;100 to +500 Da. Rank (#N) is each tool's own rank among its rows in-window.</p>
+  <ul class="sources">
+    <li class="self">recon</li><li>Byonic Preview</li><li>PTM-Shepherd</li><li>Mascot ET</li><li>MetaMorpheus</li>
+  </ul>
+  <div class="runmeta">
+    <span>374 clusters in window</span><span>299 found by one tool only</span>
+    <span>match tol 0.015 Da</span><span>2026-09-01</span>
+  </div>
+</header>
+
+<div class="verdicts">
+  <div class="verdict is-settled">
+    <span class="state">Recommendations — corroborated</span>
+    <span class="figure">5 of 9</span>
+    <p>recon's recommended mods found by at least 3 of the 4 other tools. The top three &mdash; Oxidation, Carbamidomethyl, Deamidation &mdash; are 4/4.</p>
+  </div>
+  <div class="verdict">
+    <span class="state">Preview — now joinable</span>
+    <span class="figure">19 masses</span>
+    <p>Preview's mod survey was never mined. It joins the mass axis once two of its conventions are undone.</p>
+  </div>
+  <div class="verdict is-open">
+    <span class="state">Structural blind spot</span>
+    <span class="figure">OR 1.34</span>
+    <p>Proline oxidation is curated and found by all four other tools, but fails recon's OR &ge; 2 gate: P sits in 56 % of peptides, so a containment test cannot see it.</p>
+  </div>
+</div>
+
+<section>
+  <h2><span class="num">01</span> Why Preview was missing</h2>
+  <p class="lede">Not a decision &mdash; an oversight plus two convention traps. <code>VariableMods</code> appears nowhere in NOTES, JOURNAL, PLAN, or any script in <code>testing/scripts/</code>, so no locked decision excluded it.</p>
+
+  <div class="note caution">
+    <span class="tag">Cause 1 &mdash; catalogued as configuration</span>
+    <p>The vendored README lists <code>objs/FixedMods*.txt</code>, <code>objs/VariableMods*.txt</code> under "mod settings". <code>VariableMods.txt</code> is only half settings: it also carries <code>nmods</code>, <code>n16</code>, <code>prop</code> and <code>prop2</code> &mdash; Preview's measured counts. Filed as config, it was never read as output. This is the same failure that hid Preview's mass-accuracy numbers in <code>result_summary.html</code> until 2026-09-01.</p>
+  </div>
+
+  <div class="note caution">
+    <span class="tag">Cause 2 &mdash; the alkylation-agnostic frame</span>
+    <p>The mod comparison is built on four tools that discovered +57 rather than assuming it. Preview had <code>CysMod=+57.021464</code> pre-set by the operator, so it cannot join <em class="q">that</em> claim. But that argument only excludes Preview from the +57-on-C row &mdash; it was applied to the whole arm.</p>
+  </div>
+
+  <h3>The two conventions that must be undone first</h3>
+  <div class="conv">
+    <div class="conv-card">
+      <span class="tag">Convention 1 &mdash; masses are relative to the fixed mod</span>
+      <h4>Cysteine chemistry sits 57.021464 off the axis</h4>
+      <p>Rows named <code>(-fixed mod)</code> are deltas <strong>relative to the fixed +57 on C</strong>. On the raw axis they match nothing. Verified three ways against Preview's own detail text, not assumed:</p>
+<pre>Trioxidation  -9.036720 + 57.021464 =  +47.984744   detail: "C[+48]"
+Propionamide +14.015650 + 57.021464 =  +71.037114   detail: "C[+71]"
+Dehydro      -58.029289 + 57.021464 =   -1.007825   detail: "unmodified_C[-2]"
+
+3 x oxidation = 47.984745                       <- matches to 1e-6</pre>
+      <p>Uncorrected, a mass join silently drops every cysteine modification Preview found.</p>
+    </div>
+    <div class="conv-card">
+      <span class="tag">Convention 2 &mdash; one total, many rows</span>
+      <h4>Group totals repeat across site rows</h4>
+      <p>Exactly the Mascot multi-site trap already in NOTES. <code>Deamidated</code> is listed at N and at Q, both showing 237 &mdash; because 237 is the <em class="q">combined</em> total (194 N + 43 Q). Summing gives 474.</p>
+      <p>Worse, one group can span two masses: pyro-glu lists 66 against <strong>both</strong> &minus;17.0265 and &minus;18.0106, where the detail page gives the true split as 61 and 5. Deduped on (mod, mass, count, denominator); 9 repeated rows dropped, 4 group totals replaced by the detail split.</p>
+    </div>
+  </div>
+
+  <div class="note">
+    <span class="tag">Left unsplit</span>
+    <p>One group the detail page never splits: "Carbamidomethylation artifacts (H,K,N-terminus[+57/+114]): 2.3% (54/2359)". Its 54 is repeated on +57.0215 and +114.0429, marked <b>&#7501;</b> below. Do not read those two cells as independent.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">02</span> Do recon's recommendations line up?</h2>
+  <p class="lede">recon recommends 1 fixed and 8 variable modifications for the final search. Cells are each tool's own percentage at that mass &mdash; four different currencies, so read the presence, not the magnitude.</p>
+
+  <div class="tscroll">
+    <table>
+      <thead><tr>
+        <th scope="col">Delta</th><th scope="col">recon calls it</th><th scope="col">Category</th>
+        <th scope="col">Preview</th><th scope="col">Shepherd</th><th scope="col">Mascot</th><th scope="col">MetaM</th>
+        <th scope="col">Found by</th>
+      </tr></thead>
+      <tbody>
+        <tr class="is-self"><th scope="row" class="mono">+15.9945</th><td class="lab">variable &mdash; Oxidation on M</td><td class="lab dim">Common Variable</td><td>20.85</td><td>13.67</td><td>39.24</td><td>11.67</td><td><span class="score s4">4 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">+57.0207</th><td class="lab"><strong>FIXED</strong> &mdash; Carbamidomethyl on C</td><td class="lab dim">Common Fixed</td><td>2.34 &#7501;</td><td>8.58</td><td>21.22</td><td>8.27</td><td><span class="score s3">3 + 1</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">+0.9833</th><td class="lab">variable &mdash; Deamidation</td><td class="lab dim">Common Artifact</td><td>8.89</td><td>2.35</td><td>5.88</td><td>3.05</td><td><span class="score s4">4 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">&minus;17.0261</th><td class="lab">variable &mdash; Gln-&gt;pyro-Glu</td><td class="lab dim">Common Biological</td><td>2.29</td><td>0.86</td><td>1.82</td><td>0.44</td><td><span class="score s4">4 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">+47.9844</th><td class="lab">variable &mdash; Trioxidation</td><td class="lab dim">Less Common</td><td>0.52 &#8314;</td><td>0.68</td><td>0.87</td><td class="dim">&mdash;</td><td><span class="score s3">3 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">+58.0039</th><td class="lab">variable &mdash; Carboxymethylation</td><td class="lab dim">Less Common</td><td class="dim">&mdash;</td><td>0.79</td><td>1.97</td><td>0.07</td><td><span class="score s3">3 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">+52.9105</th><td class="lab">variable &mdash; Fe[III]</td><td class="lab dim">Metal</td><td class="dim">&mdash;</td><td>0.54</td><td class="dim">&mdash;</td><td>0.69</td><td><span class="score s2">2 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">&minus;33.9890</th><td class="lab">variable &mdash; Dehydroalanine</td><td class="lab dim">Less Common</td><td class="dim">&mdash;</td><td>0.19</td><td>0.45</td><td class="dim">&mdash;</td><td><span class="score s2">2 / 4</span></td></tr>
+        <tr class="is-self"><th scope="row" class="mono">&minus;89.0302</th><td class="lab">variable &mdash; Met-loss+Acetylation</td><td class="lab dim">Common Biological</td><td class="dim">&mdash;</td><td class="dim">&mdash;</td><td>0.17</td><td class="dim">&mdash;</td><td><span class="score s1">1 / 4</span></td></tr>
+      </tbody>
+      <caption>&#8314; Preview mass shifted off its fixed +57 on C. &#7501; Preview group total the detail page never splits. Ordered by recon's own PSM count.</caption>
+    </table>
+  </div>
+
+  <div class="note settled">
+    <span class="tag">The result</span>
+    <p><strong>recon's top four recommendations are found by every other tool.</strong> Oxidation, Carbamidomethyl, Deamidation and Gln-&gt;pyro-Glu are 4/4. Two more are 3/4. Nothing recon recommends is invented: <strong>every one of the nine is found by at least one independent tool</strong>, and the two that only Preview misses are ones Preview had no candidate for &mdash; its variable list is a fixed menu of 44 entries, not an open window.</p>
+  </div>
+
+  <div class="note caution">
+    <span class="tag">+57 is 3 discoveries and 1 assumption</span>
+    <p>Preview's 2.34 % at +57.0215 is <strong>not</strong> cysteine carbamidomethylation. It is the H/K/N-term <em class="q">artifact</em>. Preview's cysteine +57 was pre-set by the operator and reported separately as a fixed mod at 100.0 % (226/226) &mdash; a confirmation of the input, not a detection. So the row is corroborated by Shepherd, Mascot and MetaMorpheus, with Preview counted apart.</p>
+  </div>
+
+  <div class="note open">
+    <span class="tag">The one to look at</span>
+    <p>&minus;89.0302 <strong>Met-loss+Acetylation</strong> is recon's weakest recommendation: Mascot alone has it, at 0.17 %. recon's internal evidence is strong &mdash; odds ratio 8578, q = 6.5e&minus;152, 72 PSMs, protein N-terminal with Met loss &mdash; and neither Shepherd nor MetaMorpheus reports the mass at all. That is a genuine single-source recommendation, not a consensus one, and should be labelled as such wherever the nine are quoted.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">03</span> The proline oxidation recon does not report</h2>
+  <p class="lede">Preview reports "Hydroxyproline: 1.5% (18/1166) of peptides containing P" as a line of its own. recon has no such recommendation. Three questions follow, and all three have answers on disk.</p>
+
+  <h3>1. Is it in recon's curated list? Yes.</h3>
+  <p class="lede">Not a curation gap. <code>reference-notes/metaMorpheusMods/Mods.txt</code> carries the entry, and that file is compiled into the binary:</p>
+<pre>ID   Hydroxylation
+TG   P
+PP   Anywhere.
+MT   Common Biological
+CF   O1                       -> 15.994915 Da</pre>
+  <div class="note">
+    <span class="tag">Which files recon actually loads</span>
+    <p>From the build dependency graph, four of the eight files in that directory are compiled in: <code>Mods.txt</code>, <code>aListOfmods.txt</code>, <code>ProteaseMods.txt</code>, <code>surfactants.txt</code>. <code>ptmlist.txt</code>, <code>glyco.txt</code>, <code>substitutions.txt</code> and <code>tmt.txt</code> are <strong>not</strong>. Hydroxyproline appears in both <code>ptmlist.txt</code> (unloaded) and, as <code>Hydroxylation</code> on P, in <code>Mods.txt</code> (loaded) — so it is available to the classifier.</p>
+  </div>
+
+  <h3>2. Did the other tools get it? All four.</h3>
+  <div class="tscroll">
+    <table>
+      <thead><tr>
+        <th scope="col">Tool</th><th scope="col">Its name for it</th>
+        <th scope="col">On P</th><th scope="col">On M</th><th scope="col">Basis</th>
+      </tr></thead>
+      <tbody>
+        <tr><th scope="row">Byonic Preview</th><td class="lab">Hydroxyproline</td><td class="key">18</td><td>509</td><td class="lab dim">peptides; 1.5 % of 1166 P-containing</td></tr>
+        <tr><th scope="row">Mascot ET</th><td class="lab">Oxidation @ P</td><td class="key">1,314</td><td>3,086</td><td class="lab dim">its own site rows, before roll-up</td></tr>
+        <tr><th scope="row">MetaMorpheus</th><td class="lab">Hydroxylation on P</td><td class="key">192</td><td>2,127</td><td class="lab dim">q &le; 0.01 peptides</td></tr>
+        <tr><th scope="row">PTM-Shepherd</th><td class="lab">Oxidation or Hydroxylation</td><td class="key">69</td><td>1,889</td><td class="lab dim">unambiguous localizations only</td></tr>
+        <tr class="is-self"><th scope="row">recon</th><td class="lab">— not reported —</td><td class="dim">—</td><td>1,688</td><td class="lab dim">one peak at +15.9945, un-localized</td></tr>
+      </tbody>
+      <caption>Shepherd's figures come from <code>psm.tsv</code> <code>MSFragger Localization</code>, which lower-cases the modified residue. Of 3,319 PSMs at this delta, 2,059 localize to exactly one residue and 1,260 are ambiguous; only the unambiguous ones are counted, giving M 91.7 % and P 3.4 %. Counting every candidate of an ambiguous row instead inflates P to 366 and puts implausible residues (G 356, E 314, A 297) at the same level — which is how you can tell that count is a candidate set, not an assignment.</caption>
+    </table>
+  </div>
+
+  <h3>3. Why recon misses it: one mass, one recommendation</h3>
+  <p class="lede">recon's open search assigns a delta per PSM, not a site. Everything at +15.9945 is one peak of 1,688 PSMs. Four curated entries sit within <code>CURATED_TOL_DA</code> = 0.010 Da of it, including Hydroxylation on P — the gap is 0.00044 Da, well inside the window — and each is tested for residue enrichment with a BH-corrected q. Then:</p>
+<pre>// STATISTICS PATH — take the best supported candidate.
+let best = testable
+    .iter()
+    .filter(|(_, _, r)| { let (o, q) = r.unwrap(); o >= OR_MIN &amp;&amp; q &lt; Q_MAX })
+    .max_by(...odds ratio...);          // tier_assignment.rs:404</pre>
+  <div class="note open">
+    <span class="tag">The mechanism — measured, not inferred</span>
+    <p><code>peptide_hits</code> asks <strong>"does this peptide contain an acceptor residue"</strong>. It is not a localization. So each candidate is scored against the background rate at which peptides contain that residue <em class="q">at all</em>. Reproducing the test on the run's own PSMs:</p>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead><tr>
+        <th scope="col">Candidate</th><th scope="col">Acceptors</th><th scope="col">Band containment</th>
+        <th scope="col">Background</th><th scope="col">Odds ratio</th><th scope="col">Verdict</th>
+      </tr></thead>
+      <tbody>
+        <tr class="is-self"><th scope="row">Oxidation on M</th><td class="lab mono">M</td><td>91.7 %</td><td>19.7 %</td><td class="key">59.42</td><td class="lab"><span class="verd yes">passes OR &ge; 2</span></td></tr>
+        <tr><th scope="row">Hydroxylation</th><td class="lab mono">K N</td><td>78.5 %</td><td>76.5 %</td><td class="key">1.12</td><td class="lab"><span class="verd no">fails</span></td></tr>
+        <tr><th scope="row">Hydroxylation</th><td class="lab mono">P</td><td>62.7 %</td><td>56.0 %</td><td class="key">1.34</td><td class="lab"><span class="verd no">fails</span></td></tr>
+        <tr><th scope="row">Oxidation (broad)</th><td class="lab mono">CDEFHILQRSTUVWY</td><td>100.0 %</td><td>100.0 %</td><td class="dim">—</td><td class="lab"><span class="verd no">background saturated</span></td></tr>
+      </tbody>
+      <caption>&#9888; APPROXIMATE. A flat &plusmn;0.010 Da window gives a band of 1,717 PSMs against recon's 1,688, and OR 59.42 for Oxidation on M against recon's reported 63.53 — recon uses its own merged-peak binning. Same conclusion, different number; do not quote these as recon's own values. Reproduce with <code>curated_mass_collisions.py --peak 15.994472</code>.</caption>
+    </table>
+  </div>
+
+  <div class="note open">
+    <span class="tag">Correction to an earlier reading</span>
+    <p><strong>Hydroxylation on P does not lose a <code>max_by</code> tie-break — it fails the OR &ge; 2 gate outright, at ~1.34.</strong> Proline sits in <strong>56.0 %</strong> of all liver peptides, so a containment test cannot see enrichment for it, and the band is 92 % M-oxidised peptides that merely also happen to contain a proline. It would not be recommended even if <code>max_by</code> kept every passing candidate rather than one.</p>
+  </div>
+
+  <div class="note settled">
+    <span class="tag">What this is and isn't</span>
+    <p>This is <strong>not</strong> a missing curated entry, and <strong>not</strong> a missed peak — recon found the mass, ranked it second overall, and recommended it. It is a reporting-shape limit: the recommendation is keyed to a mass, and a mass can carry more than one real modification. Collagen and ECM proteins in liver make proline oxidation the case where that bites hardest, which is why all four reference tools list it separately.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">04</span> How general is this?</h2>
+  <p class="lede">Proline is not a special case. Across the four curated files actually compiled into the binary, <strong>58.6 % of entries sit at a mass shared with at least one other entry</strong> — so the one-recommendation-per-mass rule has to pick a winner far more often than not.</p>
+
+  <div class="conv">
+    <div class="conv-card" style="border-left-color: var(--accent);">
+      <span class="tag" style="color: var(--accent);">Census</span>
+      <h4>99 entries, 62 masses</h4>
+      <p><strong>21</strong> mass clusters hold more than one candidate at 0.010 Da. <strong>58</strong> entries (58.6 %) live in one. The largest cluster holds <strong>5</strong>. Of those, <strong>15</strong> masses have two or more residue-testable candidates competing.</p>
+    </div>
+    <div class="conv-card">
+      <span class="tag">The bias</span>
+      <h4>The rarest acceptor wins</h4>
+      <p>To clear OR &ge; 2 against a background containment <em class="q">f</em>, a candidate needs band containment <code>x = 2f/(1+f)</code>. A rare acceptor needs little; a common one needs nearly everything. At +57.0215, <code>Carbamidomethyl on C</code> needs 20.6 % while the broad <code>Carbamidomethyl DEHKSTY</code> needs 99.7 %.</p>
+    </div>
+  </div>
+
+  <div class="tscroll">
+    <table>
+      <thead><tr><th scope="col">Residue</th><th scope="col">In this % of the 32,497 liver peptides</th><th scope="col">Band % needed for OR &ge; 2</th></tr></thead>
+      <tbody>
+        <tr><th scope="row" class="mono">L</th><td>79.3 %</td><td>88.5 %</td></tr>
+        <tr><th scope="row" class="mono">K</th><td>60.6 %</td><td>75.5 %</td></tr>
+        <tr><th scope="row" class="mono">T</th><td>57.5 %</td><td>73.0 %</td></tr>
+        <tr class="is-self"><th scope="row" class="mono">P</th><td>56.0 %</td><td>71.8 %</td></tr>
+        <tr><th scope="row" class="mono">Q</th><td>46.3 %</td><td>63.3 %</td></tr>
+        <tr><th scope="row" class="mono">Y</th><td>35.4 %</td><td>52.3 %</td></tr>
+        <tr><th scope="row" class="mono">H</th><td>31.6 %</td><td>48.0 %</td></tr>
+        <tr class="is-self"><th scope="row" class="mono">M</th><td>19.7 %</td><td>33.0 %</td></tr>
+        <tr class="is-self"><th scope="row" class="mono">C</th><td>11.5 %</td><td>20.6 %</td></tr>
+        <tr><th scope="row" class="mono">W</th><td>11.4 %</td><td>20.5 %</td></tr>
+      </tbody>
+      <caption>Abbreviated; the producer prints all twenty. Highlighted rows are the acceptors that decide the three biggest recommendations on this file.</caption>
+    </table>
+  </div>
+
+  <div class="note caution">
+    <span class="tag">Difficulty, not prediction</span>
+    <p>The needed-fraction is what a candidate <em class="q">would</em> have to reach, not what it will reach — that depends on the actual band. Both outcomes occur on this one file: <strong>+15.9949 Hydroxylation on P</strong> needs 71.8 %, has 62.7 %, and fails; <strong>&minus;17.0265 Gln-&gt;pyro-Glu on Q</strong> needs 63.3 %, has a band that is nearly all Q, scores OR 650 and <em class="q">is</em> recon's recommendation. The test works when one modification dominates its mass band. What it cannot do is surface a <strong>second, co-occurring</strong> modification at the same mass.</p>
+  </div>
+
+  <div class="note">
+    <span class="tag">Not a verdict on the design</span>
+    <p>None of this says Hydroxylation on P <em class="q">should</em> be recommended — its measured odds ratio is 1.34, and the gate is doing what it was built to do. Whether a mass should be allowed more than one recommendation, and whether a containment test is the right instrument for a common acceptor, are design questions this measurement opens rather than settles.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">05</span> The full five-way table</h2>
+  <p class="lede">Top 30 clusters by the highest percentage any one tool reports &mdash; which surfaces both "everyone agrees this is big" and "one tool alone thinks this is big".</p>
+  <div class="tscroll">
+    <table>
+      <thead><tr>
+        <th scope="col">Mass</th><th scope="col">recon verdict</th>
+        <th scope="col">recon</th><th scope="col">Preview</th><th scope="col">Shepherd</th><th scope="col">Mascot</th><th scope="col">MetaM</th>
+        <th scope="col">What each tool calls it</th>
+      </tr></thead>
+      <tbody>
+        <tr><th scope="row" class="mono">+0.0000</th><td class="lab"><span class="verd no">not in recon</span></td><td class="mono">49.54 (#1)</td><td class="dim">—</td><td class="mono">50.23 (#1)</td><td class="dim">—</td><td class="mono">72.49 (#1)</td><td class="nm"><b>recon</b> Unmodified<br><b>Shepherd</b> None<br><b>MetaM</b> Unmodified</td></tr>
+        <tr><th scope="row" class="mono">+15.9949</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">5.19 (#2)</td><td class="mono">20.85 (#1)</td><td class="mono">13.67 (#2)</td><td class="mono">39.24 (#1)</td><td class="mono">11.67 (#2)</td><td class="nm"><b>recon</b> Oxidation<br><b>Preview</b> Oxidation @M/Oxidation @H, W/Oxidation @P<br><b>Shepherd</b> Oxidation or Hydroxylation<br><b>Mascot</b> Oxidation [A,D,F,H,K,M,N,P,R,W,Y]<br><b>MetaM</b> Oxidation on M</td></tr>
+        <tr><th scope="row" class="mono">+57.0215</th><td class="lab"><span class="verd yes">FIXED</span></td><td class="mono">3.97 (#3)</td><td class="mono">2.34 (#4) &#7501;</td><td class="mono">8.58 (#3)</td><td class="mono">21.22 (#2)</td><td class="mono">8.27 (#3)</td><td class="nm"><b>recon</b> Carbamidomethyl<br><b>Preview</b> Carbamidomethyl @N-term, H, K<br><b>Shepherd</b> Iodoacetamide derivative/Addition of Glycine/Addition of G<br><b>Mascot</b> Carbamidomethyl [A,C,D,E,G,H,K,N-term,S,T,Y]<br><b>MetaM</b> Carbamidomethyl on C</td></tr>
+        <tr><th scope="row" class="mono">+0.9840</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">1.73 (#4)</td><td class="mono">8.89 (#2)</td><td class="mono">2.35 (#5)</td><td class="mono">5.88 (#4)</td><td class="mono">3.05 (#4)</td><td class="nm"><b>recon</b> Deamidated<br><b>Preview</b> Deamidated @N<br><b>Shepherd</b> Deamidation<br><b>Mascot</b> Deamidated [N,Q,R]<br><b>MetaM</b> Deamidation on N</td></tr>
+        <tr><th scope="row" class="mono">+0.9970</th><td class="lab"><span class="verd yes">recommended</span></td><td class="dim">—</td><td class="dim">—</td><td class="mono">2.42 (#4)</td><td class="mono">8.05 (#3)</td><td class="dim">—</td><td class="nm"><b>Shepherd</b> First isotopic peak<br><b>Mascot</b> Label:15N(1) [A,D,E,F,G,I,L,M,P,S,T,V,Y]</td></tr>
+        <tr><th scope="row" class="mono">+114.0429</th><td class="lab"><span class="verd no">declined · no_residue_support</span></td><td class="mono">0.39 (#18)</td><td class="mono">2.34 (#5) &#7501;</td><td class="mono">1.22 (#7)</td><td class="mono">0.18 (#32)</td><td class="mono">0.07 (#15)</td><td class="nm"><b>recon</b> GG<br><b>Preview</b> Dicarbamidomethyl @N-term<br><b>Shepherd</b> ubiquitinylation residue/Double Carbamidomethylation/Addition of N<br><b>Mascot</b> GG [C,K,N-term,R,S,T]<br><b>MetaM</b> Glutarylation on K</td></tr>
+        <tr><th scope="row" class="mono">-17.0265</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">0.43 (#14)</td><td class="mono">2.29 (#3) &#7503;</td><td class="mono">0.86 (#10)</td><td class="mono">1.82 (#6)</td><td class="mono">0.44 (#8)</td><td class="nm"><b>recon</b> Gln-&gt;pyro-Glu<br><b>Preview</b> Gln-&gt;pyro-Glu @N-Term Q<br><b>Shepherd</b> Pyro-glu from Q/Loss of ammonia<br><b>Mascot</b> Gln-&gt;pyro-Glu [N,N-term]<br><b>MetaM</b> Ammonia loss on N</td></tr>
+        <tr><th scope="row" class="mono">+58.0055</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">0.28 (#22)</td><td class="dim">—</td><td class="mono">0.79 (#11)</td><td class="mono">1.97 (#5)</td><td class="mono">0.07 (#14)</td><td class="nm"><b>recon</b> Carboxymethyl<br><b>Shepherd</b> Iodoacetic acid derivative<br><b>Mascot</b> Carboxymethyl [A,C,G,K,N-term,W]<br><b>MetaM</b> Carbamidomethyl on C, Deamidation on N</td></tr>
+        <tr><th scope="row" class="mono">+26.0157</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.23 (#26)</td><td class="mono">1.72 (#6)</td><td class="mono">0.36 (#21)</td><td class="mono">0.97 (#9)</td><td class="dim">—</td><td class="nm"><b>recon</b> Delta:H(2)C(2)<br><b>Preview</b> Delta:H(2)C(2) @N-term, H, K<br><b>Shepherd</b> Acetaldehyde +26<br><b>Mascot</b> Delta:H(2)C(2) [A,H,K,N-term]</td></tr>
+        <tr><th scope="row" class="mono">+31.9898</th><td class="lab"><span class="verd no">declined · below_floor</span></td><td class="mono">0.72 (#8)</td><td class="mono">0.97 (#8)</td><td class="mono">1.72 (#6)</td><td class="mono">0.57 (#14)</td><td class="mono">0.89 (#6)</td><td class="nm"><b>recon</b> Dioxidation<br><b>Preview</b> Dioxidation @M/Dioxidation @W<br><b>Shepherd</b> dihydroxy<br><b>Mascot</b> Dioxidation [C,F,M,P,R,W,Y]<br><b>MetaM</b> Oxidation on M, Oxidation on M</td></tr>
+        <tr><th scope="row" class="mono">+162.0528</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.95 (#5)</td><td class="dim">—</td><td class="mono">1.17 (#8)</td><td class="mono">1.54 (#7)</td><td class="dim">—</td><td class="nm"><b>recon</b> UNANNOTATED<br><b>Shepherd</b> Hexose<br><b>Mascot</b> Hex [K,N,N-term,S,T,W,Y]</td></tr>
+        <tr><th scope="row" class="mono">+14.0157</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="mono">1.31 (#7)</td><td class="mono">0.06 (#54)</td><td class="mono">0.25 (#24)</td><td class="mono">0.04 (#22)</td><td class="nm"><b>Preview</b> Methyl @N-term/Methyl @E/Methyl @R<br><b>Shepherd</b> Methylation<br><b>Mascot</b> Methyl [C,D,E,H,I,K,L,N-term,Q,R,S,T,V]<br><b>MetaM</b> Methylation on R</td></tr>
+        <tr><th scope="row" class="mono">+42.0106</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="mono">0.67 (#9)</td><td class="mono">0.57 (#13)</td><td class="mono">1.12 (#8)</td><td class="mono">0.93 (#5)</td><td class="nm"><b>Preview</b> Acetyl @Protein N-term/Acetyl @K<br><b>Shepherd</b> Acetylation<br><b>Mascot</b> Acetyl [H,K,N-term,S,T]<br><b>MetaM</b> Acetylation on X</td></tr>
+        <tr><th scope="row" class="mono">-1.0024</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="dim">—</td><td class="mono">1.07 (#9)</td><td class="mono">0.02 (#160)</td><td class="dim">—</td><td class="nm"><b>Shepherd</b> Isotopic peak error<br><b>Mascot</b> Dehydro [C]</td></tr>
+        <tr><th scope="row" class="mono">+16.9976</th><td class="lab"><span class="verd no">declined · satellite (+1 C13 of +15.9945)</span></td><td class="mono">0.88 (#6)</td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.67 (#12)</td><td class="dim">—</td><td class="nm"><b>recon</b> UNANNOTATED<br><b>Mascot</b> Pro-&gt;Asn [P]</td></tr>
+        <tr><th scope="row" class="mono">+47.9847</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">0.40 (#17)</td><td class="mono">0.52 (#10) &#8314;</td><td class="mono">0.68 (#12)</td><td class="mono">0.87 (#10)</td><td class="dim">—</td><td class="nm"><b>recon</b> Trioxidation<br><b>Preview</b> Trioxidation (-fixed mod) @C<br><b>Shepherd</b> cysteine oxidation to cysteic acid<br><b>Mascot</b> Trioxidation [C,W,Y]</td></tr>
+        <tr><th scope="row" class="mono">+73.0157</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.76 (#7)</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.09 (#13)</td><td class="nm"><b>recon</b> UNANNOTATED<br><b>MetaM</b> Carbamidomethyl on C, Oxidation on M</td></tr>
+        <tr><th scope="row" class="mono">+58.0419</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.10 (#44)</td><td class="mono">0.72 (#11)</td><td class="dim">—</td><td class="nm"><b>Shepherd</b> Reduced acrolein addition +58<br><b>Mascot</b> Delta:H(6)C(3)O(1) [C,H,K]</td></tr>
+        <tr><th scope="row" class="mono">+52.9115</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">0.48 (#12)</td><td class="dim">—</td><td class="mono">0.54 (#16)</td><td class="dim">—</td><td class="mono">0.69 (#7)</td><td class="nm"><b>recon</b> Cation:Fe[III]<br><b>Shepherd</b> Replacement of 3 protons by iron<br><b>MetaM</b> Fe[III] on E</td></tr>
+        <tr><th scope="row" class="mono">+58.0225</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.63 (#9)</td><td class="dim">—</td><td class="mono">0.40 (#18)</td><td class="mono">0.03 (#121)</td><td class="dim">—</td><td class="nm"><b>recon</b> UNANNOTATED<br><b>Shepherd</b> 2,3-dihydro-2,2-dimethyl-7-benzofuranol N-methyl carbamate<br><b>Mascot</b> Gln-&gt;Trp [Q]</td></tr>
+        <tr><th scope="row" class="mono">+72.9952</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.60 (#13)</td><td class="dim">—</td><td class="nm"><b>Mascot</b> Xle-&gt;Trp [I,L]</td></tr>
+        <tr><th scope="row" class="mono">+0.9630</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.57 (#14)</td><td class="mono">0.05 (#92)</td><td class="dim">—</td><td class="nm"><b>Shepherd</b> Unannotated mass-shift 0.9630<br><b>Mascot</b> Xle-&gt;Asn [I,L]</td></tr>
+        <tr><th scope="row" class="mono">+2.0047</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.55 (#15)</td><td class="mono">0.15 (#35)</td><td class="dim">—</td><td class="nm"><b>Shepherd</b> Second isotopic peak<br><b>Mascot</b> Label:15N(2) [N,Q]</td></tr>
+        <tr><th scope="row" class="mono">-1.0297</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.53 (#10)</td><td class="dim">—</td><td class="mono">0.26 (#22)</td><td class="mono">0.11 (#52)</td><td class="mono">0.04 (#21)</td><td class="nm"><b>recon</b> Lys-&gt;Allysine<br><b>Shepherd</b> Lysine oxidation to aminoadipic semialdehyde<br><b>Mascot</b> Lys-&gt;Allysine [K]<br><b>MetaM</b> Ammonia loss on N, Oxidation on M</td></tr>
+        <tr><th scope="row" class="mono">-0.0800</th><td class="lab"><span class="verd no">not in recon</span></td><td class="mono">0.53 (#11)</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="nm"><b>recon</b> Unmodified</td></tr>
+        <tr><th scope="row" class="mono">+16.9976</th><td class="lab"><span class="verd no">declined · satellite (+1 C13 of +15.9945)</span></td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="mono">0.50 (#15)</td><td class="dim">—</td><td class="nm"><b>Mascot</b> Asn-&gt;Met [N]</td></tr>
+        <tr><th scope="row" class="mono">-0.9588</th><td class="lab"><span class="verd no">declined · not_curated</span></td><td class="mono">0.41 (#16)</td><td class="dim">—</td><td class="mono">0.48 (#17)</td><td class="mono">0.26 (#23)</td><td class="dim">—</td><td class="nm"><b>recon</b> UNANNOTATED<br><b>Shepherd</b> Unannotated mass-shift -0.9588<br><b>Mascot</b> Glu-&gt;Lys [E]</td></tr>
+        <tr><th scope="row" class="mono">+151.9966</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="mono">0.48 (#12)</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td><td class="nm"><b>Preview</b> DTT @C</td></tr>
+        <tr><th scope="row" class="mono">+28.0313</th><td class="lab"><span class="verd no">not in recon</span></td><td class="dim">—</td><td class="mono">0.45 (#11) &#7503;</td><td class="dim">—</td><td class="mono">0.13 (#44)</td><td class="dim">—</td><td class="nm"><b>Preview</b> Dimethyl @N-term/Dimethyl @R<br><b>Mascot</b> Ethyl [A,K,N-term]</td></tr>
+        <tr><th scope="row" class="mono">-33.9877</th><td class="lab"><span class="verd yes">recommended</span></td><td class="mono">0.11 (#42)</td><td class="dim">—</td><td class="mono">0.19 (#28)</td><td class="mono">0.45 (#16)</td><td class="dim">—</td><td class="nm"><b>recon</b> Cys-&gt;Dha<br><b>Shepherd</b> Dehydroalanine (from Cysteine)<br><b>Mascot</b> Cys-&gt;Dha [C]</td></tr>
+      </tbody>
+      <caption>&#8314; mass shifted off Preview's fixed +57. &#7503; count from <code>result_detail.html</code>, not the group total. &#7501; unsplit Preview group total. +16.9976 appears twice: two clusters at the same rounded mass, one recon-anchored and one Mascot-only &mdash; shown as the producer emitted them.</caption>
+    </table>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">06</span> What recon declined, and who else saw it</h2>
+  <p class="lede">recon's ten largest peaks that did not become recommendations, with each tool's percentage at that mass. This is the sharper test: a peak recon dropped that everyone else reports is a gap in the curated list, not noise.</p>
+  <div class="tscroll">
+    <table>
+      <thead><tr>
+        <th scope="col">Delta</th><th scope="col">recon PSMs</th><th scope="col">Why declined</th>
+        <th scope="col">Preview</th><th scope="col">Shepherd</th><th scope="col">Mascot</th><th scope="col">MetaM</th><th scope="col">Seen by</th>
+      </tr></thead>
+      <tbody>
+        <tr><th scope="row" class="mono">+162.0522</th><td>310</td><td class="lab">not_curated</td><td class="dim">&mdash;</td><td>1.17</td><td>1.54</td><td class="dim">&mdash;</td><td><span class="score s2">2</span></td></tr>
+        <tr><th scope="row" class="mono">+16.9976</th><td>286</td><td class="lab">satellite (+1 C13 of +15.9945)</td><td class="dim">&mdash;</td><td class="dim">&mdash;</td><td>0.50</td><td class="dim">&mdash;</td><td><span class="score s1">1</span></td></tr>
+        <tr><th scope="row" class="mono">+73.0157</th><td>248</td><td class="lab">not_curated</td><td class="dim">&mdash;</td><td class="dim">&mdash;</td><td class="dim">&mdash;</td><td>0.09</td><td><span class="score s1">1</span></td></tr>
+        <tr><th scope="row" class="mono">+31.9894</th><td>235</td><td class="lab">below_floor &mdash; Dioxidation</td><td>0.97</td><td>1.72</td><td>0.57</td><td>0.89</td><td><span class="score s4">4</span></td></tr>
+        <tr><th scope="row" class="mono">+58.0225</th><td>204</td><td class="lab">not_curated</td><td class="dim">&mdash;</td><td>0.40</td><td>0.03</td><td class="dim">&mdash;</td><td><span class="score s2">2</span></td></tr>
+        <tr><th scope="row" class="mono">&minus;1.0297</th><td>172</td><td class="lab">not_curated &mdash; Lys-&gt;Allysine</td><td class="dim">&mdash;</td><td>0.26</td><td>0.11</td><td>0.04</td><td><span class="score s3">3</span></td></tr>
+        <tr><th scope="row" class="mono">&minus;0.9798</th><td>144</td><td class="lab">below_floor &mdash; Amidation</td><td>0.15</td><td>0.36</td><td>0.03</td><td class="dim">&mdash;</td><td><span class="score s3">3</span></td></tr>
+        <tr><th scope="row" class="mono">&minus;1.0581</th><td>137</td><td class="lab">not_curated</td><td class="dim">&mdash;</td><td>0.21</td><td class="dim">&mdash;</td><td class="dim">&mdash;</td><td><span class="score s1">1</span></td></tr>
+        <tr><th scope="row" class="mono">&minus;0.9597</th><td>134</td><td class="lab">not_curated</td><td class="dim">&mdash;</td><td>0.48</td><td>0.12</td><td class="dim">&mdash;</td><td><span class="score s2">2</span></td></tr>
+        <tr><th scope="row" class="mono">+114.0427</th><td>128</td><td class="lab">no_residue_support &mdash; GG</td><td>2.34 &#7501;</td><td>1.22</td><td>0.18</td><td>0.07</td><td><span class="score s4">4</span></td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="note caution">
+    <span class="tag">Two worth a second look</span>
+    <p><strong>+31.9894 Dioxidation is reported by all four other tools</strong> and recon has 235 PSMs on it, yet it is declined as <code>below_floor</code>. <strong>+114.0427 GG</strong> is likewise 4/4 and declined on <code>no_residue_support</code> (odds ratio 1.23). Both are curated and named &mdash; recon recognised them and ruled them out on its own thresholds, which is different from missing them. Whether the floor is set right is a separate question this table does not answer.</p>
+  </div>
+
+  <div class="note">
+    <span class="tag">Also</span>
+    <p><strong>+162.0522, 310 PSMs, recon's fifth-largest peak, is <code>not_curated</code></strong> &mdash; but Shepherd calls it Hexose and Mascot calls it Hex. recon's own annotation is empty. That is a naming gap in the curated list, not a detection failure: the peak was found and reported in the tail exactly as the design intends.</p>
+  </div>
+</section>
+
+<section>
+  <h2><span class="num">07</span> Reading rules</h2>
+  <ul class="plain">
+    <li><strong>The columns are five different currencies.</strong> recon and Shepherd report % of PSMs; MetaMorpheus % of q&nbsp;&le;&nbsp;0.01 peptides; Mascot its own resolved-ET fraction; Preview <code>nmods</code> over a 2667-ID baseline, which is the number its summary page prints. NOTES "Prevalence currency" governs. <strong>Compare presence and rank, never magnitude.</strong></li>
+    <li><strong>Preview's list is closed.</strong> Its 19 masses come from a fixed menu of 44 candidate rows, not an open window. A Preview blank means "not on the menu", which is not the same as "searched and not found" &mdash; unlike a Shepherd or recon blank.</li>
+    <li><strong>Mascot's 351 rows are site rows rolled up by mass</strong>, using the shipped adapter verbatim; 16 rows had no clean Unimod mass and were skipped and counted, never dropped silently.</li>
+    <li><strong>Not equal populations.</strong> Preview kept ProtScore &ge; 20 representative proteins; recon Pass 1 is the whole database; the FragPipe and MetaMorpheus runs are their own. Same file, same FASTA, different peptide sets.</li>
+    <li><strong>The MetaMorpheus arm needs a gitignored input</strong> (<code>Task3-SearchTask/AllPeptides.psmtsv</code>). The producer hard-stops with a named missing input rather than quietly dropping the arm.</li>
+  </ul>
+</section>
+
+<footer>
+  Producer: scratchpad <code>liver_5way.py</code> — reuses <code>testing/scripts/compare_4way.py</code> loaders and clustering verbatim; nothing written into the repo.<br>
+  Inputs: recon-output/full-run/liver.json · ptm-shepherd/liverShepherd/global.modsummary.tsv · mascot/error-tolerant/MascotErrorTol-liver.txt · metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv · preview/10mg_1_A_1/objs/VariableMods.txt + result_detail.html<br>
+  Producers now in the repo: testing/scripts/liver_5way_mods.py · testing/scripts/curated_mass_collisions.py · report at testing/recon-output/comparison/LIVER-FIVE-TOOL-MODS-2026-09-01.md<br>Proline section additionally reads: reference-notes/metaMorpheusMods/Mods.txt · recon-tool/src/tier_assignment.rs · ptm-shepherd/liverShepherd/psm.tsv · mascot/error-tolerant/MascotErrorTol-liver.txt · preview/10mg_1_A_1/result_detail.html<br>Match tolerance 0.015 Da, window −100 to +500 Da, as in compare_4way.py.
+</footer>
+
+</div>
+</body>
+</html>

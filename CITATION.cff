@@ -1,0 +1,44 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it using these metadata."
+title: "sageRecon: a Sage-based proteomics reconnaissance tool"
+abstract: >-
+  A reconnaissance tool for unfamiliar bottom-up proteomics data. It runs one
+  wide open search plus one semi-enzymatic confirmation pass, then reports which
+  modifications are present, what the digest looks like, and what mass
+  tolerances the data supports, before a production search is configured. The
+  open search assumes no fixed modification, including carbamidomethyl on
+  cysteine, so the observed cysteine chemistry is reported rather than presumed.
+type: software
+version: 0.1.2
+date-released: "2026-09-08"
+authors:
+  - family-names: Neely
+    given-names: Benjamin A.
+    affiliation: "National Institute of Standards and Technology"
+    email: benjamin.neely@nist.gov
+repository-code: "https://github.com/usnistgov/sageRecon"
+url: "https://github.com/usnistgov/sageRecon"
+license-url: "https://github.com/usnistgov/sageRecon/blob/main/LICENSE.md"
+keywords:
+  - proteomics
+  - mass spectrometry
+  - open search
+  - post-translational modification
+  - protein digestion
+  - mass tolerance
+references:
+  - type: article
+    title: >-
+      Sage: An Open-Source Tool for Fast Proteomics Searching and Quantification
+      at Scale
+    authors:
+      - family-names: Lazear
+        given-names: Michael R.
+    journal: "Journal of Proteome Research"
+    year: 2023
+    volume: 22
+    issue: 11
+    start: 3652
+    end: 3659
+    doi: "10.1021/acs.jproteome.3c00486"
+    notes: "The search engine recon runs. Please cite it as well."

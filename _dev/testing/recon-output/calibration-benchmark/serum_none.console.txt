@@ -1,0 +1,119 @@
+Loading Sage results: testing/search-output/open-serum-full/results.sage.tsv
+[2026-07-16T18:44:33Z INFO  recon_tool::sage_results] Parsed 66792 PSMs: 23610 decoys removed, 23875 q-filtered, 0 isotope-filtered, 19307 remaining
+  Loaded 19307 PSMs (q < 0.01)
+Loading Unimod database: testing/reference-data/unimod.xml
+[2026-07-16T18:44:33Z INFO  recon_tool::unimod] Loaded 1560 Unimod entries
+  Loaded 1560 modifications
+Running modification discovery...
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] PSM-level fold-to-zero: 1785 PSMs folded to Δ=0
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] DIAGNOSTIC: calibrated_deltas.len() = 19307 (invariant)
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] DIAGNOSTIC: PSMs with delta exactly 0.0: pre-fold=9, post-fold=1794, diff=1785
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] DIAGNOSTIC: folded_to_zero_count (counter) = 1785
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] DIAGNOSTIC: PSMs near zero (|d|<0.1): pre-fold=6466, post-fold=8251
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] DIAGNOSTIC: Deamidation peak analysis:
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   Peak center: 0.9883 Da, reported count: 255
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   Merge tolerance: 0.0100 Da
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   PSMs within merge window [0.9783, 0.9983]: 258
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   Wide region (0.92-1.00 Da) distribution:
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.923 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.925 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.926 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.927 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.928 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.931 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.935 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.936 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.938 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.939 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.941 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.944 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.945 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.947 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.950 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.951 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.952 Da: 4 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.953 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.954 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.955 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.956 Da: 5 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.957 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.958 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.961 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.962 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.963 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.965 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.966 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.969 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.973 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.974 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.975 Da: 5 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.976 Da: 4 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.977 Da: 5 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.978 Da: 1 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.980 Da: 3 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.982 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.983 Da: 4 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.984 Da: 2 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.985 Da: 4 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.986 Da: 24 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.987 Da: 56 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.988 Da: 57 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.989 Da: 48 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.990 Da: 43 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]     0.991 Da: 15 PSMs
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   Total in wide region: 325
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   Peak PSMs range: [0.9797, 0.9913] Da
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery]   k=1 fold window: [0.9914, 1.0154] Da
+[2026-07-16T18:44:33Z INFO  recon_tool::mod_discovery] Rolled up 4 near-zero peaks into one Unmodified row: 8183 PSMs, weighted apex = 4.1000 mDa
+
+=== Modification Discovery Summary ===
+Total PSMs: 19307
+Unmodified (delta ~0): 8251 (42.7%)
+Modified: 11056 (57.3%)
+Unique histogram bins: 3435
+Peaks detected: 47
+
+=== Calibration ===
+Mode: None (applied: false)
+Fit population (near-zero): 6466 PSMs
+Post-calibration zero center: 4.8000 mDa
+
+=== Top Peaks ===
+Rank   Delta (Da)   Count      Pct        Annotation                     Ambiguous 
+--------------------------------------------------------------------------------
+1      0.0041       8183       42.4       Unmodified                     No        
+2      16.0002      627        3.2        Oxidation                      No        
+3      52.9179      577        3.0        Cation:Fe[III]                 No        
+4      0.9883       255        1.3        Deamidated                     No        
+5      31.9939      239        1.2        Dioxidation                    No        
+6      23.9633      234        1.2        Cation:Al[III]                 No        
+7      16.0030      232        1.2        Oxidation                      No        
+8      152.0047     201        1.0        Diethylphosphothione           Yes       
+9      162.0608     178        0.9        UNANNOTATED                    No        
+10     17.0031      162        0.8        UNANNOTATED                    No        
+11     53.9206      146        0.8        Cation:Fe[II]                  No        
+12     17.0056      146        0.8        UNANNOTATED                    No        
+13     -18.0044     142        0.7        Dehydrated                     Yes       
+14     -18.0065     141        0.7        Dehydrated                     Yes       
+15     -17.0213     135        0.7        Gln-&gt;pyro-Glu               Yes       
+16     13.9826      121        0.6        Pro-&gt;pyro-Glu               Yes       
+17     14.0201      97         0.5        Methyl                         No        
+18     57.0271      85         0.4        Carbamidomethyl                Yes       
+19     153.0041     80         0.4        UNANNOTATED                    No        
+20     -0.9801      75         0.4        Glu-&gt;pyro-Glu+Methyl:2H(2)13C(1) Yes       
+
+=== Confidence Metrics (Top 10 Peaks) ===
+Rank   Delta        Hyperscore   Match%       LongestB     LongestY    
+------------------------------------------------------------------------
+1      0.0041       47.6         3750.14      4.2          8.3         
+2      16.0002      38.2         2923.02      2.6          6.8         
+3      52.9179      35.9         2188.23      2.7          6.3         
+4      0.9883       37.7         2540.80      3.3          6.0         
+5      31.9939      36.6         2811.82      3.0          6.1         
+6      23.9633      34.7         2036.68      2.9          5.7         
+7      16.0030      43.2         2793.91      3.5          7.3         
+8      152.0047     38.2         2588.41      3.2          6.4         
+9      162.0608     41.6         2594.40      3.4          7.0         
+10     17.0031      40.8         2849.90      3.0          7.0         
+
+Results written to: testing/recon-output/calibration-benchmark/serum_none.json

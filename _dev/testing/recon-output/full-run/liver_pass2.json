@@ -1,0 +1,333 @@
+{
+  "schema_version": "1.1.0",
+  "generated_at": "2026-09-03T10:39:17.942304Z",
+  "tool_version": "0.1.1",
+  "git_commit": "b62c331-dirty",
+  "source_file": "testing/inputs/10mg_1_A_1.mzML.gz",
+  "effective_params": "testing/recon-output/full-run/liver_search/pass2/pass2-effective-params.json",
+  "subset_fasta": "testing/recon-output/full-run/liver_search/pass2/subset_identified_proteins.fasta",
+  "subset_proteins": 1771,
+  "ms1_window_low_ppm": -5.970052095517849,
+  "ms1_window_high_ppm": 3.1351906522143644,
+  "ms2_tolerance": "±16.37 ppm",
+  "pass1_fragment_tol": "±20 ppm",
+  "terminus": {
+    "classified_psms": 15025,
+    "counts": [
+      {
+        "class": "fully_enzymatic",
+        "count": 13642,
+        "pct": 90.79534109816971
+      },
+      {
+        "class": "semi_n_ragged",
+        "count": 971,
+        "pct": 6.462562396006655
+      },
+      {
+        "class": "semi_c_ragged",
+        "count": 412,
+        "pct": 2.742096505823627
+      },
+      {
+        "class": "non_enzymatic",
+        "count": 0,
+        "pct": 0.0
+      },
+      {
+        "class": "not_found",
+        "count": 0,
+        "pct": 0.0
+      },
+      {
+        "class": "protein_not_found",
+        "count": 0,
+        "pct": 0.0
+      }
+    ],
+    "fully_enzymatic_pct": 90.79534109816971,
+    "semi_enzymatic_total": 1383,
+    "semi_enzymatic_pct": 9.204658901830284,
+    "semi_n_ragged_pct": 6.462562396006655,
+    "semi_c_ragged_pct": 2.742096505823627,
+    "n_c_ratio": 2.3567961165048543
+  },
+  "digestion": {
+    "total_psms": 15025,
+    "missed_cleavages": {
+      "distribution": [
+        {
+          "missed": 0,
+          "count": 12132,
+          "pct": 80.74542429284526
+        },
+        {
+          "missed": 1,
+          "count": 2893,
+          "pct": 19.254575707154743
+        }
+      ],
+      "mean": 0.19254575707154742,
+      "max_observed": 1
+    },
+    "semi_enzymatic": {
+      "fully_enzymatic_count": 13601,
+      "fully_enzymatic_pct": 90.522462562396,
+      "semi_enzymatic_count": 1424,
+      "semi_enzymatic_pct": 9.477537437603994
+    },
+    "peptide_length": {
+      "min": 8,
+      "max": 47,
+      "mean": 14.96359400998336,
+      "median": 14,
+      "distribution": [
+        {
+          "length": 8,
+          "count": 1148,
+          "pct": 7.640599001663894
+        },
+        {
+          "length": 9,
+          "count": 1299,
+          "pct": 8.645590682196339
+        },
+        {
+          "length": 10,
+          "count": 1274,
+          "pct": 8.479201331114808
+        },
+        {
+          "length": 11,
+          "count": 1314,
+          "pct": 8.745424292845257
+        },
+        {
+          "length": 12,
+          "count": 1303,
+          "pct": 8.672212978369384
+        },
+        {
+          "length": 13,
+          "count": 1068,
+          "pct": 7.108153078202995
+        },
+        {
+          "length": 14,
+          "count": 1038,
+          "pct": 6.908485856905158
+        },
+        {
+          "length": 15,
+          "count": 1041,
+          "pct": 6.928452579034942
+        },
+        {
+          "length": 16,
+          "count": 926,
+          "pct": 6.1630615640599
+        },
+        {
+          "length": 17,
+          "count": 659,
+          "pct": 4.386023294509151
+        },
+        {
+          "length": 18,
+          "count": 599,
+          "pct": 3.9866888519134775
+        },
+        {
+          "length": 19,
+          "count": 538,
+          "pct": 3.5806988352745424
+        },
+        {
+          "length": 20,
+          "count": 401,
+          "pct": 2.6688851913477536
+        },
+        {
+          "length": 21,
+          "count": 395,
+          "pct": 2.6289517470881862
+        },
+        {
+          "length": 22,
+          "count": 308,
+          "pct": 2.049916805324459
+        },
+        {
+          "length": 23,
+          "count": 285,
+          "pct": 1.896838602329451
+        },
+        {
+          "length": 24,
+          "count": 236,
+          "pct": 1.5707154742096505
+        },
+        {
+          "length": 25,
+          "count": 184,
+          "pct": 1.2246256239600666
+        },
+        {
+          "length": 26,
+          "count": 220,
+          "pct": 1.464226289517471
+        },
+        {
+          "length": 27,
+          "count": 137,
+          "pct": 0.9118136439267887
+        },
+        {
+          "length": 28,
+          "count": 110,
+          "pct": 0.7321131447587355
+        },
+        {
+          "length": 29,
+          "count": 115,
+          "pct": 0.7653910149750416
+        },
+        {
+          "length": 30,
+          "count": 82,
+          "pct": 0.5457570715474209
+        },
+        {
+          "length": 31,
+          "count": 65,
+          "pct": 0.43261231281198004
+        },
+        {
+          "length": 32,
+          "count": 49,
+          "pct": 0.3261231281198003
+        },
+        {
+          "length": 33,
+          "count": 55,
+          "pct": 0.36605657237936773
+        },
+        {
+          "length": 34,
+          "count": 50,
+          "pct": 0.33277870216306155
+        },
+        {
+          "length": 35,
+          "count": 13,
+          "pct": 0.08652246256239601
+        },
+        {
+          "length": 36,
+          "count": 25,
+          "pct": 0.16638935108153077
+        },
+        {
+          "length": 37,
+          "count": 27,
+          "pct": 0.17970049916805325
+        },
+        {
+          "length": 38,
+          "count": 27,
+          "pct": 0.17970049916805325
+        },
+        {
+          "length": 39,
+          "count": 11,
+          "pct": 0.07321131447587355
+        },
+        {
+          "length": 40,
+          "count": 4,
+          "pct": 0.026622296173044926
+        },
+        {
+          "length": 41,
+          "count": 11,
+          "pct": 0.07321131447587355
+        },
+        {
+          "length": 42,
+          "count": 5,
+          "pct": 0.033277870216306155
+        },
+        {
+          "length": 43,
+          "count": 1,
+          "pct": 0.0066555740432612314
+        },
+        {
+          "length": 47,
+          "count": 2,
+          "pct": 0.013311148086522463
+        }
+      ]
+    }
+  },
+  "composition": {
+    "peptides_classified": 10774,
+    "peptides_unresolved": 0,
+    "cleavage_completeness_pct": 82.46705030629292,
+    "missed_cleavage": {
+      "numerator": 1889,
+      "denominator": 10774,
+      "pct": 17.532949693707074
+    },
+    "ragged_n": {
+      "numerator": 748,
+      "denominator": 10774,
+      "pct": 6.94263968813811
+    },
+    "ragged_c": {
+      "numerator": 338,
+      "denominator": 10774,
+      "pct": 3.1371821050677555
+    },
+    "ragged_total": {
+      "numerator": 1086,
+      "denominator": 10774,
+      "pct": 10.079821793205866
+    },
+    "non_enzymatic_count": 0,
+    "non_enzymatic_note": "NOT MEASURED as a rate. Pass 2 runs semi_enzymatic, so Sage only generates candidates with ONE non-specific terminus and a fully non-tryptic peptide is never scored. Preview obtains its 0.1 % from a separate non-enzymatic search, which recon does not run. The count here is residual classifier disagreement, not a measurement.",
+    "decoy_corrected": {
+      "decoys_fully_enzymatic": 14,
+      "decoys_ragged_n": 85,
+      "decoys_ragged_c": 18,
+      "class_fdr_fully_enzymatic_pct": 0.14450867052023122,
+      "class_fdr_semi_enzymatic_pct": 9.484346224677717,
+      "cleavage_completeness_pct": 82.61236745800882,
+      "missed_cleavage": {
+        "numerator": 1853,
+        "denominator": 10657,
+        "pct": 17.38763254199118
+      },
+      "ragged_n": {
+        "numerator": 663,
+        "denominator": 10657,
+        "pct": 6.221263019611523
+      },
+      "ragged_c": {
+        "numerator": 320,
+        "denominator": 10657,
+        "pct": 3.0027212161020924
+      },
+      "n_c_assignment_note": "Decoys carry no N/C label; Sage's per-peptide reversal preserves the first and last residue, so the side is inferred from the last residue. Validated at 96.63 % against known target classes."
+    }
+  },
+  "comparison": {
+    "pass1_psms": 31793,
+    "pass1_semi_enzymatic_pct": 0.0,
+    "pass2_psms": 15025,
+    "pass2_semi_enzymatic_pct": 9.204658901830284,
+    "pass2_only_semi_enzymatic": 1383,
+    "note": "Pass 1 is a FULLY TRYPTIC search over the whole database and cannot generate a semi-tryptic peptide, so its 0.00 % is a control, not a prediction. Pass 2 is semi-enzymatic over 1771 identified proteins and measured 9.20 % (1383 PSMs). The two rates have DIFFERENT denominators (31793 vs 15025) and different search spaces; their difference is not a delta."
+  },
+  "pass2_search_seconds": 15.18169
+}

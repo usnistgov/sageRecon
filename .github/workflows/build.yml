@@ -1,0 +1,226 @@
+# Build and release the `recon` binary for four targets.
+#
+# Shape derived from the in-house workflow at neely/sagegui
+# (.github/workflows/build.yml), which is itself derived from jspaezp/sagegui
+# (Apache 2.0, J. Sebastian Paez). Adapted for recon on 2026-09-02.
+#
+# FOUR DIFFERENCES FROM THE SAGEGUI PARENT, each deliberate:
+#
+# 1. Every cargo command carries `--target`. sagegui builds both macOS entries
+#    with a bare `cargo build --release`, so both produce a binary for the
+#    RUNNER's architecture and the x86_64 entry is silently mislabelled. Here
+#    each target is also given its own native runner (macos-13 is Intel,
+#    macos-14 is Apple silicon), so tests run natively too and nothing needs
+#    Rosetta.
+#
+# 2. `cargo fmt -- --check` IS gated; `cargo clippy -D warnings` is NOT. The
+#    tree was rustfmt'd on 2026-09-02 and the layout gate went on the same day.
+#    Clippy stays off: about 40 lints remain and each is a real code edit to
+#    judge against the numeric tripwires, not a bulk fix.
+#    See NOTES "CI gates on `cargo fmt --check`. It does NOT gate on clippy".
+#
+# 3. The archive carries three files beside the binary. README.md is a courtesy.
+#    THIRD_PARTY_LICENSES.md and unimod.xml are Design Science License Section 3
+#    OBLIGATIONS for redistributing Unimod. Do not drop them to slim the archive.
+#
+# 4. `dtolnay/rust-toolchain` replaces `actions-rs/toolchain`. The actions-rs
+#    organisation archived its actions, so the parent workflow depends on an
+#    unmaintained action. This is a swap of the same function, not a new
+#    capability.
+#
+# ⚠ CI CANNOT run testing/scripts/run_validation.py, and `cargo test` here is
+#   weaker than it looks: the mzML, FASTA and search-output files live outside
+#   git, so 25 data-dependent assertions skip themselves on a CI checkout. The
+#   count stays 191 passed either way. Green CI means the code COMPILES and the
+#   data-free logic holds. It is not the numerical tripwire.
+
+name: Build and Release
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+# Rapid successive pushes to main or a PR branch are common here. Cancel the
+# superseded run instead of letting a stale 4-target matrix finish. Tag refs
+# (refs/tags/v*) are never cancelled, so a release build always completes.
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  CARGO_TERM_COLOR: always
+  # Incremental compilation only helps repeated local edits. In CI it just
+  # bloats the cache. Swatinem/rust-cache sets this too; explicit here so the
+  # pre-cache `cargo fmt` step is covered as well.
+  CARGO_INCREMENTAL: 0
+
+jobs:
+  build:
+    name: Build ${{ matrix.platform }}
+    runs-on: ${{ matrix.os }}
+    defaults:
+      run:
+        working-directory: recon-tool
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - platform: windows-64
+            os: windows-latest
+            target: x86_64-pc-windows-msvc
+            binary: recon.exe
+            asset_name: recon-windows-64
+          - platform: linux-64
+            os: ubuntu-latest
+            target: x86_64-unknown-linux-gnu
+            binary: recon
+            asset_name: recon-linux-64
+          # macos-13 is RETIRED. macos-15-intel is the Intel runner.
+          # Ben corrected this 2026-09-02. Do not put macos-13 back.
+          - platform: apple-intel
+            os: macos-15-intel
+            target: x86_64-apple-darwin
+            binary: recon
+            asset_name: recon-apple-intel
+          - platform: apple-silicon
+            os: macos-latest
+            target: aarch64-apple-darwin
+            binary: recon
+            asset_name: recon-apple-silicon
+
+    steps:
+      # fetch-depth: 0 is NOT needed, but the build script runs `git rev-parse
+      # --short HEAD` to stamp provenance into the binary, so a git checkout
+      # (not an export) is required. actions/checkout gives one.
+      - uses: actions/checkout@v5
+
+      # The ubuntu runner ran OUT OF DISK on 2026-09-02, run 33683133213:
+      #   "failed to write .../release/deps/rustcXdpoMl/lib.rmeta:
+      #    No space left on device (os error 28)"
+      # `cargo test` builds the whole tree in debug, then `cargo build --release`
+      # builds it again, and Sage pulls in arrow, parquet, object_store and the
+      # cloud stack. The other three runners have more free space and passed.
+      # These preinstalled toolchains are not used by this build.
+      # Since 2026-09-03 the rust-cache step prunes the restored cache, so this
+      # is now a safety margin for the debug + release double build, not the fix.
+      - name: Free Disk Space
+        if: runner.os == 'Linux'
+        run: |
+          df -h /
+          sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/lib/android \
+                      /opt/hostedtoolcache/CodeQL /usr/local/share/boost
+          df -h /
+
+      - name: Install Rust
+        uses: dtolnay/rust-toolchain@stable
+        with:
+          targets: ${{ matrix.target }}
+
+      # Swatinem/rust-cache keys on the resolved Cargo.lock hash, the exact rustc
+      # version and the target triple, so the cache invalidates exactly when a
+      # dependency or the toolchain changes. It caches the registry index, the
+      # .crate cache and ~/.cargo/git (the pinned sage-* deps), NOT the
+      # re-extractable registry/src, and it PRUNES stale build artifacts before
+      # saving -- the hand-rolled actions/cache it replaces grew past 10 GB and
+      # never shrank. `key` keeps the four platforms separate. `save-if` lets PR
+      # runs restore but not write, so PR churn never displaces the main cache;
+      # tag builds restore the warm main cache without overwriting it.
+      - name: Cache Rust build
+        uses: Swatinem/rust-cache@v2
+        with:
+          workspaces: recon-tool
+          key: ${{ matrix.platform }}
+          save-if: ${{ github.ref == 'refs/heads/main' }}
+
+      # The tree was rustfmt'd 2026-09-02, so this gate can be on. It is a
+      # LAYOUT check only -- rustfmt cannot change behaviour. Proven that day:
+      # after the reformat, 191 tests passed and run_validation.py read 17/17,
+      # the same as before.
+      # ⚠ There is deliberately NO clippy gate. About 40 lints remain, and each
+      # one is a real code edit, not a layout change. They need judging one at a
+      # time against the numbers. See NOTES.
+      - name: Check Format
+        run: cargo fmt -- --check
+
+      - name: Run Tests
+        run: cargo test --target ${{ matrix.target }} --verbose
+
+      - name: Build Release
+        run: cargo build --release --target ${{ matrix.target }} --verbose
+
+      # Design Science License Section 3 obligation: unimod.xml is compiled into
+      # the binary, so the source form must ship with it, together with the
+      # licence text. This step fails loudly if either is missing rather than
+      # producing an archive that quietly breaks the licence.
+      - name: Stage Release Archive
+        shell: bash
+        run: |
+          set -euo pipefail
+          VERSION=$(grep '^version' Cargo.toml | head -1 | cut -d '"' -f2)
+          STAGE="${{ matrix.asset_name }}-v${VERSION}"
+          mkdir -p "../$STAGE"
+          cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" "../$STAGE/"
+          cp ../README.md ../THIRD_PARTY_LICENSES.md "../$STAGE/"
+          cp resources/unimod.xml "../$STAGE/"
+          for f in ${{ matrix.binary }} README.md THIRD_PARTY_LICENSES.md unimod.xml; do
+            test -s "../$STAGE/$f" || { echo "MISSING from archive: $f"; exit 1; }
+          done
+          # unimod.xml must be BYTE-IDENTICAL to the repo copy. On 2026-09-02 the
+          # Windows runner's autocrlf rewrote all 46589 line endings and shipped a
+          # 2553267-byte file where every other target shipped 2506678 bytes. All
+          # four jobs went green with the corrupt file in the archive, because
+          # nothing compared bytes. THIRD_PARTY_LICENSES.md states the file ships
+          # UNMODIFIED, so this is a licence check, not a tidiness check.
+          # The .gitattributes -text guard is the fix; this is the tripwire.
+          # sha256sum on Linux and Git-Bash, shasum on macOS. Pick what exists.
+          if command -v sha256sum >/dev/null 2>&1; then H="sha256sum"; else H="shasum -a 256"; fi
+          a=$($H < resources/unimod.xml | cut -d' ' -f1)
+          b=$($H < "../$STAGE/unimod.xml" | cut -d' ' -f1)
+          if [ "$a" != "$b" ]; then
+            echo "unimod.xml DIFFERS from the repo copy -- DSL Source Data must ship verbatim"
+            echo "  repo:    $a  ($(wc -c < resources/unimod.xml) bytes)"
+            echo "  archive: $b  ($(wc -c < "../$STAGE/unimod.xml") bytes)"
+            exit 1
+          fi
+          echo "unimod.xml verified byte-identical: $a"
+          echo "STAGE=$STAGE" >> "$GITHUB_ENV"
+          ls -l "../$STAGE"
+
+      - name: Create Release Archive
+        shell: bash
+        working-directory: .
+        run: |
+          set -euo pipefail
+          if [ "${{ runner.os }}" = "Linux" ]; then
+            tar -czf "${{ matrix.asset_name }}.tar.gz" "$STAGE"
+          else
+            # 7z is present on the Windows runner; zip on macOS.
+            if [ "${{ runner.os }}" = "Windows" ]; then
+              7z a "${{ matrix.asset_name }}.zip" "$STAGE"
+            else
+              zip -r "${{ matrix.asset_name }}.zip" "$STAGE"
+            fi
+          fi
+
+      - name: Upload Build Artifact
+        uses: actions/upload-artifact@v7
+        with:
+          name: ${{ matrix.asset_name }}
+          path: ${{ env.STAGE }}
+
+      - name: Release
+        uses: softprops/action-gh-release@v2
+        if: startsWith(github.ref, 'refs/tags/')
+        with:
+          files: |
+            ${{ matrix.asset_name }}.tar.gz
+            ${{ matrix.asset_name }}.zip
+          fail_on_unmatched_files: false
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

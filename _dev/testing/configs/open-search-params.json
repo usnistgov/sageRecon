@@ -1,0 +1,58 @@
+{
+  "database": {
+    "bucket_size": 8192,
+    "enzyme": {
+      "missed_cleavages": 2,
+      "min_len": 7,
+      "max_len": 50,
+      "cleave_at": "KR",
+      "restrict": "P"
+    },
+    "peptide_min_mass": 500.0,
+    "peptide_max_mass": 5000.0,
+    "ion_kinds": [
+      "b",
+      "y"
+    ],
+    "min_ion_index": 2,
+    "static_mods": {},
+    "variable_mods": {},
+    "max_variable_mods": 0,
+    "decoy_tag": "rev_",
+    "generate_decoys": true,
+    "fasta": "inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta"
+  },
+  "precursor_tol": {
+    "da": [
+      -500.0,
+      100.0
+    ]
+  },
+  "fragment_tol": {
+    "ppm": [
+      -20.0,
+      20.0
+    ]
+  },
+  "precursor_charge": [
+    2,
+    4
+  ],
+  "isotope_errors": [
+    0,
+    0
+  ],
+  "deisotope": true,
+  "chimera": true,
+  "wide_window": false,
+  "min_peaks": 15,
+  "max_peaks": 150,
+  "max_fragment_charge": 1,
+  "min_matched_peaks": 4,
+  "report_psms": 2,
+  "predict_rt": false,
+  "mzml_paths": [
+    "inputs/B.naive_01steady-state.mzML.gz"
+  ],
+  "protein_grouping": false
+}

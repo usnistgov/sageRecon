@@ -1,0 +1,44 @@
+file     annotation               k  spread             gaps (mDa)  n(first,last)      verdict
+====================================================================================================
+b1906    (unannotated)            3    21.9               12.6 9.4     54,42      INCONCLUSIVE
+b1906    (unannotated)            2    11.3                   11.3     60,75      INCONCLUSIVE
+b1906    Deamidated               2     7.0                    7.0    162,78          shredded
+b1906    (unannotated)            3    22.6               7.4 15.2     45,81      INCONCLUSIVE
+b1906    Oxidation                2     3.2                    3.2    436,343         shredded
+b1906    (unannotated)            2     8.2                    8.2     56,149         shredded
+b1906    Formyl                   2     4.1                    4.1    107,104         shredded
+b1906    Carbamyl                 2     2.6                    2.6    231,347         shredded
+b1906    Carbamidomethyl          2     5.0                    5.0   1174,101         shredded
+b1906    (unannotated)            2     5.2                    5.2    166,106         shredded
+b1906    (unannotated)            2     2.9                    2.9     40,80          shredded
+b1906    AEBS                     2     2.0                    2.0     41,42          shredded
+bcell    (unannotated)            3    24.0              13.4 10.6    182,157     INCONCLUSIVE
+bcell    Amidated                 2    12.1                   12.1    215,139     INCONCLUSIVE
+bcell    (unannotated)            3    19.2                9.6 9.7    103,156         shredded
+bcell    (unannotated)            2    15.0                   15.0    300,645     INCONCLUSIVE
+bcell    (unannotated)            2     6.3                    6.3    164,166         shredded
+bcell    Oxidation                2     3.1                    3.1    789,669         shredded
+bcell    Carbamidomethyl          2     5.1                    5.1   3079,251         shredded
+bcell    (unannotated)            2     4.8                    4.8    543,446         shredded
+serum    Deamidated               2     4.0                    4.0    119,68          shredded
+serum    Oxidation                2     4.7                    4.7    186,123         shredded
+serum    Cation:Fe[III]           2     5.3                    5.3    255,49          shredded
+serum    Carbamidomethyl          2     4.4                    4.4    905,271         shredded
+serum    (unannotated)            2     6.1                    6.1    117,245         shredded
+serum    (unannotated)            2     4.2                    4.2     69,59          shredded
+serum    GG                       2     6.3                    6.3     77,65          shredded
+====================================================================================================
+  split groups                    27
+  consecutive gaps                31
+  gap min/median/max              2.0 / 6.1 / 15.2 mDa
+  spread min/median/max           2.0 / 5.2 / 24.0 mDa  (not a gate)
+  bin width                       10.0 mDa
+  deamidation/isotope doublet     19.3 mDa
+  gaps >= one bin width           7
+  gaps >= 75% of the doublet      2
+  groups: shredded / inconclusive 21 / 6
+
+  VERDICT: some consecutive gaps reach a full bin width. This test
+  CANNOT tell those from one broad population smeared over adjacent
+  bins - see the power limit in the docstring. Resolve them with a
+  sub-bin histogram of the raw delta masses before choosing a mode.

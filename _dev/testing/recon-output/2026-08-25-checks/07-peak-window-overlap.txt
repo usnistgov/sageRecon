@@ -1,0 +1,14 @@
+==============================================================================
+testing/recon-output/2026-08-25-checks/04-discover-min5-serum.json
+  bin_width=0.01 Da   collection window=+/-0.01 Da (2 bin widths wide)
+  no overlapping peak windows
+==============================================================================
+testing/recon-output/2026-08-25-checks/04-discover-min5-bcell.json
+  bin_width=0.01 Da   collection window=+/-0.01 Da (2 bin widths wide)
+  no overlapping peak windows
+==============================================================================
+testing/recon-output/2026-08-25-checks/04-discover-min5-b1906.json
+  bin_width=0.01 Da   collection window=+/-0.01 Da (2 bin widths wide)
+  no overlapping peak windows
+==============================================================================
+RESULT: 0 overlapping peak-window pair(s) across 3 file(s).

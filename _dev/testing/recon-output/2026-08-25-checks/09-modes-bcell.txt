@@ -1,0 +1,117 @@
+================================================================================================
+PEAK ASSIGNMENT COMPARISON
+  input          testing\search-output\step1-open-bcell\results.sage.tsv
+  PSMs kept      73527
+  min_peak_count 5   q<=0.01
+================================================================================================
+
+--- Merge ---
+  peaks 47   PSMs claimed by all peaks 56943 of 73527 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000   42861   40699  Unmodified                     -       -       -      -
+    57.02201    3311    3055  Carbamidomethyl                C     95%      9%  10.15
+    15.99532    1413     787  Oxidation                    HMW     94%     45%   2.09
+    58.02430     938     535  (unannotated)                  -       -       -      -
+     0.98207     760     504  Deamidated                    NQ     82%     67%   1.21
+    16.99755     389     339  (unannotated)                  -       -       -      -
+     0.95094     383     183  (unannotated)                  -       -       -      -
+    -1.02899     376     233  Lys-&gt;Allysine               -       -       -      -
+    52.91125     359     346  Cation:Fe[III]                 -       -       -      -
+    -0.98043     303      75  Glu-&gt;pyro-Glu+Methyl:       -       -       -      -
+     1.96910     296     128  (unannotated)                  -       -       -      -
+    59.02800     292     206  AEC-MAEC                       -       -       -      -
+     0.93035     272     147  (unannotated)                  -       -       -      -
+   -17.02568     253     198  Gln-&gt;pyro-Glu               Q     94%     46%   2.03
+     1.98549     241     166  (unannotated)                  -       -       -      -
+    -0.07880     226     119  Unmodified                     -       -       -      -
+   -89.02889     209     198  Met-loss+Acetyl                -       -       -      -
+     0.90926     209     101  (unannotated)                  -       -       -      -
+     1.91965     205     109  (unannotated)                  -       -       -      -
+    -1.06007     204      95  (unannotated)                  -       -       -      -
+   114.04321     203     158  GG                             -       -       -      -
+    -0.95987     201      40  (unannotated)                  -       -       -      -
+    53.91393     182     111  Cation:Fe[II]                  -       -       -      -
+    73.01809     181     154  (unannotated)                  -       -       -      -
+     1.90277     166      80  (unannotated)                  -       -       -      -
+    -0.09948     164      78  Unmodified                     -       -       -      -
+    31.99009     158     151  Dioxidation                    M     36%     24%   1.48
+     0.88993     152      77  (unannotated)                  -       -       -      -
+     2.04987     151      63  (unannotated)                  -       -       -      -
+    18.00122     148     108  Pro-&gt;HAVA                   -       -       -      -
+     2.03046     148      76  (unannotated)                  -       -       -      -
+    -1.08714     147      87  (unannotated)                  -       -       -      -
+    17.02574     142      80  Ammonium                       -       -       -      -
+    42.01094     120     116  Acetyl                         K     62%     58%   1.07
+     1.87978     117      55  (unannotated)                  -       -       -      -
+    -1.10682     111      52  (unannotated)                  -       -       -      -
+    18.03021     107      79  (unannotated)                  -       -       -      -
+   270.10990     102     101  (unannotated)                  -       -       -      -
+   115.04814      99      65  (unannotated)                  -       -       -      -
+    -0.12756      96      53  (unannotated)                  -       -       -      -
+    74.01946      84      72  (unannotated)                  -       -       -      -
+    79.96608      82      61  Phospho                      STY    100%     83%   1.21
+    78.01308      80      72  (unannotated)                  -       -       -      -
+     2.91082      80      50  (unannotated)                  -       -       -      -
+   -18.00992      78      69  Dehydrated                     C      1%      9%   0.14
+    43.00815      77      57  Carbamyl                       K     64%     58%   1.09
+   284.12558      67      50  (unannotated)                  -       -       -      -
+
+--- Split ---
+  peaks 44   PSMs claimed by all peaks 56152 of 73527 total
+    delta_Da   count  promin  annotation                 sites   in-pk      bg    enr
+     0.00000   42861   41687  Unmodified                     -       -       -      -
+    57.02162    3079    3055  Carbamidomethyl                C     95%      9%  10.14
+    15.99386     789     787  Oxidation                    HMW     93%     45%   2.07
+    15.99694     669     663  Oxidation                    HMW     94%     45%   2.11
+     0.98340     645     504  Deamidated                    NQ     85%     67%   1.26
+    58.02230     543     535  (unannotated)                  -       -       -      -
+    58.02708     446     437  (unannotated)                  -       -       -      -
+    16.99755     389     339  (unannotated)                  -       -       -      -
+    52.91125     359     346  Cation:Fe[III]                 -       -       -      -
+     0.96843     300     202  (unannotated)                  -       -       -      -
+     0.95331     300     183  (unannotated)                  -       -       -      -
+    59.02800     292     206  AEC-MAEC                       -       -       -      -
+   -17.02568     253     198  Gln-&gt;pyro-Glu               Q     94%     46%   2.03
+    57.02671     251     246  Carbamidomethyl                C     96%      9%  10.23
+    -1.03036     233     233  Lys-&gt;Allysine               -       -       -      -
+    -0.07880     226     119  Unmodified                     -       -       -      -
+    -0.98330     215      75  Amidated                       -       -       -      -
+   -89.02889     209     198  Met-loss+Acetyl                -       -       -      -
+     1.96693     207     128  (unannotated)                  -       -       -      -
+     1.91965     205     109  (unannotated)                  -       -       -      -
+    -1.06007     204      95  (unannotated)                  -       -       -      -
+   114.04321     203     158  GG                             -       -       -      -
+    -1.04375     182     117  (unannotated)                  -       -       -      -
+    53.91393     182     111  Cation:Fe[II]                  -       -       -      -
+    73.01809     181     154  (unannotated)                  -       -       -      -
+     1.98734     166     166  (unannotated)                  -       -       -      -
+     1.90277     166      80  (unannotated)                  -       -       -      -
+     1.98103     164     164  (unannotated)                  -       -       -      -
+    31.99009     158     151  Dioxidation                    M     36%     24%   1.48
+     0.90682     158     101  (unannotated)                  -       -       -      -
+    -1.01974     157     157  (unannotated)                  -       -       -      -
+     0.93995     156     156  (unannotated)                  -       -       -      -
+     2.04987     151      63  (unannotated)                  -       -       -      -
+    -0.95807     150      40  (unannotated)                  -       -       -      -
+    18.00122     148     108  Pro-&gt;HAVA                   -       -       -      -
+     2.03046     148      76  (unannotated)                  -       -       -      -
+     0.93028     147     147  (unannotated)                  -       -       -      -
+    -1.08714     147      87  (unannotated)                  -       -       -      -
+    17.02574     142      80  Ammonium                       -       -       -      -
+    -0.97116     139      62  Glu-&gt;pyro-Glu+Methyl:       -       -       -      -
+    42.01094     120     116  Acetyl                         K     62%     58%   1.07
+    18.03021     107      79  (unannotated)                  -       -       -      -
+     0.92071     103     103  (unannotated)                  -       -       -      -
+   270.10990     102     101  (unannotated)                  -       -       -      -
+
+================================================================================================
+  Merge   47 peaks    56943 PSM claims
+  Split   44 peaks    56152 PSM claims
+
+  'in-pk' is the share of the peak's PSMs whose peptide CONTAINS one of
+  the listed residues. 'bg' is the same share over the whole run, and 'enr'
+  is in-pk / bg. READ THE CEILING: enrichment cannot exceed 1/bg, so a
+  common residue set gives a low ceiling and a weak test — N or Q occurs in
+  most tryptic peptides by chance, capping enr near 1.2, while a rare
+  residue like C or W discriminates strongly. Sequence membership only; it
+  cannot say the mod SITS on that residue. A DIAGNOSTIC, not a gate.

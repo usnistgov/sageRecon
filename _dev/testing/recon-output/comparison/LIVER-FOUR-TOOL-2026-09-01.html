@@ -1,0 +1,759 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- Rendered companion to LIVER-FOUR-TOOL-2026-09-01.md.
+     Generated from the producers named in the page footer; not hand-edited.
+     Standalone copy of the published artifact: the artifact host supplies its
+     own doctype/head/body wrapper and a CSS reset, so this file adds both to
+     render correctly on its own. Fonts load from Google Fonts when online and
+     fall back to the stacks declared in the CSS when not. -->
+<title>Liver Four-Tool Crosscheck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Serif:ital,wght@0,400;0,500;1,400&display=swap">
+
+<style>
+  :root {
+    --ground:        #f4f6f7;
+    --surface:       #ffffff;
+    --surface-sunk:  #eceff1;
+    --ink:           #14191c;
+    --ink-soft:      #495459;
+    --ink-faint:     #77848a;
+    --rule:          #d3dade;
+    --rule-strong:   #b3bec4;
+    --accent:        #10606b;
+    --accent-soft:   #d3e6e8;
+    --settled:       #2f6a45;
+    --settled-soft:  #dcebe1;
+    --caution:       #8a5b0c;
+    --caution-soft:  #f2e6cf;
+    --open:          #96382f;
+    --open-soft:     #f4dedb;
+
+    --sans:  "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    --serif: "IBM Plex Serif", Georgia, "Times New Roman", serif;
+    --mono:  "IBM Plex Mono", ui-monospace, "SF Mono", Menlo, monospace;
+
+    --measure: 68ch;
+    --pad: clamp(1.25rem, 4vw, 3rem);
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --ground:        #101619;
+      --surface:       #171f23;
+      --surface-sunk:  #1e282d;
+      --ink:           #e7edef;
+      --ink-soft:      #a9b6bb;
+      --ink-faint:     #7d8a90;
+      --rule:          #2a363b;
+      --rule-strong:   #3d4b51;
+      --accent:        #5fc3ce;
+      --accent-soft:   #1b3a3e;
+      --settled:       #7cc196;
+      --settled-soft:  #1b3226;
+      --caution:       #dcae5e;
+      --caution-soft:  #33280f;
+      --open:          #e08a80;
+      --open-soft:     #3a201d;
+    }
+  }
+
+  :root[data-theme="dark"] {
+    --ground:        #101619;
+    --surface:       #171f23;
+    --surface-sunk:  #1e282d;
+    --ink:           #e7edef;
+    --ink-soft:      #a9b6bb;
+    --ink-faint:     #7d8a90;
+    --rule:          #2a363b;
+    --rule-strong:   #3d4b51;
+    --accent:        #5fc3ce;
+    --accent-soft:   #1b3a3e;
+    --settled:       #7cc196;
+    --settled-soft:  #1b3226;
+    --caution:       #dcae5e;
+    --caution-soft:  #33280f;
+    --open:          #e08a80;
+    --open-soft:     #3a201d;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ground);
+    color: var(--ink);
+    font-family: var(--serif);
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 62rem;
+    margin: 0 auto;
+    padding: var(--pad) var(--pad) 5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .masthead {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+    padding-bottom: 1.75rem;
+    border-bottom: 2px solid var(--ink);
+  }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    font-weight: 500;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: var(--sans);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 5vw, 2.9rem);
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    text-wrap: balance;
+    margin: 0;
+  }
+
+  .standfirst {
+    max-width: var(--measure);
+    margin: 0;
+    font-size: 1.06rem;
+    color: var(--ink-soft);
+  }
+
+  .sources {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    padding: 0;
+    margin: 0.25rem 0 0;
+    list-style: none;
+  }
+
+  .sources li {
+    font-family: var(--mono);
+    font-size: 0.75rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid var(--rule-strong);
+    border-radius: 2px;
+    color: var(--ink-soft);
+    background: var(--surface);
+  }
+
+  .sources li.self {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: var(--accent-soft);
+    font-weight: 600;
+  }
+
+  .runmeta {
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    color: var(--ink-faint);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 1.25rem;
+  }
+
+  /* ---------- verdict rail ---------- */
+
+  .verdicts {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
+    gap: 1rem;
+  }
+
+  .verdict {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    border-top: 3px solid var(--vc, var(--accent));
+    padding: 1.1rem 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .verdict.is-settled { --vc: var(--settled); }
+  .verdict.is-open    { --vc: var(--open); }
+
+  .verdict .state {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--vc, var(--accent));
+  }
+
+  .verdict .figure {
+    font-family: var(--sans);
+    font-size: 1.85rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .verdict p {
+    margin: 0;
+    font-size: 0.9rem;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+
+  /* ---------- sections ---------- */
+
+  section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+  }
+
+  h2 {
+    font-family: var(--sans);
+    font-size: 1.4rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin: 0;
+    padding-bottom: 0.55rem;
+    border-bottom: 1px solid var(--rule-strong);
+    display: flex;
+    align-items: baseline;
+    gap: 0.7rem;
+  }
+
+  h2 .num {
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    font-weight: 500;
+    color: var(--accent);
+  }
+
+  h3 {
+    font-family: var(--sans);
+    font-size: 1rem;
+    font-weight: 600;
+    margin: 0.4rem 0 0;
+    letter-spacing: 0.005em;
+  }
+
+  p { margin: 0; max-width: var(--measure); }
+
+  .lede { font-size: 0.95rem; color: var(--ink-soft); }
+
+  strong { font-weight: 600; }
+  em.q { font-style: italic; }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--surface-sunk);
+    padding: 0.08em 0.34em;
+    border-radius: 2px;
+  }
+
+  /* ---------- tables ---------- */
+
+  .tscroll {
+    overflow-x: auto;
+    border: 1px solid var(--rule);
+    background: var(--surface);
+  }
+
+  table {
+    border-collapse: collapse;
+    width: 100%;
+    font-family: var(--sans);
+    font-size: 0.87rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  caption {
+    caption-side: bottom;
+    text-align: left;
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    padding: 0.65rem 0.85rem;
+    border-top: 1px solid var(--rule);
+    line-height: 1.5;
+  }
+
+  th, td {
+    padding: 0.55rem 0.85rem;
+    text-align: right;
+    border-bottom: 1px solid var(--rule);
+    white-space: nowrap;
+  }
+
+  thead th {
+    font-size: 0.7rem;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--ink-faint);
+    border-bottom: 1px solid var(--rule-strong);
+    background: var(--surface-sunk);
+  }
+
+  th[scope="row"], td.lab, thead th:first-child {
+    text-align: left;
+    white-space: normal;
+  }
+
+  th[scope="row"] {
+    font-weight: 500;
+    color: var(--ink);
+  }
+
+  tbody tr:last-child td,
+  tbody tr:last-child th { border-bottom: 0; }
+
+  tr.is-self th[scope="row"],
+  tr.is-self td { background: var(--accent-soft); }
+
+  tr.is-self th[scope="row"] { font-weight: 600; color: var(--accent); }
+
+  td.key { font-weight: 600; }
+  td.mono, th.mono { font-family: var(--mono); font-size: 0.82rem; }
+  td.dim { color: var(--ink-faint); }
+
+  /* ---------- spread strip ---------- */
+
+  .strip {
+    background: var(--surface);
+    border: 1px solid var(--rule);
+    padding: 1.1rem 1.15rem 0.9rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+  }
+
+  .strip-row {
+    display: grid;
+    grid-template-columns: minmax(6.5rem, auto) 1fr minmax(4.5rem, auto);
+    align-items: center;
+    gap: 0.9rem;
+  }
+
+  .strip-label {
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink-soft);
+  }
+
+  .track {
+    position: relative;
+    height: 0.6rem;
+    background: var(--surface-sunk);
+    border-radius: 1px;
+  }
+
+  .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    border-radius: 1px;
+    background: var(--rule-strong);
+  }
+
+  .bar.method { background: var(--accent); }
+
+  .strip-val {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    font-weight: 500;
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .strip-foot {
+    font-family: var(--mono);
+    font-size: 0.72rem;
+    color: var(--ink-faint);
+    border-top: 1px solid var(--rule);
+    padding-top: 0.7rem;
+    margin: 0;
+    max-width: none;
+  }
+
+  /* ---------- notes ---------- */
+
+  .note {
+    border-left: 3px solid var(--nc, var(--rule-strong));
+    background: var(--ns, var(--surface));
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+    line-height: 1.55;
+    color: var(--ink-soft);
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+
+  .note .tag {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--nc, var(--ink-faint));
+  }
+
+  .note.caution { --nc: var(--caution); --ns: var(--caution-soft); }
+  .note.settled { --nc: var(--settled); --ns: var(--settled-soft); }
+  .note.open    { --nc: var(--open);    --ns: var(--open-soft); }
+  .note p { max-width: none; }
+
+  pre {
+    font-family: var(--mono);
+    font-size: 0.78rem;
+    line-height: 1.65;
+    background: var(--surface-sunk);
+    border: 1px solid var(--rule);
+    padding: 0.95rem 1.1rem;
+    overflow-x: auto;
+    margin: 0;
+  }
+
+  ul.plain {
+    margin: 0;
+    padding-left: 1.15rem;
+    max-width: var(--measure);
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    font-size: 0.95rem;
+  }
+
+  ul.plain li::marker { color: var(--accent); }
+
+  footer {
+    border-top: 1px solid var(--rule);
+    padding-top: 1.25rem;
+    font-family: var(--mono);
+    font-size: 0.73rem;
+    color: var(--ink-faint);
+    line-height: 1.7;
+  }
+
+  a { color: var(--accent); }
+  a:focus-visible,
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+
+  <header class="masthead">
+    <p class="eyebrow">Step 3.5 — crosscheck</p>
+    <h1>Liver, four sources, one classification rule</h1>
+    <p class="standfirst">NIST RM 8461 human liver, file <code>10mg_1_A_1</code>. Four independent search tools, all on the same 2018 database, all run alkylation-agnostic. Every side reclassified from raw sequence context — no tool's own class, terminus, or missed-cleavage column is read anywhere in this report.</p>
+    <ul class="sources">
+      <li class="self">recon</li>
+      <li>Byonic Preview v3.2.0</li>
+      <li>PTM-Shepherd (FragPipe open)</li>
+      <li>MetaMorpheus G-PTM-D</li>
+      <li>Mascot error-tolerant · mods only</li>
+    </ul>
+    <div class="runmeta">
+      <span>DB uniprot_sprot_iso_human-2018_06.fasta</span>
+      <span>42,373 sequences</span>
+      <span>report 2026-09-01</span>
+      <span>producers re-run clean, no drift</span>
+    </div>
+  </header>
+
+  <div class="verdicts">
+    <div class="verdict is-settled">
+      <span class="state">Settled — corroborated</span>
+      <span class="figure">0.08 ppm</span>
+      <p>Gap between recon's MS2 accuracy (3.4206 ppm absolute) and Preview's independent measurement (3.5 ppm) on the same raw file.</p>
+    </div>
+    <div class="verdict is-settled">
+      <span class="state">Settled — criterion met</span>
+      <span class="figure">4.3&times;</span>
+      <p>Biological signal over method disagreement on missed cleavage. Four tools span 3.74 pp; between-sample spread is 15.9 pp.</p>
+    </div>
+    <div class="verdict is-open">
+      <span class="state">Open — not resolved</span>
+      <span class="figure">1.42 ppm</span>
+      <p>MS1 precursor bias disagreement. recon says &minus;1.4193 ppm; Preview says 0.0 ppm with a balanced split. Both cannot describe the same population.</p>
+    </div>
+  </div>
+
+  <section>
+    <h2><span class="num">01</span> Digestion</h2>
+    <p class="lede">Basis is <strong>distinct peptides</strong>. The denominator for missed-cleavage and ragged rates is tryptic + semitryptic, excluding non-tryptic — Preview's own convention. Reclassified with a mirror of the shipped Rust rule, initiator-Met excision branch included.</p>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Source</th>
+            <th scope="col">Peptides</th>
+            <th scope="col">Den</th>
+            <th scope="col">Missed cl</th>
+            <th scope="col">Ragged-N</th>
+            <th scope="col">Ragged-C</th>
+            <th scope="col">Nontryp</th>
+            <th scope="col">N:C</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="is-self">
+            <th scope="row">recon Pass 2 <span class="dim">(semi)</span></th>
+            <td>10,621</td><td>10,621</td><td class="key">17.12 %</td>
+            <td>6.75 %</td><td>3.01 %</td><td>0.00 %</td><td>2.24</td>
+          </tr>
+          <tr>
+            <th scope="row">PTM-Shepherd open <span class="dim">(fully)</span></th>
+            <td>15,998</td><td>15,954</td><td class="key">19.64 %</td>
+            <td class="dim">1.64 %</td><td class="dim">0.51 %</td><td>0.02 %</td><td>3.18</td>
+          </tr>
+          <tr>
+            <th scope="row">MetaMorpheus <span class="dim">(fully)</span></th>
+            <td>15,256</td><td>15,253</td><td class="key">17.84 %</td>
+            <td class="dim">0.54 %</td><td class="dim">0.45 %</td><td>0.01 %</td><td>1.21</td>
+          </tr>
+          <tr>
+            <th scope="row">Byonic Preview v3.2.0</th>
+            <td>2,009</td><td>2,008</td><td class="key">15.90 %</td>
+            <td>8.60 %</td><td>1.30 %</td><td>0.10 %</td><td>6.62</td>
+          </tr>
+        </tbody>
+        <caption>Greyed ragged rates are fully-tryptic controls, not measurements — see below. Excluded as unresolvable against this FASTA: PTM-Shepherd 41, MetaMorpheus 1, recon 0. Preview's row is quoted from <code>result_summary.html</code>; its peptide list is not shipped, so it is the one row that cannot be recomputed.</caption>
+      </table>
+    </div>
+
+    <h3>Missed cleavage is the headline, and the weakest link</h3>
+    <div class="strip">
+      <div class="strip-row">
+        <span class="strip-label">method spread</span>
+        <span class="track"><span class="bar method" style="left:0%; width:23.5%;"></span></span>
+        <span class="strip-val">3.74 pp</span>
+      </div>
+      <div class="strip-row">
+        <span class="strip-label">sample spread</span>
+        <span class="track"><span class="bar" style="left:0%; width:100%;"></span></span>
+        <span class="strip-val">15.9 pp</span>
+      </div>
+      <p class="strip-foot">Four independent tools span 15.90 → 19.64 %. Against the between-sample spread recorded in NOTES "ACCEPTANCE CRITERION", the biological signal is 4.3&times; the method disagreement. Criterion met — but this is the worst ratio in the report.</p>
+    </div>
+
+    <h3>Ragged termini cannot be compared across enzyme conventions</h3>
+    <p class="lede">The two fully-tryptic searches report ragged-N of 1.64 % and 0.54 %. <strong>A fully tryptic search cannot generate a ragged peptide</strong>, so those are a control near zero, not a measurement — comparing them to Preview's 8.60 % is the exact trap NOTES warns about. Only recon (semi) and Preview are comparable: <strong>6.75 % vs 8.60 %</strong>, a 1.85 pp gap against a 24.7 pp between-sample range — <strong>13&times;</strong>. Comfortable.</p>
+
+    <div class="note settled">
+      <span class="tag">Fifth independent confirmation</span>
+      <p><strong>N &gt;&gt; C holds on all four sources.</strong> N:C ratios of 2.24, 3.18, 1.21 and 6.62 — every one above 1. Davis Table 3's ragged N/C headers are transposed relative to the tool that produced them. The <em class="q">direction</em> reproduces across tools; the <em class="q">magnitude</em> (1.21 → 6.62) does not.</p>
+    </div>
+
+    <div class="note caution">
+      <span class="tag">Why the controls aren't exactly zero</span>
+      <p>Residual fully-tryptic ragged-N (1.64 % Shepherd, 0.54 % MetaMorpheus) exists because classification uses the first listed protein. A peptide that is tryptic in its true parent can be ragged in the razor protein. recon carries the identical limitation, documented at <code>digestion.rs:390</code>.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">02</span> Modification discovery</h2>
+    <p class="lede">Matched by <strong>delta mass at 0.01 Da, never by name</strong> — the same chemistry is "Carbamidomethyl" to one tool and "Iodoacetamide derivative" to another. All arms ran alkylation-agnostic: recon strips and asserts empty mods in both passes; PTM-Shepherd had every fixed and variable mod removed; MetaMorpheus had Common Fixed / Common Variable moved out of mod options and into the G-PTM-D discovery list.</p>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Pair</th>
+            <th scope="col">Distinct masses</th>
+            <th scope="col">n shared</th>
+            <th scope="col">Spearman &rho;</th>
+            <th scope="col">p</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr class="is-self">
+            <th scope="row">recon</th>
+            <td>48</td><td class="dim">—</td><td class="dim">—</td><td class="dim">—</td>
+          </tr>
+          <tr>
+            <th scope="row">vs PTM-Shepherd</th>
+            <td>102</td><td>38</td><td class="key">+0.616</td>
+            <td class="mono">2.5e&minus;05 <span class="dim">perm, seed 42</span></td>
+          </tr>
+          <tr>
+            <th scope="row">vs MetaMorpheus</th>
+            <td>15</td><td>6</td><td class="key">+1.000</td>
+            <td class="mono">0.002778 <span class="dim">exact</span></td>
+          </tr>
+          <tr>
+            <th scope="row">vs Mascot</th>
+            <td>330</td><td>26</td><td class="key">+0.502</td>
+            <td class="mono">0.01005 <span class="dim">perm, seed 42</span></td>
+          </tr>
+        </tbody>
+        <caption>Distinct masses counted after removing the delta ≈ 0 population. Mascot: 16 rows had no clean Unimod mass ("Non-specific cleavage", unresolved substitutions) and were skipped and counted, never silently dropped.</caption>
+      </table>
+    </div>
+
+    <div class="note caution">
+      <span class="tag">Read n = 6 with its n</span>
+      <p>The perfect &rho; against MetaMorpheus is real but thin. G-PTM-D searches a curated candidate list, not an open window, so it has far fewer masses to share. Never report that +1.000 without its n.</p>
+    </div>
+
+    <h3>Top shared masses</h3>
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Delta</th>
+            <th scope="col">Likely identity</th>
+            <th scope="col">recon</th>
+            <th scope="col">PTM-Shepherd</th>
+            <th scope="col">MetaMorpheus</th>
+            <th scope="col">Mascot</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="lab mono">15.9945</td><td class="lab">Oxidation</td><td class="key">1,688</td><td>3,290</td><td>1,973</td><td>4,585</td></tr>
+          <tr><td class="lab mono">57.0207</td><td class="lab">Carbamidomethyl</td><td class="key">1,291</td><td>2,048</td><td>1,398</td><td>2,479</td></tr>
+          <tr><td class="lab mono">0.9833</td><td class="lab">Deamidated</td><td>562</td><td>447</td><td>516</td><td>687</td></tr>
+          <tr><td class="lab mono">162.0522</td><td class="lab dim">unannotated</td><td>310</td><td>302</td><td class="dim">—</td><td>180</td></tr>
+          <tr><td class="lab mono">16.9976</td><td class="lab dim">unannotated</td><td>286</td><td>136</td><td class="dim">—</td><td>137</td></tr>
+          <tr><td class="lab mono">73.0157</td><td class="lab dim">unannotated</td><td>248</td><td>459</td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr><td class="lab mono">31.9894</td><td class="lab">Dioxidation</td><td>235</td><td>455</td><td class="dim">—</td><td>67</td></tr>
+          <tr><td class="lab mono">58.0225</td><td class="lab dim">unannotated</td><td>204</td><td>123</td><td class="dim">—</td><td>3</td></tr>
+          <tr><td class="lab mono">&minus;1.0297</td><td class="lab">Lys-&gt;Allysine</td><td>172</td><td>50</td><td class="dim">—</td><td>13</td></tr>
+          <tr><td class="lab mono">&minus;0.0800</td><td class="lab">Unmodified</td><td>171</td><td>20</td><td class="dim">—</td><td class="dim">—</td></tr>
+          <tr><td class="lab mono">52.9105</td><td class="lab">Cation:Fe[III]</td><td>157</td><td>123</td><td>117</td><td class="dim">—</td></tr>
+          <tr><td class="lab mono">&minus;0.9798</td><td class="lab">Glu-&gt;pyro-Glu+Methyl / Amidated</td><td>144</td><td>64</td><td class="dim">—</td><td>44</td></tr>
+        </tbody>
+        <caption>Identities are recon's own Unimod annotations from <code>liver.json</code>, shown for reading only — matching between tools is by mass, never by name. "unannotated" means recon's match returned no candidate for that peak. Where recon lists several candidates, the first is shown.</caption>
+      </table>
+    </div>
+
+    <div class="note settled">
+      <span class="tag">The result</span>
+      <p><strong>All four tools independently put Oxidation first and Carbamidomethyl second among real modifications, and not one of them was told the sample was alkylated.</strong> recon reports +57.0207 at rank 3 overall — behind the unmodified population and Oxidation — at 1,291 PSMs, 3.97 %.</p>
+    </div>
+
+    <div class="note caution">
+      <span class="tag">Counts are not commensurable</span>
+      <p>No claim is made on the counts. Mascot's are resolved-ET fractions; Shepherd's run roughly 1.5–2&times; recon's throughout; NOTES "Prevalence currency" records that these tools report four different quantities. <strong>The claim is rank.</strong> Mascot also uses <code>PFA=1</code> against recon's two missed cleavages, and reports by name + site — its site rows are rolled up by mass before comparison, or its C-only row would understate the true +57. It contributes to this section only and must not enter the digestion table.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">03</span> Mass accuracy</h2>
+    <p class="lede">Preview reports measured mass error in <code>result_summary.html</code>, before and after its own recalibration. <strong>Pre-recalibration is the right side of Preview's ledger to use</strong> — recon reports what the instrument delivered, it does not recalibrate spectra.</p>
+
+<pre>PRECURSOR   before recal: median signed  0.0 ppm | |error| 0.5 ppm |  943 high /  850 low
+            after  recal: median signed -0.0 ppm | |error| 0.5 ppm |  878 high /  980 low
+            off-by-one (nominal mass is +1 isotope): 6.0% (119/1973)
+
+FRAGMENT    before recal: median signed -3.1 ppm | |error| 3.5 ppm |  307 high / 9820 low
+            after  recal: median signed  0.1 ppm | |error| 0.7 ppm | 4783 high / 5354 low</pre>
+
+    <div class="tscroll">
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">Quantity</th>
+            <th scope="col">recon</th>
+            <th scope="col">Preview (pre-recal)</th>
+            <th scope="col">Agreement</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row">Fragment / MS2, <strong>absolute</strong> median</th>
+            <td class="key">3.4206 ppm</td>
+            <td class="key">3.5 ppm</td>
+            <td class="lab">0.08 ppm apart</td>
+          </tr>
+          <tr>
+            <th scope="row">Fragment / MS2, <strong>signed</strong> median</th>
+            <td class="dim">not produced — absolute by design</td>
+            <td class="key">&minus;3.1 ppm</td>
+            <td class="lab dim">reference value only</td>
+          </tr>
+          <tr>
+            <th scope="row">Precursor / MS1, signed median</th>
+            <td class="key">&minus;1.4193 ppm</td>
+            <td class="key">0.0 ppm</td>
+            <td class="lab">1.42 ppm apart</td>
+          </tr>
+          <tr>
+            <th scope="row">Precursor / MS1, spread</th>
+            <td>MAD 0.6231 ppm</td>
+            <td>|error| median 0.5 ppm</td>
+            <td class="lab">same scale</td>
+          </tr>
+        </tbody>
+        <caption>recon values read from <code>full-run/liver.json</code>: <code>fragment_median_ppm</code>, <code>bias_ppm</code>, <code>spread_mad_ppm</code>. Clean subset n = 7,519 PSMs.</caption>
+      </table>
+    </div>
+
+    <div class="note settled">
+      <span class="tag">Settled — MS2 corroborated</span>
+      <p>recon reports 3.4206 ppm absolute; Preview independently measures 3.5 ppm absolute on the same raw file. Same quantity (median of |error|), same instrument state, <strong>0.08 ppm apart</strong>.</p>
+    </div>
+
+    <div class="note settled">
+      <span class="tag">Settled — the signed MS2 gap has an external answer</span>
+      <p>NOTES "MS2 stays ABSOLUTE" records that recon has no signed MS2 number and defers it to Step 5. Preview supplies it: <strong>&minus;3.1 ppm</strong>, corroborated by its own directional count of <strong>307 fragments high against 9,820 low</strong>. A 32:1 imbalance is not compatible with a centred distribution. The true liver MS2 bias is negative and of order &minus;3 ppm, and recon's absolute 3.42 ppm is consistent with it. recon still does not <em class="q">measure</em> the sign — it now has a reference value for the write-up.</p>
+    </div>
+
+    <div class="note open">
+      <span class="tag">Open — do not present as corroborated</span>
+      <p>recon says the precursor bias is &minus;1.4193 ppm; Preview says 0.0 ppm with a balanced 943/850 split. Both cannot be describing the same population. Candidate explanations, <strong>none tested</strong>: Preview measured on the <code>.mgf</code> after its own conversion from <code>.raw</code>; the populations differ by an order of magnitude (recon's clean subset 7,519 PSMs vs Preview's ~1,793 precursors); and the two use entirely different peptide sets.</p>
+    </div>
+
+    <div class="note caution">
+      <span class="tag">Fifth quantity — keep it out</span>
+      <p>Preview's off-by-one rate, 6.0 % (119/1973), is an isotope-assignment rate, not a mass error. Do not fold it into a tolerance comparison.</p>
+    </div>
+  </section>
+
+  <section>
+    <h2><span class="num">04</span> What this does not establish</h2>
+    <ul class="plain">
+      <li><strong>Nothing about localization.</strong> recon reports an un-localized delta mass plus a population enrichment; the reference tools localize per PSM. Same boundary that retired Gate 5.</li>
+      <li><strong>Nothing outside one instrument class.</strong> This is one Orbitrap file. The ion-trap, TOF and Astral tolerance buckets remain unexercised.</li>
+      <li><strong>Not equal populations.</strong> Preview kept ProtScore ≥ 20 representative proteins (2,009 peptides); recon Pass 2 searches its own ≥ 2-peptide subset; the FragPipe runs searched the whole database. Direction and scale, not equality.</li>
+      <li><strong>The MetaMorpheus arm is not reproducible from a clean clone.</strong> Both producers read <code>Task3-SearchTask/AllPeptides.psmtsv</code>, which is gitignored. Both scripts hard-stop with a named missing input rather than quietly dropping the arm — falsified 2026-09-01 by removing an input and confirming the stop.</li>
+      <li><strong>An earlier version of this report was wrong about Preview.</strong> It said there was no Preview mass-accuracy number to compare against. That was true of the UI's inputs but wrong about its output — corrected 2026-09-01, and section 03 is the correction.</li>
+      <li><strong>The archived MSFragger run is not part of this comparison.</strong> A closed semi-tryptic <code>liverFragger</code> run (16.16 % missed cleavage) was an intermediate check from a previous session, archived 2026-09-01. Do not cite it and do not re-add it.</li>
+    </ul>
+  </section>
+
+  <footer>
+    Source: testing/recon-output/comparison/LIVER-FOUR-TOOL-2026-09-01.md<br>
+    Producers: testing/scripts/liver_four_tool_digestion.py · testing/scripts/liver_mod_rank_comparison.py<br>
+    Provenance: testing/reference-data/liver-reference-runs.md · recon run: testing/recon-output/full-run/liver.json<br>
+    Both producers re-run 2026-09-01 against the committed outputs; every figure above reproduced exactly.
+  </footer>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+=== serum ===
+EQUIVALENCE CHECK  testing/search-output/step1-open-serum/results.sage.tsv
+  python PSMs kept       15386
+  json   total_psms      15386
+  python apex_offset     4.2000 mDa
+  json   apex_offset     4.2000 mDa
+  python folded_to_zero  792
+  json   folded_to_zero  792
+  python bins            3060
+  json   bins            3060
+
+  PASS: all 3060 bins identical (centre and count).
+
+=== bcell ===
+EQUIVALENCE CHECK  testing/search-output/step1-open-bcell/results.sage.tsv
+  python PSMs kept       73527
+  json   total_psms      73527
+  python apex_offset     0.0500 mDa
+  json   apex_offset     0.0500 mDa
+  python folded_to_zero  7118
+  json   folded_to_zero  7118
+  python bins            6537
+  json   bins            6537
+
+  PASS: all 6537 bins identical (centre and count).
+
+=== b1906 ===
+EQUIVALENCE CHECK  testing/search-output/step1-open-b1906/results.sage.tsv
+  python PSMs kept       28005
+  json   total_psms      28005
+  python apex_offset     1.0000 mDa
+  json   apex_offset     1.0000 mDa
+  python folded_to_zero  2344
+  json   folded_to_zero  2344
+  python bins            2946
+  json   bins            2946
+
+  PASS: all 2946 bins identical (centre and count).
+

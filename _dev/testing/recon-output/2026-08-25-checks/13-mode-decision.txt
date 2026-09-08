@@ -1,0 +1,67 @@
+====================================================================================
+MODE DECISION EVIDENCE - peak-or-carpet test on every contested group member
+  Produced by testing/scripts/subbin_delta_histogram.py --stability
+  Contested = a group whose consecutive gap reaches one bin width in
+  10-mode-sibling-separation.txt, i.e. the cases that gate could not resolve.
+  REAL requires z >= 5.0 at ALL THREE bin widths and a measurable width at 2 of 3.
+====================================================================================
+
+=== serum - no group reached a one-bin gap; controls only ===
+testing/search-output/step1-open-serum/results.sage.tsv
+      center  z@1mDa  z@2mDa  z@4mDa     FWHM 1/2/4 mDa  verdict  label
+    57.02201   146.4   174.0   234.8             7/8/12     REAL  CONTROL+ Carbamidomethyl
+    15.99491    87.0   153.0   155.0             3/4/12     REAL  CONTROL+ Oxidation
+     0.55000     nan     nan     nan              -/-/-   carpet  CONTROL- flat region
+    -0.45000     nan     nan     nan              -/-/-   carpet  CONTROL- flat region
+
+=== bcell - 3 contested groups ===
+testing/search-output/step1-open-bcell/results.sage.tsv
+      center  z@1mDa  z@2mDa  z@4mDa     FWHM 1/2/4 mDa  verdict  label
+    57.02201   536.7   928.4   837.6             5/6/12     REAL  CONTROL+ Carbamidomethyl
+    15.99491   359.0   422.1   526.0              4/6/8     REAL  CONTROL+ Oxidation
+     0.98402    25.2    33.2    30.0              4/4/8     REAL  CONTROL+ Deamidated
+     0.55000     nan     nan     nan              -/-/-   carpet  CONTROL- flat region
+    -0.45000     0.0     0.0    -0.7              -/-/-   carpet  CONTROL- flat region
+    -1.04375     1.2     1.5     3.2              4/6/8   carpet  grp -1.029 m1
+    -1.03036     8.9    11.1    13.7              4/6/8     REAL  grp -1.029 m2
+    -1.01974     6.4     5.3     5.8              4/6/8     REAL  grp -1.029 m3
+    -0.98330     7.5     8.7     7.6              2/4/8     REAL  grp -0.980 m1 Amidated
+    -0.97116     3.2     6.4     4.1              3/4/8   carpet  grp -0.980 m2
+     0.96843     3.5     3.1     2.7              4/4/8   carpet  grp 0.982 m1
+     0.98340    25.2    35.2    33.1              4/4/8     REAL  grp 0.982 m2 Deamidated
+
+=== b1906 - 3 contested groups ===
+testing/search-output/step1-open-b1906/results.sage.tsv
+      center  z@1mDa  z@2mDa  z@4mDa     FWHM 1/2/4 mDa  verdict  label
+    57.02201   222.7   328.8   518.3             4/6/12     REAL  CONTROL+ Carbamidomethyl
+    15.99491   140.0   264.0   229.2             5/6/12     REAL  CONTROL+ Oxidation
+     0.55000     nan     nan     nan              -/-/-   carpet  CONTROL- flat region
+    -0.45000     nan     nan     nan              -/-/-   carpet  CONTROL- flat region
+    -2.05265     2.9     0.8     0.3              -/-/-   carpet  grp -2.040 m1
+    -2.04010     2.9     1.1     1.4              -/-/-   carpet  grp -2.040 m2
+    -2.03074     2.9     2.6     1.6              -/-/-   carpet  grp -2.040 m3
+     0.92094     2.5     1.8     0.9              -/-/-   carpet  grp 0.930 m1
+     0.93221     2.0     2.3     1.1              3/4/-   carpet  grp 0.930 m2
+     1.96002     1.3     1.8     2.0              -/-/-   carpet  grp 1.968 m1
+     1.96745     1.3     1.8     2.3              -/-/-   carpet  grp 1.968 m2
+     1.98265     2.7     3.2     3.0              -/-/-   carpet  grp 1.968 m3
+
+====================================================================================
+TALLY - counted from the rows above, not written by hand
+  positive controls, all REAL         7 of 7
+  negative controls, all carpet       6 of 6
+  contested groups                    6  (serum 0, bcell 3, b1906 3)
+  contested members                  15
+  members REAL                        4
+  members carpet                     11
+  groups holding TWO REAL members     1  ['grp -1.029']
+  groups holding one REAL + carpet    2  ['grp -0.980', 'grp 0.982']
+  groups that are entirely carpet     3  ['grp -2.040', 'grp 0.930', 'grp 1.968']
+====================================================================================
+
+READ THIS WITH THE TALLY:
+  Only ONE group in the whole set holds two populations that both survive
+  the gate: bcell -1.03036 and -1.01974, 10.6 mDa apart, with a real valley
+  between them (43 / 8 / 36 counts per 1 mDa bin). That is the single case
+  where Merge is measurably wrong. Against it, Split shreds 21 genuine single
+  populations and promotes 11 carpet chunks to named peaks.

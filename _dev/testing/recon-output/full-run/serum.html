@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>2019-4-9_909c_0311.mzML.gz &mdash; recon</title>
+<style>
+:root{--fg:#1a1a1a;--mut:#767676;--line:#e3e3e3;--card:#fafafa;--acc:#0b5fa5;--warn:#a35b00}
+body{margin:0;font:14px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;color:var(--fg);background:#fff}
+.wrap{max-width:1000px;margin:0 auto;padding:24px}
+h1{font-size:20px;margin:0 0 4px} h2{font-size:15px;margin:0}
+.sub{color:var(--mut);font-size:13px;margin-bottom:18px}
+.meta{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px 20px;background:var(--card);border:1px solid var(--line);border-radius:6px;padding:14px 16px;margin-bottom:22px}
+.meta div span{display:block;color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.05em}
+.meta div b{font-weight:600;font-size:13px;word-break:break-all}
+section{border:1px solid var(--line);border-radius:6px;margin-bottom:16px;overflow:hidden}
+.hd{background:var(--card);padding:10px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;gap:12px}
+.bd{padding:14px}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:14px}
+.stat b{display:block;font-size:19px} .stat span{color:var(--mut);font-size:11px;text-transform:uppercase;letter-spacing:.04em}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{text-align:left;font-size:11px;text-transform:uppercase;letter-spacing:.04em;color:var(--mut);border-bottom:1px solid var(--line);padding:6px 8px}
+td{padding:6px 8px;border-bottom:1px solid #f0f0f0;vertical-align:top}
+.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+.mut{color:var(--mut);font-weight:400}
+.tbl-title{font-size:12px;font-weight:600;text-transform:uppercase;letter-spacing:.05em;color:var(--acc);margin:16px 0 4px}
+.tbl-title:first-child{margin-top:0}
+.why{color:var(--mut)}
+/* Wide tables scroll inside their own box; the page never scrolls sideways. */
+.scroll{overflow-x:auto}
+.note{background:#fbfbfb;border-left:3px solid var(--line);padding:10px 12px;font-size:12.5px;color:#555;margin-top:14px}
+/* The routing explainer reads as a decision chart, not as prose. */
+.flow{margin:10px 0}
+.step{border:1px solid var(--line);border-left:3px solid var(--acc);border-radius:4px;background:#fff;padding:8px 10px;margin-bottom:6px}
+.step+.step{margin-top:0}
+.step>b{display:block;margin-bottom:5px;color:var(--fg)}
+.step .yes,.step .no{padding:3px 0 3px 12px;border-left:2px solid var(--line);margin-left:2px}
+.step .yes+.no,.step .no+.yes{margin-top:3px}
+details{border-top:1px solid var(--line);margin-top:14px}
+details summary{cursor:pointer;padding:9px 14px;font-size:13px;background:var(--card)}
+textarea{width:100%;box-sizing:border-box;font:12px/1.4 ui-monospace,SFMono-Regular,Menlo,Consolas,monospace}
+footer{margin-top:26px;border-top:2px solid var(--fg);padding-top:14px;font-size:12.5px;color:var(--mut)}
+footer a{color:var(--acc)}
+button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;border-radius:4px;padding:4px 10px;cursor:pointer}
+@media print{.wrap{max-width:none} button{display:none} section{break-inside:avoid}}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>2019-4-9_909c_0311.mzML.gz</h1>
+<div class="sub">Proteomics reconnaissance report</div>
+
+<div class="meta">
+  <div><span>FASTA</span><b>testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta</b></div>
+  <div><span>Enzyme</span><b>trypsin — KR, not before P, C-term</b></div>
+  <div><span>Generated</span><b>2026-09-03 10:40:34 UTC</b></div>
+  <div><span>recon</span><b>v0.1.1</b></div>
+  <div><span>Total runtime</span><b>82.2 s</b></div>
+</div>
+
+<section><div class="hd"><h2>Detectors</h2></div><div class="bd"><div class="stats">
+  <div class="stat"><span>Instrument</span><b style="font-size:14px">Orbitrap Fusion Lumos</b></div>
+  <div class="stat"><span>MS1 analyzer</span><b style="font-size:14px">Orbitrap / FT-ICR</b></div>
+  <div class="stat"><span>MS2 analyzer</span><b style="font-size:14px">Orbitrap / FT-ICR</b></div>
+  <div class="stat"><span>MS2 scans</span><b>41,788</b></div>
+</div></div></section>
+
+<section><div class="hd"><h2>Mass accuracy</h2></div><div class="bd"><div class="stats">
+  <div class="stat"><span>Precursor / MS1 &mdash; signed median</span><b>+2.42 ppm</b></div>
+  <div class="stat"><span>Fragment / MS2 &mdash; |median|</span><b>1.11 ppm</b></div>
+  <div class="stat"><span>Measured MS2 tolerance</span><b style="font-size:15px">-1.67 to +1.67 ppm</b></div>
+  <div class="stat"><span>Recommended MS1 / MS2</span><b>10 / 10 ppm</b></div>
+</div></div></section>
+
+<section><div class="hd"><h2>Contamination</h2></div><div class="bd">
+<div class="stats">
+  <div class="stat"><span>Polymer % of TIC</span><b>0.57%</b></div>
+  <div class="stat"><span>Level</span><b style="font-size:14px">Moderate (0.1-1%)</b></div>
+</div>
+<div class="scroll"><table style="margin-top:12px"><tr><th>Polymer</th><th class="num">% TIC</th></tr>
+<tr><td>Tween-20</td><td class="num">0.453%</td></tr><tr><td>PEG+2H</td><td class="num">0.041%</td></tr><tr><td>PEG+3H</td><td class="num">0.029%</td></tr><tr><td>Polysiloxane</td><td class="num">0.011%</td></tr><tr><td>PEG+1H</td><td class="num">0.010%</td></tr>
+</table></div></div></section>
+
+<section><div class="hd"><h2>Glycopeptides</h2></div><div class="bd"><div class="stats">
+  <div class="stat"><span>Candidate spectra</span><b>2,286</b></div>
+  <div class="stat"><span>% of MS2</span><b>5.47%</b></div>
+</div></div></section>
+
+<section><div class="hd"><h2>Digestion</h2></div><div class="bd"><div class="stats">
+  <div class="stat"><span>Missed cleavage</span><b>10.86%</b></div>
+  <div class="stat"><span>Ragged N</span><b>27.26%</b></div>
+  <div class="stat"><span>Ragged C</span><b>17.56%</b></div>
+  <div class="stat"><span>N : C ratio</span><b>1.73</b></div>
+</div></div></section>
+
+<section><div class="hd"><h2>Recommended search modifications</h2>
+<button onclick="reconCsv()">Copy as CSV</button></div><div class="bd">
+<div class="tbl-title">Fixed</div>
+<div class="scroll"><table id="t1"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+57.0238</td><td>Carbamidomethyl on C</td><td><strong>C</strong><span class="mut"></span></td><td class="num">1,120</td><td class="num">7.17%</td><td>statistics</td><td class="why">OR 66.36, q &lt; 0.001</td></tr></table></div>
+<div class="tbl-title">Variable</div>
+<div class="scroll"><table id="t2"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+52.9131</td><td>Fe[III]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">297</td><td class="num">1.90%</td><td>statistics</td><td class="why">OR 2.10, q 0.012</td></tr><tr><td class="num">+15.9952</td><td>Oxidation on M</td><td><strong>M</strong><span class="mut"></span></td><td class="num">288</td><td class="num">1.84%</td><td>statistics</td><td class="why">OR 16.64, q &lt; 0.001</td></tr><tr><td class="num">+0.9847</td><td>Deamidation</td><td><strong>N, Q</strong><span class="mut"></span></td><td class="num">189</td><td class="num">1.21%</td><td>statistics</td><td class="why">OR 12.17, q &lt; 0.001</td></tr><tr><td class="num">+58.0128</td><td>Carboxymethylation</td><td><strong>C, K, W</strong><span class="mut"></span></td><td class="num">97</td><td class="num">0.62%</td><td>statistics</td><td class="why">OR 3.39, q 0.002</td></tr><tr><td class="num">-17.0284</td><td>Gln-&gt;pyro-Glu</td><td><strong>Q</strong><span class="mut"> · peptide N-term</span></td><td class="num">60</td><td class="num">0.38%</td><td>statistics</td><td class="why">OR 26.31, q &lt; 0.001</td></tr><tr><td class="num">+14.0138</td><td>Methylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term</span></td><td class="num">54</td><td class="num">0.35%</td><td>statistics</td><td class="why">OR 23.54, q &lt; 0.001</td></tr><tr><td class="num">+47.9884</td><td>Trioxidation</td><td><strong>C</strong><span class="mut"></span></td><td class="num">36</td><td class="num">0.23%</td><td>statistics</td><td class="why">OR 3.78, q 0.002</td></tr><tr><td class="num">-33.9866</td><td>Dehydroalanine</td><td><strong>C</strong><span class="mut"></span></td><td class="num">28</td><td class="num">0.18%</td><td>statistics</td><td class="why">OR 9.93, q &lt; 0.001</td></tr></table></div>
+<div class="tbl-title">Detected but did not make the cut</div>
+<div class="scroll"><table id="t3"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Why not</th></tr><tr><td class="num">+58.0261</td><td><span class="mut">un-curated</span></td><td><span class="mut">&mdash;</span></td><td class="num">350</td><td class="num">2.24%</td><td>satellite</td><td class="why">isotope satellite &mdash; satellite (+1 C13 of +57.0238)</td></tr><tr><td class="num">+114.0457</td><td>GG (Ubiquitination Site)</td><td><strong>K</strong><span class="mut"></span></td><td class="num">141</td><td class="num">0.90%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 1.29 (needs &ge; 2.0), q 0.189 (needs &le; 0.05)</td></tr><tr><td class="num">-18.0101</td><td>Water Loss (Glu-&gt;pyro-Glu)</td><td><strong>E</strong><span class="mut"> · peptide N-term</span></td><td class="num">82</td><td class="num">0.52%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 2.12 (needs &ge; 2.0), q 0.069 (needs &le; 0.05)</td></tr><tr><td class="num">+53.9156</td><td>Fe[II]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">58</td><td class="num">0.37%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 2.71 (needs &ge; 2.0), q 0.189 (needs &le; 0.05)</td></tr><tr><td class="num">+21.9816</td><td>Sodium</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">33</td><td class="num">0.21%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 1.35 (needs &ge; 2.0), q 0.697 (needs &le; 0.05)</td></tr><tr><td class="num">+37.9491</td><td>Potassium</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">29</td><td class="num">0.19%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 4.06 (needs &ge; 2.0), q 0.239 (needs &le; 0.05)</td></tr><tr><td class="num">+71.0377</td><td>Propionamidation</td><td><strong>C, K</strong><span class="mut"></span></td><td class="num">26</td><td class="num">0.17%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 5.13 (needs &ge; 2.0), q 0.117 (needs &le; 0.05)</td></tr></table></div>
+
+<details id="csv-box"><summary>CSV of the three tables above</summary><div class="bd">
+<p class="why" id="csv-status">Press <b>Copy as CSV</b> above to fill this box.</p>
+<textarea id="csv-out" rows="10" spellcheck="false"
+ aria-label="CSV of the three tables"></textarea>
+</div></details>
+
+<div class="note"><b>49 distinct delta masses were detected and assessed in this file.</b>
+Each one walked this chart from the top and stopped at the first answer that applied.
+
+<div class="flow">
+<div class="step"><b>1. Is it an isotope satellite of a larger peak?</b>
+  <div class="yes"><b>Yes</b> &rarr; shown as a satellite. Never recommended.</div>
+  <div class="no"><b>No</b> &rarr; go to 2.</div></div>
+
+<div class="step"><b>2. Is there a curated entry for this delta mass?</b>
+  <div class="no"><b>No</b> &rarr; judged on <b>abundance</b> against the floor of <b>224 PSMs</b>
+    (20% of the tallest peak).<br>
+    Above the floor: listed as an un-curated delta mass. Never recommended.<br>
+    Below the floor: not shown at all.</div>
+  <div class="yes"><b>Yes</b> &rarr; go to 3.</div></div>
+
+<div class="step"><b>3. Does the curated entry name specific acceptor residues?</b>
+  <div class="no"><b>No</b> &rarr; judged on <b>abundance</b> against the same floor.</div>
+  <div class="yes"><b>Yes</b> &rarr; judged on <b>statistics</b>. Recommended only if
+    <b>OR &ge; 2.0</b> AND <b>q &le; 0.05</b>.<br>
+    Otherwise it appears in &ldquo;did not make the cut&rdquo; with both numbers.</div></div>
+</div>
+
+<b>Decided by</b> tells you which route each row took.</div>
+
+<div class="note"><b>These counts are lower than your next search will report, and that is
+expected.</b> This is one open search: each spectrum is assigned a single delta mass, so occupancy is
+split across every form a peptide takes. <b>Use the ranking, not the magnitude.</b> A targeted search
+with these modifications set will report higher numbers for the same chemistry.</div>
+
+<p class="why">Modification names and acceptor sites come from: MetaMorpheus curated mod list (recon-tool/resources/mods/), dated snapshot</p>
+</div></section>
+
+<footer>
+<b>sageRecon</b> v0.1.1 &middot; using Sage v0.15.0-beta.2 &middot; maintained by
+Benjamin Neely (NIST), <a href="mailto:benjamin.neely@nist.gov">benjamin.neely@nist.gov</a><br>
+<!-- Provenance line KEPT, against the mockup, which dropped both. A report that
+     cannot say which code state made it is not traceable. -->
+Built from commit b62c331-dirty &middot; report schema v3.2.0
+<details><summary>Acknowledgements</summary><div class="bd">
+<b>Sage</b> &mdash; <a href="https://github.com/lazear/sage">github.com/lazear/sage</a> &mdash; Lazear, M.R.
+<i>J. Proteome Res.</i> 2023, 22(11), 3652&ndash;3659. doi:10.1021/acs.jproteome.3c00486<br>
+<b>MetaMorpheus</b> (curated modification list) &mdash;
+<a href="https://github.com/smith-chem-wisc/metamorpheus">github.com/smith-chem-wisc/metamorpheus</a> &mdash;
+Solntsev, Shortreed, Frey, Smith. <i>J. Proteome Res.</i> 2018, 17(5), 1844&ndash;1851. doi:10.1021/acs.jproteome.7b00873<br>
+<b>mzSniffer</b> (polymer detection) &mdash; <a href="https://github.com/wfondrie/mzsniffer">github.com/wfondrie/mzsniffer</a> &mdash; no publication.<br>
+<b>Pyteomics</b> (code ideas) &mdash; <a href="https://github.com/levitsky/pyteomics">github.com/levitsky/pyteomics</a> &mdash;
+Levitsky, Klein, Ivanov, Gorshkov. <i>J. Proteome Res.</i> 2019, 18(2), 709&ndash;714. doi:10.1021/acs.jproteome.8b00717<br>
+<b>Unimod</b> &mdash; <a href="https://www.unimod.org/">unimod.org</a> &mdash; Design Science License.
+</div></details>
+<details><summary>Licence &mdash; NIST</summary><div class="bd">
+NIST Software Licensing Statement. The full text is in <code>LICENSE.md</code>, shipped beside this tool.
+</div></details>
+<details><summary>Licence &mdash; third party</summary><div class="bd">
+Sage (MIT), mzSniffer (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License).
+The full texts are in <code>THIRD_PARTY_LICENSES.md</code>, shipped in the release archive.
+</div></details>
+</footer>
+</div>
+<script>
+function reconCsv(){
+  const rows=[];
+  for(const id of ['t1','t2','t3']){
+    const t=document.getElementById(id);
+    if(!t){continue;}
+    for(const r of t.rows){
+      rows.push([...r.cells].map(c=>'"'+c.innerText.replace(/"/g,'""')+'"').join(','));
+    }
+    rows.push('');
+  }
+  const text=rows.join('\n');
+  const box=document.getElementById('csv-box');
+  const out=document.getElementById('csv-out');
+  const st=document.getElementById('csv-status');
+  out.value=text;
+  box.open=true;
+  out.focus();
+  out.select();
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(
+      function(){st.textContent='Copied to the clipboard. It is also in the box below.';},
+      function(){st.textContent='The browser blocked the clipboard. Select the text below and copy it.';}
+    );
+  }else{
+    st.textContent='This browser gives a local page no clipboard. Select the text below and copy it.';
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,48 @@
+[package]
+name = "recon-tool"
+version = "0.1.2"
+edition = "2021"
+description = "Proteomics reconnaissance tool using Sage open search"
+license = "MIT"
+
+[dependencies]
+csv = "1.3"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+log = "0.4"
+env_logger = "0.11"
+clap = { version = "4.5", features = ["derive"] }
+quick-xml = "0.36"
+mzdata = { version = "0.65", default-features = false, features = ["mzml", "miniz_oxide"] }
+flate2 = "1.0"
+chrono = { version = "0.4", features = ["serde"] }
+
+# Sage, embedded as a library rather than invoked as a subprocess (A1 landing 2).
+# Pinned to the SAME commit the vendored binary was: tag v0.15.0-beta.2 on
+# UPSTREAM lazear/sage. No fork is needed -- recon wants neither of the progress
+# or cancellation patches sagegui carries.
+# A Cargo git rev is a PIN, not tracking: moving to a later Sage stays a
+# deliberate, tested, recorded upgrade. See NOTES "Sage version pinning".
+sage-core = { git = "https://github.com/lazear/sage.git", rev = "df9219951cc9a54cf4cd55d76541af24b687bd3d" }
+sage-cli = { git = "https://github.com/lazear/sage.git", rev = "df9219951cc9a54cf4cd55d76541af24b687bd3d" }
+sage-cloudpath = { git = "https://github.com/lazear/sage.git", rev = "df9219951cc9a54cf4cd55d76541af24b687bd3d" }
+# Used directly by sage_runner: Sage's own main sets these, so we mirror them.
+# Sage takes paths as strings and parses them as URLs. recon builds the URL
+# itself so a Windows drive letter is not read as a scheme. See sage_runner.
+url = "2.5"
+percent-encoding = "2.3"
+rayon = "1.5"
+num_cpus = "1.13"
+
+[dev-dependencies]
+tempfile = "3"
+
+[lib]
+name = "recon_tool"
+path = "src/lib.rs"
+
+[[bin]]
+name = "recon"
+path = "src/main.rs"
+

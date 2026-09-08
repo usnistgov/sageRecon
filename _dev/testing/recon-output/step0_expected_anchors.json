@@ -1,0 +1,59 @@
+{
+  "b1906": {
+    "total_rows": 35501,
+    "decoy": 7079,
+    "qfail": 13317,
+    "kept_target_q01": 15105,
+    "oxidation_M": 2256,
+    "deamidation_NQ": 870,
+    "acetyl_protN": 51,
+    "carbamidomethyl_C": 3193,
+    "cys_containing_peptides": 3193,
+    "mc_dist": {
+      "0": 11595,
+      "1": 3234,
+      "2": 276
+    },
+    "semi_enzymatic": 0,
+    "frag_ppm_median": 1.17,
+    "frag_ppm_p95": 3.284
+  },
+  "bcell": {
+    "total_rows": 76950,
+    "decoy": 9173,
+    "qfail": 10609,
+    "kept_target_q01": 57168,
+    "oxidation_M": 5222,
+    "deamidation_NQ": 2937,
+    "acetyl_protN": 349,
+    "carbamidomethyl_C": 10557,
+    "cys_containing_peptides": 10557,
+    "mc_dist": {
+      "0": 48065,
+      "1": 8584,
+      "2": 519
+    },
+    "semi_enzymatic": 0,
+    "frag_ppm_median": 1.857,
+    "frag_ppm_p95": 3.788
+  },
+  "serum": {
+    "total_rows": 24817,
+    "decoy": 7463,
+    "qfail": 7857,
+    "kept_target_q01": 9497,
+    "oxidation_M": 994,
+    "deamidation_NQ": 1254,
+    "acetyl_protN": 2,
+    "carbamidomethyl_C": 3778,
+    "cys_containing_peptides": 3778,
+    "mc_dist": {
+      "0": 8200,
+      "1": 1195,
+      "2": 102
+    },
+    "semi_enzymatic": 0,
+    "frag_ppm_median": 1.26,
+    "frag_ppm_p95": 3.064
+  }
+}
