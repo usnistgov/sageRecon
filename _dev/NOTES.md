@@ -10338,3 +10338,59 @@ existed, minutes before one did. **Documentation that describes INFRASTRUCTURE
 goes stale on a different clock from documentation that describes CODE**, because
 the infrastructure changes without any commit touching the file. Re-read the
 download section every time the release story moves.
+
+### Cross-platform builds: what this Mac can and cannot do (2026-09-08)
+
+**macOS Intel is BUILT HERE, and a 2010 Intel Mac is not needed for it.** Ben
+asked whether to build on a 2010 MacBook Pro. The answer is no for building and
+yes for testing:
+
+* Rust's floor for `x86_64-apple-darwin` is **macOS 10.12 Sierra**; a mid-2010
+  MacBook Pro reaches 10.13, so it qualifies by one release. But it is a Core 2
+  Duo class machine against 415 crates including Sage. This Mac cross-built it
+  in 2m28s.
+* `x86_64-apple-darwin` was **demoted to Tier 2 in Rust 1.90** after GitHub
+  ended free Intel macOS runners. Still built and distributed, no longer
+  auto-tested upstream.
+* The binary declares `LC_VERSION_MIN_MACOSX 10.12`, so old Intel hardware CAN
+  run it. That machine is a test host, not a build host.
+
+**Toolchain state on this Mac, changed today:** `rustup` is installed at
+`~/.cargo` with `--no-modify-path`, so `rustc` still resolves to Homebrew's
+1.97.1 by default. `rustup`'s toolchain is 1.98.1 and has both
+`aarch64-apple-darwin` and `x86_64-apple-darwin`. Put `~/.cargo/bin` first on
+PATH to use it. **Rosetta 2 is now installed**, so an Intel binary can be run
+and tested here.
+
+### 🔒 THE WINDOWS AND INTEL BUILDS AGREE ON EVERY MEASURED VALUE (2026-09-08)
+
+Both built from the `v0.1.2` tag, both run on serum. Comparing the two reports
+field by field, after dropping timestamps, runtimes and input paths: **one
+difference, and it is the FASTA path string**, because one run was given an
+absolute path and the other a relative one. Every count, percentage, odds ratio,
+q value and tolerance is identical.
+
+This is the first cross-platform numerical check this project has made. It is
+ONE file, so it is evidence and not proof, and the README says so in those
+words. Do not upgrade the claim without a panel behind it.
+
+### ⚠ LINUX IS DEFERRED, and the blocker is specific (Ben, 2026-09-08)
+
+Not skipped for lack of interest. **The dependency graph compiles C**:
+`zstd-sys` and `cc` are in `Cargo.lock`, so a Linux target needs a full C
+cross-toolchain, not merely a linker. `rustup target add` alone is not enough.
+
+Nothing suitable is installed here: no Docker, podman, colima, lima, zig,
+`cargo-zigbuild` or `cross`.
+
+**The two routes, and the trade:**
+* **Colima or Docker** builds natively in Linux and is the ONLY route where the
+  binary can be RUN before shipping. Heavier install.
+* **zig plus `cargo-zigbuild`** is a small install, and can pin an old glibc or
+  build static musl, which is far more portable than an `ubuntu-latest` build.
+  But nothing here can execute the result, so it would ship unverified.
+
+**Ben's call: do it on a work VM instead.** The README already states Linux
+builds from source, which stays true. If it is picked up, prefer whichever route
+allows the archive to be run before release; v0.1.0 shipped defective precisely
+because an archive was never run.
