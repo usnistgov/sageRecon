@@ -1,9 +1,9 @@
 {
   "schema_version": "1.1.0",
-  "generated_at": "2026-09-04T18:07:43.253221Z",
+  "generated_at": "2026-09-08T18:48:43.596645700Z",
   "tool_version": "0.1.2",
-  "git_commit": "cc01e1c",
-  "source_file": "2019-4-9_909c_0311.mzML.gz",
+  "git_commit": "5666815",
+  "source_file": "serum.mzML.gz",
   "effective_params": "serum_search\\pass2\\pass2-effective-params.json",
   "subset_fasta": "serum_search\\pass2\\subset_identified_proteins.fasta",
   "subset_proteins": 225,
@@ -334,5 +334,5 @@
     "pass2_only_semi_enzymatic": 2119,
     "note": "Pass 1 is a FULLY TRYPTIC search over the whole database and cannot generate a semi-tryptic peptide, so its 0.00 % is a control, not a prediction. Pass 2 is semi-enzymatic over 225 identified proteins and measured 33.08 % (2119 PSMs). The two rates have DIFFERENT denominators (15631 vs 6406) and different search spaces; their difference is not a delta."
   },
-  "pass2_search_seconds": 6.8948234
+  "pass2_search_seconds": 8.8328831
 }

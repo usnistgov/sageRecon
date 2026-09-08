@@ -63,7 +63,7 @@ reports sit on the same axis, though we have not run Preview and recon on the
 same file and then reconciled the figures line by line.
 
 **It is fast enough to run routinely.** Our serum test file contains 41,788 MS/MS
-scans and completed in 107.2 seconds with the v0.1.2 binary on a standard work
+scans and completed in 95.2 seconds with the v0.1.2 binary on a standard work
 computer, with no performance tuning applied. Critically, that is one file on one
 machine and not a controlled benchmark: we have measured no comparative timing
 against any other tool, and we make no speed claim relative to one. What the

@@ -1,11 +1,11 @@
 {
   "schema_version": "3.2.0",
-  "runtime_seconds": 107.1948248,
-  "generated_at": "2026-09-04T18:07:36.025943600Z",
+  "runtime_seconds": 95.2463774,
+  "generated_at": "2026-09-08T18:48:34.453851200Z",
   "tool_version": "0.1.2",
-  "git_commit": "cc01e1c",
+  "git_commit": "5666815",
   "input": {
-    "mzml_file": "2019-4-9_909c_0311.mzML.gz",
+    "mzml_file": "serum.mzML.gz",
     "sage_tsv": "serum_search\\results.sage.tsv",
     "unimod_file": "<compiled into recon 0.1.2>",
     "ms1_spectra": 15030,
@@ -1620,13 +1620,13 @@
   },
   "signal_fate": {
     "id_rate_by_count_pct": 35.45276155834211,
-    "id_rate_by_tic_pct": 18.0264106446373,
+    "id_rate_by_tic_pct": 18.026410644637245,
     "identified_spectra": 14815,
     "total_ms2_spectra": 41788,
     "chimera_rate_pct": 5.507931150860614
   },
   "polymer": {
-    "total_pct_tic": 0.5685913289598179,
+    "total_pct_tic": 0.568591328959818,
     "contamination_level": "Moderate (0.1-1%)",
     "top_polymers": [
       {
@@ -2166,7 +2166,7 @@
     "floor_pct_of_top": 20.0,
     "odds_ratio_min": 2.0,
     "q_max": 0.05,
-    "annotation_source": "MetaMorpheus curated mod list (reference-notes/metaMorpheusMods/), dated snapshot",
+    "annotation_source": "MetaMorpheus curated mod list (recon-tool/resources/mods/), dated snapshot",
     "protein_context": {
       "fasta": "UniProt-Human-UP000005640_canonical-2023_05.fasta",
       "proteins_indexed": 20596,
