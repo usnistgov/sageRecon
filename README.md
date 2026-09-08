@@ -106,14 +106,18 @@ which `recon` does not use.
 
 ### Getting the binary
 
-**There is no prebuilt release yet. Build from source, described below.** The
-build is one command and needs only a Rust toolchain.
+**A macOS Apple Silicon archive is attached to the v0.1.2 release** on this
+repository's Releases page. It holds the binary, `README.md`,
+`THIRD_PARTY_LICENSES.md` and `unimod.xml`.
 
-We intend to publish archives for Windows, Linux, macOS Intel and macOS Apple
-Silicon. The workflow that produces them is committed at
-`.github/workflows/build.yml` and builds all four targets on a version tag.
-GitHub Actions is disabled for this organization, so it does not run here. Until
-that changes, the source build is the supported route.
+**Windows, Linux and macOS Intel are not attached.** Build them from source,
+described below. The build is one command and needs only a Rust toolchain, so
+this is a distribution limit rather than a portability one.
+
+We intend to publish all four. The workflow that produces them is committed at
+`.github/workflows/build.yml` and builds every target on a version tag. GitHub
+Actions is not available for this organization, so it cannot run here, and the
+one attached archive was built by hand to the same layout.
 
 If you redistribute the binary, keep `README.md`, `THIRD_PARTY_LICENSES.md` and
 `unimod.xml` with it. The last two are Design Science License Section 3
@@ -531,9 +535,9 @@ These are ordered by how much they would change what a user can trust.
    flags presence without identification), and an automated residue-mass
    degeneracy pass, to be activated if a future file's flanking check returns
    glycine-context peptides.
-5. **Prebuilt binaries for Windows, Linux, macOS Intel and macOS Apple Silicon.**
-   All four build from source today, and none is released. The four-target
-   workflow is written and committed, so this is blocked on GitHub Actions being
+5. **Prebuilt binaries for Windows, Linux and macOS Intel.** Apple Silicon is
+   released; the other three build from source today. The four-target workflow
+   is written and committed, so this is blocked on GitHub Actions being
    available for this organization rather than on work we have not done.
 6. **Stratified FDR by terminus class**, so Pass 2 semi-enzymatic rates can be
    reported with proper error control.
