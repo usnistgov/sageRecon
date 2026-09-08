@@ -1,3 +1,95 @@
+# Debrief — 2026-09-08: published, released, and a scrub that had only covered prose
+
+**Landed:** the tool is public at `github.com/usnistgov/sageRecon` and v0.1.2 is
+released with Windows and macOS Apple Silicon archives, both rebuilt from the tag
+and both verified by downloading them back. `neely/sageRecon` stays private as
+the full-history archive, with its workflows disabled so it stops emailing
+billing failures. The GitLab pipeline is deleted. **211 tests, 17/17, unchanged
+throughout.**
+
+The through-line: **every real problem today was a check that had been run over
+the wrong file set.** The scrub was verified across `.md` and was clean, and 82
+other files still carried the paths. A `.gitignore` rule was verified by reading
+it, and its actual behaviour was the opposite of what it looked like.
+
+## Q1. What am I least confident about, and what would settle it?
+
+**Whether withholding `_dev/testing/reference-data/` was right.** I recommended
+it for two reasons at once, leakage and size, and they pointed the same way,
+which made it feel more obviously correct than it was. That directory is the
+evidence behind the four-tool comparison claims NOTES and the README make. A
+reviewer who wants to check those claims now cannot. **Settled by asking whether
+ADLP reviewers need to reproduce the benchmark, or only to read the conclusion.**
+
+**Whether the shipped example was the only stale artifact.** I found the stale
+`annotation_source` only because Ben asked about the GitLab binary. I then
+bounded it by diffing `recon-tool/src` between the two commits, which showed that
+string is the only change reaching report output. That bound covers the source.
+It does not cover other committed artifacts produced by older builds.
+
+**The Windows binary, which I could not run.** My check was `strings` plus the
+report it produced. Ben's smoke test from the downloaded archive closed this
+properly, and it is the test PLAN item (d) has wanted since v0.1.0.
+
+## Q2. What did I assume without stating it?
+
+**That publishing `_dev/` is net positive.** It is a candid engineering diary,
+including entries that begin "THAT WAS WRONG", now in a government repository. I
+raised it once at the start, got an answer, and never revisited it as the content
+became concrete. It may well be right. It was not re-examined.
+
+**That the squash was the right trade.** It discards the commit-level trail,
+which is arguably the strongest available evidence of engineering rigor for a
+reviewer, in exchange for a clean public start. NOTES and JOURNAL keep the
+narrative but not the granularity.
+
+**That "no personal paths and no secrets" means "safe to publish".** Those are
+the two things I scanned for. I did not scan for unpublished results, embargoed
+data, or anything else a NIST release review would care about.
+
+## Q3. What is the biggest thing you are missing?
+
+**The README cites comparisons a reader cannot verify.** It describes agreement
+with MSFragger, PTM-Shepherd, MetaMorpheus and Mascot. The data behind those
+statements is in the withheld directory. Either publish the reference data, or
+say plainly in the README that the benchmark inputs are not distributed.
+
+**There is no vulnerability-reporting route.** No `SECURITY.md`. The NIST
+template does not ship one, so this is not a compliance gap, but a public
+government repository with a compiled binary and no disclosure path is a
+practical one.
+
+**`CITATION.cff` has no ORCID and no SPDX licence identifier.** I left both out
+rather than invent them. Both are yours to supply.
+
+## Q4. What could you have done differently?
+
+**The `.gitignore` commit pushed from the web UI mid-session** caused a rejected
+push, a rebase, and an investigation. Not wrong to make, but a change landing on
+a repo while a session is working in it will collide, and this one also happened
+to be doing something other than what its message said.
+
+**Saying earlier that the NIST route did not apply.** AGENTS, PLAN and NOTES all
+described the internal pipeline as the live release path, and were corrected
+today. Knowing sooner would have saved writing that text on 2026-09-04.
+
+## Q5. What would you suggest?
+
+1. **Make the re-publish a script.** It is now a repeatable eight-step manual
+   procedure with a squash, a withheld-directory step, and a scan that must run
+   on the publish tree rather than the working one. Doing it from memory next
+   time is how a withheld directory gets published by accident.
+2. **Ask `usnistgov` admins about Actions.** The four-target workflow is
+   committed and its workflows are `active`. One policy change replaces the
+   hand-built archives permanently.
+3. **Decide the reference-data question**, per Q3.
+4. **Remove `signal_fate`.** The binary's own `--help` still advertises "where
+   the signal went" after the README stopped. It is a schema bump, already
+   tracked, and the docs and the tool now disagree.
+5. **Re-read the README's download section whenever the release story moves.**
+   It was publicly wrong twice today. Documentation describing infrastructure
+   goes stale without any commit touching it.
+
 # Debrief — 2026-09-04: the repo became a product, and a green suite proved nothing
 
 **Landed:** seven commits, `d5634c1` to `6616921`. Shipped data moved into the

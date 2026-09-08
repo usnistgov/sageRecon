@@ -14,8 +14,50 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-09-04 (end of session). Read this block, then the "Deferred /
+**Updated 2026-09-08 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
+
+### ▶ 2026-09-08: THE TOOL IS PUBLISHED AND RELEASED. Read this first.
+
+**`github.com/usnistgov/sageRecon` is PUBLIC.** Anything committed there is
+public immediately and permanently. Check which remote you are on before you
+push.
+
+**`github.com/neely/sageRecon` is the PRIVATE ARCHIVE.** It holds the full
+pre-publication history. Keep it. Its workflows are `disabled_manually` because
+Actions is billing-blocked on that account and every push fired four jobs that
+failed in eight seconds. Re-enable with
+`gh workflow enable build.yml --repo neely/sageRecon`.
+
+⚠ **THE TWO HISTORIES ARE DIFFERENT AND WILL NOT FAST-FORWARD.** The public repo
+starts from a squashed commit on top of the NIST template's own initial commit.
+Local `main` has 300+ commits; public `main` has a handful. To publish again,
+repeat the squash: clone to scratch, branch from `nist/main`,
+`git checkout main -- .`, drop the withheld directories, commit, push.
+
+**Withheld from the public repo, deliberately:** `_dev/testing/reference-data/`
+and `_dev/_archive/`. 212.7 MB, 85 % of the tracked bytes, and almost all of the
+personal-path leakage. The publish tree is 277 files and 36.4 MB.
+`run_validation.py` reads neither, so the gate is unaffected. See
+`_dev/README.md`, which is written for a public reader.
+
+**v0.1.2 IS RELEASED**, with two archives: `recon-windows-64.zip` and
+`recon-apple-silicon.zip`. Each holds the binary, `README.md`,
+`THIRD_PARTY_LICENSES.md` and `unimod.xml`, and each `unimod.xml` was confirmed
+byte-identical to the repo copy after a round trip through GitHub.
+
+⚠ **BOTH ARCHIVES WERE BUILT BY HAND.** GitHub Actions is disabled for the
+`usnistgov` organization by its administrators. Repo admin cannot override it.
+`.github/workflows/build.yml` is committed and its workflows are `active`, so
+the four-target build runs the moment the policy changes. **Releases never
+needed Actions; only automated building did.**
+
+⚠ **DO NOT REUSE A BINARY BUILT BEFORE THE RESTRUCTURE.** The old internal
+Windows build emitted `annotation_source` naming `reference-notes/metaMorpheusMods/`,
+which the published source no longer produces. Between that build and the tag,
+that string is the ONLY change to report output, but shipping it would repeat the
+v0.1.1 defect: a binary that does not match its tag. Both released binaries were
+rebuilt from the tag, and the report from each stamps `git_commit 5666815`.
 
 ### ▶ 2026-09-04: THE REPO WAS RESHAPED FOR PRODUCTION. Read this first.
 
@@ -211,10 +253,13 @@ A cold start that re-plans any of them is going backwards.
     ⚠ **CI still does NOT gate on clippy, and must not start.** A gate turns the
     next lint into something to silence quickly, which is the pressure that
     would have shipped all three defects above.
-(d) **Run a release archive on the Intel Mac and on Windows.** apple-silicon is
-    done and recorded. The other two platforms have never been run from an
-    archive. Blocked for a CI-built archive by the billing entry above; a local
-    build on each platform is still possible.
+(d) ✅ **WINDOWS IS DONE, 2026-09-08.** Ben downloaded `recon-windows-64.zip`
+    from the public Releases page, unzipped it, and ran it. That is the test
+    this item existed for: v0.1.0 shipped defective precisely because nobody ran
+    it from an archive. apple-silicon was already done and recorded.
+    **Still open: the Intel Mac and Linux**, which have no released archive yet
+    because nothing here can build those targets (`rustup` is not installed, so
+    there are no cross-targets, and the host is arm64).
 
 ### ▶ THE ROUTE BEN SET, 2026-09-03 — work it in this order
 

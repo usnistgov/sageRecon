@@ -10267,3 +10267,74 @@ was written from the design's history rather than from the artifact.**
 bump and the downstream trace, and it restages the four committed reports. Do
 not do it incidentally. Tracked in PLAN's "Deferred / open" as a class: audit
 for other functions built during development and never retired.
+
+## Publication to usnistgov, and the scrub that had missed the data files (2026-09-08)
+
+The tool is public at `github.com/usnistgov/sageRecon`, released as v0.1.2 with
+Windows and macOS Apple Silicon archives. `neely/sageRecon` stays as the private
+archive of the full history.
+
+### ⚠ THE SCRUB HAD ONLY COVERED PROSE. THE DATA FILES STILL CARRIED THE PATHS.
+
+The 2026-09-04 scrub removed every second-machine reference from `.md` files and
+was verified by grep. **It never touched data files.** The pre-publication audit
+found personal absolute paths in **82 tracked files, 72 of them carrying the
+work-machine path**, including a `temp\delme` scratch folder. The bulk was inside
+vendored third-party output as a data column: 53,719 occurrences in one MSFragger
+`psm.tsv`.
+
+**The lesson is about the shape of the check, not the diligence of it.** Grepping
+`*.md` proved the prose was clean and said nothing about the other 300 files. A
+scrub is only as wide as the file set it runs over, and the natural file set to
+reach for is the one you were editing.
+
+**How it was fixed:** withholding `_dev/testing/reference-data/` and
+`_dev/_archive/` removed 212.7 MB and almost all the leakage in one move, and
+also solved a size problem nobody had prioritised. The residual 34 lines across
+13 files were rewritten by hand. Verified on the exact tree pushed, not on the
+working repo.
+
+⚠ **The two config files whose paths were rewritten are compared against the
+bundled defaults**, and the edit was safe for a reason worth knowing:
+`bundled_default_matches_committed_template` omits `fasta` and `mzml_paths` by
+design, which are exactly the two fields that held the paths.
+
+### A bare `testing/` in .gitignore matched at every level
+
+Commit `c761d89` added `testing/`. **A pattern with no leading slash matches at
+every level**, so it also matched `_dev/testing/`. Two effects, both silent:
+
+* It untracked NOTHING. Git does not untrack a file because a rule starts to
+  match it. All 292 tracked files stayed.
+* It BLOCKED new ones. `git add` reported the path ignored and `git status`
+  showed nothing at all. It also disabled the `!/_dev/testing/recon-output/**/results.json`
+  exception, because **git cannot re-include a file inside an excluded
+  directory**.
+
+Anchored to `/testing/`. The repository has had no `testing/` at the root since
+2026-09-04, so only the unintended match remained.
+
+### Actions is disabled by the organization, and releases do not need it
+
+`usnistgov` administrators disable Actions. Repo admin cannot override it.
+**A GitHub Release is a separate mechanism: attaching archives by hand works.**
+Both v0.1.2 archives were staged to `build.yml`'s exact layout, including the
+`unimod.xml` hash check that satisfies Design Science License Section 3, then
+downloaded back from GitHub and verified byte-identical.
+
+⚠ **A BINARY BUILT BEFORE THE RESTRUCTURE MUST NOT BE RELEASED.** The internal
+Windows build predated `e22b9aa`, so its reports name
+`reference-notes/metaMorpheusMods/`. Diffing `recon-tool/src` from that commit to
+the tag showed the `annotation_source` string is the ONLY change reaching report
+output; everything else is path literals and comments. It would still have been
+the v0.1.1 defect again: a binary that does not match its tag. Both released
+binaries were rebuilt from the tag and their reports stamp `git_commit 5666815`.
+
+### The README was publicly wrong twice in one afternoon, both times about downloads
+
+First it said a Windows binary was attached to a Releases page that had no
+releases, a leftover from the deleted internal pipeline. Then it said no release
+existed, minutes before one did. **Documentation that describes INFRASTRUCTURE
+goes stale on a different clock from documentation that describes CODE**, because
+the infrastructure changes without any commit touching the file. Re-read the
+download section every time the release story moves.
