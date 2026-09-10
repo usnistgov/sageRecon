@@ -118,6 +118,20 @@ Releases page:
 Each holds the binary, `README.md`, `THIRD_PARTY_LICENSES.md` and `unimod.xml`.
 Unzip it and run the binary; there is nothing to install.
 
+**On macOS, the first run is blocked.** Apple has not notarized the binary, so
+macOS stops a copy that was downloaded through a browser. The binary is not
+broken. From Terminal, `recon` can print `zsh: killed`, or it can print nothing
+and look like it hangs while a "recon Not Opened" dialog is open. Close the
+dialog. Do not click Move to Trash. If you did, open the Trash in Finder,
+right-click the file and choose Put Back, or download the archive again. Then
+run this once on the unzipped folder, and run `recon` normally after that:
+
+```
+xattr -dr com.apple.quarantine recon-apple-silicon-v0.1.2
+```
+
+For the Intel archive, the folder is `recon-apple-intel-v0.1.2`.
+
 The Windows and Intel builds were checked against each other on the same file.
 Every measured value in the two reports agrees; the only difference is the input
 path each was given. We take that as evidence the numbers do not depend on the
@@ -129,7 +143,7 @@ rather than a portability one.
 
 We intend to publish all four. The workflow that produces them is committed at
 `.github/workflows/build.yml` and builds every target on a version tag. GitHub
-Actions is not available for this organization, so it cannot run here, and both
+Actions is not available for this organization, so it cannot run here, and all three
 attached archives were built by hand to the same layout.
 
 If you redistribute the binary, keep `README.md`, `THIRD_PARTY_LICENSES.md` and

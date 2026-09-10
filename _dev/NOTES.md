@@ -6432,6 +6432,11 @@ directory: `Recommendations: 7 by statistics, 0 by abundance`, no warning.
 quarantined unsigned binary gives `zsh: killed`, nothing else. The README claimed
 an "unidentified developer" prompt and offered right-click-Open; both were wrong
 and are corrected. The fix is `xattr -d com.apple.quarantine ./recon`.
+⚠ **DISPUTED 2026-09-10, not yet settled.** A check from the sagegui repo on the
+v0.1.2 archives saw a "recon Not Opened" dialog and no exit after 20 s, not
+`zsh: killed`. The same check found the arm64 binary linker-signed ad-hoc, so
+"unsigned" is not exact for arm64; Gatekeeper blocks it because it is not
+notarized. The README now describes both results. See PLAN "Deferred / open".
 
 **3. Two stale strings in user-visible report text** (NOT yet fixed):
 - The MS1 line prints `median |error| 11208.77 ppm` under a MASS ACCURACY
@@ -10321,6 +10326,30 @@ Anchored to `/testing/`. The repository has had no `testing/` at the root since
 Both v0.1.2 archives were staged to `build.yml`'s exact layout, including the
 `unimod.xml` hash check that satisfies Design Science License Section 3, then
 downloaded back from GitHub and verified byte-identical.
+
+**Manual release checklist (written 2026-09-10).** Until 2026-09-10 no written
+procedure existed; the steps lived in `build.yml` only. This list mirrors that
+workflow. Keep the two in step.
+1. Bump `version` in `recon-tool/Cargo.toml` BEFORE tagging. v0.1.1 shipped a
+   binary that reported `0.1.0`.
+2. Build from the tag: `cargo build --release --target <triple>`. For Intel,
+   put `~/.cargo/bin` first on PATH (see "Cross-platform builds" below).
+3. Stage `<asset_name>-v<VERSION>/` with the binary, `README.md`,
+   `THIRD_PARTY_LICENSES.md` and `recon-tool/resources/unimod.xml`. Compare the
+   `unimod.xml` SHA-256 with the repo copy. They must be identical.
+4. **macOS only:** sign and verify the staged binary.
+   `codesign --force --sign - recon` then
+   `codesign --verify --strict --verbose=2 recon`. The linker signs only arm64,
+   so without this the Intel binary ships unsigned. ⚠ This does NOT pass
+   Gatekeeper. Only notarization does.
+5. Zip the staged folder: `zip -r <asset_name>.zip <asset_name>-v<VERSION>`.
+6. **macOS only:** extract the zip and verify the binary inside it.
+   `CHECK=$(mktemp -d)`, `ditto -x -k <asset_name>.zip "$CHECK"`, then
+   `codesign --verify --strict --verbose=2 "$CHECK"/<asset_name>-v<VERSION>/recon`.
+7. Attach the archive to the Release. Download it back and confirm it is
+   byte-identical.
+8. RUN the downloaded archive outside the repo. v0.1.0 shipped defective because
+   no archive was run.
 
 ⚠ **A BINARY BUILT BEFORE THE RESTRUCTURE MUST NOT BE RELEASED.** The internal
 Windows build predated `e22b9aa`, so its reports name

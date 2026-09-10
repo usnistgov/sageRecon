@@ -41,12 +41,14 @@ personal-path leakage. The publish tree is 277 files and 36.4 MB.
 `run_validation.py` reads neither, so the gate is unaffected. See
 `_dev/README.md`, which is written for a public reader.
 
-**v0.1.2 IS RELEASED**, with two archives: `recon-windows-64.zip` and
-`recon-apple-silicon.zip`. Each holds the binary, `README.md`,
+**v0.1.2 IS RELEASED**, with three archives: `recon-windows-64.zip`,
+`recon-apple-silicon.zip` and `recon-apple-intel.zip` (the Intel archive was
+added later on 2026-09-08). Each holds the binary, `README.md`,
 `THIRD_PARTY_LICENSES.md` and `unimod.xml`, and each `unimod.xml` was confirmed
 byte-identical to the repo copy after a round trip through GitHub.
+(Corrected 2026-09-10: this entry said two archives.)
 
-⚠ **BOTH ARCHIVES WERE BUILT BY HAND.** GitHub Actions is disabled for the
+⚠ **ALL THREE ARCHIVES WERE BUILT BY HAND.** GitHub Actions is disabled for the
 `usnistgov` organization by its administrators. Repo admin cannot override it.
 `.github/workflows/build.yml` is committed and its workflows are `active`, so
 the four-target build runs the moment the policy changes. **Releases never
@@ -257,9 +259,11 @@ A cold start that re-plans any of them is going backwards.
     from the public Releases page, unzipped it, and ran it. That is the test
     this item existed for: v0.1.0 shipped defective precisely because nobody ran
     it from an archive. apple-silicon was already done and recorded.
-    **Still open: the Intel Mac and Linux**, which have no released archive yet
-    because nothing here can build those targets (`rustup` is not installed, so
-    there are no cross-targets, and the host is arm64).
+    ✅ **The Intel Mac archive is released (2026-09-08).** It was cross-built on
+    this arm64 Mac with `rustup`. See NOTES "Cross-platform builds".
+    (Corrected 2026-09-10: this item said `rustup` was not installed and Intel
+    could not be built here.) **Still open: Linux**, deferred to a work VM. See
+    NOTES "LINUX IS DEFERRED".
 
 ### ▶ THE ROUTE BEN SET, 2026-09-03 — work it in this order
 
@@ -305,6 +309,36 @@ reads "NOT a mass accuracy in an open search — see below," and the version
 string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 
 ### Deferred / open — none of this is forgotten
+
+* ⚠ **macOS DOWNLOADS ARE BLOCKED BY GATEKEEPER (2026-09-10).** Only Developer
+  ID signing plus Apple notarization removes the block. That needs a paid Apple
+  Developer account, and Ben decided not to get one for now. The README gives
+  the `xattr -dr` workaround. `build.yml` now ad-hoc signs the macOS binary and
+  verifies it inside the extracted zip. That is hygiene. It does NOT remove the
+  block. Four gaps stay open:
+  1. **When Actions runs, download and test the CI macOS archives.** Download
+     them from the Releases page THROUGH A BROWSER, so the quarantine attribute
+     is set. Record four results: what the block looks like, whether the README
+     `xattr -dr` command clears it, whether `recon --version` then runs, and
+     whether `codesign --verify --strict` passes on the extracted binary. ⚠ The
+     new signing and zip-check steps have NEVER run on a runner. Only
+     `actionlint` and a local rehearsal on two test binaries checked them.
+  2. **Confirm the form of the xattr command.** `recon` ships as a bare binary
+     in a folder, not as a `.app` bundle, so the README runs the command on the
+     folder. Ben asked whether `xattr -dr com.apple.quarantine "recon.app"` is
+     needed. The `.app` form is sagegui's. Check it on the downloaded archive.
+     Do not assume.
+  3. **Two records disagree on what the block looks like.** The v0.1.0 smoke
+     test (2026-09-02) saw `zsh: killed` and no dialog. A check from the sagegui
+     repo on the v0.1.2 archives (2026-09-10) saw no output, no exit after 20 s,
+     and a "recon Not Opened" dialog. The README states both. Settle it with
+     gap 1, then correct NOTES and README in place.
+  4. **The hand-built v0.1.2 macOS binaries were not re-signed.** The same
+     2026-09-10 check found the Intel binary unsigned and the arm64 binary
+     linker-signed ad-hoc. It did not re-check that locally: no archive was
+     downloaded here. The Intel binary still runs once the quarantine is
+     removed, so v0.1.2 is not re-cut. Use the manual release checklist in NOTES
+     "Actions is disabled by the organization" for the next release.
 
 * **Nothing has run on a non-tryptic or ion-trap file.** The whole evidence base
   is four tryptic Orbitrap files. This is the biggest gap in the project.

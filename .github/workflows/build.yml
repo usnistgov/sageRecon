@@ -9,8 +9,8 @@
 # 1. Every cargo command carries `--target`. sagegui builds both macOS entries
 #    with a bare `cargo build --release`, so both produce a binary for the
 #    RUNNER's architecture and the x86_64 entry is silently mislabelled. Here
-#    each target is also given its own native runner (macos-13 is Intel,
-#    macos-14 is Apple silicon), so tests run natively too and nothing needs
+#    each target is also given its own native runner (macos-15-intel is Intel,
+#    macos-latest is Apple silicon), so tests run natively too and nothing needs
 #    Rosetta.
 #
 # 2. `cargo fmt -- --check` IS gated; `cargo clippy -D warnings` is NOT. The
@@ -168,6 +168,16 @@ jobs:
           cp "target/${{ matrix.target }}/release/${{ matrix.binary }}" "../$STAGE/"
           cp ../README.md ../THIRD_PARTY_LICENSES.md "../$STAGE/"
           cp resources/unimod.xml "../$STAGE/"
+          # macOS: ad-hoc sign the shipped binary and verify it. The linker
+          # signs only arm64 output, so the x86_64 binary is otherwise unsigned.
+          # Re-signing arm64 is harmless. ⚠ This does NOT pass Gatekeeper for a
+          # downloaded file. Only Developer ID signing plus notarization does,
+          # and there is no Apple Developer account (Ben, 2026-09-10). The
+          # README gives the xattr workaround.
+          if [ "${{ runner.os }}" = "macOS" ]; then
+            codesign --force --sign - "../$STAGE/${{ matrix.binary }}"
+            codesign --verify --strict --verbose=2 "../$STAGE/${{ matrix.binary }}"
+          fi
           for f in ${{ matrix.binary }} README.md THIRD_PARTY_LICENSES.md unimod.xml; do
             test -s "../$STAGE/$f" || { echo "MISSING from archive: $f"; exit 1; }
           done
@@ -205,6 +215,10 @@ jobs:
               7z a "${{ matrix.asset_name }}.zip" "$STAGE"
             else
               zip -r "${{ matrix.asset_name }}.zip" "$STAGE"
+              # Verify the binary a user downloads, not only the one on disk.
+              CHECK=$(mktemp -d)
+              ditto -x -k "${{ matrix.asset_name }}.zip" "$CHECK"
+              codesign --verify --strict --verbose=2 "$CHECK/$STAGE/${{ matrix.binary }}"
             fi
           fi
 
