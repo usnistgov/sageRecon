@@ -415,7 +415,9 @@ decide.
 A complete report from our human serum test file (Orbitrap Fusion Lumos, tryptic,
 41,788 MS/MS scans) ships in this repository:
 
-- [`examples/serum.html`](examples/serum.html) (open in a browser)
+- [`examples/serum.html`](https://htmlpreview.github.io/?https://github.com/usnistgov/sageRecon/blob/main/examples/serum.html)
+  (opens the rendered report through htmlpreview.github.io;
+  [view the source](examples/serum.html))
 - [`examples/serum.json`](examples/serum.json)
 - [`examples/serum_pass2.json`](examples/serum_pass2.json)
 
