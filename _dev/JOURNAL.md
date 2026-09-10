@@ -1,3 +1,78 @@
+# Debrief — 2026-09-10: macOS Gatekeeper guidance, signing checks, and a report link that renders
+
+**Landed:** two commits, both pushed. `b330721` adds ad-hoc signing and a
+verify-inside-the-zip step to the macOS jobs in `build.yml`, a macOS quarantine
+note in the README, a manual release checklist in NOTES, the open Gatekeeper
+gaps in PLAN, and corrections to five stale statements. `4a62e68` links the
+example HTML report through htmlpreview.github.io. This clone now commits as
+`Benjamin A. Neely <benjamin.neely@nist.gov>`. **No code, test or derived number
+changed; the tripwires were not re-run.**
+
+The work started from a handoff written in a sagegui session. The through-line:
+**the handoff and the repo's own records disagreed, and the disagreement is
+recorded, not resolved.** The v0.1.0 smoke test saw `zsh: killed`; the handoff
+saw a dialog and an apparent hang. The README now describes both.
+
+## Q1. What am I least confident about, and what would settle it?
+
+**That the new workflow steps work on a real runner.** They passed `actionlint`
+and a local rehearsal on two binaries built with `clang` on this Mac. They have
+never run on `macos-15-intel` or `macos-latest`, and the rehearsal did not use a
+`recon` binary built by `rustc`. **Settled by the first Actions run.**
+
+**What a blocked download looks like.** The two records disagree. The handoff's
+"no exit after 20 s" may come from an agent shell with no terminal, not from what
+a user sees in Terminal. That is a guess and is not recorded as a fact.
+**Settled by gap 1 in PLAN: download through a browser and run it by hand.**
+
+**The signature state of the published v0.1.2 archives.** It comes from the
+handoff only. No archive was downloaded here. **Settled by downloading the two
+macOS zips and running `codesign -dv` on the binaries inside.**
+
+**That htmlpreview stays usable.** It is an external service. On 2026-09-10 it
+rendered the report with the same text, tables and headings as the local file.
+The "Copy as CSV" button was present but was not clicked.
+
+## Q2. What did I assume without stating it?
+
+**That "sure" approved the extra work.** Ben answered "sure" to a question that
+offered to fix stale text and write a release checklist. I read it as approval
+for both.
+
+**That the hand-built v0.1.2 folders follow the `build.yml` names.** NOTES says
+they were staged to the exact layout, and the README `xattr` command relies on
+it. I did not open a zip to check.
+
+**That quarantine reaches the extracted files.** That is true when Finder's
+Archive Utility unzips a browser download. It may not be true for the `unzip`
+command. The README says "downloaded through a browser" and does not cover the
+other case.
+
+## Q3. What is the biggest thing you are missing?
+
+**The manual checklist and `build.yml` are two copies of one procedure.** NOTES
+says "keep the two in step". That is the kind of rule that fails silently, the
+same way the README's download section went stale twice on 2026-09-08.
+
+## Q4. What could you have done differently?
+
+**Asked to download the two macOS archives at the start.** Two downloads of about
+9 MB would have turned the handoff's signature table from a claim into a
+measurement before any text was written on top of it.
+
+## Q5. What would you suggest?
+
+1. **Make staging a script** that both the workflow and the manual release call:
+   copy the files, check the `unimod.xml` hash, sign on macOS, zip, extract and
+   verify. One implementation removes the "keep the two in step" rule.
+2. **Do PLAN's Gatekeeper gap 1 on the v0.1.2 archives now.** It does not need
+   Actions. It settles the dialog-or-killed question and the signature table
+   today.
+3. **Click "Copy as CSV" in the htmlpreview view** before the link is shared
+   widely.
+4. **Consider GitHub Pages for `examples/`** if the organization allows it. It
+   is first-party and does not depend on a third-party proxy.
+
 # Debrief — 2026-09-08: published, released, and a scrub that had only covered prose
 
 **Landed:** the tool is public at `github.com/usnistgov/sageRecon` and v0.1.2 is

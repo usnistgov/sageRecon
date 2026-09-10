@@ -10331,7 +10331,8 @@ downloaded back from GitHub and verified byte-identical.
 procedure existed; the steps lived in `build.yml` only. This list mirrors that
 workflow. Keep the two in step.
 1. Bump `version` in `recon-tool/Cargo.toml` BEFORE tagging. v0.1.1 shipped a
-   binary that reported `0.1.0`.
+   binary that reported `0.1.0`. Update the version strings in the README in
+   the same pass, including the two `xattr` folder names in the macOS note.
 2. Build from the tag: `cargo build --release --target <triple>`. For Intel,
    put `~/.cargo/bin` first on PATH (see "Cross-platform builds" below).
 3. Stage `<asset_name>-v<VERSION>/` with the binary, `README.md`,
@@ -10423,3 +10424,51 @@ Nothing suitable is installed here: no Docker, podman, colima, lima, zig,
 builds from source, which stays true. If it is picked up, prefer whichever route
 allows the archive to be run before release; v0.1.0 shipped defective precisely
 because an archive was never run.
+
+## macOS Gatekeeper and the example report link — 2026-09-10
+
+### 🔒 macOS binaries are ad-hoc signed, NOT notarized (Ben, 2026-09-10)
+
+**Chosen:** ad-hoc sign the macOS binary (`codesign --force --sign -`), verify
+it on disk, and verify it again inside the extracted zip. This is in `build.yml`
+and in the manual release checklist above. The README gives users the
+`xattr -dr com.apple.quarantine <folder>` workaround.
+
+**Rejected:** Developer ID signing plus Apple notarization. It is the ONLY route
+that removes the Gatekeeper block on a downloaded binary. It needs a paid Apple
+Developer account, and Ben decided not to get one for now.
+
+⚠ **Ad-hoc signing does NOT remove the Gatekeeper block. Do not claim it does.**
+It makes both architectures consistent and gives the release a checkable
+integrity step. That is all.
+
+**What was checked here, and what was not.** The work came from a handoff
+written in a sagegui session.
+* CHECKED on this Mac: `clang` output for arm64 was `Signature=adhoc` as linked;
+  output for x86_64 was `code object is not signed at all`. For both, the full
+  sequence (sign, verify, `zip -r`, `ditto -x -k`, verify) passed and the
+  extracted binary ran. `actionlint` 1.7.12 with shellcheck reported no
+  findings on the edited `build.yml`.
+* NOT CHECKED: a `recon` binary built by `rustc`; the steps on a real runner;
+  the published v0.1.2 archives. The claim that the v0.1.2 Intel binary is
+  unsigned and the arm64 binary is linker-signed comes from the handoff only.
+* DISPUTED: what a blocked download looks like. See "2. macOS Gatekeeper KILLS
+  the binary" above and PLAN "Deferred / open".
+
+### 🔒 The example report is linked through htmlpreview.github.io (2026-09-10)
+
+GitHub shows `examples/serum.html` as source text, so "open in a browser" did
+not work from the README.
+
+**Chosen:** `https://htmlpreview.github.io/?https://github.com/usnistgov/sageRecon/blob/main/examples/serum.html`.
+Checked in a browser against the local file: the same text length (4053
+characters), 4 tables, 7 headings, and no console errors. The README keeps a
+second link to the source.
+
+**Rejected:** `raw.githack.com`. On 2026-09-10 it showed an "External Content
+Notice" page with an advertisement before the report, so a reader needs an
+extra click.
+
+⚠ **Both are external services, and this is how they behaved on 2026-09-10.**
+The link follows `main`, so it always shows the current committed report. The
+report's "Copy as CSV" button was present under htmlpreview but was not clicked.

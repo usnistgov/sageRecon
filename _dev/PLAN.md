@@ -14,8 +14,24 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-09-08 (end of session). Read this block, then the "Deferred /
+**Updated 2026-09-10 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
+
+### ▶ 2026-09-10: macOS signing checks and Gatekeeper guidance landed
+
+**State.** `build.yml` ad-hoc signs the macOS binary and verifies it again
+inside the extracted zip (`b330721`). The README tells macOS users how to remove
+the quarantine attribute, and links the example report through
+htmlpreview.github.io (`4a62e68`). NOTES now holds a manual release checklist.
+No code, test or derived number changed, so the tripwires were not re-run.
+
+⚠ **The new workflow steps have never run on a runner.** Actions is still
+disabled for the organization.
+
+**Next action.** For the tool, unchanged: STEP 5, the write-up (see "The route
+Ben set"). For releases: when Actions runs, do gap 1 of the Gatekeeper entry in
+"Deferred / open". At the next release, follow the NOTES checklist, including
+the version in the README `xattr` folder names.
 
 ### ▶ 2026-09-08: THE TOOL IS PUBLISHED AND RELEASED. Read this first.
 

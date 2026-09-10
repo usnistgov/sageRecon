@@ -221,6 +221,10 @@ hash AND confirm the remote accepted the push.
   Edit the precise lines.
 - **Commit to main, plainly.** Standard commit messages, straight to main.
   No branches, no squashing, no commit-message prefixes.
+  **Commit as `Benjamin A. Neely <benjamin.neely@nist.gov>`** (Ben, 2026-09-10).
+  It is set in this clone's `.git/config`, which git does not track, so set it
+  again in a new clone. The global git identity is a personal address; do not
+  use it here. No `Co-Authored-By` trailer.
 - **Batched atomic commits.** Group logically related file changes into one
   commit. A code change and its doc update belong together. One commit reads
   as one coherent decision. Hold related edits together before committing
