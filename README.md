@@ -90,11 +90,11 @@ evidence base does and does not cover.
    a published dataset with no usage restriction:
    - mzML — `10mg_1_A_1.mzML.gz`, from
      [PRIDE PXD013608](https://www.ebi.ac.uk/pride/archive/projects/PXD013608)
-   - FASTA — `uniprot_sprot_iso_human-2018_06.fasta` (UniProtKB SwissProt +
-     varsplic, human, June 2018 — the exact snapshot the paper's own analysis
-     used; a new survey should generally use today's canonical UniProt human
-     proteome instead), attached to the
-     [v0.1.3 release](https://github.com/usnistgov/sageRecon/releases/tag/v0.1.3)
+   - FASTA — [`examples/uniprot_sprot_iso_human-2018_06.fasta`](examples/uniprot_sprot_iso_human-2018_06.fasta),
+     which ships in this repository (UniProtKB SwissProt + varsplic, human,
+     June 2018 — the exact snapshot the paper's own analysis used; a new
+     survey should generally use today's canonical UniProt human proteome
+     instead)
 
 ```
 recon run 10mg_1_A_1.mzML.gz uniprot_sprot_iso_human-2018_06.fasta --enzyme trypsin --output liver

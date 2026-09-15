@@ -23,6 +23,11 @@ reference/
 *.FASTA
 *.mgf
 *.MGF
+# ...EXCEPT the Quick Start sample data. Committed deliberately, not test
+# scratch: it is the exact FASTA the liver Quick Start example needs, and at
+# 29 MB it is small enough to ship in the repository rather than as a
+# separate release asset. See examples/liver.* and the README Quick Start.
+!/examples/uniprot_sprot_iso_human-2018_06.fasta
 
 # Claude Code machine-local settings (permission grants, not shared)
 .claude/settings.local.json

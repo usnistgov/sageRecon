@@ -44,6 +44,13 @@ downloaded back and confirmed byte-identical; both macOS binaries run from
 the downloaded copies, Windows `.exe` run with `--help` on the laptop
 itself. The full 9-step manual checklist passed.
 
+⚠ **Corrected same day: the FASTA is no longer a Release asset.** It ships
+at `examples/uniprot_sprot_iso_human-2018_06.fasta` instead (Ben's call --
+29 MB isn't too big to commit, and it belongs with the example data, not
+bolted onto a binary release). Deleted from the v0.1.3 Release; the Release
+notes and `THIRD_PARTY_LICENSES.md` were updated to match. The three
+platform archives are unaffected.
+
 **Next action.** STEP 5, the write-up (see "The route Ben set"), still
 unstarted. Separately, when a Byonic Preview run against the same liver
 file (PXD013608) is available, fold the comparison into the README/paper

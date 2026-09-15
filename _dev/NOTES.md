@@ -10581,9 +10581,16 @@ snapshot the paper's own analysis used, stated in the README as NOT the
 current canonical UniProt proteome a fresh survey should generally use.
 
 **mzML is not rehosted.** At 273 MB it is already permanently public on
-PRIDE; the README links there rather than duplicating it as a GitHub Release
-asset. Only the 29 MB FASTA ships as a v0.1.3 Release asset. UniProt's CC BY
-4.0 attribution was added to `THIRD_PARTY_LICENSES.md`.
+PRIDE; the README links there rather than duplicating it. **Corrected
+2026-09-15, same day:** the 29 MB FASTA first shipped as a v0.1.3 Release
+asset, then Ben decided that was the wrong call -- it isn't that huge, and
+belongs with the rest of the example data rather than bolted onto a binary
+release. It now lives at `examples/uniprot_sprot_iso_human-2018_06.fasta`,
+committed to the repository with a documented `.gitignore` exception (the
+blanket `*.fasta` rule exists for large *test* data, and this is deliberate
+sample data, not scratch). The asset was deleted from the v0.1.3 Release and
+the release notes edited to match. UniProt's CC BY 4.0 attribution in
+`THIRD_PARTY_LICENSES.md` was updated to point at the new path.
 
 `recon run` was re-executed locally against both files to regenerate
 `examples/liver.{html,json,pass2.json}` alongside the existing serum example
