@@ -15,7 +15,7 @@ those decisions are written down here rather than lost.
 | `NOTES.md` | Settled decisions, discovered truths, dead ends, and entries marked "intentional, not a bug". The main record |
 | `JOURNAL.md` | Dated session debriefs. What was least certain, what was assumed, what to do differently |
 | `PLAN.md` | The roadmap and its status block |
-| `AGENTS.md` | The working protocol, including the rule that every stated fact must come from a file on disk |
+| `dev_AGENTS.md` | The working protocol, including the rule that every stated fact must come from a file on disk |
 | `AUDIT-2026-09-02.md` | A code audit. All 13 findings are closed |
 | `reference-notes/` | Distilled external material: search-engine documentation, controlled vocabularies, methodology notes, and vendored papers |
 | `testing/` | Test data, search configurations, the validation harness, and committed reference reports |
