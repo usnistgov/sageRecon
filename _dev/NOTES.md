@@ -10608,10 +10608,17 @@ tainted first copies were deleted, never committed.
 
 Cargo.toml bumped to `0.1.3` and the README's Quick Start, Installation
 version strings, macOS `xattr` folder names, and Citation block were updated
-to match. **The actual v0.1.3 GitHub Release (multi-platform builds, macOS
-signing, uploading the binary archives and the FASTA asset) has NOT been cut**
--- this Mac (Apple Silicon) can build both `aarch64-apple-darwin` and
-`x86_64-apple-darwin` targets, but the Windows `x86_64-pc-windows-msvc` target
-has no cross-compile path from macOS and needs the Windows laptop, matching
-`build.yml`'s own `windows-latest` runner. Follow the checklist above when
-ready.
+to match.
+
+**v0.1.3 IS released (2026-09-15).** This Mac (Apple Silicon) built both
+`aarch64-apple-darwin` and `x86_64-apple-darwin` targets natively/cross-compiled
+(the latter needs `~/.cargo/bin` first on PATH, see "Cross-platform builds"
+below -- Homebrew's `cargo` lacks the target). The Windows
+`x86_64-pc-windows-msvc` archive was built on the Windows laptop (no
+cross-compile path from macOS) and transferred over; its `unimod.xml` hash
+and PE32+ format were verified here before upload. All four assets (three
+platform archives plus the FASTA) were downloaded back from the Release and
+confirmed byte-identical to what was uploaded. Both macOS binaries were
+extracted from the downloaded copies and run (`recon 0.1.3`); the Windows
+binary was run with `--help` on the laptop itself, output confirmed correct.
+The full 9-step manual checklist passed clean.

@@ -17,11 +17,10 @@ closed/localized search — that's a human decision downstream of this report.
 **Updated 2026-09-15 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
 
-### ▶ 2026-09-15: Public-repo polish from colleague review; v0.1.3 staged, not yet released
+### ▶ 2026-09-15: Public-repo polish from colleague review; v0.1.3 RELEASED
 
-**State.** A colleague's review of the public repo drove four changes, all
-committed to the working tree but NOT yet released or pushed as of this
-entry:
+**State.** A colleague's review of the public repo drove four changes,
+committed and pushed:
 1. `AGENTS.md` split for discoverability: root `AGENTS.md` (light, for
    contributors) + `_dev/dev_AGENTS.md` (the full protocol, same content as
    the old `_dev/AGENTS.md`). New `docs/AI_USAGE.md`. See NOTES "AGENTS.md
@@ -38,15 +37,18 @@ entry:
    replaces the placeholder".
 4. `Cargo.toml` bumped to `0.1.3`.
 
-⚠ **v0.1.3 is NOT released.** Windows needs the other laptop (no MSVC
-cross-compile from macOS); the macOS archives and the FASTA release asset are
-still to be built/staged/uploaded by hand per the NOTES checklist.
+**v0.1.3 IS released**: https://github.com/usnistgov/sageRecon/releases/tag/v0.1.3.
+Both macOS archives built here; Windows built on the Windows laptop and
+transferred over. All four assets (three platform archives, the FASTA)
+downloaded back and confirmed byte-identical; both macOS binaries run from
+the downloaded copies, Windows `.exe` run with `--help` on the laptop
+itself. The full 9-step manual checklist passed.
 
-**Next action.** Cut v0.1.3: build both macOS targets here, the Windows
-target on the Windows laptop, run the NOTES manual checklist (now 9 steps,
-vulnerability scan is step 2) for all three, attach the FASTA as a
-standalone Release asset. Then, separately: STEP 5, the write-up (see "The
-route Ben set"), still unstarted.
+**Next action.** STEP 5, the write-up (see "The route Ben set"), still
+unstarted. Separately, when a Byonic Preview run against the same liver
+file (PXD013608) is available, fold the comparison into the README/paper
+material in the manuscript-style register (`style-guide.md`), not
+ASD-STE100 -- see NOTES "the liver file replaces the placeholder".
 
 ### ▶ 2026-09-10: macOS signing checks and Gatekeeper guidance landed
 
