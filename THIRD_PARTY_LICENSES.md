@@ -354,3 +354,22 @@ IN ANY WAY OUT OF THE USE OF THIS WORK, EVEN IF ADVISED OF THE
 POSSIBILITY OF SUCH DAMAGE.
 
 END OF TERMS AND CONDITIONS
+
+---
+
+## UniProtKB (sample FASTA)
+
+Source: https://www.uniprot.org/
+License: Creative Commons Attribution 4.0 International (CC BY 4.0),
+https://creativecommons.org/licenses/by/4.0/
+
+**Redistribution notice:** `uniprot_sprot_iso_human-2018_06.fasta`, attached
+to the v0.1.3 release as sample data for the Quick Start example, is the
+UniProtKB SwissProt + SwissProt varsplic database, *Homo sapiens*, June 2018
+release, unmodified. This is the exact snapshot used in the original
+analysis of the NIST Candidate RM 8461 human liver reference material (Davis,
+Kilpatrick, Ellisor & Neely, *Scientific Data* 6, 324, 2019,
+doi:10.1038/s41597-019-0336-7); it is not the current canonical UniProt human
+proteome, and a new search should generally use today's snapshot instead.
+Cite UniProt: The UniProt Consortium, *Nucleic Acids Research*,
+https://www.uniprot.org/help/publications.

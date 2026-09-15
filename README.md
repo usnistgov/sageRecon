@@ -15,7 +15,7 @@ who wants an unbiased first look before committing to a search strategy.
 recon run <MZML> <FASTA> --enzyme <ENZYME>
 ```
 
-Version 0.1.2. Everything the tool needs is compiled into one binary: the
+Version 0.1.3. Everything the tool needs is compiled into one binary: the
 [Sage](#third-party-software) search engine, the Unimod element table, and the
 curated modification list. There is no search engine to install, no path to
 configure, and no network call at search time.
@@ -77,13 +77,33 @@ evidence base does and does not cover.
 
 ## Quick start
 
+1. **Download** the binary for your platform — see the table under
+   [Getting the binary](#getting-the-binary) — from the
+   [v0.1.3 release](https://github.com/usnistgov/sageRecon/releases/tag/v0.1.3).
+2. **macOS only:** the binary is not code-signed, so the first run is
+   blocked by Gatekeeper. Do the unblock step in
+   [Installation](#installation) below before running it.
+3. **Get the sample data and run it.** The example below is the NIST
+   Candidate RM 8461 human liver reference material (Davis, Kilpatrick,
+   Ellisor & Neely, *Sci. Data* 6, 324, 2019,
+   [doi:10.1038/s41597-019-0336-7](https://doi.org/10.1038/s41597-019-0336-7)),
+   a published dataset with no usage restriction:
+   - mzML — `10mg_1_A_1.mzML.gz`, from
+     [PRIDE PXD013608](https://www.ebi.ac.uk/pride/archive/projects/PXD013608)
+   - FASTA — `uniprot_sprot_iso_human-2018_06.fasta` (UniProtKB SwissProt +
+     varsplic, human, June 2018 — the exact snapshot the paper's own analysis
+     used; a new survey should generally use today's canonical UniProt human
+     proteome instead), attached to the
+     [v0.1.3 release](https://github.com/usnistgov/sageRecon/releases/tag/v0.1.3)
+
 ```
-recon run sample.mzML.gz UniProt-Human.fasta --enzyme trypsin
+recon run 10mg_1_A_1.mzML.gz uniprot_sprot_iso_human-2018_06.fasta --enzyme trypsin --output liver
 ```
 
-This writes `sample_recon.json`, `sample_recon.html`, `sample_recon_pass2.json`,
-and a `sample_recon_search/` directory beside them. Open the HTML file in a
-browser.
+This writes `liver.json`, `liver.html`, `liver_pass2.json`, and a
+`liver_search/` directory beside them. Open the HTML file in a browser. A
+pre-computed copy of this report ships in the repo; see
+[Example output](#example-output).
 
 ## Installation
 
@@ -106,7 +126,7 @@ which `recon` does not use.
 
 ### Getting the binary
 
-**Three archives are attached to the v0.1.2 release** on this repository's
+**Three archives are attached to the v0.1.3 release** on this repository's
 Releases page:
 
 | Archive | Platform |
@@ -127,10 +147,10 @@ right-click the file and choose Put Back, or download the archive again. Then
 run this once on the unzipped folder, and run `recon` normally after that:
 
 ```
-xattr -dr com.apple.quarantine recon-apple-silicon-v0.1.2
+xattr -dr com.apple.quarantine recon-apple-silicon-v0.1.3
 ```
 
-For the Intel archive, the folder is `recon-apple-intel-v0.1.2`.
+For the Intel archive, the folder is `recon-apple-intel-v0.1.3`.
 
 The Windows and Intel builds were checked against each other on the same file.
 Every measured value in the two reports agrees; the only difference is the input
@@ -412,8 +432,22 @@ decide.
 
 ## Example output
 
-A complete report from our human serum test file (Orbitrap Fusion Lumos, tryptic,
-41,788 MS/MS scans) ships in this repository:
+Two complete reports ship in this repository.
+
+The file demonstrated in [Quick start](#quick-start) is the NIST Candidate RM
+8461 human liver reference material (Orbitrap Fusion Lumos, tryptic; Davis,
+Kilpatrick, Ellisor & Neely, *Sci. Data* 6, 324, 2019,
+[doi:10.1038/s41597-019-0336-7](https://doi.org/10.1038/s41597-019-0336-7);
+data at [PRIDE PXD013608](https://www.ebi.ac.uk/pride/archive/projects/PXD013608)):
+
+- [`examples/liver.html`](https://htmlpreview.github.io/?https://github.com/usnistgov/sageRecon/blob/main/examples/liver.html)
+  (opens the rendered report through htmlpreview.github.io;
+  [view the source](examples/liver.html))
+- [`examples/liver.json`](examples/liver.json)
+- [`examples/liver_pass2.json`](examples/liver_pass2.json)
+
+A second report, from our human serum test file (Orbitrap Fusion Lumos,
+tryptic, 41,788 MS/MS scans), also ships here:
 
 - [`examples/serum.html`](https://htmlpreview.github.io/?https://github.com/usnistgov/sageRecon/blob/main/examples/serum.html)
   (opens the rendered report through htmlpreview.github.io;
@@ -585,7 +619,7 @@ These are ordered by how much they would change what a user can trust.
 If you use `recon` in published work, please cite the software:
 
 > Neely, B.A. (2026). *sageRecon: a Sage-based proteomics reconnaissance tool*
-> (Version 0.1.2) [Computer software]. National Institute of Standards and
+> (Version 0.1.3) [Computer software]. National Institute of Standards and
 > Technology. https://github.com/usnistgov/sageRecon
 
 Cite the version you ran, not the repository in general, because the
