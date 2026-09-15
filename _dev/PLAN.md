@@ -14,8 +14,39 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-09-10 (end of session). Read this block, then the "Deferred /
+**Updated 2026-09-15 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
+
+### ▶ 2026-09-15: Public-repo polish from colleague review; v0.1.3 staged, not yet released
+
+**State.** A colleague's review of the public repo drove four changes, all
+committed to the working tree but NOT yet released or pushed as of this
+entry:
+1. `AGENTS.md` split for discoverability: root `AGENTS.md` (light, for
+   contributors) + `_dev/dev_AGENTS.md` (the full protocol, same content as
+   the old `_dev/AGENTS.md`). New `docs/AI_USAGE.md`. See NOTES "AGENTS.md
+   split".
+2. CI: `cargo audit` + `trivy fs` added as a `security` job in `build.yml`,
+   plus the matching manual-checklist step, since Actions still cannot run
+   here. Found and fixed 2 real advisories in recon-tool's own `quick-xml`
+   dependency (bumped to 0.41); documented 9 more as exceptions (Sage-pinned
+   transitive chain). See NOTES "cargo-audit found real findings".
+3. README Quick Start rebuilt around real, published sample data (NIST
+   Candidate RM 8461 liver, PXD013608) instead of a placeholder filename that
+   never existed. `examples/liver.{html,json,pass2.json}` regenerated
+   alongside (not replacing) `examples/serum.*`. See NOTES "the liver file
+   replaces the placeholder".
+4. `Cargo.toml` bumped to `0.1.3`.
+
+⚠ **v0.1.3 is NOT released.** Windows needs the other laptop (no MSVC
+cross-compile from macOS); the macOS archives and the FASTA release asset are
+still to be built/staged/uploaded by hand per the NOTES checklist.
+
+**Next action.** Cut v0.1.3: build both macOS targets here, the Windows
+target on the Windows laptop, run the NOTES manual checklist (now 9 steps,
+vulnerability scan is step 2) for all three, attach the FASTA as a
+standalone Release asset. Then, separately: STEP 5, the write-up (see "The
+route Ben set"), still unstarted.
 
 ### ▶ 2026-09-10: macOS signing checks and Gatekeeper guidance landed
 

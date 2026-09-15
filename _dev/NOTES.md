@@ -10333,23 +10333,40 @@ workflow. Keep the two in step.
 1. Bump `version` in `recon-tool/Cargo.toml` BEFORE tagging. v0.1.1 shipped a
    binary that reported `0.1.0`. Update the version strings in the README in
    the same pass, including the two `xattr` folder names in the macOS note.
-2. Build from the tag: `cargo build --release --target <triple>`. For Intel,
+2. **Run the vulnerability scan.** `trivy fs recon-tool` must be clean. For
+   `cargo audit`, the 9 findings inside sage-cloudpath's pinned HTTP stack are
+   a recorded exception (not a config file -- `audit.toml` auto-discovery did
+   not work with the installed cargo-audit 0.22.2, verified 2026-09-15; the
+   `--ignore` flag does):
+   ```
+   cargo audit --ignore RUSTSEC-2026-0194 --ignore RUSTSEC-2026-0195 \
+     --ignore RUSTSEC-2026-0258 --ignore RUSTSEC-2026-0285 \
+     --ignore RUSTSEC-2026-0104 --ignore RUSTSEC-2026-0098 \
+     --ignore RUSTSEC-2026-0099
+   ```
+   Must report only the 4 `unmaintained`/`unsound` warnings, zero
+   vulnerabilities, before continuing. A new advisory outside this list is a
+   real finding, not something to add to the ignore list without review. This
+   mirrors the `security` job added to `build.yml` on 2026-09-15, which
+   cannot run on its own because Actions is disabled for this organization --
+   this step is the only place it actually executes for a public release.
+3. Build from the tag: `cargo build --release --target <triple>`. For Intel,
    put `~/.cargo/bin` first on PATH (see "Cross-platform builds" below).
-3. Stage `<asset_name>-v<VERSION>/` with the binary, `README.md`,
+4. Stage `<asset_name>-v<VERSION>/` with the binary, `README.md`,
    `THIRD_PARTY_LICENSES.md` and `recon-tool/resources/unimod.xml`. Compare the
    `unimod.xml` SHA-256 with the repo copy. They must be identical.
-4. **macOS only:** sign and verify the staged binary.
+5. **macOS only:** sign and verify the staged binary.
    `codesign --force --sign - recon` then
    `codesign --verify --strict --verbose=2 recon`. The linker signs only arm64,
    so without this the Intel binary ships unsigned. ⚠ This does NOT pass
    Gatekeeper. Only notarization does.
-5. Zip the staged folder: `zip -r <asset_name>.zip <asset_name>-v<VERSION>`.
-6. **macOS only:** extract the zip and verify the binary inside it.
+6. Zip the staged folder: `zip -r <asset_name>.zip <asset_name>-v<VERSION>`.
+7. **macOS only:** extract the zip and verify the binary inside it.
    `CHECK=$(mktemp -d)`, `ditto -x -k <asset_name>.zip "$CHECK"`, then
    `codesign --verify --strict --verbose=2 "$CHECK"/<asset_name>-v<VERSION>/recon`.
-7. Attach the archive to the Release. Download it back and confirm it is
+8. Attach the archive to the Release. Download it back and confirm it is
    byte-identical.
-8. RUN the downloaded archive outside the repo. v0.1.0 shipped defective because
+9. RUN the downloaded archive outside the repo. v0.1.0 shipped defective because
    no archive was run.
 
 ⚠ **A BINARY BUILT BEFORE THE RESTRUCTURE MUST NOT BE RELEASED.** The internal
@@ -10472,3 +10489,129 @@ extra click.
 ⚠ **Both are external services, and this is how they behaved on 2026-09-10.**
 The link follows `main`, so it always shows the current committed report. The
 report's "Copy as CSV" button was present under htmlpreview but was not clicked.
+
+### 🔒 AGENTS.md split: root file for contributors, dev_AGENTS.md for depth (2026-09-15)
+
+A colleague reviewing the public repo said `AGENTS.md` living only in `_dev/`
+is not discoverable by a human or another AI coding tool landing on the repo
+cold. Renaming `_dev/` to `docs/` (their first suggestion) was rejected: a
+`docs/` directory already exists at the repo root, public and generated
+(`docs/curated-modifications.md`).
+
+**Chosen:** `git mv _dev/AGENTS.md _dev/dev_AGENTS.md` (full internal
+protocol, unchanged content). New, short root `AGENTS.md`: repo layout, the
+handful of settled decisions an outside contributor needs immediately (frozen
+CLI, enzyme is a required parameter, Sage is a pinned library, committed
+Cargo.lock, no clippy gate), and a pointer to `_dev/dev_AGENTS.md` for
+substantial work. `github.com/neely/agent-context-project-template` was
+checked before writing it: the template itself uses one root `AGENTS.md` with
+no dual-file convention, so this split is a sageRecon-specific adaptation, not
+something copied from the template.
+
+Also added `docs/AI_USAGE.md`: a short, factual statement that AI coding
+agents were used under human review, not a policy document -- NIST and GitHub
+have no standard disclosure format for this yet.
+
+`_dev/CLAUDE.md` updated to `@dev_AGENTS.md`; a new root `CLAUDE.md` (`@AGENTS.md`)
+was added so a session opened at the repo root picks up the light file.
+`_dev/README.md`'s "What is in here" table updated to the new filename.
+Bare "AGENTS.md" mentions inside `JOURNAL.md`, this file's older entries, and
+`AUDIT-2026-09-02.md` were left alone -- they describe the file as it was
+named at the time, and are history, not live documentation.
+
+### ⚠ cargo-audit found real findings; Trivy did not (2026-09-15)
+
+The same colleague asked for Trivy (binary scan, reject on moderate/high) and
+cargo-audit (code scan) in CI. Added both as a new `security` job in
+`build.yml`, gating `build` via `needs:`. **Because Actions is disabled for
+this organization, this job never runs on its own** -- see "Actions is
+disabled by the organization" above. The same two checks were added as step 2
+of the manual release checklist, since that is the only place they actually
+execute for a public release.
+
+`trivy fs recon-tool --severity MEDIUM,HIGH,CRITICAL` read **0** vulnerabilities.
+`cargo audit` read **11**. This is exactly the "a contradicting result
+outranks your hypothesis" case dev_AGENTS.md describes -- it was reported
+rather than averaged away or re-run until it agreed.
+
+`cargo tree -i` traced all 11:
+- **2 were recon-tool's own direct dependency**, `quick-xml 0.36.2`, used only
+  in `src/unimod.rs` to parse the compiled-in `unimod.xml` (not user-supplied
+  mzML, contrary to what was first assumed and said out loud -- corrected
+  before acting on it). RUSTSEC-2026-0194 and -0195, both DoS-shaped
+  (unbounded allocation / quadratic runtime on crafted XML). Fixed: bumped
+  `Cargo.toml` to `quick-xml = "0.41"`, `cargo update -p quick-xml@0.36.2
+  --precise 0.41.0`. `Reader::from_str` / `read_event_into` / `Event::*` are
+  unchanged across that range; full `cargo test --release` passed after,
+  including every `unimod::` test and `unimod::embedded_tests::embedded_unimod_matches_the_committed_file`.
+- **The other 9** live inside `sage-cloudpath`'s pinned HTTP/cloud-storage
+  chain (`reqwest` -> `hyper`/`hyper-rustls` -> `h2`/`rustls`/`rustls-webpki`,
+  plus two more `quick-xml` copies via `sage-cloudpath` and `object_store`).
+  This is the same already-documented drift as "AND THE PIN IS WEAKER ON ONE
+  AXIS THAN IT LOOKS" (155/335 packages already differ from Sage's own
+  lockfile) -- fixing them means overriding versions Sage's own manifest
+  resolves, a deliberate Sage-upgrade decision, not a routine patch. Ben's
+  call 2026-09-15: fix what's recon's own, document the rest.
+
+**`audit.toml` does NOT work with the installed `cargo-audit 0.22.2`** --
+tried it first, verified empirically it changed nothing, then switched to the
+`--ignore RUSTSEC-...` flag (confirmed working) and the `rustsec/audit-check`
+action's `ignore:` input (its README documents this input). Do not reintroduce
+an `audit.toml` file assuming it will be picked up automatically; it was not.
+The exact 7 ignored IDs (some cover 2 of the 9 findings each) are recorded in
+`build.yml`'s `security` job and in the manual checklist step 2 above.
+Re-evaluate this list at the next deliberate Sage dependency upgrade.
+
+### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
+
+The README's Quick Start always named `sample.mzML.gz` and `UniProt-Human.fasta`,
+files that never existed anywhere. Ben chose the NIST Candidate RM 8461 human
+liver reference material -- `10mg_1_A_1.mzML.gz` +
+`uniprot_sprot_iso_human-2018_06.fasta` -- over reusing the serum file already
+in `examples/`, because it is already fully public (PRIDE PXD013608, Davis,
+Kilpatrick, Ellisor & Neely, *Sci. Data* 6, 324, 2019,
+doi:10.1038/s41597-019-0336-7) and feeds a future paper comparing against a
+Byonic Preview run Ben will do separately (this session cannot run Preview).
+
+Citation and search parameters were pulled from the live PRIDE record and the
+paper itself, not assumed: enzyme trypsin, 2 missed cleavages, fixed
+carbamidomethyl, variable oxidation, both tolerances 10 ppm, FASTA is
+UniProtKB SwissProt + varsplic, *Homo sapiens*, 2018_06 release -- the exact
+snapshot the paper's own analysis used, stated in the README as NOT the
+current canonical UniProt proteome a fresh survey should generally use.
+
+**mzML is not rehosted.** At 273 MB it is already permanently public on
+PRIDE; the README links there rather than duplicating it as a GitHub Release
+asset. Only the 29 MB FASTA ships as a v0.1.3 Release asset. UniProt's CC BY
+4.0 attribution was added to `THIRD_PARTY_LICENSES.md`.
+
+`recon run` was re-executed locally against both files to regenerate
+`examples/liver.{html,json,pass2.json}` alongside the existing serum example
+(kept, not replaced -- both are referenced in different places: liver in
+Quick Start, serum standalone). 56,949 MS2 spectra, 153.0 s total (Pass-1
+102.5 s + Pass-2 15.4 s + recon 35.1 s), 90.80% fully enzymatic / 9.20%
+semi-tryptic in Pass 2.
+
+⚠ **First attempt leaked `/Users/ben/Documents/proteomicsTesting/` into
+`liver.json`'s `input.mzml_file`/`fasta_file` fields**, because the run passed
+absolute paths on the command line and `report.rs` records those fields
+verbatim (by design -- not canonicalised). This is exactly the class of leak
+that got `_dev/testing/reference-data/` and `_dev/_archive/` withheld from the
+public repo (see "q-DERIVED COUNTS JITTER" era entries above). Caught by
+diffing against the already-shipped `serum.json`, which uses bare relative
+filenames, not an absolute path -- the existing example was already doing
+this correctly and the new one was not. **Fixed:** symlinked both input
+files under their real basenames into the run directory and re-ran `recon`
+from there with relative arguments; verified `grep -c "/Users/ben"` reads 0
+across all three output files before copying anything into `examples/`. The
+tainted first copies were deleted, never committed.
+
+Cargo.toml bumped to `0.1.3` and the README's Quick Start, Installation
+version strings, macOS `xattr` folder names, and Citation block were updated
+to match. **The actual v0.1.3 GitHub Release (multi-platform builds, macOS
+signing, uploading the binary archives and the FASTA asset) has NOT been cut**
+-- this Mac (Apple Silicon) can build both `aarch64-apple-darwin` and
+`x86_64-apple-darwin` targets, but the Windows `x86_64-pc-windows-msvc` target
+has no cross-compile path from macOS and needs the Windows laptop, matching
+`build.yml`'s own `windows-latest` runner. Follow the checklist above when
+ready.
