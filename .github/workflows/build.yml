@@ -61,8 +61,61 @@ env:
   CARGO_INCREMENTAL: 0
 
 jobs:
+  security:
+    name: Dependency and vulnerability scan
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: recon-tool
+    steps:
+      - uses: actions/checkout@v5
+
+      # Reads the committed recon-tool/Cargo.lock (415 packages) against the
+      # RustSec advisory database. Runs once here, not once per platform in
+      # the build matrix below -- the lockfile is identical on every
+      # platform, so four scans would be four times the noise for no extra
+      # coverage.
+      #
+      # The `ignore` list below is a DELIBERATE, RECORDED exception set, not
+      # a silenced alarm -- see dev_AGENTS.md "Manual curation and pinned
+      # values change ONLY by deliberate, recorded edits." Every ID here
+      # lives inside sage-cloudpath's HTTP/cloud-storage dependency chain
+      # (reqwest -> hyper/hyper-rustls -> h2/rustls/rustls-webpki, plus two
+      # more quick-xml copies pulled in by sage-cloudpath and object_store),
+      # which is pinned by the Sage git rev in Cargo.toml, not chosen by
+      # recon-tool directly -- see dev_AGENTS.md "AND THE PIN IS WEAKER ON
+      # ONE AXIS THAN IT LOOKS." recon-tool's OWN direct quick-xml dependency
+      # (used only to parse the compiled-in unimod.xml, not user-supplied
+      # mzML) was bumped to 0.41.0 on 2026-09-15 and needs no exception.
+      # Re-evaluate this list at the next deliberate Sage dependency upgrade.
+      - name: cargo audit
+        uses: rustsec/audit-check@v2.0.0
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          ignore: RUSTSEC-2026-0194,RUSTSEC-2026-0195,RUSTSEC-2026-0258,RUSTSEC-2026-0285,RUSTSEC-2026-0104,RUSTSEC-2026-0098,RUSTSEC-2026-0099
+
+      # Trivy carries its own vulnerability database, independent of
+      # RustSec's, so this is a second opinion on the same Cargo.lock, not a
+      # duplicate check. exit-code 1 fails the job on MEDIUM or above --
+      # "reject the build on moderate/high", per the 2026-09 colleague review
+      # of the public repo.
+      #
+      # Unlike the clippy gate this project deliberately leaves off (see the
+      # file header above), a vulnerability finding here is "upgrade this
+      # dependency", not a semantic rewrite that needs judging one at a time
+      # against the numeric tripwires. It carries none of the risk that kept
+      # clippy off, so a hard gate is safe here.
+      - name: Trivy filesystem scan
+        uses: aquasecurity/trivy-action@v0.36.0
+        with:
+          scan-type: fs
+          scan-ref: .
+          severity: MEDIUM,HIGH,CRITICAL
+          exit-code: "1"
+
   build:
     name: Build ${{ matrix.platform }}
+    needs: security
     runs-on: ${{ matrix.os }}
     defaults:
       run:

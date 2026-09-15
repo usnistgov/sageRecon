@@ -13,7 +13,7 @@ anyhow = "1.0"
 log = "0.4"
 env_logger = "0.11"
 clap = { version = "4.5", features = ["derive"] }
-quick-xml = "0.36"
+quick-xml = "0.41"
 mzdata = { version = "0.65", default-features = false, features = ["mzml", "miniz_oxide"] }
 flate2 = "1.0"
 chrono = { version = "0.4", features = ["serde"] }
