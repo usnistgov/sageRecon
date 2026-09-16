@@ -10441,6 +10441,18 @@ builds from source, which stays true. If it is picked up, prefer whichever route
 allows the archive to be run before release; v0.1.0 shipped defective precisely
 because an archive was never run.
 
+⚠ **Superseded 2026-09-16: GitHub Actions was enabled for the organization,
+which resolves the build side of this entirely.** `build.yml`'s `linux-64`
+job runs natively on an `ubuntu-latest` runner, so the local no-C-toolchain
+blocker above no longer applies -- CI has a real Linux machine, this Mac
+does not need one. First real run (`35101337469`) built it green: `recon`
+is a valid ELF 64-bit executable, `unimod.xml` byte-identical to the repo
+copy. **What is still NOT done: RUNNING it.** Nothing on this Mac can
+execute a Linux binary (still no Docker/podman/colima/zig here), so v0.1.0's
+lesson -- an archive must be run before it ships -- is not yet satisfied for
+Linux. Do not attach a Linux archive to a release until it has actually been
+run somewhere, per the manual checklist step 9.
+
 ## macOS Gatekeeper and the example report link — 2026-09-10
 
 ### 🔒 macOS binaries are ad-hoc signed, NOT notarized (Ben, 2026-09-10)
@@ -10618,6 +10630,20 @@ confirms the committed blobs are already correct LF, so this is purely a
 missing `.gitattributes` line, not corrupted content needing a recommit.
 **Fixed:** added `_dev/testing/recon-output/full-run/*.html    -text`
 alongside the existing `.json`/`.txt` rule for that directory.
+
+**All three fixes together, verified green: run `35101337469`.** Security
+job passed (0 vulnerabilities, 4 documented informational warnings, Check
+Run posted). All four platforms built: `apple-silicon`, `apple-intel`,
+`windows-64`, `linux-64` -- the first Linux build this project has ever
+produced. Not just trusted as green: all four artifacts were downloaded and
+their `unimod.xml` verified byte-identical to the repo copy; both macOS
+binaries were ad-hoc signed already (by the runner), extracted, and
+actually run (`recon 0.1.3`); the apple-silicon binary was run end to end
+against the real liver file and matched the committed example exactly on
+`ms1_spectra` (11973) and `ms2_spectra` (56949). The Windows and Linux
+binaries were confirmed to be the correct executable format (PE32+, ELF 64)
+but not executed -- nothing on this Mac runs either, so per the manual
+checklist's own rule, neither should ship in a release until it is.
 
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 

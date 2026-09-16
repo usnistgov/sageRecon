@@ -14,8 +14,53 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-09-15 (end of session). Read this block, then the "Deferred /
+**Updated 2026-09-16 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
+
+### ▶ 2026-09-16: GitHub Actions works. Found and fixed three real bugs on its first run.
+
+**State.** The organization enabled Actions today, so `build.yml` ran on a
+real runner for the first time ever -- confirming the risk the 2026-09-15
+entry below flagged ("since Actions still cannot run here" is now WRONG,
+corrected here rather than left standing). Three genuine, previously
+unverifiable bugs surfaced and were fixed, each confirmed by a subsequent
+green run, not assumed fixed:
+1. `cargo audit`/Trivy read the repo root, not `recon-tool/`, because
+   `defaults.run.working-directory` doesn't apply to `uses:` steps. Fixed
+   with each action's own path input.
+2. `rustsec/audit-check` couldn't post its Check Run: the workflow's
+   `permissions:` block lacked `checks: write`. Fixed.
+3. `Build windows-64` failed `cargo test`: the four `.html` regression
+   fixtures under `_dev/testing/recon-output/full-run/` were never covered
+   by the `-text` `.gitattributes` guard that already protects the `.json`/
+   `.txt` files beside them, so a Windows checkout CRLF-corrupted them. Fixed.
+
+See NOTES "The security job's first real run failed" for the full story of
+all three.
+
+**Verified green, run `35101337469`.** All four platforms built --
+`linux-64` for the first time this project has ever produced a Linux
+binary. Not left at "CI is green": downloaded all four artifacts, confirmed
+every `unimod.xml` byte-identical to the repo copy, ran both macOS binaries
+(the apple-silicon one end to end against the real liver file, matching the
+committed example on spectra counts exactly), confirmed Windows/Linux are
+the right executable format. **Windows and Linux binaries were NOT run** --
+nothing on this Mac executes either -- so neither should go into a release
+until someone does. Also added Build/Release and release-version badges to
+the README now that the workflow actually reports real status.
+
+**Separately, also today:** at Ben's request, every mention of the private
+archive as `github.com/neely/sageRecon` (personal account) was replaced with
+`gitlab.nist.gov/gitlab/ban/sageRecon` (NIST's own GitLab) across `_dev`'s
+docs -- both hold the same history in parallel, this is not a git rewrite,
+just pointing NIST readers at NIST's own copy. See NOTES "AGENTS.md split"
+region is unaffected; see the "Remote" section in `dev_AGENTS.md` for the
+corrected identity.
+
+**Next action.** Someone needs to actually run the Windows and Linux
+binaries before either is trusted for a release. STEP 5, the write-up (see
+"The route Ben set"), is still the next real work item and is still
+unstarted.
 
 ### ▶ 2026-09-15: Public-repo polish from colleague review; v0.1.3 RELEASED
 
@@ -26,10 +71,11 @@ committed and pushed:
    the old `_dev/AGENTS.md`). New `docs/AI_USAGE.md`. See NOTES "AGENTS.md
    split".
 2. CI: `cargo audit` + `trivy fs` added as a `security` job in `build.yml`,
-   plus the matching manual-checklist step, since Actions still cannot run
-   here. Found and fixed 2 real advisories in recon-tool's own `quick-xml`
-   dependency (bumped to 0.41); documented 9 more as exceptions (Sage-pinned
-   transitive chain). See NOTES "cargo-audit found real findings".
+   plus the matching manual-checklist step. (Written when Actions still could
+   not run here -- **wrong as of 2026-09-16, see the entry above.**) Found and
+   fixed 2 real advisories in recon-tool's own `quick-xml` dependency (bumped
+   to 0.41); documented 9 more as exceptions (Sage-pinned transitive chain).
+   See NOTES "cargo-audit found real findings".
 3. README Quick Start rebuilt around real, published sample data (NIST
    Candidate RM 8461 liver, PXD013608) instead of a placeholder filename that
    never existed. `examples/liver.{html,json,pass2.json}` regenerated
