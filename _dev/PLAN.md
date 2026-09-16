@@ -57,9 +57,11 @@ just pointing NIST readers at NIST's own copy. See NOTES "AGENTS.md split"
 region is unaffected; see the "Remote" section in `dev_AGENTS.md` for the
 corrected identity.
 
-**Next action.** Someone needs to actually run the Windows and Linux
-binaries before either is trusted for a release. STEP 5, the write-up (see
-"The route Ben set"), is still the next real work item and is still
+**Next action.** ✅ Windows CI binary downloaded and verified by Ben,
+2026-09-16. **Linux is the only CI-built binary still unrun anywhere** --
+build it needs no VM any more (CI does it), but running it before a release
+still does. STEP 5, the write-up (see "The route Ben set"), is still the
+next real work item and is still
 unstarted.
 
 ### ▶ 2026-09-15: Public-repo polish from colleague review; v0.1.3 RELEASED

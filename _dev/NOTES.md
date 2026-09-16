@@ -10643,10 +10643,11 @@ apple-intel binary (via Rosetta 2) were run end to end against the real
 liver file and matched the committed example exactly on `ms1_spectra`
 (11973) and `ms2_spectra` (56949) -- confirming CI's Intel cross-build is
 functionally correct, not merely the right executable format. The Windows
-and Linux binaries were confirmed to be the correct executable format
-(PE32+, ELF 64) but not executed -- nothing on this Mac runs either, so per
-the manual checklist's own rule, neither should ship in a release until it
-is. Ben is testing the Windows one directly.
+binary was confirmed to be the correct executable format (PE32+) here, then
+Ben downloaded the CI artifact himself and verified it directly (2026-09-16).
+**Linux is the only one of the four CI-built binaries still unexecuted
+anywhere** -- confirmed ELF 64 here, but nothing available can run it. Do
+not ship a Linux archive in a release until that changes.
 
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 
