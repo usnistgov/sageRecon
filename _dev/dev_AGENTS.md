@@ -201,12 +201,16 @@ them will not fast-forward. Check which remote you are on before pushing.
 vendored third-party output, and they carry personal filesystem paths in their
 data columns. See `_dev/README.md`.
 
-**Releases are built BY HAND.** `usnistgov` administrators disable GitHub
-Actions, and repo admin cannot override it. `.github/workflows/build.yml` is
-committed and builds four targets on a `v*` tag, but it does not run today.
-Follow the manual release checklist in NOTES "Actions is disabled by the
-organization", which mirrors the workflow. (Corrected 2026-09-10: this entry
-said releases come from Actions because a public repo gets free runners.)
+**Releases are tag-triggered via Actions (corrected 2026-09-16).** The
+organization enabled Actions that day. `.github/workflows/build.yml` builds
+all four targets and creates the Release on a `v*` tag push; a manual
+dispatch (Actions tab, or `gh workflow run`) rebuilds without releasing;
+plain pushes to `main` trigger nothing. (Previously corrected 2026-09-10:
+this entry once said releases come from Actions because a public repo gets
+free runners, which was also wrong -- Actions was disabled by the org the
+whole time until 2026-09-16. See NOTES "Actions is disabled by the
+organization" for that history and "CI now runs on tags and manual dispatch
+only" for the 2026-09-16 change.)
 
 ⚠ **A second, internal pipeline used to exist and is GONE (2026-09-08).** It ran
 a Windows build for a NIST approval route that turned out not to apply.

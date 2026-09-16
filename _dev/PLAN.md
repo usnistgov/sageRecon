@@ -153,7 +153,8 @@ byte-identical to the repo copy after a round trip through GitHub.
 `usnistgov` organization by its administrators. Repo admin cannot override it.
 `.github/workflows/build.yml` is committed and its workflows are `active`, so
 the four-target build runs the moment the policy changes. **Releases never
-needed Actions; only automated building did.**
+needed Actions; only automated building did.** (That policy changed
+2026-09-16 -- see the status block at the top of this file.)
 
 ⚠ **DO NOT REUSE A BINARY BUILT BEFORE THE RESTRUCTURE.** The old internal
 Windows build emitted `annotation_source` naming `reference-notes/metaMorpheusMods/`,

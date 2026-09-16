@@ -10649,6 +10649,31 @@ Ben downloaded the CI artifact himself and verified it directly (2026-09-16).
 anywhere** -- confirmed ELF 64 here, but nothing available can run it. Do
 not ship a Linux archive in a release until that changes.
 
+### 🔒 CI now runs on tags and manual dispatch only, not every push to main (Ben, 2026-09-16)
+
+Now that Actions genuinely works, every push to `main` was about to start
+firing the full 4-target build matrix plus the security scan -- real compute
+for a doc tweak or a NOTES entry, not something this project's commit
+cadence (many small, frequent, plain commits straight to `main`) wants by
+default.
+
+**Chosen:** `build.yml`'s `on:` trigger is now `push: tags: ["v*"]` plus
+`workflow_dispatch: {}`. A tag still builds and releases automatically, as
+decided above. A manual dispatch (Actions tab, or `gh workflow run`) covers
+"I want a rebuild to check something" without cutting a release. Plain
+pushes to `main` build nothing.
+
+**Rejected:** keeping `push: branches: [main]`. That was the CI shape while
+Actions was disabled and never actually ran -- it was never a considered
+choice under real load, just what happened to be there. `pull_request:
+branches: [main]` was dropped too, for the same reason: this project takes
+no PRs (see dev_AGENTS.md "Commit to main, plainly. No branches."), so it
+was dead weight, not a safety net protecting anything real.
+
+`.github/workflows/actionlint.yml` is unaffected and stays as it was: it
+already only fires when a workflow file itself changes, and it is one cheap
+lint step, not a build.
+
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 
 The README's Quick Start always named `sample.mzML.gz` and `UniProt-Human.fasta`,

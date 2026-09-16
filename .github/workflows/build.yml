@@ -38,18 +38,17 @@ name: Build and Release
 
 on:
   push:
-    branches: [main]
     tags: ["v*"]
-  pull_request:
-    branches: [main]
+  workflow_dispatch: {}
 
 permissions:
   contents: write
   checks: write
 
-# Rapid successive pushes to main or a PR branch are common here. Cancel the
-# superseded run instead of letting a stale 4-target matrix finish. Tag refs
-# (refs/tags/v*) are never cancelled, so a release build always completes.
+# A manual re-dispatch supersedes whatever is already running for the same
+# ref; cancel the stale 4-target matrix instead of letting it finish. Tag
+# refs (refs/tags/v*) are never cancelled, so a release build always
+# completes once started.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
