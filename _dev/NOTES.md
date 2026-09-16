@@ -10561,6 +10561,32 @@ The exact 7 ignored IDs (some cover 2 of the 9 findings each) are recorded in
 `build.yml`'s `security` job and in the manual checklist step 2 above.
 Re-evaluate this list at the next deliberate Sage dependency upgrade.
 
+### ⚠ The security job's first real run failed, and it was the job's own config (2026-09-16)
+
+GitHub Actions was enabled for the organization today, so `build.yml` ran on
+a real runner for the first time ever. It failed on `cargo audit`: `error:
+not found: Couldn't load ./Cargo.lock`.
+
+**Root cause: `defaults.run.working-directory` only applies to `run:` steps,
+not `uses:` steps.** The `security` job sets `working-directory: recon-tool`
+at the job level, so a `run:` shell step would see it, but `rustsec/audit-check`
+and `aquasecurity/trivy-action` are both `uses:` actions -- each reads the
+repository root unless given its OWN path input. `rustsec/audit-check` takes
+a `working-directory` input (confirmed by reading its `action.yml`, not
+assumed); `aquasecurity/trivy-action` takes `scan-ref`. Neither was set, so
+both defaulted to `.`, the repo root, where there is no `Cargo.lock` --
+that file lives at `recon-tool/Cargo.lock`. **Fixed:** added
+`working-directory: recon-tool` to the `cargo audit` step and changed
+`scan-ref: .` to `scan-ref: recon-tool` on the Trivy step.
+
+This is exactly the risk PLAN flagged under "the new workflow steps have
+never run on a runner" -- confirmed the hard way, not a hypothetical. The
+9 documented cargo-audit exceptions above were never actually verified
+against a live CI run before today; they were correct on a local run of the
+same lockfile, so the ignore list itself should still be right once the job
+runs to completion, but that is now a claim to re-check against the next
+green run, not to assume.
+
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 
 The README's Quick Start always named `sample.mzML.gz` and `UniProt-Human.fasta`,

@@ -92,6 +92,7 @@ jobs:
         uses: rustsec/audit-check@v2.0.0
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
+          working-directory: recon-tool
           ignore: RUSTSEC-2026-0194,RUSTSEC-2026-0195,RUSTSEC-2026-0258,RUSTSEC-2026-0285,RUSTSEC-2026-0104,RUSTSEC-2026-0098,RUSTSEC-2026-0099
 
       # Trivy carries its own vulnerability database, independent of
@@ -109,7 +110,7 @@ jobs:
         uses: aquasecurity/trivy-action@v0.36.0
         with:
           scan-type: fs
-          scan-ref: .
+          scan-ref: recon-tool
           severity: MEDIUM,HIGH,CRITICAL
           exit-code: "1"
 
