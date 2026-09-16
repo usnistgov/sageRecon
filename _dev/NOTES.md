@@ -10638,12 +10638,15 @@ Run posted). All four platforms built: `apple-silicon`, `apple-intel`,
 produced. Not just trusted as green: all four artifacts were downloaded and
 their `unimod.xml` verified byte-identical to the repo copy; both macOS
 binaries were ad-hoc signed already (by the runner), extracted, and
-actually run (`recon 0.1.3`); the apple-silicon binary was run end to end
-against the real liver file and matched the committed example exactly on
-`ms1_spectra` (11973) and `ms2_spectra` (56949). The Windows and Linux
-binaries were confirmed to be the correct executable format (PE32+, ELF 64)
-but not executed -- nothing on this Mac runs either, so per the manual
-checklist's own rule, neither should ship in a release until it is.
+actually run (`recon 0.1.3`); **both** the apple-silicon binary and the
+apple-intel binary (via Rosetta 2) were run end to end against the real
+liver file and matched the committed example exactly on `ms1_spectra`
+(11973) and `ms2_spectra` (56949) -- confirming CI's Intel cross-build is
+functionally correct, not merely the right executable format. The Windows
+and Linux binaries were confirmed to be the correct executable format
+(PE32+, ELF 64) but not executed -- nothing on this Mac runs either, so per
+the manual checklist's own rule, neither should ship in a release until it
+is. Ben is testing the Windows one directly.
 
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 
