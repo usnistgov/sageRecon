@@ -1,5 +1,7 @@
 # recon: a Sage-based proteomics reconnaissance tool
 
+[![Build and Release](https://github.com/usnistgov/sageRecon/actions/workflows/build.yml/badge.svg)](https://github.com/usnistgov/sageRecon/actions/workflows/build.yml)
+[![Release](https://img.shields.io/github/v/release/usnistgov/sageRecon)](https://github.com/usnistgov/sageRecon/releases/latest)
 [![Sage](https://img.shields.io/badge/Sage-v0.15.0--beta.2-blue)](https://github.com/lazear/sage/releases/tag/v0.15.0-beta.2)
 
 `recon` is a reconnaissance tool for unfamiliar bottom-up proteomics data. It
