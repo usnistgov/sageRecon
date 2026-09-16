@@ -10587,6 +10587,38 @@ same lockfile, so the ignore list itself should still be right once the job
 runs to completion, but that is now a claim to re-check against the next
 green run, not to assume.
 
+**Second failure, same job, different cause: `checks: write` was missing.**
+Once the path was fixed, `cargo audit` actually ran and found 0
+vulnerabilities -- matching the local result exactly -- but 4 informational
+warnings (3 unmaintained: `atty`, `paste`, `rustls-pemfile`; 1 unsound:
+`atty` on Windows) made `rustsec/audit-check` try to post a GitHub Check
+Run, which failed: `Resource not accessible by integration`. The workflow's
+`permissions:` block only granted `contents: write`. Confirmed by reading
+the action's own README ("Granular Permissions" section lists `checks:
+write` as required); fixed by adding it. All 4 warnings trace to Sage's
+pinned chain (`sage-cli` -> `env_logger` -> `atty`; `sage-cloudpath` ->
+`parquet` -> `paste`; `sage-cloudpath` -> `reqwest` -> `rustls-pemfile`),
+none are recon-tool's own dependencies, same pattern as the 9 vulnerability
+exceptions above. `cargo-audit` treats these as non-fatal informational
+warnings, not vulnerabilities; they need no `--ignore` entry.
+
+**Third failure, a different job: `Build windows-64` failed `cargo test`,
+and it is the exact `unimod.xml` CRLF bug again, in a file that was missed.**
+`html_report_regression` compares each committed
+`_dev/testing/recon-output/full-run/*.html` fixture byte-for-byte against
+what the current renderer produces. On Windows it failed on `b1906.html`:
+committed 15324 bytes, rendered 15124 bytes -- a 200-byte gap consistent
+with roughly 200 lines gaining a `\r`. `.gitattributes` already forces `-text`
+on `full-run/*.json` and `*.txt` in that same directory (added for exactly
+this class of bug, see the `unimod.xml` entry above), but the `.html`
+fixtures -- `b1906.html`, `bcell.html`, `liver.html`, `serum.html` -- were
+never covered. A Windows checkout applied `core.autocrlf` to them since
+nothing told git not to. Checked, not assumed: `git show HEAD:` on all four
+confirms the committed blobs are already correct LF, so this is purely a
+missing `.gitattributes` line, not corrupted content needing a recommit.
+**Fixed:** added `_dev/testing/recon-output/full-run/*.html    -text`
+alongside the existing `.json`/`.txt` rule for that directory.
+
 ### 🔒 The liver file (PXD013608) replaces the placeholder Quick Start example (2026-09-15)
 
 The README's Quick Start always named `sample.mzML.gz` and `UniProt-Human.fasta`,

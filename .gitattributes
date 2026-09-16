@@ -17,6 +17,7 @@ _dev/testing/reference-data/ptm-shepherd/**/*.config -text
 # to what the tool emitted so a future re-run diffs cleanly.
 _dev/testing/recon-output/full-run/*.json    -text
 _dev/testing/recon-output/full-run/*.txt     -text
+_dev/testing/recon-output/full-run/*.html    -text
 
 # Shipped example report. recon writes LF. This copy is produced on whichever
 # machine ran the release binary, so without this guard a Windows run commits a
