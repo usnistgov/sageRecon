@@ -1,6 +1,6 @@
 # Sage-Based Proteomics Reconnaissance Tool — Roadmap
 
-Repo: **github.com/neely/sageRecon**
+Repo: **gitlab.nist.gov/gitlab/ban/sageRecon**
 
 **Purpose:** A fast, free, alkylation-agnostic reconnaissance tool for unfamiliar
 mass-spec data — one Sage open search, one report on what mods are present,
@@ -79,11 +79,8 @@ the version in the README `xattr` folder names.
 public immediately and permanently. Check which remote you are on before you
 push.
 
-**`github.com/neely/sageRecon` is the PRIVATE ARCHIVE.** It holds the full
-pre-publication history. Keep it. Its workflows are `disabled_manually` because
-Actions is billing-blocked on that account and every push fired four jobs that
-failed in eight seconds. Re-enable with
-`gh workflow enable build.yml --repo neely/sageRecon`.
+**`gitlab.nist.gov/gitlab/ban/sageRecon` is the PRIVATE ARCHIVE.** It holds
+the full pre-publication history. Keep it.
 
 ⚠ **THE TWO HISTORIES ARE DIFFERENT AND WILL NOT FAST-FORWARD.** The public repo
 starts from a squashed commit on top of the NIST template's own initial commit.
@@ -415,12 +412,12 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 * The ion-trap Da path (ppm at m/z 500, doubled) is curated, never measured.
 * Alkylation beyond carbamidomethyl — reagent table belongs in recon's own code
   cited to Unimod, NOT in `Mods.txt`. Ben decides the list.
-* **✅ DONE 2026-09-04 — the repo was renamed to `sageRecon`.** GitHub
-  (`neely/sagePreview` → `neely/sageRecon`). Ben's
-  call to go ahead despite NIST hosting still being unsettled, rather than
-  wait — accepting the risk of a second rename later if the tool moves to a
-  NIST GitHub org. `README`/`AGENTS.md`/`PLAN.md` URLs updated in the same
-  pass. See NOTES "Report footer name" for the original locked naming call.
+* **✅ DONE 2026-09-04 — the repo was renamed to `sageRecon`** (from
+  `sagePreview`). Ben's call to go ahead despite NIST hosting still being
+  unsettled, rather than wait — accepting the risk of a second rename later
+  if the tool moves to a NIST GitHub org. `README`/`AGENTS.md`/`PLAN.md` URLs
+  updated in the same pass. See NOTES "Report footer name" for the original
+  locked naming call.
 * **`notable_unannotated` is UNEXERCISED, not broken.** ⚠ Corrected 2026-09-03;
   this used to read "reads 0 on serum while 19 un-curated peaks exist", which
   implied a defect. Measured across all four committed reports: it is **0 on
@@ -446,8 +443,8 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 - Check off phases below as completed. Don't delete finished items.
 - When a phase finishes: move non-obvious rationale to NOTES first, then
   collapse the phase to one line under Completed.
-- Batched atomic commits, authored as `neely` on both remotes (see
-  AGENTS.md). One commit reads as one coherent decision.
+- Batched atomic commits, authored as Benjamin A. Neely (see AGENTS.md). One
+  commit reads as one coherent decision.
 - Each phase below ends in a checkpoint: tests pass, commit, stop — not a
   segue straight into the next phase in the same breath.
 

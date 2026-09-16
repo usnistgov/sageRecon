@@ -7557,7 +7557,7 @@ side, and the queued recon no-fixed-mods run removes it on ours.
 1. **Reference repos excluded from git** — The cloned repos in `reference/` (sage, mzsniffer, PTM-Shepherd, intensityWeighting) are too large and are just for local reference. Added to `.gitignore`.
 2. **Large data files excluded** — `.mzML`, `.mzML.gz`, `.raw` files excluded from git (too large, user-specific test data).
 3. **Sage output excluded** — `*.sage.tsv` and `lfq.tsv` are regenerated on each run, no need to commit.
-4. **Git authentication** — Using fine-grained PAT for push access to `neely/sagePreview`.
+4. **Git authentication** — set up for push access to the private repo.
 5. **Open search template created** — `testing/open-search-params.json` with `da: [-500, 100]` tolerance, `chimera: true`, `report_psms: 2` per PLAN.md Template A spec.
 
 ### Files Vendored
@@ -9467,7 +9467,7 @@ CLI and future GUI share it.
 
 **Working setup (process, not architecture) — NOTE: partially stale, see
 2026-08-19 debrief re: Perplexity session and git-identity/batching drift.**
-- Repo: GitHub, private, PAT-scoped. Commits authored as `neely`
+- Repo: GitLab, private, PAT-scoped. Commits authored as Benjamin A. Neely
   (see AGENTS.md).
 - Editor at time of writing: Claude Code (VS Code extension), Opus 4.8 for
   all work in one loop. Superseded the earlier Cline + Opus-plan/Sonnet-act
@@ -9832,9 +9832,8 @@ no edit.
 **Rejected alternative:** changing the footer to `sagePreview` to match the
 remote. Rejected because the repo name was the half expected to move.
 
-✅ **CLOSED 2026-09-04 — the repo was renamed.** GitHub is now
-`github.com/neely/sageRecon`. Ben
-went ahead despite NIST hosting still being unsettled, rather than wait —
+✅ **CLOSED 2026-09-04 — the repo was renamed.** It is now named `sageRecon`.
+Ben went ahead despite NIST hosting still being unsettled, rather than wait —
 see PLAN's former "Deferred / open" entry, now marked done, for the accepted
 risk (a second rename later if the tool moves to a NIST GitHub org).
 `README.md`/`AGENTS.md`/`PLAN.md` URLs updated in the same pass. Do not
@@ -10276,8 +10275,8 @@ for other functions built during development and never retired.
 ## Publication to usnistgov, and the scrub that had missed the data files (2026-09-08)
 
 The tool is public at `github.com/usnistgov/sageRecon`, released as v0.1.2 with
-Windows and macOS Apple Silicon archives. `neely/sageRecon` stays as the private
-archive of the full history.
+Windows and macOS Apple Silicon archives. `gitlab.nist.gov/gitlab/ban/sageRecon`
+stays as the private archive of the full history.
 
 ### ⚠ THE SCRUB HAD ONLY COVERED PROSE. THE DATA FILES STILL CARRIED THE PATHS.
 

@@ -188,7 +188,7 @@ recreate it.
 **`github.com/usnistgov/sageRecon` is the published repository. It is PUBLIC.**
 Anything committed there is public immediately and permanently.
 
-`github.com/neely/sageRecon` is a PRIVATE ARCHIVE. It holds the full
+`gitlab.nist.gov/gitlab/ban/sageRecon` is a PRIVATE ARCHIVE. It holds the full
 pre-publication history, 329 commits. Keep it. Do not delete it, and do not
 publish from it.
 

@@ -77,10 +77,9 @@ measurement before any text was written on top of it.
 
 **Landed:** the tool is public at `github.com/usnistgov/sageRecon` and v0.1.2 is
 released with Windows and macOS Apple Silicon archives, both rebuilt from the tag
-and both verified by downloading them back. `neely/sageRecon` stays private as
-the full-history archive, with its workflows disabled so it stops emailing
-billing failures. The GitLab pipeline is deleted. **211 tests, 17/17, unchanged
-throughout.**
+and both verified by downloading them back. `gitlab.nist.gov/gitlab/ban/sageRecon`
+stays private as the full-history archive. The GitLab pipeline is deleted.
+**211 tests, 17/17, unchanged throughout.**
 
 The through-line: **every real problem today was a check that had been run over
 the wrong file set.** The scrub was verified across `.md` and was clean, and 82
