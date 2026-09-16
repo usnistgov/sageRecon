@@ -45,6 +45,7 @@ on:
 
 permissions:
   contents: write
+  checks: write
 
 # Rapid successive pushes to main or a PR branch are common here. Cancel the
 # superseded run instead of letting a stale 4-target matrix finish. Tag refs
