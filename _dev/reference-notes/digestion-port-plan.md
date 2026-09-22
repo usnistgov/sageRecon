@@ -1,5 +1,12 @@
 # Digestion Efficiency: Python to Rust Port Plan
 
+> **NOTE (2026-09-22):** this plan did not ship as scoped. PLAN.md records
+> the settled outcome (2026-08-28): `digestion_efficiency` is the sole Rust
+> port target, wired inline. The two scripts named below, `subset_fasta.py`
+> and `annotate_termini.py`, were both superseded by `digestion_efficiency`
+> and are deleted (recoverable from git history). Read this file for the
+> original scoping, not as the port's current shape.
+
 ## Current State
 
 ### Rust (`digestion.rs`) — Implemented

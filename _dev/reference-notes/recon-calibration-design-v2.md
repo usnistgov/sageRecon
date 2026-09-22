@@ -1,5 +1,12 @@
 # Recon Calibration Design v2: Analyzer-Aware Two-Pass Tolerance Estimation
 
+> **NOTE (2026-09-22):** this design was not built as written. NOTES records
+> a direct divergence: this file specifies `median + 3×IQR` for the MS1
+> tolerance estimate, and the shipped code uses `bias + p95(|dev|)` instead.
+> See `ms1-tolerance-recommendation-rationale.md` for the evidence behind the
+> shipped formula. Read this file as the earlier design intent, not as what
+> ships.
+
 **Status:** Design note for future redesign — not yet implemented
 **Purpose:** Reference for the calibration/tolerance pass when we redesign the recon pipeline
 

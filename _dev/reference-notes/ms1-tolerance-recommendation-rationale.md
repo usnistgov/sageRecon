@@ -1,5 +1,10 @@
 # MS1 Tolerance Recommendation — Rationale and Evidence
 
+> **NOTE (2026-09-22):** the status line below is stale. The code change was
+> implemented 2026-08-28 (see the "IMPLEMENTED" entry further down this
+> file, and PLAN's ship-track). The rationale and evidence here still hold as
+> the record of why; read "deferred" as historical, not current.
+
 **Status:** analysis complete, code change deferred to ship-track step 3.
 **Date:** 2026-08-24. **Files:** serum (909c), bcell (B.naive), b1906.
 

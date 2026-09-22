@@ -1,5 +1,13 @@
 # Recon Two-Search Architecture
 
+> **NOTE (2026-09-22):** this is a working sketch from early development, not
+> a current reference. The overall two-search shape it describes is locked
+> (see NOTES "Default recon = two searches, self-calibrated, no re-run loop")
+> and both passes run end to end today. The specific parameter values and
+> step descriptions below were not re-checked against the shipped code. Some
+> are no longer accurate. Kept as the general idea, not as a build spec. For
+> current parameters, read `recon-tool/src/`, not this file.
+
 Working document. Source of truth for the "what and why" of each search.
 Feed this into README, methods section, and pub when ready.
 Not PLAN or NOTES — this is the architecture narrative.

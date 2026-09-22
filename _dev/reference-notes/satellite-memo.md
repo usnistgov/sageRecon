@@ -1,4 +1,14 @@
 # Decision memo — isotope satellites in step 2 tier stratification
+
+> **NOTE (2026-09-22):** the core recommendation below, keep
+> `enable_satellite_folding: false`, is settled and current; NOTES and PLAN
+> both record satellite folding as disabled-by-design. The specific tier
+> mechanism explored here (flag-and-demote, and the option-C Sage config
+> route) was tested further after this memo, and some combinations did not
+> pass the validation gates. See NOTES for the later satellite-folding
+> entries (Phase 7C) before treating the mechanism sections below as shipped
+> behavior.
+
 Date: 2026-08-24. Written without the raw Sage TSVs or the upstream clones to hand.
 Scope: design + recommendation only. `enable_satellite_folding` NOT changed. No folding code written.
 Incorporates the Byonic Preview addendum and `reference-notes/byonic-preview-methodology.md`.

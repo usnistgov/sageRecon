@@ -1,5 +1,13 @@
 # Vendoring Checklist — Phase 0
 
+> **NOTE (2026-09-22):** the `reference/` clone targets below
+> (`reference/sage`, `reference/mzsniffer`, `reference/ptm-shepherd`)
+> describe a folder that no longer exists. `dev_AGENTS.md` records it as gone
+> and settled: it was local scratch for porting source, never a read path,
+> and should not be recreated. This checklist is kept for the Phase 0
+> vendoring history and for the distilled-notes process in Section 2, which
+> still describes how `reference-notes/` entries get produced.
+
 Two kinds of material: source repos (clone as-is) and distilled notes
 (research with Perplexity/Sonar, write up, vendor the writeup — not raw
 search results).

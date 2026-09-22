@@ -1,5 +1,10 @@
 # Three-layer MS1 signal fate (extracted from recon)
 
+> **NOTE (2026-09-22):** the note near the bottom of this file, that
+> `dev_AGENTS.md` needs updating for this removal, is resolved.
+> `dev_AGENTS.md` now carries its own "Superseded 2026-09-02" entry
+> describing this same move. No further action needed here.
+
 ## What this is
 
 An algorithm that splits the total MS1 TIC of a run into four buckets:

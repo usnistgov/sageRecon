@@ -1,5 +1,13 @@
 # Reference Notes: Open Search Delta Mass — Calibration, Isotope Folding, and Peak Detection
 
+> **NOTE (2026-09-22):** `PLAN-PHASE8-MOD-DISCOVERY-FIX.md`, named just below,
+> was never committed to this repository. It is not a broken link to fix; the
+> "what to change" work it pointed to landed directly in the code instead.
+> The isotope-fold-to-zero fix and the corrected NEUTRON constant described
+> here are both implemented. See NOTES for "NEUTRON constant was wrong" and
+> PLAN's Phase 8 entries for the validation pass that followed. Read this
+> file for the rationale, not as a pointer to a further document.
+
 **Purpose:** Background and rationale for the Phase 8 mod discovery fixes. Read this to understand *why* the pipeline was changed. For *what* to change, see `PLAN-PHASE8-MOD-DISCOVERY-FIX.md`.
 
 ---

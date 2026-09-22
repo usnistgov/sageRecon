@@ -1,5 +1,10 @@
 # PTM Stratification Design: Tiered Mod Recommendations
 
+> **NOTE (2026-09-22):** the "not yet implemented" status line below is
+> stale. `PLAN.md` records Step 2, PTM stratification, as complete
+> (2026-08-26). This file stays useful as the design rationale for what was
+> built. It is not a statement of current status.
+
 **Status:** Design note — not yet implemented. Evidence-vector table corrected
 2026-08-24 against the committed artifacts; see the correction block in Step 1.
 **Purpose:** Turn the mod-discovery peak list into a search-parameter recommendation.
