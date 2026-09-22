@@ -10649,6 +10649,52 @@ Ben downloaded the CI artifact himself and verified it directly (2026-09-16).
 anywhere** -- confirmed ELF 64 here, but nothing available can run it. Do
 not ship a Linux archive in a release until that changes.
 
+### ⚠ Dependabot and cargo-audit disagree on the finding set, again (2026-09-22)
+
+GitHub's Dependabot alerts tab reported 5 open findings on `main` after a
+push (1 high, 1 medium, 3 low), all against `recon-tool/Cargo.lock`. A local
+`cargo audit` the same day reported 9 vulnerabilities plus 4 informational
+warnings, the same count as the 2026-09-15 entry above. **Neither list is a
+subset of the other:**
+
+- **`thrift` 0.17.0, GHSA-2f9f-gq7v-9h6m / CVE-2026-43868** (medium,
+  excessive-allocation DoS in `parquet`'s decoder) appears ONLY in
+  Dependabot. `cargo audit`'s local RustSec advisory-db copy (1261
+  advisories, fetched today) has no entry for it. Traced with
+  `cargo tree -i thrift`: pulled in twice, via `parquet 50.0.0` and
+  `parquet 53.4.0`, both under `sage-cloudpath`.
+- **`h2` (RUSTSEC-2026-0258) and `rustls` (RUSTSEC-2026-0285)** appear ONLY
+  in `cargo audit`. Dependabot's alert list did not name either.
+- **The 3 `rustls-webpki` 0.101.7 findings overlap exactly**: Dependabot's
+  GHSA-82j2-j2ch-gfr8 (high, CRL BIT STRING panic), GHSA-xgp8-3hg3-c2mh, and
+  GHSA-965h-392x-2mh5 (both low, name-constraint bugs) are RUSTSEC-2026-0104,
+  -0098, -0099 in the ignore list above, same crate, same version.
+- **`atty` 0.2.14** appears as a low-severity alert in Dependabot
+  (GHSA-g98v-hv3f-hcfr, no fix released) and as the informational
+  `unmaintained` + `unsound` pair in `cargo audit` (RUSTSEC-2024-0375,
+  RUSTSEC-2021-0145) -- same underlying issue, different severity framing
+  per tool.
+
+This is the same shape as "cargo-audit found real findings; Trivy did not"
+above: two scanners against the same lockfile, non-identical results, and
+the gap is itself the finding, not something to average away.
+
+**All 5 Dependabot alerts trace to the pinned Sage chain, none to
+recon-tool's own dependencies** (confirmed with `cargo tree -i` per
+package): `thrift` and the `rustls-webpki` chain via
+`sage-cloudpath -> parquet` / `sage-cloudpath -> reqwest -> hyper-rustls`,
+`atty` via `sage-cli -> env_logger`. Same pattern, same reasoning as the
+2026-09-15 call: fixing them means overriding versions Sage's own manifest
+resolves, a deliberate Sage-upgrade decision, not a routine patch.
+
+**Ben's call 2026-09-22: leave `Cargo.lock` untouched, document only.** A
+scoped `cargo update -p thrift -p rustls-webpki@0.101.7` would very likely
+resolve 4 of the 5 (a patched `rustls-webpki` 0.103.15 already exists
+elsewhere in the same lockfile, via `object_store`), and `atty` has no fix
+to update to since the crate is abandoned. Not done. Re-evaluate alongside
+the next deliberate Sage dependency upgrade, same as the RUSTSEC ignore
+list.
+
 ### 🔒 CI now runs on tags and manual dispatch only, not every push to main (Ben, 2026-09-16)
 
 Now that Actions genuinely works, every push to `main` was about to start
