@@ -3,8 +3,8 @@
   "_recon_pass2_provenance": {
     "applied_fragment_tol": {
       "ppm": [
-        -4.8122567,
-        4.8122567
+        -4.804783325,
+        4.804783325
       ]
     },
     "applied_isotope_errors": [
@@ -13,14 +13,14 @@
     ],
     "applied_precursor_tol": {
       "ppm": [
-        -4.246288276134216,
-        3.2167835278408146
+        -4.25430732433692,
+        3.203239117015735
       ]
     },
     "mods_note": "Pass 2 searches with NO fixed and NO variable mods. It measures where trypsin cut, not what is modified, and pass 1 is an OPEN search whose modification set is unknown by design.",
     "ms1_window_delta_ppm": {
-      "high": 4.246288276134216,
-      "low": -3.2167835278408146
+      "high": 4.25430732433692,
+      "low": -3.203239117015735
     },
     "pass1_fragment_tol": {
       "ppm": [
@@ -30,8 +30,8 @@
     },
     "sign_note": "precursor_tol is INVERTED relative to the delta mass it produces; measured on serum 2026-08-29. See src/pass2.rs.",
     "subset_fasta": "testing/recon-output/full-run/b1906_search/pass2/subset_identified_proteins.fasta",
-    "subset_proteins": 2298,
-    "template": "<bundled pass-2 default, recon 0.1.1>",
+    "subset_proteins": 2241,
+    "template": "<bundled pass-2 default, recon 0.1.3>",
     "template_fragment_tol": {
       "ppm": [
         -20.0,
@@ -80,8 +80,8 @@
   "deisotope": true,
   "fragment_tol": {
     "ppm": [
-      -4.8122567,
-      4.8122567
+      -4.804783325,
+      4.804783325
     ]
   },
   "isotope_errors": [
@@ -98,8 +98,8 @@
   ],
   "precursor_tol": {
     "ppm": [
-      -4.246288276134216,
-      3.2167835278408146
+      -4.25430732433692,
+      3.203239117015735
     ]
   },
   "predict_rt": false,

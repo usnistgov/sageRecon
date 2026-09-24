@@ -3,8 +3,8 @@
   "database": {
     "bucket_size": 8192,
     "enzyme": {
-      "missed_cleavages": 2,
-      "min_len": 7,
+      "missed_cleavages": 1,
+      "min_len": 8,
       "max_len": 50,
       "cleave_at": "KR",
       "restrict": "P",
@@ -23,7 +23,7 @@
     "max_variable_mods": 1,
     "decoy_tag": "rev_",
     "generate_decoys": true,
-    "fasta": "file:///path/to/sageRecon/testing/inputs/uniprot_sprot_iso_human-2018_06.fasta",
+    "fasta": "file:///path/to/sageRecon/_dev/testing/inputs/uniprot_sprot_iso_human-2018_06.fasta",
     "prefilter_chunk_size": 0,
     "prefilter": false,
     "prefilter_low_memory": true
@@ -76,10 +76,10 @@
   "report_psms": 2,
   "predict_rt": false,
   "mzml_paths": [
-    "file:///path/to/sageRecon/testing/inputs/10mg_1_A_1.mzML.gz"
+    "file:///path/to/sageRecon/_dev/testing/inputs/10mg_1_A_1.mzML.gz"
   ],
   "output_paths": [
-    "file:///path/to/sageRecon/testing/recon-output/full-run/liver_search/results.sage.tsv"
+    "file:///path/to/sageRecon/_dev/testing/recon-output/full-run/liver_search/results.sage.tsv"
   ],
   "bruker_config": {
     "ms2": {

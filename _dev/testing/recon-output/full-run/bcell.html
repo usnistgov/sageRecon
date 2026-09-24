@@ -54,9 +54,9 @@ button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;
 <div class="meta">
   <div><span>FASTA</span><b>testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta</b></div>
   <div><span>Enzyme</span><b>trypsin — KR, not before P, C-term</b></div>
-  <div><span>Generated</span><b>2026-09-03 10:35:25 UTC</b></div>
-  <div><span>recon</span><b>v0.1.1</b></div>
-  <div><span>Total runtime</span><b>261.8 s</b></div>
+  <div><span>Generated</span><b>2026-09-24 22:33:35 UTC</b></div>
+  <div><span>recon</span><b>v0.1.3</b></div>
+  <div><span>Total runtime</span><b>152.2 s</b></div>
 </div>
 
 <section><div class="hd"><h2>Detectors</h2></div><div class="bd"><div class="stats">
@@ -68,18 +68,18 @@ button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;
 
 <section><div class="hd"><h2>Mass accuracy</h2></div><div class="bd"><div class="stats">
   <div class="stat"><span>Precursor / MS1 &mdash; signed median</span><b>+0.00 ppm</b></div>
-  <div class="stat"><span>Fragment / MS2 &mdash; |median|</span><b>1.84 ppm</b></div>
-  <div class="stat"><span>Measured MS2 tolerance</span><b style="font-size:15px">-1.82 to +1.82 ppm</b></div>
+  <div class="stat"><span>Fragment / MS2 &mdash; |median|</span><b>1.85 ppm</b></div>
+  <div class="stat"><span>Measured MS2 tolerance</span><b style="font-size:15px">-1.81 to +1.81 ppm</b></div>
   <div class="stat"><span>Recommended MS1 / MS2</span><b>10 / 10 ppm</b></div>
 </div></div></section>
 
 <section><div class="hd"><h2>Contamination</h2></div><div class="bd">
 <div class="stats">
-  <div class="stat"><span>Polymer % of TIC</span><b>0.36%</b></div>
+  <div class="stat"><span>Polymer % of TIC</span><b>0.19%</b></div>
   <div class="stat"><span>Level</span><b style="font-size:14px">Moderate (0.1-1%)</b></div>
 </div>
 <div class="scroll"><table style="margin-top:12px"><tr><th>Polymer</th><th class="num">% TIC</th></tr>
-<tr><td>PEG+2H</td><td class="num">0.107%</td></tr><tr><td>PEG+1H</td><td class="num">0.084%</td></tr><tr><td>PEG+3H</td><td class="num">0.047%</td></tr><tr><td>Tween-40</td><td class="num">0.041%</td></tr><tr><td>Tween-20</td><td class="num">0.033%</td></tr>
+<tr><td>PEG+1H</td><td class="num">0.063%</td></tr><tr><td>Tween-40</td><td class="num">0.040%</td></tr><tr><td>PEG+2H</td><td class="num">0.035%</td></tr><tr><td>Tween-20</td><td class="num">0.015%</td></tr><tr><td>PEG+3H</td><td class="num">0.014%</td></tr>
 </table></div></div></section>
 
 <section><div class="hd"><h2>Glycopeptides</h2></div><div class="bd"><div class="stats">
@@ -89,19 +89,19 @@ button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;
 
 <section><div class="hd"><h2>Digestion</h2></div><div class="bd"><div class="stats">
   <div class="stat"><span>Missed cleavage</span><b>16.58%</b></div>
-  <div class="stat"><span>Ragged N</span><b>4.36%</b></div>
-  <div class="stat"><span>Ragged C</span><b>2.26%</b></div>
-  <div class="stat"><span>N : C ratio</span><b>1.91</b></div>
+  <div class="stat"><span>Ragged N</span><b>4.34%</b></div>
+  <div class="stat"><span>Ragged C</span><b>2.27%</b></div>
+  <div class="stat"><span>N : C ratio</span><b>1.92</b></div>
 </div></div></section>
 
 <section><div class="hd"><h2>Recommended search modifications</h2>
 <button onclick="reconCsv()">Copy as CSV</button></div><div class="bd">
 <div class="tbl-title">Fixed</div>
-<div class="scroll"><table id="t1"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+57.0220</td><td>Carbamidomethyl on C</td><td><strong>C</strong><span class="mut"></span></td><td class="num">3,379</td><td class="num">4.64%</td><td>statistics</td><td class="why">OR 445, q &lt; 0.001</td></tr></table></div>
+<div class="scroll"><table id="t1"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+57.0219</td><td>Carbamidomethyl on C</td><td><strong>C</strong><span class="mut"></span></td><td class="num">3,420</td><td class="num">4.78%</td><td>statistics</td><td class="why">OR 420, q &lt; 0.001</td></tr></table></div>
 <div class="tbl-title">Variable</div>
-<div class="scroll"><table id="t2"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+15.9954</td><td>Oxidation on M</td><td><strong>M</strong><span class="mut"></span></td><td class="num">1,430</td><td class="num">1.96%</td><td>statistics</td><td class="why">OR 28.92, q &lt; 0.001</td></tr><tr><td class="num">+0.9820</td><td>Deamidation</td><td><strong>N, Q</strong><span class="mut"></span></td><td class="num">745</td><td class="num">1.02%</td><td>statistics</td><td class="why">OR 3.26, q &lt; 0.001</td></tr><tr><td class="num">+52.9113</td><td>Fe[III]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">354</td><td class="num">0.49%</td><td>statistics</td><td class="why">OR 4.47, q &lt; 0.001</td></tr><tr><td class="num">-17.0257</td><td>Gln-&gt;pyro-Glu</td><td><strong>Q</strong><span class="mut"> · peptide N-term</span></td><td class="num">309</td><td class="num">0.42%</td><td>statistics</td><td class="why">OR 305, q &lt; 0.001</td></tr><tr><td class="num">-89.0288</td><td>Met-loss+Acetylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term, Met loss</span></td><td class="num">202</td><td class="num">0.28%</td><td>statistics</td><td class="why">OR 4154, q &lt; 0.001</td></tr><tr><td class="num">+53.9141</td><td>Fe[II]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">184</td><td class="num">0.25%</td><td>statistics</td><td class="why">OR 2.43, q 0.006</td></tr><tr><td class="num">+42.0109</td><td>Acetylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term</span></td><td class="num">120</td><td class="num">0.16%</td><td>statistics</td><td class="why">OR 157, q &lt; 0.001</td></tr><tr><td class="num">-18.0097</td><td>Water Loss (Glu-&gt;pyro-Glu)</td><td><strong>E</strong><span class="mut"> · peptide N-term</span></td><td class="num">79</td><td class="num">0.11%</td><td>statistics</td><td class="why">OR 10.33, q &lt; 0.001</td></tr><tr><td class="num">+79.9661</td><td>Phosphorylation</td><td><strong>S, T</strong><span class="mut"></span></td><td class="num">77</td><td class="num">0.11%</td><td>statistics</td><td class="why">OR 29.36, q &lt; 0.001</td></tr></table></div>
+<div class="scroll"><table id="t2"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Evidence</th></tr><tr><td class="num">+15.9953</td><td>Oxidation on M</td><td><strong>M</strong><span class="mut"></span></td><td class="num">1,450</td><td class="num">2.03%</td><td>statistics</td><td class="why">OR 28.69, q &lt; 0.001</td></tr><tr><td class="num">+0.9819</td><td>Deamidation</td><td><strong>N, Q</strong><span class="mut"></span></td><td class="num">724</td><td class="num">1.01%</td><td>statistics</td><td class="why">OR 3.43, q &lt; 0.001</td></tr><tr><td class="num">+52.9112</td><td>Fe[III]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">359</td><td class="num">0.50%</td><td>statistics</td><td class="why">OR 3.86, q &lt; 0.001</td></tr><tr><td class="num">-17.0258</td><td>Gln-&gt;pyro-Glu</td><td><strong>Q</strong><span class="mut"> · peptide N-term</span></td><td class="num">322</td><td class="num">0.45%</td><td>statistics</td><td class="why">OR 307, q &lt; 0.001</td></tr><tr><td class="num">-89.0289</td><td>Met-loss+Acetylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term, Met loss</span></td><td class="num">198</td><td class="num">0.28%</td><td>statistics</td><td class="why">OR 4040, q &lt; 0.001</td></tr><tr><td class="num">+53.9140</td><td>Fe[II]</td><td><strong>D, E</strong><span class="mut"></span></td><td class="num">191</td><td class="num">0.27%</td><td>statistics</td><td class="why">OR 2.16, q 0.021</td></tr><tr><td class="num">+42.0109</td><td>Acetylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term</span></td><td class="num">112</td><td class="num">0.16%</td><td>statistics</td><td class="why">OR 153, q &lt; 0.001</td></tr><tr><td class="num">-18.0100</td><td>Water Loss (Glu-&gt;pyro-Glu)</td><td><strong>E</strong><span class="mut"> · peptide N-term</span></td><td class="num">82</td><td class="num">0.11%</td><td>statistics</td><td class="why">OR 10.10, q &lt; 0.001</td></tr><tr><td class="num">+79.9661</td><td>Phosphorylation</td><td><strong>S, T</strong><span class="mut"></span></td><td class="num">66</td><td class="num">0.09%</td><td>statistics</td><td class="why">OR 25.77, q &lt; 0.001</td></tr><tr><td class="num">+14.0151</td><td>Methylation</td><td><strong>any residue</strong><span class="mut"> · protein N-term</span></td><td class="num">26</td><td class="num">0.04%</td><td>statistics</td><td class="why">OR 18.71, q 0.021</td></tr><tr><td class="num">-32.0047</td><td>Oxidation and then loss of oxidized M side chain</td><td><strong>M</strong><span class="mut"></span></td><td class="num">22</td><td class="num">0.03%</td><td>statistics</td><td class="why">OR 75.93, q &lt; 0.001</td></tr></table></div>
 <div class="tbl-title">Detected but did not make the cut</div>
-<div class="scroll"><table id="t3"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Why not</th></tr><tr><td class="num">+58.0244</td><td><span class="mut">un-curated</span></td><td><span class="mut">&mdash;</span></td><td class="num">931</td><td class="num">1.28%</td><td>satellite</td><td class="why">isotope satellite &mdash; satellite (+1 C13 of +57.0220)</td></tr><tr><td class="num">+114.0431</td><td>GG (Ubiquitination Site)</td><td><strong>K</strong><span class="mut"></span></td><td class="num">200</td><td class="num">0.27%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.66 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr></table></div>
+<div class="scroll"><table id="t3"><tr><th class="num">Delta mass</th><th>Modification</th><th>Residue</th><th class="num">Count</th><th class="num">%</th><th>Decided by</th><th>Why not</th></tr><tr><td class="num">+58.0243</td><td><span class="mut">un-curated</span></td><td><span class="mut">&mdash;</span></td><td class="num">946</td><td class="num">1.32%</td><td>satellite</td><td class="why">isotope satellite &mdash; satellite (+1 C13 of +57.0219)</td></tr><tr><td class="num">+114.0432</td><td>GG (Ubiquitination Site)</td><td><strong>K</strong><span class="mut"></span></td><td class="num">214</td><td class="num">0.30%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.65 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr><tr><td class="num">+27.9988</td><td>Formylation</td><td><strong>K</strong><span class="mut"></span></td><td class="num">23</td><td class="num">0.03%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 1.08 (needs &ge; 2.0), q 0.847 (needs &le; 0.05)</td></tr><tr><td class="num">+47.9861</td><td>Trioxidation</td><td><strong>C</strong><span class="mut"></span></td><td class="num">21</td><td class="num">0.03%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 17.46 (needs &ge; 2.0), q 0.079 (needs &le; 0.05)</td></tr><tr><td class="num">+203.0780</td><td>HexNAc</td><td><strong>S, T</strong><span class="mut"></span></td><td class="num">18</td><td class="num">0.03%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 2.80 (needs &ge; 2.0), q 0.553 (needs &le; 0.05)</td></tr><tr><td class="num">-16.0001</td><td>Reduction</td><td><strong>D, S, T</strong><span class="mut"></span></td><td class="num">18</td><td class="num">0.03%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 1.93 (needs &ge; 2.0), q 0.668 (needs &le; 0.05)</td></tr><tr><td class="num">+29.9653</td><td>Quinone</td><td><strong>Y, W</strong><span class="mut"></span></td><td class="num">14</td><td class="num">0.02%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 11.74 (needs &ge; 2.0), q 0.226 (needs &le; 0.05)</td></tr><tr><td class="num">-30.0066</td><td>Pyrrolidinone</td><td><strong>P</strong><span class="mut"></span></td><td class="num">10</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 2.43 (needs &ge; 2.0), q 0.653 (needs &le; 0.05)</td></tr><tr><td class="num">-48.0044</td><td>Homoserine lactone</td><td><strong>M</strong><span class="mut"> · Peptide C-terminal</span></td><td class="num">9</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.00 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr><tr><td class="num">+71.0385</td><td>Propionamidation</td><td><strong>C, K</strong><span class="mut"></span></td><td class="num">9</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.00 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr><tr><td class="num">+56.0217</td><td>Propionylation</td><td><strong>K</strong><span class="mut"></span></td><td class="num">9</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.43 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr><tr><td class="num">+28.9968</td><td>Nitrosylation</td><td><strong>C</strong><span class="mut"></span></td><td class="num">7</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 0.00 (needs &ge; 2.0), q 1.000 (needs &le; 0.05)</td></tr><tr><td class="num">+28.0306</td><td>Dimethylation</td><td><strong>R</strong><span class="mut"></span></td><td class="num">7</td><td class="num">0.01%</td><td>statistics</td><td class="why">failed the residue test &mdash; OR 3.04 (needs &ge; 2.0), q 0.287 (needs &le; 0.05)</td></tr></table></div>
 
 <details id="csv-box"><summary>CSV of the three tables above</summary><div class="bd">
 <p class="why" id="csv-status">Press <b>Copy as CSV</b> above to fill this box.</p>
@@ -109,7 +109,7 @@ button{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff;
  aria-label="CSV of the three tables"></textarea>
 </div></details>
 
-<div class="note"><b>47 distinct delta masses were detected and assessed in this file.</b>
+<div class="note"><b>268 distinct delta masses were detected and assessed in this file.</b>
 Each one walked this chart from the top and stopped at the first answer that applied.
 
 <div class="flow">
@@ -118,7 +118,7 @@ Each one walked this chart from the top and stopped at the first answer that app
   <div class="no"><b>No</b> &rarr; go to 2.</div></div>
 
 <div class="step"><b>2. Is there a curated entry for this delta mass?</b>
-  <div class="no"><b>No</b> &rarr; judged on <b>abundance</b> against the floor of <b>676 PSMs</b>
+  <div class="no"><b>No</b> &rarr; judged on <b>abundance</b> against the floor of <b>684 PSMs</b>
     (20% of the tallest peak).<br>
     Above the floor: listed as an un-curated delta mass. Never recommended.<br>
     Below the floor: not shown at all.</div>
@@ -142,11 +142,11 @@ with these modifications set will report higher numbers for the same chemistry.<
 </div></section>
 
 <footer>
-<b>sageRecon</b> v0.1.1 &middot; using Sage v0.15.0-beta.2 &middot; maintained by
+<b>sageRecon</b> v0.1.3 &middot; using Sage v0.15.0-beta.2 &middot; maintained by
 Benjamin Neely (NIST), <a href="mailto:benjamin.neely@nist.gov">benjamin.neely@nist.gov</a><br>
 <!-- Provenance line KEPT, against the mockup, which dropped both. A report that
      cannot say which code state made it is not traceable. -->
-Built from commit b62c331-dirty &middot; report schema v3.2.0
+Built from commit ba4d30e &middot; report schema v4.0.0
 <details><summary>Acknowledgements</summary><div class="bd">
 <b>Sage</b> &mdash; <a href="https://github.com/lazear/sage">github.com/lazear/sage</a> &mdash; Lazear, M.R.
 <i>J. Proteome Res.</i> 2023, 22(11), 3652&ndash;3659. doi:10.1021/acs.jproteome.3c00486<br>
@@ -154,15 +154,14 @@ Built from commit b62c331-dirty &middot; report schema v3.2.0
 <a href="https://github.com/smith-chem-wisc/metamorpheus">github.com/smith-chem-wisc/metamorpheus</a> &mdash;
 Solntsev, Shortreed, Frey, Smith. <i>J. Proteome Res.</i> 2018, 17(5), 1844&ndash;1851. doi:10.1021/acs.jproteome.7b00873<br>
 <b>mzSniffer</b> (polymer detection) &mdash; <a href="https://github.com/wfondrie/mzsniffer">github.com/wfondrie/mzsniffer</a> &mdash; no publication.<br>
-<b>Pyteomics</b> (code ideas) &mdash; <a href="https://github.com/levitsky/pyteomics">github.com/levitsky/pyteomics</a> &mdash;
-Levitsky, Klein, Ivanov, Gorshkov. <i>J. Proteome Res.</i> 2019, 18(2), 709&ndash;714. doi:10.1021/acs.jproteome.8b00717<br>
+<b>mzdata</b> (mzML reading) &mdash; <a href="https://github.com/mobiusklein/mzdata">github.com/mobiusklein/mzdata</a> &mdash; Klein, J.<br>
 <b>Unimod</b> &mdash; <a href="https://www.unimod.org/">unimod.org</a> &mdash; Design Science License.
 </div></details>
 <details><summary>Licence &mdash; NIST</summary><div class="bd">
 NIST Software Licensing Statement. The full text is in <code>LICENSE.md</code>, shipped beside this tool.
 </div></details>
 <details><summary>Licence &mdash; third party</summary><div class="bd">
-Sage (MIT), mzSniffer (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License).
+Sage (MIT), mzSniffer (Apache 2.0), mzdata (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License).
 The full texts are in <code>THIRD_PARTY_LICENSES.md</code>, shipped in the release archive.
 </div></details>
 </footer>

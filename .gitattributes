@@ -3,6 +3,7 @@
 # checkout would convert these to CRLF and every snapshot would false-positive
 # as "changed" on re-run. See NOTES Phase 8 determinism entry.
 _dev/testing/regression-snapshots/*.json    -text
+_dev/testing/regression-snapshots/weak-mode/*.json    -text
 _dev/testing/recon-output/step0_expected_anchors.json    -text
 recon-tool/tests/fixtures/*.tsv    -text
 

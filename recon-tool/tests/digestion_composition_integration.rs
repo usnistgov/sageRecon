@@ -156,13 +156,19 @@ fn composition_reproduces_the_liver_measurement() {
             "{label}: {got} is outside the 0.5% band around {expect} (delta {delta}, tol {tol:.1})"
         );
     }
-    within("peptides_classified", c.peptides_classified, 10771);
+    // ⚠ REPINNED 2026-09-24, a recorded edit, not a widening. Pass 1 moved to
+    // (1 missed cleavage, length 8), so the Pass 2 subset shrank 1770 -> 1700
+    // proteins and the population changed. Measured on the regenerated
+    // full-run liver: peptides_classified 10771 -> 10697 (-0.69 %, outside the
+    // band), missed_cleavage 1888 -> 1880, ragged_n 745 -> 743, ragged_c 339.
+    // The bands are unchanged.
+    within("peptides_classified", c.peptides_classified, 10697);
     within(
         "missed_cleavage.numerator",
         c.missed_cleavage.numerator,
-        1888,
+        1880,
     );
-    within("ragged_n.numerator", c.ragged_n.numerator, 745);
+    within("ragged_n.numerator", c.ragged_n.numerator, 743);
     within("ragged_c.numerator", c.ragged_c.numerator, 339);
 
     // These two are STRUCTURAL, not statistical, so they stay exact. A non-zero
@@ -175,7 +181,8 @@ fn composition_reproduces_the_liver_measurement() {
 
     // The percentage is far more stable than the counts it comes from, because
     // numerator and denominator move together. Keep it tight.
-    assert!((c.cleavage_completeness_pct - 82.47).abs() < 0.05);
+    // Repinned 2026-09-24 with the counts above: 82.47 -> 82.42.
+    assert!((c.cleavage_completeness_pct - 82.42).abs() < 0.05);
 
     // The ragged RATES are the claim the counts above exist to support, and they
     // are far steadier than the integers. Across the 2026-09-03 regeneration
@@ -285,7 +292,9 @@ fn composition_reproduces_the_liver_measurement() {
         d.class_fdr_fully_enzymatic_pct
     );
     assert!(
-        (d.ragged_n.pct - 6.20).abs() < 0.05 && (d.ragged_c.pct - 3.01).abs() < 0.05,
+        // Repinned 2026-09-24 with the counts above: N 6.20 -> 6.25 (measured
+        // 6.2547 %, outside the old 0.05 band), C 3.01 -> 3.03. Band unchanged.
+        (d.ragged_n.pct - 6.25).abs() < 0.05 && (d.ragged_c.pct - 3.03).abs() < 0.05,
         "decoy-corrected ragged rates moved: N {:.2} %, C {:.2} %",
         d.ragged_n.pct,
         d.ragged_c.pct

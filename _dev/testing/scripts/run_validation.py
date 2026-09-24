@@ -136,10 +136,13 @@ SNAPSHOT_FILES    = ["b1906", "bcell", "serum"]
 #   open-*-full/results.json     -> static_mods {'C': 57.0215}  -> "fixed-c"
 FULL_RUN_FAMILY   = "agnostic"
 
-# Tier 3 baselines. Regenerated 2026-08-25 from step1-open-* at
-# --min-peak-count 5, matching what `analyze` uses for full-run.
+# Tier 3 baselines. Regenerated 2026-09-24 from step1-open-* at
+# --min-peak-count 5, the floor `run` records in full-run's discovery_settings.
 SNAPSHOT_DIR      = Path("_dev/testing/regression-snapshots")
 SNAPSHOT_SOURCE   = Path("_dev/testing/search-output")   # gitignored; absent in CI
+# Weak-mode comparison copy. Written by the same `discover` command and build as
+# the snapshots, and regenerated with them. See tier3_snapshot.
+WEAK_FALLBACK_DIR = Path("_dev/testing/regression-snapshots/weak-mode")
 RECON_BIN         = Path("recon-tool/target/release/recon")
 UNIMOD_PATH       = Path("recon-tool/resources/unimod.xml")
 SNAPSHOT_MIN_PEAK_COUNT = 5
@@ -413,10 +416,16 @@ def tier3_snapshot(r, root):
     same code must give the same bytes, so any difference is a real regression.
 
     Weak mode (TSV or binary absent, e.g. CI): compare the snapshot against the
-    committed `04-discover-min5-*.json`, which is generated from the same TSV at the
-    same peak floor. That still catches silent mutation of either file, but it
-    cannot catch a code regression. The mode is always printed — a gate that
+    committed WEAK_FALLBACK_DIR copy, generated from the same TSV at the same peak
+    floor by the same build. That still catches silent mutation of either file, but
+    it cannot catch a code regression. The mode is always printed. A gate that
     silently degrades is how the previous one went unnoticed.
+
+    Fixed 2026-09-24: weak mode used to read the dated
+    `2026-08-25-checks/04-discover-min5-*.json`. Those predate the Unimod entity
+    fix (`Lys-&gt;Allysine`), and the snapshots were re-baselined without them,
+    so weak mode failed 3/3 on a name. REGENERATE THE FALLBACK WHENEVER THE
+    SNAPSHOTS ARE REGENERATED, with the same command and build.
     """
     for fkey in SNAPSHOT_FILES:
         snap_path = root / SNAPSHOT_DIR / f"discover_{fkey}.snapshot.json"
@@ -432,7 +441,7 @@ def tier3_snapshot(r, root):
         current, note = _regenerate_discover(root, fkey)
         mode = "regenerated"
         if current is None:
-            fallback = root / "_dev/testing/recon-output/2026-08-25-checks" / f"04-discover-min5-{fkey}.json"
+            fallback = root / WEAK_FALLBACK_DIR / f"discover_{fkey}.json"
             if not fallback.exists():
                 r.fail(f"T3/{fkey}", f"cannot verify: {note}, and no committed artifact at {fallback}")
                 continue

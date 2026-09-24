@@ -17,7 +17,7 @@
     "ms2_analyzers": [
       "Orbitrap / FT-ICR"
     ],
-    "template": "<bundled open-search default, recon 0.1.1>",
+    "template": "<bundled open-search default, recon 0.1.3>",
     "template_fasta": null,
     "template_fragment_tol": {
       "ppm": [
@@ -37,8 +37,8 @@
       "c_terminal": true,
       "cleave_at": "KR",
       "max_len": 50,
-      "min_len": 7,
-      "missed_cleavages": 2,
+      "min_len": 8,
+      "missed_cleavages": 1,
       "restrict": "P"
     },
     "fasta": "testing/inputs/UniProt-Human-UP000005640_canonical-2023_05.fasta",

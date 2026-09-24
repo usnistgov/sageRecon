@@ -177,7 +177,14 @@ fn statistics_override_category_on_bcell() {
     // `TG=K anywhere` reading that scored OR 1.19 and failed). See
     // `protein_context_moves_exactly_three_decisions` below.
     // This count is 8 when the FASTA is absent and the test skips the index.
-    let expected = if fasta().exists() { 10 } else { 8 };
+    // ⚠ REPINNED 2026-09-24, a recorded edit: 10 -> 13 with the FASTA, 8 -> 10
+    // without. The peaks come from the regenerated full-run/bcell.json, which
+    // holds 268 peaks under the 500 cap and topographic prominence (47 before).
+    // Three recommendations enter, each on a peak absent from the old list:
+    // +14.0151 Methylation (n=26, protein N-term, needs the FASTA), +47.9861
+    // Trioxidation (n=21) and -32.0047 oxidized M side-chain loss (n=22).
+    // None leaves. Measured with a scratch probe against both peak lists.
+    let expected = if fasta().exists() { 13 } else { 10 };
     assert_eq!(
         counts(&tiers),
         (expected, 0),
@@ -215,7 +222,12 @@ fn statistics_drop_unsupported_candidates_on_serum() {
     // (2026-09-01). Was 7 under v0.14.7, and 6 when the FASTA is absent because
     // +14.0149 Methylation at a protein N-terminus is only testable with it.
     // NEW BASELINE, not a regression: recon's math is unchanged.
-    let expected = if fasta().exists() { 8 } else { 6 };
+    // ⚠ REPINNED 2026-09-24, a recorded edit: 8 -> 7 with the FASTA (6 without,
+    // unchanged). The regenerated full-run/serum.json no longer carries the
+    // +58.0128 Carboxymethylation flank (n=97), which topographic prominence
+    // removes (NOTES "Prominence is topographic" predicted this loss). Nothing
+    // enters.
+    let expected = if fasta().exists() { 7 } else { 6 };
     assert_eq!(
         counts(&tiers),
         (expected, 0),
@@ -321,14 +333,17 @@ fn reproduces_the_prototype_on_b1906() {
 
     // --- the abundance path --------------------------------------------------
     // Carbamyl's acceptors sit in ~100% of tryptic peptides, so no statistic can
-    // reach it. It is recommended here because 555 PSMs clears the 251 floor.
+    // reach it. It is recommended here because 530 PSMs clears the 259 floor.
+    // ⚠ REPINNED 2026-09-24, a recorded edit: 217 % -> 205 %. The peaks come
+    // from the regenerated full-run/b1906.json: Carbamyl 545 -> 530 PSMs and
+    // the floor 251.0 -> 259.0 (the tallest peak grew). Band unchanged.
     let carbamyl = find(43.0058);
     assert!(carbamyl.label.as_deref().unwrap_or("").contains("Carbamyl"));
     match carbamyl.decision {
         Decision::Abundance { pct_of_floor } => {
             assert!(
-                (pct_of_floor - 217.0).abs() < 2.0,
-                "Carbamyl should sit at ~217% of floor, got {pct_of_floor:.0}%"
+                (pct_of_floor - 205.0).abs() < 2.0,
+                "Carbamyl should sit at ~205% of floor, got {pct_of_floor:.0}%"
             );
         }
         ref d => panic!("Carbamyl should be decided by abundance, got {d:?}"),
@@ -352,7 +367,18 @@ fn reproduces_the_prototype_on_b1906() {
         .filter(|t| matches!(t.decision, Decision::Abundance { .. }))
         .count();
     // Sage v0.15 baseline (2026-09-01): was (7, 1) under v0.14.7.
-    assert_eq!((n_stats, n_abund), (9, 1), "recommendation set moved");
+    // ⚠ REPINNED 2026-09-24, a recorded edit: (9, 1) -> (11, 1). The regenerated
+    // full-run/b1906.json holds 155 peaks (48 before). Two statistics
+    // recommendations enter, each on a peak absent from the old list: +47.9825
+    // Trioxidation (n=5) and -89.0296 Met-loss+Acetylation (n=17, protein
+    // N-term). None leaves. Without the FASTA it is (9, 1), measured the same
+    // day; this pin had no FASTA branch before and would have failed there.
+    let expected_stats = if fasta().exists() { 11 } else { 9 };
+    assert_eq!(
+        (n_stats, n_abund),
+        (expected_stats, 1),
+        "recommendation set moved"
+    );
 }
 
 /// The Step-2 carpet invariant, asserted on REAL committed data with the actual

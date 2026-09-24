@@ -24,7 +24,7 @@ Each setting below was read from the file named in the last column.
 
 | tool | version | key settings | source file |
 |---|---|---|---|
-| recon | 0.1.1 (`git_commit: b62c331-dirty`), Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
+| recon | 0.1.3 (`git_commit: ba4d30e`), Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin, 1 missed cleavage, minimum length 8. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
 | PTM-Shepherd | FragPipe 23.1, MSFragger 4.4.1, PTM-Shepherd 3.0.2 | FragPipe Open workflow (the operator's description) with all fixed and variable mods removed (`add_C_cysteine` is commented out; all 29 `add_*` lines are 0.0; no `variable_mod` line is active). Precursor -150 to +500 Da. Fragment 20 ppm. `calibrate_mass = 2`. `num_enzyme_termini = 2` (fully tryptic). `allowed_missed_cleavage_1 = 2`. `isotope_error = 0`. | `ptm-shepherd/liverShepherd/fragger.params`, `fragpipe.workflow`, log |
 | MetaMorpheus | 1.1.7 | Three tasks: Calibrate, G-PTM-D, Search. `ListOfModsFixed` and `ListOfModsVariable` are empty in all three. The G-PTM-D list holds Carbamidomethyl on C (Common Fixed) and Oxidation on M (Common Variable), so +57 is discovered. Calibrate: MS1 10 ppm, MS2 30 ppm. Search: MS1 5 ppm, MS2 20 ppm. `SpecificProtease = "trypsin"`, 2 missed cleavages. | `metamorpheus/liverMetaMorpheus/Task Settings/*.toml`, `allResults.txt` |
 | Mascot | 2.6.0 (see note) | Error-tolerant search (`ERRORTOLERANT=1`). `MODS=` and `IT_MODS=` are empty, so its Carbamidomethyl is a discovery. MS1 10 ppm, MS2 20 ppm. Trypsin, `PFA=1`. | `mascot/error-tolerant/Human_ertol-2018.par` |
@@ -55,30 +55,31 @@ input is missing. It does not report a partial comparison.
 | none (read by hand) | `ptm-shepherd/liverShepherd/log_2026-09-01_09-18-03.txt`, `metamorpheus/liverMetaMorpheus/Task1-CalibrateTask/results.txt` | | MS1 calibration medians |
 
 `recon/pass2/results.sage.tsv` is recon's own pass-2 Sage output for this
-file. It belongs to the committed `liver.json` run: it holds 15025 target PSMs
-and 10774 distinct peptides at `peptide_q < 0.01`, the same two counts that
-`liver_pass2.json` records.
+file. It belongs to the committed `liver.json` run: it holds 14952 target PSMs
+and 10697 distinct peptides at `peptide_q < 0.01`. The peptide count equals
+`composition.peptides_classified` in `liver_pass2.json`. Pass 2 schema 2.0.0
+records no PSM count, so the PSM count is read from the TSV only.
 
 The other files are settings and provenance. They are not read by a script.
 
 ## Values this folder reproduces
 
 Run on 2026-09-24 from this repository. recon side: Sage v0.15.0-beta.2,
-`full-run/liver.json`.
+`full-run/liver.json` at `git_commit` `ba4d30e`.
 
 Mod rank agreement, recon against each tool:
 
 | tool | shared masses | Spearman rho |
 |---|---|---|
-| PTM-Shepherd | 39 | +0.609 |
-| MetaMorpheus | 6 | +0.943 |
-| Mascot | 28 | +0.472 |
+| PTM-Shepherd | 68 | +0.762 |
+| MetaMorpheus | 13 | +0.747 |
+| Mascot | 69 | +0.652 |
 
 Digestion, distinct peptides, one classifier for every tool:
 
 | tool | missed cleavage | ragged-N | ragged-C |
 |---|---|---|---|
-| recon pass 2 | 17.53 % | 6.94 % | 3.14 % |
+| recon pass 2 | 17.58 % | 6.95 % | 3.17 % |
 | PTM-Shepherd | 19.64 % | 1.64 % | 0.51 % |
 | MetaMorpheus | 17.84 % | 0.54 % | 0.45 % |
 | Byonic Preview | 15.90 % | 8.60 % | 1.30 % |
@@ -109,9 +110,10 @@ grep -m1 "MS1 ppm error median" _dev/liver-benchmark/metamorpheus/liverMetaMorph
 `liver_5way_report.py` writes by default to
 `_dev/testing/recon-output/comparison/LIVER-FIVE-TOOL-2026-09-01.md` and
 overwrites the committed copy. Its `-o` path must be inside `_dev/`, or the
-script fails after it writes the file. The committed copy is from an earlier
-recon run, so its recon numbers differ slightly from a rerun. Its
-third-party rows do not change.
+script fails after it writes the file. The committed copy was written on
+2026-09-24 from the `ba4d30e` run. A new `recon run` gives slightly different
+recon counts, because q-derived counts jitter. Its third-party rows do not
+change.
 
 ## Window-sign and fragment check (`sage-window-check/`)
 

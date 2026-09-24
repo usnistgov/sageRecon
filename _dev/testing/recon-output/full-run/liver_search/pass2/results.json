@@ -23,7 +23,7 @@
     "max_variable_mods": 1,
     "decoy_tag": "rev_",
     "generate_decoys": true,
-    "fasta": "file:///path/to/sageRecon/testing/recon-output/full-run/liver_search/pass2/subset_identified_proteins.fasta",
+    "fasta": "file:///path/to/sageRecon/_dev/testing/recon-output/full-run/liver_search/pass2/subset_identified_proteins.fasta",
     "prefilter_chunk_size": 0,
     "prefilter": false,
     "prefilter_low_memory": true
@@ -47,14 +47,14 @@
   },
   "precursor_tol": {
     "ppm": [
-      -3.1351907,
-      5.9700522
+      -3.133567,
+      5.9488416
     ]
   },
   "fragment_tol": {
     "ppm": [
-      -16.369648,
-      16.369648
+      -16.342007,
+      16.342007
     ]
   },
   "precursor_charge": [
@@ -76,10 +76,10 @@
   "report_psms": 1,
   "predict_rt": false,
   "mzml_paths": [
-    "file:///path/to/sageRecon/testing/inputs/10mg_1_A_1.mzML.gz"
+    "file:///path/to/sageRecon/_dev/testing/inputs/10mg_1_A_1.mzML.gz"
   ],
   "output_paths": [
-    "file:///path/to/sageRecon/testing/recon-output/full-run/liver_search/pass2/results.sage.tsv"
+    "file:///path/to/sageRecon/_dev/testing/recon-output/full-run/liver_search/pass2/results.sage.tsv"
   ],
   "bruker_config": {
     "ms2": {
