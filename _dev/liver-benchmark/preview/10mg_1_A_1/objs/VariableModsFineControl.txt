@@ -1,0 +1,7 @@
+Oxidation / +15.994915 @ M | common2
+Dioxidation / +31.989829 @ W | common1
+Deamidated / +0.984016 @ N | common1
+Gln->pyro-Glu / -17.026549 @ N-Term Q | rare1
+Glu->pyro-Glu / -18.010565 @ N-Term E | rare1
+Ammonia-loss / -17.026549 @ N-Term C | rare1
+Acetyl / +42.010565 @ Protein N-term | rare1

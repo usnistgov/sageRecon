@@ -42,6 +42,12 @@ results.json
 # database that was never used. It did exactly that, and misled a session on
 # 2026-09-01. The truth must be in git.
 !/_dev/testing/recon-output/**/results.json
+# ...and EXCEPT the liver benchmark. These two are published inputs, not
+# scratch: the stock Sage config of the window check, and recon's liver
+# pass-2 PSMs that liver_four_tool_digestion.py reads. See
+# _dev/liver-benchmark/README.md.
+!/_dev/liver-benchmark/sage-window-check/results.json
+!/_dev/liver-benchmark/recon/pass2/results.sage.tsv
 # Scratch verification runs. Never committed: recon has one artifact set
 # (full-run/), and a second copy of a run is exactly the kind of stale ghost
 # this repo has been cleaning out.

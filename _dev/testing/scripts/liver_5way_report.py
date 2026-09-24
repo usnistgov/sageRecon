@@ -38,7 +38,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[2]
 RECON_LIVER = ROOT / "testing/recon-output/full-run/liver.json"
-PREVIEW_SUMMARY = ROOT / "testing/reference-data/preview/10mg_1_A_1/result_summary.html"
+PREVIEW_SUMMARY = ROOT / "liver-benchmark/preview/10mg_1_A_1/result_summary.html"
 DIGESTION = ROOT / "testing/scripts/liver_four_tool_digestion.py"
 MODS = ROOT / "testing/scripts/liver_5way_mods.py"
 

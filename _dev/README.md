@@ -19,6 +19,7 @@ those decisions are written down here rather than lost.
 | `AUDIT-2026-09-02.md` | A code audit. All 13 findings are closed |
 | `reference-notes/` | Distilled external material: search-engine documentation, controlled vocabularies, methodology notes, and vendored papers |
 | `testing/` | Test data, search configurations, the validation harness, and committed reference reports |
+| `liver-benchmark/` | The liver five-tool comparison inputs for the technical note: each tool's output and settings, with personal paths redacted, plus a stock-Sage window-sign and fragment check |
 | `extracted/` | Code moved out of `recon-tool` for a separate tool |
 | `writeup/` | Source material for the technical note: each pipeline phase with its prior art, the tested assumptions, sources, and open flags |
 | `temp-flowChart.md` | A working sketch |

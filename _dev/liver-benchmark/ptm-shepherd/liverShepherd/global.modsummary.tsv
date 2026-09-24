@@ -1,0 +1,66 @@
+Modification	Mass Shift	10mg_1_A_1_1_PSMs	10mg_1_A_1_1_percent_PSMs
+None	0.0	15320	50.2260
+Oxidation or Hydroxylation	15.994915	4170	13.6720
+Iodoacetamide derivative/Addition of Glycine/Addition of G	57.021464	2618	8.5830
+First isotopic peak	1.00235	739	2.4220
+Deamidation	0.984016	718	2.3530
+dihydroxy	31.989829	526	1.7240
+ubiquitinylation residue/Double Carbamidomethylation/Addition of N	114.042927	373	1.2230
+Hexose	162.052824	358	1.1740
+Isotopic peak error	-1.00235	328	1.0750
+Pyro-glu from Q/Loss of ammonia	-17.026549	261	0.8560
+Iodoacetic acid derivative	58.005479	242	0.7930
+cysteine oxidation to cysteic acid	47.984744	206	0.6750
+Acetylation	42.010565	175	0.5740
+Unannotated mass-shift 0.9630	0.963	173	0.5670
+Second isotopic peak	2.0047	166	0.5450
+Replacement of 3 protons by iron	52.911464	165	0.5400
+Unannotated mass-shift -0.9588	-0.9588	147	0.4820
+2,3-dihydro-2,2-dimethyl-7-benzofuranol N-methyl carbamate	58.029289	123	0.4030
+Replacement of 3 protons by aluminium	23.958063	113	0.3710
+Amidation	-0.984016	109	0.3580
+Acetaldehyde +26	26.01565	109	0.3570
+Lysine oxidation to aminoadipic semialdehyde	-1.031634	80	0.2630
+S-carbamoylmethylcysteine cyclization (N-terminus)/Glyoxal-derived hydroimiadazolone	39.994915	71	0.2330
+Gluconoylation	178.047738	67	0.2200
+Unannotated mass-shift -1.0638	-1.0638	64	0.2100
+Unannotated mass-shift -1.0194	-1.0194	61	0.2000
+Sodium adduct	21.981943	59	0.1940
+Dehydroalanine (from Cysteine)	-33.987721	59	0.1930
+carboxyethyl/Dihydroxy methylglyoxal adduct/Ethoxyformylation	72.021129	55	0.1800
+proline oxidation to pyroglutamic acid/Tryptophan oxidation to oxolactone/aldehyde and ketone modifications	13.979265	52	0.1700
+Unannotated mass-shift 0.0674	0.0674	48	0.1570
+Unannotated mass-shift 292.2068	292.2068	47	0.1540
+Formylation	27.994915	46	0.1510
+Replacement of proton by potassium	37.955882	45	0.1470
+Tryptophan oxidation to dihydroxy-N-formaylkynurenine	63.979659	44	0.1440
+Unannotated mass-shift 0.8996	0.8996	43	0.1410
+Photo-induced Glycine Adduct	89.011293	43	0.1410
+Propionate labeling reagent light form (N-term & K)/Acrolein addition +56	56.026215	41	0.1340
+2-amino-3-oxo-butanoic_acid	-2.01565	40	0.1310
+Deamidation followed by a methylation	14.999666	39	0.1280
+Unannotated mass-shift 0.9264	0.9264	38	0.1250
+Unannotated mass-shift -43.9900	-43.99	36	0.1180
+Dehydration/Pyro-glu from E	-18.010565	32	0.1050
+Reduced acrolein addition +58	58.041865	31	0.1020
+Michael addition with methylamine	13.031634	27	0.0890
+thiocarboxylic acid	15.977156	26	0.0850
+Addition of Y	163.06332397460938	24	0.0790
+Cleavage product of EGS protein crosslinks by hydroylamine treatment/Addition of D	115.026943	24	0.0790
+alpha-amino adipic acid	14.96328	23	0.0750
+tryptophan oxidation to kynurenin	3.994915	21	0.0690
+quinone	29.974179	20	0.0660
+Third isotopic peak	3.0070500000000004	20	0.0660
+Carbamylation	43.005814	18	0.0590
+Methylation	14.01565	18	0.0590
+Arginine replacement by Nitropyrimidyl ornithine	80.985078	17	0.0560
+formaldehyde adduct	12.0	17	0.0560
+Proline oxidation to 5-hydroxy-2-aminovaleric acid	18.010565	16	0.0520
+Proline oxidation to pyrrolidinone/Decarboxylation	-30.010565	15	0.0490
+Unannotated mass-shift 216.0730	216.073	14	0.0460
+Tyrosine oxidation to 2-aminotyrosine/Conversion of carboxylic acid to hydroxamic acid	15.010899	14	0.0460
+Deuterium Methylation of Lysine	16.028204	14	0.0460
+Unannotated mass-shift 12.0372	12.0372	10	0.0330
+Unannotated mass-shift 326.1920	326.192	10	0.0330
+Unannotated mass-shift 56.9516	56.9516	10	0.0330
+Unannotated mass-shift 0.8300	0.83	10	0.0330

@@ -33,3 +33,8 @@ examples/*.html    -text
 # where every other target carried the pinned 2506678-byte one (found 2026-09-02
 # by hashing the four CI artifacts). Keep it LF everywhere.
 recon-tool/resources/unimod.xml    -text
+
+# Liver benchmark: third-party tool output published as received (Windows
+# CRLF and all). Keep it byte-faithful so the redaction diff in its README
+# stays the only change from the original files.
+_dev/liver-benchmark/** -text

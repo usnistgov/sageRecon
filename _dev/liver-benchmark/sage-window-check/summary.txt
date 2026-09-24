@@ -1,0 +1,17 @@
+Output of window_and_fragments.py on the stock Sage v0.15.0-beta.2 search
+configured by results.json in this folder. Run 2026-09-24.
+Sage's own log line "discovered 19052 target peptide-spectrum matches at 1% FDR"
+counts targets AND decoys at spectrum_q <= 0.01 (sage/src/ml/qvalue.rs,
+spectrum_q_value). 18865 targets + 187 decoys = 19052.
+
+== window sign ==
+PSM rows (all ranks, targets and decoys): 44218
+  targets 32242, decoys 11976, rows per rank {'1': 44218}
+observed delta expmass - calcmass: min -1.2496 Da, max +3.4987 Da
+
+== matched fragments, rank-1 target PSMs, spectrum_q <= 0.01 ==
+PSMs: 18865
+matched fragments: 250882
+median fragment_mz_experimental: 605.3758
+intensity-weighted median: 726.4010
+fragments with 400 <= m/z <= 600: 43338 (17.27 %)

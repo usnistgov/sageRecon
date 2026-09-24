@@ -1,0 +1,97 @@
+MetaMorpheus: version 1.1.7
+Time to run task: 00:02:45.8351331
+
+--------------------------------------------------
+
+New files:
+New spectra: 
+
+<redacted>/Documents\temp\delme\sagePreview\liver\reallyMetaMorpheus\2026-09-01-09-20-24\Task1-CalibrateTask\10mg_1_A_1-calib.mzML
+
+--------------------------------------------------
+
+
+
+
+--------------------------------------------------
+
+Engine Results:
+
+Engine type: DatabaseLoadingEngine
+Time to run engine: 00:00:13.9533071
+Databases loaded:
+	uniprot_sprot_iso_human-2018_06.fasta: 84746 Proteins
+		42373 Target Proteins 	 42373 Decoy Proteins
+Total Proteins loaded: 84746
+Total Proteins removed by sanitization: 0
+Total Proteins renamed by sanitization: 0
+Total decoy Proteins scrambled due to homology: 2794
+Total Proteins remaining: 84746
+
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:33.4713975
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.7709337
+PSMs within 1% FDR: 7766
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.8329387
+MS1 calibration datapoint count: 443495
+MS1 ppm error median: -1.57
+MS1 ppm error interquartile range: 1.23
+MS2 calibration datapoint count: 149182
+MS2 ppm error median: -2.988
+MS2 ppm error interquartile range: 1.974
+
+
+Engine type: CalibrationEngine
+Time to run engine: 00:00:00.8374505
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:22.7813068
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.5770780
+PSMs within 1% FDR: 11236
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.9801738
+MS1 calibration datapoint count: 526123
+MS1 ppm error median: 0.155
+MS1 ppm error interquartile range: 1.27
+MS2 calibration datapoint count: 185807
+MS2 ppm error median: 0.087
+MS2 ppm error interquartile range: 1.883
+
+
+Engine type: CalibrationEngine
+Time to run engine: 00:00:00.5993774
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:18.4541893
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.4262558
+PSMs within 1% FDR: 12147
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.8561443
+MS1 calibration datapoint count: 495625
+MS1 ppm error median: 0.207
+MS1 ppm error interquartile range: 1.254
+MS2 calibration datapoint count: 192281
+MS2 ppm error median: 0.161
+MS2 ppm error interquartile range: 1.826
+
+

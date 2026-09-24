@@ -37,7 +37,9 @@ import csv
 import json
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-PREVIEW_DIR = f"{ROOT}/reference-data/preview/10mg_1_A_1"
+BENCH = os.path.join(os.path.dirname(ROOT), "liver-benchmark")
+UNIMOD = os.path.join(os.path.dirname(os.path.dirname(ROOT)), "recon-tool/resources/unimod.xml")
+PREVIEW_DIR = f"{BENCH}/preview/10mg_1_A_1"
 FIXED_C = 57.021464
 
 
@@ -195,12 +197,12 @@ def main():
 
     C4.PTMS_COLUMN_STEM["liver"] = "10mg_1_A_1_1"
     shep = C4.load_ptmshepherd(
-        require(f"{ROOT}/reference-data/ptm-shepherd/liverShepherd/global.modsummary.tsv",
+        require(f"{BENCH}/ptm-shepherd/liverShepherd/global.modsummary.tsv",
                 "PTM-Shepherd arm"), "liver")
 
-    titles = C4.load_unimod_title_mass(require(f"{ROOT}/reference-data/unimod.xml", "Unimod masses"))
+    titles = C4.load_unimod_title_mass(require(UNIMOD, "Unimod masses"))
     mascot = C4.load_mascot(
-        require(f"{ROOT}/reference-data/mascot/error-tolerant/MascotErrorTol-liver.txt",
+        require(f"{BENCH}/mascot/error-tolerant/MascotErrorTol-liver.txt",
                 "Mascot arm"), titles)
     if isinstance(mascot, tuple):
         mascot, mascot_skipped = mascot
@@ -209,8 +211,8 @@ def main():
 
     C4.METAMORPHEUS_FILE_STEM["liver"] = "10mg_1_A_1-calib"
     mm = C4.load_metamorpheus(
-        require(f"{ROOT}/reference-data/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
-                "MetaMorpheus arm — GITIGNORED, see .gitignore:62"), "liver")
+        require(f"{BENCH}/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
+                "MetaMorpheus arm"), "liver")
 
     prev, dup_dropped, offsets, overridden = load_preview(
         require(f"{PREVIEW_DIR}/objs/VariableMods.txt", "Byonic Preview arm"))

@@ -195,21 +195,22 @@ def require(path, why):
 
 def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-    fasta = os.path.expanduser("~/Documents/proteomicsTesting/uniprot_sprot_iso_human-2018_06.fasta")
+    bench = os.path.join(os.path.dirname(root), "liver-benchmark")
+    fasta = os.path.join(os.path.dirname(os.path.dirname(root)), "examples/uniprot_sprot_iso_human-2018_06.fasta")
     require(fasta, "the shared 2018 database every side is classified against")
     seqs = read_fasta(fasta)
     print(f"FASTA: {fasta}\n  {len(seqs)} sequences\n")
 
     rows = []
-    rec_tsv = f"{root}/recon-output/full-run/liver_search/pass2/results.sage.tsv"
+    rec_tsv = f"{bench}/recon/pass2/results.sage.tsv"
     require(rec_tsv, "recon Pass 2 arm")
     rows.append(tally(from_sage(rec_tsv), seqs, "recon Pass 2 (semi)"))
     rows.append(tally(from_fragpipe(require(
-        f"{root}/reference-data/ptm-shepherd/liverShepherd/peptide.tsv", "PTM-Shepherd arm")), seqs,
+        f"{bench}/ptm-shepherd/liverShepherd/peptide.tsv", "PTM-Shepherd arm")), seqs,
         "PTM-Shepherd open (FULLY)"))
     rows.append(tally(from_metamorpheus(require(
-        f"{root}/reference-data/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
-        "MetaMorpheus arm — GITIGNORED, see .gitignore:62")),
+        f"{bench}/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
+        "MetaMorpheus arm")),
         seqs, "MetaMorpheus (FULLY)"))
 
     hdr = f"{'source':<27}{'peptides':>9}{'den':>8}{'missed cl':>12}{'ragged-N':>11}{'ragged-C':>11}{'nontryp':>10}{'N:C':>7}"

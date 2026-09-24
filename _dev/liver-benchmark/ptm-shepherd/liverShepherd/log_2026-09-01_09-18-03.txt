@@ -1,0 +1,1280 @@
+System OS: Windows 11, Architecture: AMD64
+Java Info: 17.0.10, OpenJDK 64-Bit Server VM, Eclipse Adoptium
+.NET Core Info: N/A
+
+
+Version info:
+FragPipe version 23.1
+DIA-Umpire version 2.3.3
+diaTracer version 2.2.1
+MSFragger version 4.4.1
+Crystal-C version 1.5.9
+MSBooster version 1.3.17
+Percolator version 3.7.1
+PTMProphet version 7.3.0
+Metaproteomics version 1.0.1
+Philosopher version 5.1.2
+PTM-Shepherd version 3.0.2
+IonQuant version 1.11.20
+TMT-Integrator version 6.1.1
+EasyPQP version 0.1.52
+DIA-NN version 1.8.2 beta 8
+Skyline version N/A
+Pandas version 2.2.3
+Numpy version 1.26.4
+
+
+LCMS files:
+  Experiment/Group: 10mg_1_A_1_1
+  (if "spectral library generation" is enabled, all files will be analyzed together)
+  - <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.raw	DDA
+
+
+20 commands to execute:
+CheckCentroid
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Xmx14G -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar org.nesvilab.fragpipe.util.CheckCentroid <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.raw 13
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --init --nocheck --temp <redacted>/AppData\Local\Temp\981060a6-9375-41ba-8943-47a60eaf179e
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --init --nocheck --temp <redacted>/AppData\Local\Temp\0816eb62-e433-4e99-8e99-1731a43929a0
+MSFragger [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -jar -Dfile.encoding=UTF-8 -Xmx14G C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\MSFragger-4.4.1.jar <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\fragger.params <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.raw
+MSFragger move pepxml
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.pepXML <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pepXML
+MSFragger move tsv
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.tsv <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.tsv
+MSFragger move pin
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.pin <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pin
+Crystal-C [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Dlibs.thermo.dir=C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\ext\thermo -Xmx14G -cp C:\FragPipe\FragPipe-23.1\tools\original-crystalc-1.5.9.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar;C:\FragPipe\FragPipe-23.1\tools\grppr-0.3.23.jar crystalc.Run <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\crystalc-0-10mg_1_A_1.pepXML.params <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pepXML
+Crystal-C delete temp
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar org.nesvilab.utils.FileDelete <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\crystalc-0-10mg_1_A_1.pepXML.params
+PeptideProphet [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe peptideprophet --nonparam --expectscore --decoyprobs --masswidth 1000.0 --clevel -2 --decoy rev_ --database <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas --combine 10mg_1_A_1_c.pepXML
+Rewrite pepxml [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib/* org.nesvilab.fragpipe.util.RewritePepxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1_uncalibrated.mzML
+ProteinProphet [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe proteinprophet --maxppmdiff 2000000 --output combined <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\filelist_proteinprophet.txt
+PhilosopherDbAnnotate [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe database --annotate <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas --prefix rev_
+PhilosopherFilter [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe filter --sequential --prot 0.01 --mapmods --tag rev_ --pepxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1 --protxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\combined.prot.xml --razor
+PhilosopherReport [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe report
+PTMShepherd [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Xmx14G -Dlibs.thermo.dir=C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\ext\thermo -cp C:\FragPipe\FragPipe-23.1\lib\commons-lang3-3.17.0.jar;C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar;C:\FragPipe\FragPipe-23.1\tools\hipparchus-1.8\hipparchus-core-1.8.jar;C:\FragPipe\FragPipe-23.1\tools\ptmshepherd-3.0.2.jar;C:\FragPipe\FragPipe-23.1\tools\commons-math3-3.6.1.jar;C:\FragPipe\FragPipe-23.1\tools\hipparchus-1.8\hipparchus-stat-1.8.jar edu.umich.andykong.ptmshepherd.PTMShepherd "<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\shepherd.config"
+WorkspaceClean [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+WorkspaceClean [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+~~~~~~~~~~~~~~~~~~~~~~
+
+Execution order:
+
+    Cmd: [START], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [CheckCentroid], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [WorkspaceCleanInit], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [WorkspaceCleanInit], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+    Cmd: [MSFragger], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [Crystal-C], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [PeptideProphet], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [ProteinProphet], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [PhilosopherDbAnnotate], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [PhilosopherFilter], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [PhilosopherReport], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [PTMShepherd], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [WorkspaceClean], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+    Cmd: [WorkspaceClean], Work dir: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+
+~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~Sample of <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas~~~~~~~
+>rev_sp|A0A075B6H9|LV469_HUMAN Immunoglobulin lambda variable 4-69 OS=Homo sapiens OX=9606 GN=IGLV4-69 PE=1 SV=1
+>rev_sp|O75431-2|MTX2_HUMAN Isoform 2 of Metaxin-2 OS=Homo sapiens OX=9606 GN=MTX2
+>rev_sp|P19099|C11B2_HUMAN Cytochrome P450 11B2, mitochondrial OS=Homo sapiens OX=9606 GN=CYP11B2 PE=1 SV=3
+>rev_sp|P58872-3|RHBL3_HUMAN Isoform 3 of Rhomboid-related protein 3 OS=Homo sapiens OX=9606 GN=RHBDL3
+>rev_sp|Q15717-2|ELAV1_HUMAN Isoform 2 of ELAV-like protein 1 OS=Homo sapiens OX=9606 GN=ELAVL1
+>rev_sp|Q6P4F1-3|FUT10_HUMAN Isoform 3 of Alpha-(1,3)-fucosyltransferase 10 OS=Homo sapiens OX=9606 GN=FUT10
+>rev_sp|Q8IYW4|ENTD1_HUMAN ENTH domain-containing protein 1 OS=Homo sapiens OX=9606 GN=ENTHD1 PE=2 SV=1
+>rev_sp|Q92545|TM131_HUMAN Transmembrane protein 131 OS=Homo sapiens OX=9606 GN=TMEM131 PE=1 SV=3
+>rev_sp|Q9BV29|CCD32_HUMAN Coiled-coil domain-containing protein 32 OS=Homo sapiens OX=9606 GN=CCDC32 PE=1 SV=2
+>rev_sp|Q9NX36|DJC28_HUMAN DnaJ homolog subfamily C member 28 OS=Homo sapiens OX=9606 GN=DNAJC28 PE=1 SV=2
+>rev_sp|W5XKT8-2|SACA6_HUMAN Isoform 2 of Sperm acrosome membrane-associated protein 6 OS=Homo sapiens OX=9606 GN=SPACA6
+>sp|O75426-4|FBX24_HUMAN Isoform 4 of F-box only protein 24 OS=Homo sapiens OX=9606 GN=FBXO24
+>sp|P19075|TSN8_HUMAN Tetraspanin-8 OS=Homo sapiens OX=9606 GN=TSPAN8 PE=1 SV=1
+>sp|P58753-3|TIRAP_HUMAN Isoform 3 of Toll/interleukin-1 receptor domain-containing adapter protein OS=Homo sapiens OX=9606 GN=TIRAP
+>sp|Q15714-3|T22D1_HUMAN Isoform 3 of TSC22 domain family protein 1 OS=Homo sapiens OX=9606 GN=TSC22D1
+>sp|Q6P4E1-5|CASC4_HUMAN Isoform 5 of Protein CASC4 OS=Homo sapiens OX=9606 GN=CASC4
+>sp|Q8IYW2-2|CFA46_HUMAN Isoform 2 of Cilia- and flagella-associated protein 46 OS=Homo sapiens OX=9606 GN=CFAP46
+>sp|Q92543-2|SNX19_HUMAN Isoform 2 of Sorting nexin-19 OS=Homo sapiens OX=9606 GN=SNX19
+>sp|Q9BV23|ABHD6_HUMAN Monoacylglycerol lipase ABHD6 OS=Homo sapiens OX=9606 GN=ABHD6 PE=1 SV=1
+>sp|Q9NX20|RM16_HUMAN 39S ribosomal protein L16, mitochondrial OS=Homo sapiens OX=9606 GN=MRPL16 PE=1 SV=1
+>sp|S4R3P1|HMN13_HUMAN Humanin-like 13 OS=Homo sapiens OX=9606 GN=MTRNR2L13 PE=3 SV=1
+~~~~~~~~~~~~~~~~~~~~~~
+
+~~~~~~~~~ fragpipe.config ~~~~~~~~~
+# FragPipe v23.1ui state cache
+
+
+# Please edit the following path to point to the correct location.
+# In Windows, please replace single '\' with '\\'
+database.db-path=<redacted>/Documents\\temp\\delme\\sagePreview\\liver\\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas
+
+Table.editor=57.02146
+crystalc.run-crystalc=true
+database.decoy-tag=rev_
+diann.channel-normalization-strategy=0
+diann.cmd-opts=
+diann.generate-msstats=true
+diann.heavy=
+diann.library=
+diann.light=
+diann.medium=
+diann.min-site-prob=0.75
+diann.mod-tag=
+diann.q-value=0.01
+diann.quantification-strategy=3
+diann.quantification-strategy-2=2
+diann.run-dia-nn=false
+diann.run-dia-plex=false
+diann.run-specific-protein-q-value=false
+diann.unrelated-runs=false
+diann.use-predicted-spectra=false
+diatracer.corr-threshold=0.3
+diatracer.delta-apex-im=0.01
+diatracer.delta-apex-rt=3
+diatracer.mass-defect-filter=true
+diatracer.mass-defect-offset=0.1
+diatracer.rf-max=500
+diatracer.run-diatracer=false
+diatracer.write-intermediate-files=false
+diaumpire.AdjustFragIntensity=true
+diaumpire.BoostComplementaryIon=false
+diaumpire.CorrThreshold=0
+diaumpire.DeltaApex=0.2
+diaumpire.ExportPrecursorPeak=false
+diaumpire.Q1=true
+diaumpire.Q2=true
+diaumpire.Q3=true
+diaumpire.RFmax=500
+diaumpire.RPmax=25
+diaumpire.RTOverlap=0.3
+diaumpire.SE.EstimateBG=false
+diaumpire.SE.IsoPattern=0.3
+diaumpire.SE.MS1PPM=10
+diaumpire.SE.MS2PPM=20
+diaumpire.SE.MS2SN=1.1
+diaumpire.SE.MassDefectFilter=true
+diaumpire.SE.MassDefectOffset=0.1
+diaumpire.SE.NoMissedScan=1
+diaumpire.SE.SN=1.1
+diaumpire.run-diaumpire=false
+fpop.coadaptr.fpop.fpop_masses=
+fpop.coadaptr.fpop.run-fpop-coadaptr=false
+fpop.fragpipe.fpop.fpop-tmt=false
+fpop.fragpipe.fpop.label_control=
+fpop.fragpipe.fpop.label_fpop=
+fpop.fragpipe.fpop.region_size=1
+fpop.fragpipe.fpop.run-fpop=false
+fpop.fragpipe.fpop.subtract-control=false
+fragpipe-config.bin-diann=C\:\\FragPipe\\FragPipe-23.1\\tools\\diann\\1.8.2_beta_8\\windows\\DiaNN.exe
+fragpipe-config.bin-python=C\:\\FragPipe\\FragPipe-23.1\\python\\python.exe
+fragpipe-config.tools-folder=C\:\\FragPipe\\FragPipe-23.1\\tools
+freequant.mz-tol=10
+freequant.rt-tol=0.4
+freequant.run-freequant=true
+ionquant.excludemods=
+ionquant.formula=
+ionquant.heavy=
+ionquant.imtol=0.05
+ionquant.intensitymode=0
+ionquant.ionfdr=0.01
+ionquant.light=
+ionquant.locprob=0.75
+ionquant.maxlfq=1
+ionquant.mbr=0
+ionquant.mbrimtol=0.05
+ionquant.mbrmincorr=0
+ionquant.mbrrttol=1
+ionquant.mbrtoprun=10
+ionquant.medium=
+ionquant.minfreq=0
+ionquant.minions=1
+ionquant.minisotopes=2
+ionquant.minscans=3
+ionquant.mztol=10
+ionquant.normalization=1
+ionquant.peptidefdr=1
+ionquant.proteinfdr=1
+ionquant.requantify=1
+ionquant.rttol=0.4
+ionquant.run-ionquant=false
+ionquant.tp=0
+ionquant.uniqueness=0
+ionquant.use-labeling=false
+ionquant.use-lfq=true
+ionquant.writeindex=0
+metaproteomics.cmd-line-opts=
+metaproteomics.delta-hyperscore=0.0
+metaproteomics.host-name=Homo sapiens
+metaproteomics.iterations=3
+metaproteomics.min-pept-cnt-per-prot=1
+metaproteomics.min-uniq-pept-cnt=3
+metaproteomics.min-uniq-pept-cnt-per-prot=1
+metaproteomics.qvalue=0.01
+metaproteomics.run-metaproteomics=false
+msbooster.find-best-im-model=false
+msbooster.find-best-rt-model=false
+msbooster.find-best-spectra-model=false
+msbooster.fragmentation-type=0
+msbooster.im-model=DIA-NN
+msbooster.koina-url=
+msbooster.predict-im=true
+msbooster.predict-rt=true
+msbooster.predict-spectra=true
+msbooster.rt-model=DIA-NN
+msbooster.run-msbooster=false
+msbooster.spectra-model=DIA-NN
+msbooster.spectral-library-path=
+msfragger.Y_type_masses=
+msfragger.activation_types=all
+msfragger.allowed_missed_cleavage_1=2
+msfragger.allowed_missed_cleavage_2=2
+msfragger.analyzer_types=all
+msfragger.calibrate_mass=2
+msfragger.check_spectral_files=true
+msfragger.clip_nTerm_M=true
+msfragger.deisotope=1
+msfragger.delta_mass_exclude_ranges=(-1.5,3.5)
+msfragger.deneutralloss=1
+msfragger.diagnostic_fragments=
+msfragger.diagnostic_intensity_filter=0
+msfragger.digest_max_length=50
+msfragger.digest_min_length=7
+msfragger.fragment_ion_series=b,y
+msfragger.fragment_mass_tolerance=20
+msfragger.fragment_mass_units=1
+msfragger.group_variable=0
+msfragger.intensity_transform=0
+msfragger.ion_series_definitions=
+msfragger.isotope_error=0
+msfragger.labile_search_mode=off
+msfragger.localize_delta_mass=true
+msfragger.mass_diff_to_variable_mod=0
+msfragger.mass_offsets=0
+msfragger.mass_offsets_detailed=
+msfragger.max_fragment_charge=2
+msfragger.max_variable_mods_combinations=5000
+msfragger.max_variable_mods_per_peptide=3
+msfragger.min_fragments_modelling=2
+msfragger.min_matched_fragments=4
+msfragger.min_sequence_matches=2
+msfragger.minimum_peaks=15
+msfragger.minimum_ratio=0.01
+msfragger.misc.fragger.clear-mz-hi=0
+msfragger.misc.fragger.clear-mz-lo=0
+msfragger.misc.fragger.digest-mass-hi=5000
+msfragger.misc.fragger.digest-mass-lo=500
+msfragger.misc.fragger.enzyme-dropdown-1=stricttrypsin
+msfragger.misc.fragger.enzyme-dropdown-2=null
+msfragger.misc.fragger.precursor-charge-hi=4
+msfragger.misc.fragger.precursor-charge-lo=1
+msfragger.misc.fragger.remove-precursor-range-hi=1.5
+msfragger.misc.fragger.remove-precursor-range-lo=-1.5
+msfragger.misc.slice-db=1
+msfragger.num_enzyme_termini=2
+msfragger.output_format=pepXML_pin
+msfragger.output_max_expect=50
+msfragger.output_report_topN=1
+msfragger.output_report_topN_dda_plus=5
+msfragger.output_report_topN_dia1=5
+msfragger.override_charge=false
+msfragger.precursor_mass_lower=-150
+msfragger.precursor_mass_mode=corrected
+msfragger.precursor_mass_units=0
+msfragger.precursor_mass_upper=500
+msfragger.precursor_true_tolerance=20
+msfragger.precursor_true_units=1
+msfragger.remainder_fragment_masses=
+msfragger.remove_precursor_peak=1
+msfragger.report_alternative_proteins=true
+msfragger.require_precursor=true
+msfragger.restrict_deltamass_to=all
+msfragger.reuse_dia_fragment_peaks=false
+msfragger.run-msfragger=true
+msfragger.search_enzyme_cut_1=KR
+msfragger.search_enzyme_cut_2=
+msfragger.search_enzyme_name_1=stricttrypsin
+msfragger.search_enzyme_name_2=null
+msfragger.search_enzyme_nocut_1=
+msfragger.search_enzyme_nocut_2=
+msfragger.search_enzyme_sense_1=C
+msfragger.search_enzyme_sense_2=C
+msfragger.table.fix-mods=0.0,C-Term Peptide,true,-1; 0.0,N-Term Peptide,true,-1; 0.0,C-Term Protein,true,-1; 0.0,N-Term Protein,true,-1; 0.0,G (glycine),true,-1; 0.0,A (alanine),true,-1; 0.0,S (serine),true,-1; 0.0,P (proline),true,-1; 0.0,V (valine),true,-1; 0.0,T (threonine),true,-1; 57.02146,C (cysteine),false,-1; 0.0,L (leucine),true,-1; 0.0,I (isoleucine),true,-1; 0.0,N (asparagine),true,-1; 0.0,D (aspartic acid),true,-1; 0.0,Q (glutamine),true,-1; 0.0,K (lysine),true,-1; 0.0,E (glutamic acid),true,-1; 0.0,M (methionine),true,-1; 0.0,H (histidine),true,-1; 0.0,F (phenylalanine),true,-1; 0.0,R (arginine),true,-1; 0.0,Y (tyrosine),true,-1; 0.0,W (tryptophan),true,-1; 0.0,B ,true,-1; 0.0,J,true,-1; 0.0,O,true,-1; 0.0,U,true,-1; 0.0,X,true,-1; 0.0,Z,true,-1
+msfragger.table.var-mods=15.9949,M,false,3; 42.0106,[^,false,1; 79.96633,STY,false,3; -17.0265,nQnC,false,1; -18.0106,nE,false,1; 4.025107,K,false,2; 6.020129,R,false,2; 8.014199,K,false,2; 10.008269,R,false,2; 0.0,site_10,false,1; 0.0,site_11,false,1; 0.0,site_12,false,1; 0.0,site_13,false,1; 0.0,site_14,false,1; 0.0,site_15,false,1; 0.0,site_16,false,1
+msfragger.track_zero_topN=0
+msfragger.use_all_mods_in_first_search=false
+msfragger.use_detailed_offsets=false
+msfragger.use_topN_peaks=150
+msfragger.write_calibrated_mzml=false
+msfragger.zero_bin_accept_expect=0
+msfragger.zero_bin_mult_expect=1
+opair.activation1=HCD
+opair.activation2=ETD
+opair.allowed_sites=
+opair.filterOxonium=true
+opair.glyco_db=
+opair.max_glycans=4
+opair.max_isotope_error=2
+opair.min_isotope_error=0
+opair.ms1_tol=20
+opair.ms2_tol=20
+opair.oxonium_filtering_file=
+opair.oxonium_minimum_intensity=0.05
+opair.reverse_scan_order=false
+opair.run-opair=false
+opair.single_scan_type=false
+peptide-prophet.cmd-opts=--nonparam --expectscore --decoyprobs --masswidth 1000.0 --clevel -2
+peptide-prophet.combine-pepxml=true
+peptide-prophet.run-peptide-prophet=true
+percolator.cmd-opts=--only-psms --no-terminate --post-processing-tdc
+percolator.keep-tsv-files=false
+percolator.min-prob=0.5
+percolator.run-percolator=false
+phi-report.dont-use-prot-proph-file=false
+phi-report.filter=--sequential --prot 0.01 --mapmods
+phi-report.pep-level-summary=false
+phi-report.print-decoys=false
+phi-report.prot-level-summary=true
+phi-report.remove-contaminants=false
+phi-report.run-report=true
+protein-prophet.cmd-opts=--maxppmdiff 2000000
+protein-prophet.run-protein-prophet=true
+ptmprophet.cmdline=
+ptmprophet.override-defaults=false
+ptmprophet.run-ptmprophet=false
+ptmshepherd.adv_params=false
+ptmshepherd.annotate_assigned_mods=false
+ptmshepherd.annotation-common=false
+ptmshepherd.annotation-custom=false
+ptmshepherd.annotation-glyco=false
+ptmshepherd.annotation-unimod=true
+ptmshepherd.annotation_file=
+ptmshepherd.annotation_tol=0.01
+ptmshepherd.cap_y_ions=
+ptmshepherd.decoy_type=1
+ptmshepherd.diag_ions=
+ptmshepherd.diagmine_diagMinFoldChange=3.0
+ptmshepherd.diagmine_diagMinSpecDiff=25
+ptmshepherd.diagmine_fragMinFoldChange=3.0
+ptmshepherd.diagmine_fragMinPropensity=12.5
+ptmshepherd.diagmine_fragMinSpecDiff=25
+ptmshepherd.diagmine_minIonsPerSpec=2
+ptmshepherd.diagmine_minPeps=25
+ptmshepherd.diagmine_pepMinFoldChange=3.0
+ptmshepherd.diagmine_pepMinSpecDiff=25
+ptmshepherd.glyco_fdr=1.00
+ptmshepherd.glyco_isotope_max=3
+ptmshepherd.glyco_isotope_min=-1
+ptmshepherd.glyco_ppm_tol=50
+ptmshepherd.glycodatabase=
+ptmshepherd.histo_smoothbins=2
+ptmshepherd.iontype_a=false
+ptmshepherd.iontype_b=true
+ptmshepherd.iontype_c=false
+ptmshepherd.iontype_x=false
+ptmshepherd.iontype_y=true
+ptmshepherd.iontype_z=false
+ptmshepherd.localization_allowed_res=
+ptmshepherd.n_glyco=true
+ptmshepherd.normalization-psms=true
+ptmshepherd.normalization-scans=false
+ptmshepherd.output_extended=false
+ptmshepherd.peakpicking_mass_units=0
+ptmshepherd.peakpicking_minPsm=10
+ptmshepherd.peakpicking_promRatio=0.3
+ptmshepherd.peakpicking_width=0.002
+ptmshepherd.precursor_mass_units=0
+ptmshepherd.precursor_tol=0.01
+ptmshepherd.print_decoys=false
+ptmshepherd.print_full_glyco_params=false
+ptmshepherd.prob_mass=0.5
+ptmshepherd.remainder_masses=
+ptmshepherd.remove_glycan_delta_mass=true
+ptmshepherd.run-shepherd=true
+ptmshepherd.run_diagextract_mode=false
+ptmshepherd.run_diagmine_mode=false
+ptmshepherd.run_glyco_mode=false
+ptmshepherd.spectra_condPeaks=150
+ptmshepherd.spectra_condRatio=0.0001
+ptmshepherd.spectra_maxPrecursorCharge=4
+ptmshepherd.spectra_maxfragcharge=1
+ptmshepherd.spectra_ppmtol=20
+ptmshepherd.use_msfragger_localization=false
+ptmshepherd.varmod_masses=
+quantitation.run-label-free-quant=false
+run-psm-validation=true
+run-validation-tab=true
+saintexpress.cmd-opts=
+saintexpress.max-replicates=10
+saintexpress.run-saint-express=false
+saintexpress.virtual-controls=100
+skyline.run-skyline=false
+skyline.skyline=false
+skyline.skyline-custom=false
+skyline.skyline-custom-path=
+skyline.skyline-daily=true
+skyline.skyline-fragment-tolerance=10
+skyline.skyline-mods-mode=Default
+skyline.skyline-precursor-tolerance=10
+skyline.use-ssl=false
+speclibgen.convert-pepxml=true
+speclibgen.convert-psm=false
+speclibgen.easypqp.extras.max_delta_ppm=15
+speclibgen.easypqp.extras.max_delta_unimod=0.02
+speclibgen.easypqp.extras.max_glycan_qval=1
+speclibgen.easypqp.extras.rt_lowess_fraction=0
+speclibgen.easypqp.fragment.a=false
+speclibgen.easypqp.fragment.b=true
+speclibgen.easypqp.fragment.c=false
+speclibgen.easypqp.fragment.x=false
+speclibgen.easypqp.fragment.y=true
+speclibgen.easypqp.fragment.z=false
+speclibgen.easypqp.im-cal=Automatic selection of a run as reference IM
+speclibgen.easypqp.labile_mode=Regular (not glyco)
+speclibgen.easypqp.neutral_loss=false
+speclibgen.easypqp.rt-cal=ciRT
+speclibgen.easypqp.select-file.text=
+speclibgen.easypqp.select-im-file.text=
+speclibgen.keep-intermediate-files=false
+speclibgen.run-speclibgen=false
+tab-run.delete_temp_files=false
+tab-run.export_matched_fragments=false
+tab-run.sub_mzml_prob_threshold=0.5
+tab-run.write_sub_mzml=false
+tmtintegrator.add_Ref=-1
+tmtintegrator.aggregation_method=0
+tmtintegrator.allow_overlabel=true
+tmtintegrator.allow_unlabeled=false
+tmtintegrator.best_psm=true
+tmtintegrator.channel_num=TMT-10
+tmtintegrator.extraction_tool=IonQuant
+tmtintegrator.glyco_qval=-1
+tmtintegrator.groupby=-1
+tmtintegrator.log2transformed=true
+tmtintegrator.max_pep_prob_thres=0
+tmtintegrator.min_ntt=0
+tmtintegrator.min_pep_prob=0.9
+tmtintegrator.min_percent=0.05
+tmtintegrator.min_purity=0.5
+tmtintegrator.min_resolution=0
+tmtintegrator.min_site_prob=-1
+tmtintegrator.min_snr=0
+tmtintegrator.mod_tag=none
+tmtintegrator.ms1_int=true
+tmtintegrator.outlier_removal=true
+tmtintegrator.philosopher-msstats=false
+tmtintegrator.print_RefInt=false
+tmtintegrator.prot_exclude=none
+tmtintegrator.prot_norm=-1
+tmtintegrator.psm_norm=false
+tmtintegrator.quant_level=2
+tmtintegrator.ref_d_tag=Pool
+tmtintegrator.ref_tag=pool
+tmtintegrator.run-tmtintegrator=false
+tmtintegrator.tolerance=20
+tmtintegrator.unique_gene=0
+tmtintegrator.unique_pep=false
+tmtintegrator.use_glycan_composition=false
+workdir=<redacted>/Documents\\temp\\delme\\sagePreview\\liver\\reallyOpenShepherd
+workflow.input.data-type.im-ms=false
+workflow.input.data-type.regular-ms=true
+workflow.misc.save-sdrf=true
+workflow.misc.sdrf-type=Default
+workflow.ram=0
+workflow.threads=13
+
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+CheckCentroid
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Xmx14G -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar org.nesvilab.fragpipe.util.CheckCentroid <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.raw 13
+Done in 0.0 s.
+Process 'CheckCentroid' finished, exit code: 0
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+time="09:04:45" level=info msg="Executing Workspace  v5.1.2"
+time="09:04:45" level=info msg="Removing workspace"
+time="09:04:45" level=info msg=Done
+Process 'WorkspaceCleanInit' finished, exit code: 0
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --init --nocheck --temp <redacted>/AppData\Local\Temp\981060a6-9375-41ba-8943-47a60eaf179e
+time="09:04:45" level=info msg="Executing Workspace  v5.1.2"
+time="09:04:45" level=info msg="Creating workspace"
+time="09:04:45" level=info msg=Done
+Process 'WorkspaceCleanInit' finished, exit code: 0
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+time="09:04:45" level=info msg="Executing Workspace  v5.1.2"
+time="09:04:45" level=info msg="Removing workspace"
+time="09:04:45" level=info msg=Done
+Process 'WorkspaceCleanInit' finished, exit code: 0
+WorkspaceCleanInit [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --init --nocheck --temp <redacted>/AppData\Local\Temp\0816eb62-e433-4e99-8e99-1731a43929a0
+time="09:04:46" level=info msg="Executing Workspace  v5.1.2"
+time="09:04:46" level=info msg="Creating workspace"
+time="09:04:46" level=info msg=Done
+Process 'WorkspaceCleanInit' finished, exit code: 0
+MSFragger [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -jar -Dfile.encoding=UTF-8 -Xmx14G C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\MSFragger-4.4.1.jar <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\fragger.params <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.raw
+MSFragger version MSFragger-4.4.1
+Batmass-IO version 1.36.6
+timsdata library version timsdata-2-21-0-4
+(c) University of Michigan
+RawFileReader reading tool. Copyright (c) 2016 by Thermo Fisher Scientific, Inc. All rights reserved.
+timdTOF .d reading tool. Copyright (c) 2022 by Bruker Daltonics GmbH & Co. KG. All rights reserved.
+System OS: Windows 11, Architecture: AMD64
+Java Info: 17.0.10, OpenJDK 64-Bit Server VM, Eclipse Adoptium
+JVM started with 14 GB memory
+Checking database...
+Checking spectral files...
+10mg_1_A_1.raw: Scans = 56949; MS2 ITMS = false; MS2 FTMS = true; MS2 ASTMS = false; MS1 ITMS = false; Isolation sizes = [0.7]; Instrument = Orbitrap Fusion Lumos
+***********************************FIRST SEARCH************************************
+Parameters:
+num_threads = 13
+database_name = <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas
+decoy_prefix = rev_
+keep_decoys = 1
+precursor_mass_lower = -20.0
+precursor_mass_upper = 20.0
+precursor_mass_units = 1
+data_type = 0
+precursor_true_tolerance = 20.0
+precursor_true_units = 1
+fragment_mass_tolerance = 20.0
+fragment_mass_units = 1
+calibrate_mass = 2
+use_all_mods_in_first_search = 0
+write_calibrated_mzml = 0
+write_uncalibrated_mzml = 1
+write_mzbin_all = 0
+isotope_error = 0/1
+mass_offsets = 0
+use_detailed_offsets = 0
+labile_search_mode = OFF
+restrict_deltamass_to = all
+precursor_mass_mode = CORRECTED
+localize_delta_mass = 0
+delta_mass_exclude_ranges = (-1.5,3.5)
+fragment_ion_series = b,y
+ion_series_definitions = 
+search_enzyme_name = stricttrypsin
+search_enzyme_sense_1 = C
+search_enzyme_cut_1 = KR
+search_enzyme_nocut_1 = 
+allowed_missed_cleavage_1 = 2
+num_enzyme_termini = 2
+clip_nTerm_M = 1
+allow_multiple_variable_mods_on_residue = 0
+max_variable_mods_per_peptide = 3
+max_variable_mods_combinations = 5000
+output_format = pepxml_pin
+output_report_topN = 1
+output_max_expect = 50.0
+report_alternative_proteins = 0
+override_charge = 0
+precursor_charge_low = 2
+precursor_charge_high = 3
+digest_min_length = 7
+digest_max_length = 50
+digest_mass_range_low = 500.0
+digest_mass_range_high = 5000.0
+max_fragment_charge = 1
+deisotope = 1
+deneutralloss = 1
+track_zero_topN = 0
+zero_bin_accept_expect = 0.0
+zero_bin_mult_expect = 1.0
+minimum_peaks = 15
+use_topN_peaks = 150
+minIonsScoring = 2
+min_matched_fragments = 4
+minimum_ratio = 0.01
+intensity_transform = 0
+activation_types = all
+analyzer_types = all
+group_variable = 0
+require_precursor = 1
+reuse_dia_fragment_peaks = 0
+remove_precursor_peak = 1
+remove_precursor_range = -1.500000,1.500000
+clear_mz_range_low = 0.0
+clear_mz_range_high = 0.0
+excluded_scan_list_file = 
+mass_diff_to_variable_mod = 0
+min_sequence_matches = 2
+check_spectral_files = 1
+add_A_alanine = 0.0
+add_B_user_amino_acid = 0.0
+add_Cterm_peptide = 0.0
+add_Cterm_protein = 0.0
+add_D_aspartic_acid = 0.0
+add_E_glutamic_acid = 0.0
+add_F_phenylalanine = 0.0
+add_G_glycine = 0.0
+add_H_histidine = 0.0
+add_I_isoleucine = 0.0
+add_J_user_amino_acid = 0.0
+add_K_lysine = 0.0
+add_L_leucine = 0.0
+add_M_methionine = 0.0
+add_N_asparagine = 0.0
+add_Nterm_peptide = 0.0
+add_Nterm_protein = 0.0
+add_O_user_amino_acid = 0.0  # O = pyrrolysine (237.14773 Da)
+add_P_proline = 0.0
+add_Q_glutamine = 0.0
+add_R_arginine = 0.0
+add_S_serine = 0.0
+add_T_threonine = 0.0
+add_U_user_amino_acid = 0.0  # U = selenocysteine (150.95363 Da)
+add_V_valine = 0.0
+add_W_tryptophan = 0.0
+add_X_user_amino_acid = 0.0
+add_Y_tyrosine = 0.0
+add_Z_user_amino_acid = 0.0
+Number of unique peptides
+	of length 7: 309195
+	of length 8: 298658
+	of length 9: 297475
+	of length 10: 281327
+	of length 11: 267392
+	of length 12: 256103
+	of length 13: 249847
+	of length 14: 234743
+	of length 15: 223030
+	of length 16: 208014
+	of length 17: 195388
+	of length 18: 187769
+	of length 19: 184140
+	of length 20: 165258
+	of length 21: 158456
+	of length 22: 148830
+	of length 23: 139244
+	of length 24: 132342
+	of length 25: 124124
+	of length 26: 116047
+	of length 27: 110643
+	of length 28: 105718
+	of length 29: 96408
+	of length 30: 91448
+	of length 31: 85843
+	of length 32: 81398
+	of length 33: 76110
+	of length 34: 71469
+	of length 35: 64898
+	of length 36: 63258
+	of length 37: 57654
+	of length 38: 54201
+	of length 39: 49163
+	of length 40: 46555
+	of length 41: 43595
+	of length 42: 40172
+	of length 43: 33966
+	of length 44: 27542
+	of length 45: 21251
+	of length 46: 13892
+	of length 47: 8826
+	of length 48: 5046
+	of length 49: 2759
+	of length 50: 1650
+In total 5430847 peptides.
+Generated 5430847 modified peptides.
+Number of peptides with more than 5000 modification patterns: 0
+Selected fragment index width 0.10 Da.
+198549088 fragments to be searched in 1 slices (1.85 GB total)
+Operating on slice 1 of 1: 
+	Fragment index slice generated in 1.99 s
+	001. 10mg_1_A_1.raw 19.3 s | deisotoping 1.8 s
+		[progress: 56949/56949 (100%) - 10166 spectra/s] 5.6s
+postprocessing 10mg_1_A_1.raw 0.4 s
+***************************FIRST SEARCH DONE IN 0.874 MIN**************************
+
+*********************MASS CALIBRATION AND PARAMETER OPTIMIZATION*******************
+-----|---------------|---------------|---------------|---------------
+     |  MS1   (Old)  |  MS1   (New)  |  MS2   (Old)  |  MS2   (New)  
+-----|---------------|---------------|---------------|---------------
+ Run |  Median  MAD  |  Median  MAD  |  Median  MAD  |  Median  MAD  
+ 001 |  -1.43   0.97 |  -0.03   0.57 |  -3.02   1.33 |  -0.03   1.20  
+-----|---------------|---------------|---------------|---------------
+Finding the optimal parameters:
+-------|-------|-------|-------|-------|-------|-------|-------|-------
+  MS2  |    5  |    7  |   10  |   15  |   20  |   25  |   30  |   50  
+-------|-------|-------|-------|-------|-------|-------|-------|-------
+ Count |  15008|  15066|  14979| skip rest
+-------|-------|-------|-------|-------|-------|-------|-------|-------
+-------|-------|-------|-------|-------|-------|-------
+ Peaks | 300_0 | 200_0 | 175_0 | 150_1 | 125_1 | 100_1 
+-------|-------|-------|-------|-------|-------|-------
+ Count |  15041|  15006|  14990|  15066|  15033|  15007
+-------|-------|-------|-------|-------|-------|-------
+-------|-------
+ Int.  |    1  
+-------|-------
+ Count |  15122
+-------|-------
+-------|-------
+ Rm P. |    0  
+-------|-------
+ Count |  15052
+-------|-------
+New fragment_mass_tolerance = 7.000000 PPM
+New use_topN_peaks = 100
+New minimum_ratio = 0.010000
+New intensity_transform = 1
+New remove_precursor_peak = 1
+New precursor_true_tolerance = 3.000000 PPM
+************MASS CALIBRATION AND PARAMETER OPTIMIZATION DONE IN 1.121 MIN*********
+
+************************************MAIN SEARCH************************************
+Checking database...
+Parameters:
+num_threads = 13
+database_name = <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas
+decoy_prefix = rev_
+keep_decoys = 1
+precursor_mass_lower = -150.0
+precursor_mass_upper = 500.0
+precursor_mass_units = 0
+data_type = 0
+precursor_true_tolerance = 3.0
+precursor_true_units = 1
+fragment_mass_tolerance = 7.0
+fragment_mass_units = 1
+calibrate_mass = 2
+use_all_mods_in_first_search = 0
+write_calibrated_mzml = 0
+write_uncalibrated_mzml = 1
+write_mzbin_all = 0
+isotope_error = 0
+mass_offsets = 0.0
+use_detailed_offsets = 0
+labile_search_mode = OFF
+restrict_deltamass_to = all
+precursor_mass_mode = CORRECTED
+localize_delta_mass = 1
+delta_mass_exclude_ranges = (-1.5,3.5)
+fragment_ion_series = b,y
+ion_series_definitions = 
+search_enzyme_name = stricttrypsin
+search_enzyme_sense_1 = C
+search_enzyme_cut_1 = KR
+search_enzyme_nocut_1 = 
+allowed_missed_cleavage_1 = 2
+num_enzyme_termini = 2
+clip_nTerm_M = 1
+allow_multiple_variable_mods_on_residue = 0
+max_variable_mods_per_peptide = 3
+max_variable_mods_combinations = 5000
+output_format = pepxml_pin
+output_report_topN = 1
+output_max_expect = 50.0
+report_alternative_proteins = 1
+override_charge = 0
+precursor_charge_low = 1
+precursor_charge_high = 4
+digest_min_length = 7
+digest_max_length = 50
+digest_mass_range_low = 500.0
+digest_mass_range_high = 5000.0
+max_fragment_charge = 1
+deisotope = 1
+deneutralloss = 1
+track_zero_topN = 0
+zero_bin_accept_expect = 0.0
+zero_bin_mult_expect = 1.0
+minimum_peaks = 15
+use_topN_peaks = 100
+minIonsScoring = 2
+min_matched_fragments = 4
+minimum_ratio = 0.01
+intensity_transform = 1
+activation_types = all
+analyzer_types = all
+group_variable = 0
+require_precursor = 1
+reuse_dia_fragment_peaks = 0
+remove_precursor_peak = 1
+remove_precursor_range = -1.500000,1.500000
+clear_mz_range_low = 0.0
+clear_mz_range_high = 0.0
+excluded_scan_list_file = 
+mass_diff_to_variable_mod = 0
+min_sequence_matches = 2
+check_spectral_files = 1
+add_A_alanine = 0.0
+add_B_user_amino_acid = 0.0
+add_Cterm_peptide = 0.0
+add_Cterm_protein = 0.0
+add_D_aspartic_acid = 0.0
+add_E_glutamic_acid = 0.0
+add_F_phenylalanine = 0.0
+add_G_glycine = 0.0
+add_H_histidine = 0.0
+add_I_isoleucine = 0.0
+add_J_user_amino_acid = 0.0
+add_K_lysine = 0.0
+add_L_leucine = 0.0
+add_M_methionine = 0.0
+add_N_asparagine = 0.0
+add_Nterm_peptide = 0.0
+add_Nterm_protein = 0.0
+add_O_user_amino_acid = 0.0  # O = pyrrolysine (237.14773 Da)
+add_P_proline = 0.0
+add_Q_glutamine = 0.0
+add_R_arginine = 0.0
+add_S_serine = 0.0
+add_T_threonine = 0.0
+add_U_user_amino_acid = 0.0  # U = selenocysteine (150.95363 Da)
+add_V_valine = 0.0
+add_W_tryptophan = 0.0
+add_X_user_amino_acid = 0.0
+add_Y_tyrosine = 0.0
+add_Z_user_amino_acid = 0.0
+Number of unique peptides
+	of length 7: 309195
+	of length 8: 298658
+	of length 9: 297475
+	of length 10: 281327
+	of length 11: 267392
+	of length 12: 256103
+	of length 13: 249847
+	of length 14: 234743
+	of length 15: 223030
+	of length 16: 208014
+	of length 17: 195388
+	of length 18: 187769
+	of length 19: 184140
+	of length 20: 165258
+	of length 21: 158456
+	of length 22: 148830
+	of length 23: 139244
+	of length 24: 132342
+	of length 25: 124124
+	of length 26: 116047
+	of length 27: 110643
+	of length 28: 105718
+	of length 29: 96408
+	of length 30: 91448
+	of length 31: 85843
+	of length 32: 81398
+	of length 33: 76110
+	of length 34: 71469
+	of length 35: 64898
+	of length 36: 63258
+	of length 37: 57654
+	of length 38: 54201
+	of length 39: 49163
+	of length 40: 46555
+	of length 41: 43595
+	of length 42: 40172
+	of length 43: 33966
+	of length 44: 27542
+	of length 45: 21251
+	of length 46: 13892
+	of length 47: 8826
+	of length 48: 5046
+	of length 49: 2759
+	of length 50: 1650
+In total 5430847 peptides.
+Generated 5430847 modified peptides.
+Number of peptides with more than 5000 modification patterns: 0
+Selected fragment index width 0.01 Da.
+397098176 fragments to be searched in 1 slices (3.70 GB total)
+Operating on slice 1 of 1: 
+	Fragment index slice generated in 6.98 s
+	001. 10mg_1_A_1.mzBIN_calibrated 0.4 s
+		[progress: 56949/56949 (100%) - 106 spectra/s] 536.4s
+postprocessing 10mg_1_A_1.mzBIN_calibrated 10.9 s
+***************************MAIN SEARCH DONE IN 9.553 MIN***************************
+
+*******************************TOTAL TIME 11.548 MIN********************************
+Process 'MSFragger' finished, exit code: 0
+MSFragger move pepxml
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.pepXML <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pepXML
+Process 'MSFragger move pepxml' finished, exit code: 0
+MSFragger move tsv
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.tsv <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.tsv
+Process 'MSFragger move tsv' finished, exit code: 0
+MSFragger move pin
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;/C:/FragPipe/FragPipe-23.1/lib/batmass-io-1.35.4.jar org.nesvilab.utils.FileMove --no-err <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1.pin <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pin
+Process 'MSFragger move pin' finished, exit code: 0
+Crystal-C [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Dlibs.thermo.dir=C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\ext\thermo -Xmx14G -cp C:\FragPipe\FragPipe-23.1\tools\original-crystalc-1.5.9.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar;C:\FragPipe\FragPipe-23.1\tools\grppr-0.3.23.jar crystalc.Run <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\crystalc-0-10mg_1_A_1.pepXML.params <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1.pepXML
+10mg_1_A_1.pepXML Done!   The execution time is 0.19527 min.
+Process 'Crystal-C' finished, exit code: 0
+Crystal-C delete temp
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar org.nesvilab.utils.FileDelete <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\crystalc-0-10mg_1_A_1.pepXML.params
+Process 'Crystal-C delete temp' finished, exit code: 0
+PeptideProphet [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe peptideprophet --nonparam --expectscore --decoyprobs --masswidth 1000.0 --clevel -2 --decoy rev_ --database <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas --combine 10mg_1_A_1_c.pepXML
+Please wait. PeptideProphet is running. It can take a long time.
+time="09:16:34" level=info msg="Executing PeptideProphet  v5.1.2"
+Unknown file type. No file loaded.<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1/10mg_1_A_1.raw
+Unknown file type. No file loaded.<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1/10mg_1_A_1.raw
+ file 1: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\10mg_1_A_1_c.pepXML
+ processed altogether 50620 results
+INFO: Results written to file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml
+
+  - <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml
+  - Building Commentz-Walter keyword tree...
+  - Searching the tree...
+  - Linking duplicate entries...
+  - Printing results...
+    Warning: could not map 4 entries
+
+Using Decoy Label "rev_".
+Decoy Probabilities will be reported.
+Using non-parametric distributions
+ (X! Tandem) (using Tandem's expectation score for modeling)
+using search_offsets in mass mixture distr: 0.0
+init with X! Tandem stricttrypsin 
+ PeptideProphet  (TPP v5.2.1-dev Flammagenitus, Build 201906281613-exported (Windows_NT-x86_64)) AKeller@ISB
+ read in 0 1+, 28696 2+, 17698 3+, 3479 4+, 620 5+, 116 6+, and 0 7+ spectra.
+Found 8356 Decoys, and 42253 Non-Decoys
+MS Instrument info: Manufacturer: UNKNOWN, Model: UNKNOWN, Ionization: UNKNOWN, Analyzer: UNKNOWN, Detector: UNKNOWN
+
+INFO: Processing standard MixtureModel ... 
+Initialising statistical models ...
+Iterations: .........10.........20....WARNING: Mixture model quality test failed for charge (1+).
+.
+WARNING: Mixture model quality test failed for charge (7+).
+model complete after 26 iterations
+time="09:17:31" level=info msg=Done
+Process 'PeptideProphet' finished, exit code: 0
+Rewrite pepxml [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -cp C:\FragPipe\FragPipe-23.1\lib/* org.nesvilab.fragpipe.util.RewritePepxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml <redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1_uncalibrated.mzML
+Fixing pepxml: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml
+Writing output to: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml11240217396209388471.temp-rewrite
+Deleting file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml
+Moving rewritten file to original location: [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml11240217396209388471.temp-rewrite] -> [<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml]
+Process 'Rewrite pepxml' finished, exit code: 0
+ProteinProphet [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe proteinprophet --maxppmdiff 2000000 --output combined <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\filelist_proteinprophet.txt
+time="09:17:33" level=info msg="Executing ProteinProphet  v5.1.2"
+ProteinProphet (C++) by Insilicos LLC and LabKey Software, after the original Perl by A. Keller (TPP v6.0.0-rc15 Noctilucent, Build 202105101442-exported (Windows_NT-x86_64))
+ (no FPKM) (no groups) (using degen pep info)
+Reading in <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1\interact.pep.xml...
+...read in 0 1+, 21063 2+, 12763 3+, 2362 4+, 367 5+, 53 6+, 0 7+ spectra with min prob 0.05
+
+Initializing 23137 peptide weights: 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Calculating protein lengths and molecular weights from database <redacted>/Documents/temp/delme/sagePreview/liver/2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........1000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........2000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........3000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........4000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........5000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........6000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........7000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........8000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........9000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........10000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........11000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........12000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........13000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........14000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........15000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........16000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........17000
+.........:.........:.........:.........:...WARNING: Found the following zero-mass residues in protein entry rev_sp|Q16881-6|TRXR1_HUMAN : U
+MGUCGAQLISAGSRKTVSLTTFVEACVPHIGITSDLQKKTLGCKLAAAFGQTVEGANPGLVHFGVVRENDKTNCIIKAYCKNNDRSPITWELPWFYSHYVEINEEGFKEVAKEESLGCAGYELPTFVTTPVNEYDCKVTSGAYLRQALLRGAQIAVPTLEVKDELIDGIAYIYPVNTQEEDTVPIKGTKENIKVGVTELGIKRTCADRGIALMVTNYEGEIIEESNTSQAVVRLRGPTGAEIQEVKIPVFQRIFKIGHEEMHEGIKNAMDQDFGRLLISRVMVTVDLGIGALFGACELAVYSAGVVLTKGPCYPLSFLDDSSICYEKDGPIGLYRPREGTAILFREASYIKEKGKNNTAKIRHPGIFQGYANEYVVKKERLAVRYGWNLSGIHNQVAEIMRDWDHKVTEEVKWGYNRSDQLAQGLLAAQHMLKKPICGVNVCTGGLGWRTGLPTPTVFDLVMVKKGYQAAEKAAALGGSGGGIIILDYDYSKPLDEPGNMKLLKQLRGEQYALGFQVNREQRSDSTPPSLCLKPDASSSPEQSTSPPATSCHSPPLVASHSGTPLMAPMRLPEPVSPLVGPFWCCHPCSQVVRVTQVFPRACSAPLCLWYDDVP
+......:.........:.........:.........:.........:.........18000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........19000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........20000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........21000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........22000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........23000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........24000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........25000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........26000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........27000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........28000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........29000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........30000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........31000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........32000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........33000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........34000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........35000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........36000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........37000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........38000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........39000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........40000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........41000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........42000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........43000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........44000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........45000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........46000
+.WARNING: Found the following zero-mass residues in protein entry sp|O60613-2|SEP15_HUMAN : U
+MVAMAAGPSGCLVPAFGLRLLLATVLQAVSAFGAEFSSEACRELGFSSNLLCSSCDLLGQFNLLQLDPDCRGCCQEEAQFETKKLYAGAILEVCGUKLGRFPQVQVCPWFRPCIKAFGRQWEHC
+.WARNING: Found the following zero-mass residues in protein entry sp|O60613|SEP15_HUMAN : U
+MVAMAAGPSGCLVPAFGLRLLLATVLQAVSAFGAEFSSEACRELGFSSNLLCSSCDLLGQFNLLQLDPDCRGCCQEEAQFETKKLYAGAILEVCGUKLGRFPQVQAFVRSDKPKLFRGLQIKYVRGSDPVLKLLDDNGNIAEELSILKWNTDSVEEFLSEKLERI
+.......:.........:.........:.........:.........:.........:.........:.........:.........:.........47000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........48000
+.........:.........:.........:.........:.........:.........:.........:.........:.WARNING: Found the following zero-mass residues in protein entry sp|P07203-2|GPX1_HUMAN : U
+MCAARLAAAAAAAQSVYAFSARPLAGGEPVSLGSLRGKVLLIENVASLUGTTVRDYTQMNELQRRLGPRGLVVLGFPCNQFGHQVRRAERGGAGADVQ
+.WARNING: Found the following zero-mass residues in protein entry sp|P07203|GPX1_HUMAN : U
+MCAARLAAAAAAAQSVYAFSARPLAGGEPVSLGSLRGKVLLIENVASLUGTTVRDYTQMNELQRRLGPRGLVVLGFPCNQFGHQENAKNEEILNSLKYVRPGGGFEPNFMLFEKCEVNGAGAHPLFAFLREALPAPSDDATALMTDPKLITWSPVCRNDVAWNFEKFLVGPDGVPLRRYSRRFQTIDIEPDIEALLSQGPSCA
+.......:.........49000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........50000
+.........:.........:.........:.........:.........:.........:.........:......WARNING: Found the following zero-mass residues in protein entry sp|P18283|GPX2_HUMAN : U
+MAFIAKSFYDLSAISLDGEKVDFNTFRGRAVLIENVASLUGTTTRDFTQLNELQCRFPRRLVVLGFPCNQFGHQENCQNEEILNSLKYVRPGGGYQPTFTLVQKCEVNGQNEHPVFAYLKDKLPYPYDDPFSLMTDPKLIIWSPVRRSDVAWNFEKFLIGPEGEPFRRYSRTFPTINIEPDIKRLLKVAI
+...:.........:.........51000
+.........:.........:........WARNING: Found the following zero-mass residues in protein entry sp|P22352|GPX3_HUMAN : U
+MARLLQASCLLSLLLAGFVSQSRGQEKSKMDCHGGISGTIYEYGALTIDGEEYIPFKQYAGKYVLFVNVASYUGLTGQYIELNALQEELAPFGLVILGFPCNQFGKQEPGENSEILPTLKYVRPGGGFVPNFQLFEKGDVNGEKEQKFYTFLKNSCPPTSELLGTSDRLFWEPMKVHDIRWNFEKFLVGPDGIPIMRWHHRTTVSNVKMDILSYMRRQAALGVKRK
+.:.........:.........:.........:.........:.........:.........:.........52000
+.........:.........:.........:.........:.........:.........:.........:.........WARNING: Found the following zero-mass residues in protein entry sp|P36969-2|GPX4_HUMAN : U
+MCASRDDWRCARSMHEFSAKDIDGHMVNLDKYRGFVCIVTNVASQUGKTEVNYTQLVDLHARYAECGLRILAFPCNQFGKQEPGSNEEIKEFAAGYNVKFDMFSKICVNGDDAHPLWKWMKIQPKGKGILGNAIKWNFTKFLIDKNGCVVKRYGPMEEPLVIEKDLPHYF
+:WARNING: Found the following zero-mass residues in protein entry sp|P36969|GPX4_HUMAN : U
+MSLGRLCRLLKPALLCGALAAPGLAGTMCASRDDWRCARSMHEFSAKDIDGHMVNLDKYRGFVCIVTNVASQUGKTEVNYTQLVDLHARYAECGLRILAFPCNQFGKQEPGSNEEIKEFAAGYNVKFDMFSKICVNGDDAHPLWKWMKIQPKGKGILGNAIKWNFTKFLIDKNGCVVKRYGPMEEPLVIEKDLPHYF
+.........:.........53000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........54000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........55000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........56000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........57000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........58000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........59000
+.........:.........:.........:.........:.........:.........:.........:.........:WARNING: Found the following zero-mass residues in protein entry sp|Q16881-2|TRXR1_HUMAN : U
+MLSRLVLNSWAQAIIRPRPPKVLGLQVTTFSEAYQEGRLQKLLKMNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q16881-3|TRXR1_HUMAN : U
+MQQVMLTCKGVNRGHAVPAGPGRKPRPRRSSRLLAGEKHLTRSALLLCHTEDGRALEGTLSELAAETDLPVVFVKQRKIGGHGPTLKAYQEGRLQKLLKMNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+.WARNING: Found the following zero-mass residues in protein entry sp|Q16881-4|TRXR1_HUMAN : U
+MSCEDGRALEGTLSELAAETDLPVVFVKQRKIGGHGPTLKAYQEGRLQKLLKMNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q16881-5|TRXR1_HUMAN : U
+MNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q16881-6|TRXR1_HUMAN : U
+MPVDDYWLCLPASCARPFVQTVRVVQSCPHCCWFPGVLPSVPEPLRMPAMLPTGSHSAVLPPSHCSTAPPSTSQEPSSSADPKLCLSPPTSDSRQERNVQFGLAYQEGRLQKLLKMNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q16881-7|TRXR1_HUMAN : U
+MVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q16881|TRXR1_HUMAN : U
+MGCAEGKAVAAAAPTELQTKGKNGDGRRRSAKDHHPGKTLPENPAGFTSTATADSRALLQAYIDGHSVVIFSRSTCTRCTEVKKLFKSLCVPYFVLELDQTEDGRALEGTLSELAAETDLPVVFVKQRKIGGHGPTLKAYQEGRLQKLLKMNGPEDLPKSYDYDLIIIGGGSGGLAAAKEAAQYGKKVMVLDFVTPTPLGTRWGLGGTCVNVGCIPKKLMHQAALLGQALQDSRNYGWKVEETVKHDWDRMIEAVQNHIGSLNWGYRVALREKKVVYENAYGQFIGPHRIKATNNKGKEKIYSAERFLIATGERPRYLGIPGDKEYCISSDDLFSLPYCPGKTLVVGASYVALECAGFLAGIGLDVTVMVRSILLRGFDQDMANKIGEHMEEHGIKFIRQFVPIKVEQIEAGTPGRLRVVAQSTNSEEIIEGEYNTVMLAIGRDACTRKIGLETVGVKINEKTGKIPVTDEEQTNVPYIYAIGDILEDKVELTPVAIQAGRLLAQRLYAGSTVKCDYENVPTTVFTPLEYGACGLSEEKAVEKFGEENIEVYHSYFWPLEWTIPSRDNNKCYAKIICNTKDNERVVGFHVLGPNAGEVTQGFAAALKCGLTKKQLDSTIGIHPVCAEVFTTLSVTKRSGASILQAGCUG
+........:.........60000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........61000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........62000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........63000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........64000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........65000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........66000
+.........:.........:.........:.........:.........:......WARNING: Found the following zero-mass residues in protein entry sp|Q86VQ6|TRXR3_HUMAN : U
+MERSPPQSPGPGKAGDAPNRRSGHVRGARVLSPPGRRARLSSPGPSRSSEAREELRRHLVGLIERSRVVIFSKSYCPHSTRVKELFSSLGVECNVLELDQVDDGARVQEVLSEITNQKTVPNIFVNKVHVGGCDQTFQAYQSGLLQKLLQEDLAYDYDLIIIGGGSGGLSCAKEAAILGKKVMVLDFVVPSPQGTSWGLGGTCVNVGCIPKKLMHQAALLGQALCDSRKFGWEYNQQVRHNWETMTKAIQNHISSLNWGYRLSLREKAVAYVNSYGEFVEHHKIKATNKKGQETYYTAAQFVIATGERPRYLGIQGDKEYCITSDDLFSLPYCPGKTLVVGASYVALECAGFLAGFGLDVTVMVRSILLRGFDQEMAEKVGSYMEQHGVKFLRKFIPVMVQQLEKGSPGKLKVLAKSTEGTETIEGVYNTVLLAIGRDSCTRKIGLEKIGVKINEKSGKIPVNDVEQTNVPYVYAVGDILEDKPELTPVAIQSGKLLAQRLFGASLEKCDYINVPTTVFTPLEYGCCGLSEEKAIEVYKKENLEIYHTLFWPLEWTVAGRENNTCYAKIICNKFDHDRVIGFHILGPNAGEVTQGFAAAMKCGLTKQLLDDTIGIHPTCGEVFTTLEITKSSGLDITQKGCUG
+...:.........:.........:.........:.........67000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........68000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........69000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........70000
+.........:.........:.........:....WARNING: Found the following zero-mass residues in protein entry sp|Q8NHP1|ARK74_HUMAN : U
+MSRQLSRARPATVLGAMEMGRRMDAPTSAAVTRAFLERGHTEIDTAFLYSDGQSETILGGLGLRMGSSDCRVKIATKANPWIGNSLKPDSVRSQLETSLKRLQCPUVDLFYLHAPDHSAPVEETLRACHQLHQEGKFVELGLSNYAAWEVAEICTLCKSNGWILPTVYQGMYSATTRQVETELFPCLRHFGLRFYAYNPLAGGLLTGKYKYEDKDGKQPVGRFFGTQWAEIYRNHFWKEHHFEGIALVEKALQAAYGASAPSMTSAALRWMYHHSQLQGAHGDAVILGMSSLEQLEQNLAAAEEGPLEPAVVDAFNQAWHLFAHECPNYFI
+.....:.........:.........:.........:.........:.........:.........71000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........72000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........73000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........74000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........75000
+.........:.........:.........:........WARNING: Found the following zero-mass residues in protein entry sp|Q99611|SPS2_HUMAN : U
+MAEASATGACGEAMAAAEGSSGPAGLTLGRSFSNYRPFEPQALGLSPSWRLTGFSGMKGUGCKVPQEALLKLLAGLTRPDVRPPLGRGLVGGQEEASQEAGLPAGAGPSPTFPALGIGMDSCVIPLRHGGLSLVQTTDFFYPLVEDPYMMGRIACANVLSDLYAMGITECDNMLMLLSVSQSMSEEEREKVTPLMVKGFRDAAEEGGTAVTGGQTVVNPWIIIGGVATVVCQPNEFIMPDSAVVGDVLVLTKPLGTQVAVNAHQWLDNPERWNKVKMVVSREEVELAYQEAMFNMATLNRTAAGLMHTFNAHAATDITGFGILGHSQNLAKQQRNEVSFVIHNLPIIAKMAAVSKASGRFGLLQGTSAETSGGLLICLPREQAARFCSEIKSSKYGEGHQAWIVGIVEKGNRTARIIDKPRVIEVLPRGATAAVLAPDSSNASSEPSS
+.:.........:.........:.........:.........:.........:.........76000
+.........:.........:.........:....WARNING: Found the following zero-mass residues in protein entry sp|Q9BVL4|SELO_HUMAN : U
+MAVYRAALGASLAAARLLPLGRCSPSPAPRSTLSGAAMEPAPRWLAGLRFDNRALRALPVEAPPPGPEGAPSAPRPVPGACFTRVQPTPLRQPRLVALSEPALALLGLGAPPAREAEAEAALFFSGNALLPGAEPAAHCYCGHQFGQFAGQLGDGAAMYLGEVCTATGERWELQLKGAGPTPFSRQADGRKVLRSSIREFLCSEAMFHLGVPTTRAGACVTSESTVVRDVFYDGNPKYEQCTVVLRVASTFIRFGSFEIFKSADEHTGRAGPSVGRNDIRVQLLDYVISSFYPEIQAAHASDSVQRNAAFFREVTRRTARMVAEWQCVGFCHGVLNTDNMSILGLTIDYGPFGFLDRYDPDHVCNASDNTGRYAYSKQPEVCRWNLRKLAEALQPELPLELGEAILAEEFDAEFQRHYLQKMRRKLGLVQVELEEDGALVSKLLETMHLTGADFTNTFYLLSSFPVELESPGLAEFLARLMEQCASLEELRLAFRPQMDPRQLSMMLMLAQSNPQLFALMGTRAGIARELERVEQQSRLEQLSAAELQSRNQGHWADWLQAYRARLDKDLEGAGDAAAWQAEHVRVMHANNPKYVLRNYIAQNAIEAAERGDFSEVRRVLKLLETPYHCEAGAATDAEATEADGADGRQRSYSSKPPLWAAELCVTUSS
+.....:.........:.........:.........:.........:.........:.........77000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........78000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........79000
+.........:.........:WARNING: Found the following zero-mass residues in protein entry sp|Q9NNW7-2|TRXR2_HUMAN : U
+MEDQRGAAAGQRDYDLLVVGGGSGGLACAKEAAQLGRKVAVVDYVEPSPQGTRWGLGGTCVNVGCIPKKLMHQAALLGGLIQDAPNYGWEVAQPVPHDWRKMAEAVQNHVKSLNWGHRVQLQDRKVKYFNIKASFVDEHTVCGVAKGGKEILLSADHIIIATGGRPRYPTHIEGALEYGITSDDIFWLKESPGKTLVVGASYVALECAGFLTGIGLDTTIMMRSIPLRGFDQQMSSMVIEHMASHGTRFLRGCAPSRVRRLPDGQLQVTWEDSTTGKEDTGTFDTVLWAIGRVPDTRSLNLEKAGVDTSPDTQKILVDSREATSVPHIYAIGDVVEGRPELTPIAIMAGRLLVQRLFGGSSDLMDYDNVPTTVFTPLEYGCVGLSEEEAVARHGQEHVEVYHAHYKPLEFTVAGRDASQCYVKMVCLREPPQLVLGLHFLGPNAGEVTQGFALGIKCGASYAQVMRTVGIHPTCSEEVVKLRISKRSGLDPTVTGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q9NNW7-3|TRXR2_HUMAN : U
+MHQAALLGGLIQDAPNYGWEVAQPVPHDWRKMAEAVQNHVKSLNWGHRVQLQDRKVKYFNIKASFVDEHTVCGVAKGGKEILLSADHIIIATGGRPRYPTHIEGALEYGITSDDIFWLKESPGKTLVVGASYVALECAGFLTGIGLDTTIMMRSIPLRGFDQQMSSMVIEHMASHGTRFLRGCAPSRVRRLPDGQLQVTWEDSTTGKEDTGTFDTVLWAIGRVPDTRSLNLEKAGVDTSPDTQKILVDSREATSVPHIYAIGDVVEGRPELTPIAIMAGRLLVQRLFGGSSDLMDYDNVPTTVFTPLEYGCVGLSEEEAVARHGQEHVEVYHAHYKPLEFTVAGRDASQCYVKMVCLREPPQLVLGLHFLGPNAGEVTQGFALGIKCGASYAQVMRTVGIHPTCSEEVVKLRISKRSGLDPTVTGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q9NNW7-4|TRXR2_HUMAN : U
+MRSIPLRGFDQQMSSMVIEHMASHGTRFLRGCAPSRVRRLPDGQLQVTWEDSTTGKEDTGTFDTVLWAIGRVPDTRSLNLEKAGVDTSPDTQKILVDSREATSVPHIYAIGDVVEGRPELTPIAIMAGRLLVQRLFGGSSDLMDYDNVPTTVFTPLEYGCVGLSEEEAVARHGQEHVEVYHAHYKPLEFTVAGRDASQCYVKMVCLREPPQLVLGLHFLGPNAGEVTQGFALGIKCGASYAQVMRTVGIHPTCSEEVVKLRISKRSGLDPTVTGCUG
+WARNING: Found the following zero-mass residues in protein entry sp|Q9NNW7|TRXR2_HUMAN : U
+MAAMAVALRGLGGRFRWRTQAVAGGVRGAARGAAAGQRDYDLLVVGGGSGGLACAKEAAQLGRKVAVVDYVEPSPQGTRWGLGGTCVNVGCIPKKLMHQAALLGGLIQDAPNYGWEVAQPVPHDWRKMAEAVQNHVKSLNWGHRVQLQDRKVKYFNIKASFVDEHTVCGVAKGGKEILLSADHIIIATGGRPRYPTHIEGALEYGITSDDIFWLKESPGKTLVVGASYVALECAGFLTGIGLDTTIMMRSIPLRGFDQQMSSMVIEHMASHGTRFLRGCAPSRVRRLPDGQLQVTWEDSTTGKEDTGTFDTVLWAIGRVPDTRSLNLEKAGVDTSPDTQKILVDSREATSVPHIYAIGDVVEGRPELTPIAIMAGRLLVQRLFGGSSDLMDYDNVPTTVFTPLEYGCVGLSEEEAVARHGQEHVEVYHAHYKPLEFTVAGRDASQCYVKMVCLREPPQLVLGLHFLGPNAGEVTQGFALGIKCGASYAQVMRTVGIHPTCSEEVVKLRISKRSGLDPTVTGCUG
+.........:.........:.........:.........:.........:.........:.........:.........80000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........81000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........82000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........83000
+.........:.........:.........:.........:.........:.........:.........:.........:.........:.........84000
+.........:.........:.........:.........:.........:.........:.........:....  Total: 84746
+Computing degenerate peptides for 14019 proteins: 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Computing probabilities for 17034 proteins.  Loop 1: 0%...20%...40%...60%...80%...100%  Loop 2: 0%...20%...40%...60%...80%...100%
+Calculating sensitivity...and error tables...
+INFO: mu=4.20984e-05, db_size=97407864
+Computing MU for 17034 proteins: 0%...10%...20%...30%...40%...50%...60%...70%...80%...90%...100%
+time="09:17:39" level=info msg=Done
+Process 'ProteinProphet' finished, exit code: 0
+PhilosopherDbAnnotate [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe database --annotate <redacted>/Documents\temp\delme\sagePreview\liver\2026-08-31-decoys-uniprot_sprot_iso_human-2018_06.fasta.fas --prefix rev_
+time="09:17:39" level=info msg="Executing Database  v5.1.2"
+time="09:17:39" level=info msg="Annotating the database"
+time="09:17:39" level=info msg=Done
+Process 'PhilosopherDbAnnotate' finished, exit code: 0
+PhilosopherFilter [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe filter --sequential --prot 0.01 --mapmods --tag rev_ --pepxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1 --protxml <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\combined.prot.xml --razor
+time="09:17:39" level=info msg="Executing Filter  v5.1.2"
+time="09:17:39" level=info msg="Processing peptide identification files"
+time="09:17:39" level=info msg="Parsing <redacted>/Documents\\temp\\delme\\sagePreview\\liver\\reallyOpenShepherd\\10mg_1_A_1_1\\interact.pep.xml"
+time="09:17:41" level=info msg="1+ Charge profile" decoy=0 target=0
+time="09:17:41" level=info msg="2+ Charge profile" decoy=1181 target=19885
+time="09:17:41" level=info msg="3+ Charge profile" decoy=583 target=12182
+time="09:17:41" level=info msg="4+ Charge profile" decoy=93 target=2269
+time="09:17:41" level=info msg="5+ Charge profile" decoy=3 target=364
+time="09:17:41" level=info msg="6+ Charge profile" decoy=1 target=52
+time="09:17:41" level=info msg="Database search results" ions=23161 peptides=20332 psms=36613
+time="09:17:41" level=info msg="Converged to 1.00 % FDR with 31119 PSMs" decoy=311 threshold=0.5767 total=31430
+time="09:17:41" level=info msg="Converged to 1.00 % FDR with 16080 Peptides" decoy=160 threshold=0.7771 total=16240
+time="09:17:41" level=info msg="Converged to 1.00 % FDR with 18800 Ions" decoy=188 threshold=0.7121 total=18988
+time="09:17:41" level=info msg="Protein inference results" decoy=1745 target=5432
+time="09:17:41" level=info msg="Converged to 0.98 % FDR with 2355 Proteins" decoy=23 threshold=0.9738 total=2378
+time="09:17:42" level=info msg="Applying sequential FDR estimation" ions=18635 peptides=16023 psms=30528
+time="09:17:42" level=info msg="Converged to 0.08 % FDR with 30503 PSMs" decoy=25 threshold=0.5767 total=30528
+time="09:17:42" level=info msg="Converged to 0.14 % FDR with 15999 Peptides" decoy=23 threshold=0.5776 total=16022
+time="09:17:42" level=info msg="Converged to 0.13 % FDR with 18610 Ions" decoy=24 threshold=0.5776 total=18634
+time="09:17:42" level=info msg="Post processing identifications"
+time="09:17:42" level=info msg="Mapping modifications"
+time="09:17:42" level=info msg="Assigning protein identifications to layers"
+time="09:17:45" level=info msg="Processing protein inference"
+time="09:17:46" level=info msg="Synchronizing PSMs and proteins"
+time="09:17:46" level=info msg="Final report numbers after FDR filtering, and post-processing" ions=18609 peptides=15998 proteins=2355 psms=30502
+time="09:17:46" level=info msg=Saving
+time="09:17:46" level=info msg=Done
+Process 'PhilosopherFilter' finished, exit code: 0
+PhilosopherReport [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe report
+time="09:17:46" level=info msg="Executing Report  v5.1.2"
+time="09:17:46" level=info msg="Creating reports"
+time="09:17:47" level=info msg=Done
+Process 'PhilosopherReport' finished, exit code: 0
+PTMShepherd [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\jre\bin\java.exe -Xmx14G -Dlibs.thermo.dir=C:\FragPipe\FragPipe-23.1\tools\MSFragger-4.4.1\ext\thermo -cp C:\FragPipe\FragPipe-23.1\lib\commons-lang3-3.17.0.jar;C:\FragPipe\FragPipe-23.1\lib\fragpipe-23.1.jar;C:\FragPipe\FragPipe-23.1\tools\batmass-io-1.35.4.jar;C:\FragPipe\FragPipe-23.1\tools\hipparchus-1.8\hipparchus-core-1.8.jar;C:\FragPipe\FragPipe-23.1\tools\ptmshepherd-3.0.2.jar;C:\FragPipe\FragPipe-23.1\tools\commons-math3-3.6.1.jar;C:\FragPipe\FragPipe-23.1\tools\hipparchus-1.8\hipparchus-stat-1.8.jar edu.umich.andykong.ptmshepherd.PTMShepherd "<redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\shepherd.config"
+
+PTM-Shepherd version 3.0.2
+(c) 2022 University of Michigan
+
+Using Java 17.0.10 on 14336MB memory
+
+Finding spectral data
+	Indexing data from 10mg_1_A_1_1
+Done finding spectral data
+
+
+Caching spectral data
+	Caching data from 10mg_1_A_1_1
+		<redacted>/Documents\temp\delme\sagePreview\liver\10mg_1_A_1_uncalibrated.mzML - 30502 (4157 ms, 2047 ms)
+	Done caching data from 10mg_1_A_1_1
+Done caching spectral data
+
+Counting MS2 scans for dataset 10mg_1_A_1_1
+	30502 MS2 scans present in dataset 10mg_1_A_1_1
+Done counting MS2 scans for dataset 10mg_1_A_1_1
+
+Creating combined histogram
+	Generated histogram file for dataset 10mg_1_A_1_1 [-154 - 500]
+Done creating combined histogram
+
+Running peak picking
+	Picked top 500 peaks
+	Removed 387 peaks with insufficient PSMs
+	Created summary table
+Done running peak picking
+
+Annotated summary table
+
+Mapping modifications back into PSM lists
+
+Created modification summary
+
+Begin localization annotation
+	10mg_1_A_1 - 30502 lines (435 ms reading, 2556 ms processing)
+Done
+
+Created localization reports
+
+Begin similarity and retention time annotation
+	Spectral data read into memory (311 ms reading)
+	10mg_1_A_1 - 30502 lines (444 ms processing)
+Done
+
+Created similarity/RT reports
+
+Combining and cleaning reports
+Writing combined table for dataset 10mg_1_A_1_1
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\peaks.tsv
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\peaksummary.annotated.tsv
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\peaksummary.tsv
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\combined.tsv
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\combined.histo
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\global.locprofile.txt
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\global.simrtprofile.txt
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.locprofile.txt
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.simrtprofile.txt
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.profile.tsv
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.histo
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.ms2counts
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.rawlocalize
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1_1.rawsimrt
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\10mg_1_A_1.mzBIN_cache
+Deleted file: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\ptm-shepherd-output\cache-4da9564d13d8128.txt
+Process 'PTMShepherd' finished, exit code: 0
+WorkspaceClean [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+time="09:18:02" level=info msg="Executing Workspace  v5.1.2"
+time="09:18:02" level=info msg="Removing workspace"
+time="09:18:02" level=info msg=Done
+Process 'WorkspaceClean' finished, exit code: 0
+WorkspaceClean [Work dir: <redacted>/Documents\temp\delme\sagePreview\liver\reallyOpenShepherd\10mg_1_A_1_1]
+C:\FragPipe\FragPipe-23.1\tools\Philosopher\philosopher-v5.1.2.exe workspace --clean --nocheck
+time="09:18:03" level=info msg="Executing Workspace  v5.1.2"
+time="09:18:03" level=info msg="Removing workspace"
+time="09:18:03" level=info msg=Done
+Process 'WorkspaceClean' finished, exit code: 0
+
+Please cite:
+(Any searches) MSFragger: ultrafast and comprehensive peptide identification in mass spectrometry–based proteomics. Nat Methods. 14:513 (2017)
+(Any searches) Fast deisotoping algorithm and its implementation in the MSFragger search engine. J Proteome Res. 20:498 (2021)
+(timsTOF ddaPASEF) Fast quantitative analysis of timsTOF PASEF data with MSFragger and IonQuant. Mol Cell Proteomics. 19:1575 (2020)
+(Open search) Identification of modified peptides using localization-aware open search. Nat Commun. 11:4065 (2020)
+(Glyco search) Fast and comprehensive N- and O-glycoproteomics analysis with MSFragger-Glyco. Nat Methods. 17:1125 (2020)
+(Labile search) MSFragger-Labile: A Flexible Method to Improve Labile PTM Analysis in Proteomics. Mol Cell Proteomics. 22:100538 (2023)
+(DDA+ search) MSFragger-DDA+ enhances peptide identification sensitivity with full isolation window search. Nat Commun. 16:3329 (2025)
+(Open search) Crystal-C: A Computational tool for refinement of open search results. J Proteome Res. 19.6:2511 (2020)
+(PSM validation with PeptideProphet)Empirical statistical model to estimate the accuracy of peptide identifications made by MS/MS and database search. Anal Chem. 74:5383 (2002)
+(Protein inference with ProteinProphet)A statistical model for identifying proteins by tandem mass spectrometry. Anal Chem. 75:4646 (2003)
+(FDR filtering and reporting) Philosopher: a versatile toolkit for shotgun proteomics data analysis. Nat Methods. 17:869 (2020)
+(Open search) PTM-Shepherd: analysis and summarization of post-translational and chemical modifications from open search results. Mol Cell Proteomics. 20:100018 (2020)
+(Diagnostic ion mining) Detecting diagnostic features in MS/MS spectra of post-translationally modified peptides. Nat Commun. 14:4132 (2023)
+(Visualization with FragPipe-PDV) PDV: an integrative proteomics data viewer. Bioinformatics. 35(7):1249 (2019)
+
+Task Runtimes:
+  CheckCentroid: 0.00 minutes
+  WorkspaceCleanInit: 0.03 minutes
+  MSFragger: 11.56 minutes
+  MSFragger move pepxml: 0.00 minutes
+  MSFragger move tsv: 0.00 minutes
+  MSFragger move pin: 0.00 minutes
+  Crystal-C: 0.23 minutes
+  Crystal-C delete temp: 0.00 minutes
+  PeptideProphet: 0.96 minutes
+  Rewrite pepxml: 0.02 minutes
+  ProteinProphet: 0.10 minutes
+  PhilosopherDbAnnotate: 0.01 minutes
+  PhilosopherFilter: 0.11 minutes
+  PhilosopherReport: 0.01 minutes
+  PTMShepherd: 0.26 minutes
+  WorkspaceClean: 0.01 minutes
+  Finalizer Task: 0.00 minutes
+
+=============================================================ALL JOBS DONE IN 13.3 MINUTES=============================================================

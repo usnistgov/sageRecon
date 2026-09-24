@@ -1,0 +1,425 @@
+MetaMorpheus: version 1.1.7
+Total time: 00:15:32.4851548
+
+
+
+
+Time to run task: 00:02:45.8351331
+
+--------------------------------------------------
+
+New files:
+New spectra: 
+
+<redacted>/Documents\temp\delme\sagePreview\liver\reallyMetaMorpheus\2026-09-01-09-20-24\Task1-CalibrateTask\10mg_1_A_1-calib.mzML
+
+--------------------------------------------------
+
+
+
+
+--------------------------------------------------
+
+Engine Results:
+
+Engine type: DatabaseLoadingEngine
+Time to run engine: 00:00:13.9533071
+Databases loaded:
+	uniprot_sprot_iso_human-2018_06.fasta: 84746 Proteins
+		42373 Target Proteins 	 42373 Decoy Proteins
+Total Proteins loaded: 84746
+Total Proteins removed by sanitization: 0
+Total Proteins renamed by sanitization: 0
+Total decoy Proteins scrambled due to homology: 2794
+Total Proteins remaining: 84746
+
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:33.4713975
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.7709337
+PSMs within 1% FDR: 7766
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.8329387
+MS1 calibration datapoint count: 443495
+MS1 ppm error median: -1.57
+MS1 ppm error interquartile range: 1.23
+MS2 calibration datapoint count: 149182
+MS2 ppm error median: -2.988
+MS2 ppm error interquartile range: 1.974
+
+
+Engine type: CalibrationEngine
+Time to run engine: 00:00:00.8374505
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:22.7813068
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.5770780
+PSMs within 1% FDR: 11236
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.9801738
+MS1 calibration datapoint count: 526123
+MS1 ppm error median: 0.155
+MS1 ppm error interquartile range: 1.27
+MS2 calibration datapoint count: 185807
+MS2 ppm error median: 0.087
+MS2 ppm error interquartile range: 1.883
+
+
+Engine type: CalibrationEngine
+Time to run engine: 00:00:00.5993774
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:18.4541893
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:00.4262558
+PSMs within 1% FDR: 12147
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: DataPointAcquisitionEngine
+Time to run engine: 00:00:00.8561443
+MS1 calibration datapoint count: 495625
+MS1 ppm error median: 0.207
+MS1 ppm error interquartile range: 1.254
+MS2 calibration datapoint count: 192281
+MS2 ppm error median: 0.161
+MS2 ppm error interquartile range: 1.826
+
+
+
+
+
+
+
+Time to run task: 00:10:18.9149696
+
+--------------------------------------------------
+
+New files:
+New databases: 
+<redacted>/Documents\temp\delme\sagePreview\liver\reallyMetaMorpheus\2026-09-01-09-20-24\Task2-GPTMDTask\uniprot_sprot_iso_human-2018_06GPTMD.xml
+
+--------------------------------------------------
+
+
+Modifications added: 13945
+Mods types and counts:
+	Oxidation on M	4421
+	Carbamidomethyl on C	2847
+	Deamidation on N	1384
+	Hydroxylation on P	1295
+	Hydroxylation on N	798
+	Hydroxylation on K	762
+	Deamidation on Q	526
+	Fe[III] on E	320
+	Fe[III] on D	308
+	Acetylation on X	242
+	Ammonia loss on N	218
+	Citrullination on R	190
+	Sodium on E	82
+	Acetylation on K	76
+	Sodium on D	76
+	Fe[II] on D	51
+	Fe[II] on E	46
+	Carbamyl on X	40
+	Glutarylation on K	39
+	Formylation on K	35
+	Magnesium on E	35
+	Methylation on K	32
+	Calcium on D	20
+	Water Loss on E	20
+	Magnesium on D	16
+	Methylation on R	15
+	Calcium on E	15
+	Carbamyl on K	13
+	Potassium on D	9
+	Carbamyl on M	7
+	Potassium on E	6
+	Glu to PyroGlu on Q	1
+
+
+--------------------------------------------------
+
+Engine Results:
+
+Engine type: DatabaseLoadingEngine
+Time to run engine: 00:00:22.1582701
+Databases loaded:
+	uniprot_sprot_iso_human-2018_06.fasta: 84746 Proteins
+		42373 Target Proteins 	 42373 Decoy Proteins
+Total Proteins loaded: 84746
+Total Proteins removed by sanitization: 0
+Total Proteins renamed by sanitization: 0
+Total decoy Proteins scrambled due to homology: 2794
+Total Proteins remaining: 84746
+
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:09:16.5647481
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:01.2952479
+PSMs within 1% FDR: 24423
+Delta Score Used for FDR Analysis: False
+
+
+
+Engine type: GptmdEngine
+Time to run engine: 00:00:01.0981083
+Modifications trying to add: 22551
+Proteins trying to expand: 4236
+Mods types and counts:
+	Oxidation on M	4421
+	Carbamidomethyl on C	2847
+	Deamidation on N	1384
+	Hydroxylation on P	1295
+	Hydroxylation on N	798
+	Hydroxylation on K	762
+	Deamidation on Q	526
+	Fe[III] on E	320
+	Fe[III] on D	308
+	Acetylation on X	242
+	Ammonia loss on N	218
+	Citrullination on R	190
+	Sodium on E	82
+	Acetylation on K	76
+	Sodium on D	76
+	Fe[II] on D	51
+	Fe[II] on E	46
+	Carbamyl on X	40
+	Glutarylation on K	39
+	Magnesium on E	35
+	Formylation on K	35
+	Methylation on K	32
+	Water Loss on E	20
+	Calcium on D	20
+	Magnesium on D	16
+	Calcium on E	15
+	Methylation on R	15
+	Carbamyl on K	13
+	Potassium on D	9
+	Carbamyl on M	7
+	Potassium on E	6
+	Glu to PyroGlu on Q	1
+
+
+
+
+
+
+Time to run task: 00:02:27.6914482
+
+--------------------------------------------------
+
+All target PSMs with q-value <= 0.01: 29188
+All target peptides with q-value <= 0.01: 16849
+All target protein groups with q-value <= 0.01 (1% FDR): 2349
+All Precursors: 95160
+All MS2 Scans: 56949
+
+
+
+--------------------------------------------------
+
+Engine Results:
+
+Engine type: DatabaseLoadingEngine
+Time to run engine: 00:00:28.8201221
+Databases loaded:
+	uniprot_sprot_iso_human-2018_06GPTMD.xml: 84746 Proteins
+		42373 Target Proteins 	 42373 Decoy Proteins
+Total Proteins loaded: 84746
+Total Proteins removed by sanitization: 0
+Total Proteins renamed by sanitization: 0
+Total decoy Proteins scrambled due to homology: 2794
+Total Proteins remaining: 84746
+
+
+Engine type: ClassicSearchEngine
+Time to run engine: 00:00:41.5955151
+
+Engine type: FdrAnalysisEngine
+Time to run engine: 00:00:24.9852161
+PSMs within 1% FDR: 29309
+Delta Score Used for FDR Analysis: False
+
+************************************************************
+*       Metrics for Determination of PEP Using Binary Classification      
+*-----------------------------------------------------------
+*       Accuracy:  0.9849166307542038
+*       Area Under Curve:  0.9981682527178182
+*       Area under Precision recall Curve:  0.9990903207742197
+*       F1Score:  0.9895631411930746
+*       LogLoss:  0.08853803521703345
+*       LogLossReduction:  0.8958295494469763
+*       PositivePrecision:  0.9905330050296072
+*       PositiveRecall:  0.9886031756085567
+*       NegativePrecision:  0.9703150122359487
+*       NegativeRecall:  0.9753678791638225
+*       Count of Ambiguous Peptides Removed:  179
+*       Q-Value Cutoff for Training Targets:  0.005
+*       Targets Used for Training:  35929
+*       Decoys Used for Training:  13757
+************************************************************
+
+
+
+Engine type: DisambiguationEngine
+Time to run engine: 00:00:01.4855416
+Ambiguous Peptides removed QValueNotch: 37
+
+
+Engine type: ModificationAnalysisEngine
+Time to run engine: 00:00:00.0579328
+Localized mods seen below q-value 0.01:
+	Oxidation on M	758
+	Carbamidomethyl on C	585
+	Deamidation on N	198
+	Hydroxylation on P	91
+	Acetylation on X	81
+	Fe[III] on E	34
+	Ammonia loss on N	28
+	Fe[III] on D	23
+	Deamidation on Q	23
+	Hydroxylation on K	15
+	Formylation on K	12
+	Hydroxylation on N	12
+	Sodium on D	11
+	Acetylation on K	9
+	Calcium on D	6
+	Calcium on E	6
+	Citrullination on R	5
+	Water Loss on E	5
+	Glutarylation on K	4
+	Carbamyl on K	4
+	Sodium on E	3
+	Methylation on R	3
+	Carbamyl on X	2
+	Fe[II] on D	2
+	Magnesium on D	2
+	Carbamyl on M	1
+	Fe[II] on E	1
+	Glu to PyroGlu on Q	1
+	Methylation on K	1
+(Approx) Additional localized but protein ambiguous mods seen below q-value 0.01:
+	Oxidation on M	1166
+	Carbamidomethyl on C	759
+	Deamidation on N	311
+	Acetylation on X	59
+	Ammonia loss on N	53
+	Hydroxylation on P	45
+	Fe[III] on D	43
+	Fe[III] on E	34
+	Deamidation on Q	27
+	Hydroxylation on N	17
+	Sodium on E	13
+	Hydroxylation on K	11
+	Sodium on D	10
+	Formylation on K	9
+	Glutarylation on K	9
+	Carbamyl on X	6
+	Acetylation on K	5
+	Citrullination on R	5
+	Water Loss on E	4
+	Calcium on D	4
+	Fe[II] on E	3
+	Fe[II] on D	3
+	Methylation on R	2
+	Methylation on K	2
+	Calcium on E	1
+	Carbamyl on M	1
+	Magnesium on D	1
+	Magnesium on E	1
+(Approx) Additional unlocalized mods seen below q-value 0.01:
+	Deamidation on N	33
+	Hydroxylation on P	20
+	Oxidation on M	15
+	Fe[III] on D	11
+	Fe[III] on E	10
+	Calcium on D	3
+	Ammonia loss on N	3
+	Sodium on E	2
+	Deamidation on Q	2
+	Fe[II] on D	1
+	Potassium on D	1
+	Glutarylation on K	1
+	Sodium on D	1
+(Approx) Additional unlocalized modification formulas seen below q-value 0.01:
+	O	254
+	O2	33
+	H-3Fe	28
+	H-1N-1O2	16
+	H-1N-1O	13
+	H-3FeO	4
+	C2H2O	4
+	H-2Fe	3
+	CHNO	2
+	H-1Na	1
+	H-1NaO	1
+	C2H3NO2	1
+	C2H3NO2	1
+	H-3N-1O	1
+	C2H2O2	1
+
+All mods in database limited to peptides observed in the results:
+	Oxidation on M	820
+	Carbamidomethyl on C	585
+	Deamidation on N	266
+	Hydroxylation on P	218
+	Hydroxylation on N	107
+	Acetylation on X	83
+	Deamidation on Q	72
+	Fe[III] on D	68
+	Fe[III] on E	68
+	Hydroxylation on K	53
+	Ammonia loss on N	37
+	Citrullination on R	21
+	Fe[II] on E	16
+	Calcium on D	15
+	Fe[II] on D	15
+	Formylation on K	15
+	Sodium on D	14
+	Sodium on E	12
+	Acetylation on K	11
+	Calcium on E	9
+	Carbamyl on X	8
+	Magnesium on E	7
+	Glutarylation on K	6
+	Carbamyl on K	6
+	Water Loss on E	6
+	Potassium on D	4
+	Methylation on R	4
+	Potassium on E	3
+	Magnesium on D	3
+	Methylation on K	2
+	Carbamyl on M	1
+	Glu to PyroGlu on Q	1
+
+
+Engine type: ProteinParsimonyEngine
+Time to run engine: 00:00:02.9136621
+
+
+Engine type: ProteinScoringAndFdrEngine
+Time to run engine: 00:00:01.0674068
+Number of proteins within 1% FDR: 2372
+
+Engine type: ProteinScoringAndFdrEngine
+Time to run engine: 00:00:00.6383788
+Number of proteins within 1% FDR: 2372
+
+

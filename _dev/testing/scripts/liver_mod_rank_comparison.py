@@ -238,17 +238,19 @@ def mascot_peaks(txt_path, unimod_xml):
 
 def main():
     root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    bench = os.path.join(os.path.dirname(root), "liver-benchmark")
+    unimod = os.path.join(os.path.dirname(os.path.dirname(root)), "recon-tool/resources/unimod.xml")
     rec = recon_peaks(require(f"{root}/recon-output/full-run/liver.json", "recon arm"))
-    sh = shepherd_peaks(require(f"{root}/reference-data/ptm-shepherd/liverShepherd/global.profile.tsv", "PTM-Shepherd arm"))
-    elems = element_masses(f"{root}/reference-data/unimod.xml")
+    sh = shepherd_peaks(require(f"{bench}/ptm-shepherd/liverShepherd/global.profile.tsv", "PTM-Shepherd arm"))
+    elems = element_masses(unimod)
     mm3 = metamorpheus_peaks(require(
-        f"{root}/reference-data/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
-        "MetaMorpheus arm — GITIGNORED, see .gitignore:62"),
+        f"{bench}/metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv",
+        "MetaMorpheus arm"),
         elems)
     msc, msc_skipped = mascot_peaks(
-        require(f"{root}/reference-data/mascot/error-tolerant/MascotErrorTol-liver.txt",
+        require(f"{bench}/mascot/error-tolerant/MascotErrorTol-liver.txt",
                 "Mascot arm"),
-        f"{root}/reference-data/unimod.xml")
+        unimod)
     msc = merge_by_mass(msc)
     mm = merge_by_mass([(m, n) for m, n, _ in mm3])
     sh = merge_by_mass(sh)

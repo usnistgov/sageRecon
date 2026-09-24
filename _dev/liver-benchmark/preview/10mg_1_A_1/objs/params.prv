@@ -1,0 +1,23 @@
+#PMI-Preview parameters v1.15
+#Thu Mar 14 11:12:20 EDT 2019
+OutputFolder=<redacted>/Data\\Orbitrap Data\\2018 Liver SD Homogeneity\\Liver RM 10 mg Preview\\10mg_1_A_1.prv[2]
+LysMod=
+Wildcard=0
+CTermMod=
+FirstK=
+ArgMod=
+ProteomeDiscovererVersion=2.0
+FragType=0
+ProteomeDiscovererSuggestedByonicWorkflow=<redacted>/Data\\Orbitrap Data\\2018 Liver SD Homogeneity\\Liver RM 10 mg Preview\\10mg_1_A_1.suggestedByonicSearch.pdAnalysis
+DigestLetters=KR
+DebugText=
+DebugMode=0
+CysMod=+57.021464 (carbamidomethylation)
+AllCharges=0
+DatabaseFiles=C\:\\ProgramData\\Thermo\\Proteome Discoverer 2.2\\Scratch\\Job2133\\uniprot_sprot_iso_human-2018_06.fasta
+SpectraFiles=<redacted>/Data\\Orbitrap Data\\2018 Liver SD Homogeneity\\Liver RM 10 mg Preview\\10mg_1_A_1.prv[2]\\10mg_1_A_1.mgf
+NTermMod=
+digest_side=0
+RecalibrateType=3
+phospho_search=0
+DigestType=2
