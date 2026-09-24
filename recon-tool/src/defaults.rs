@@ -195,6 +195,24 @@ mod tests {
         }
     }
 
+    /// Both passes use 1 missed cleavage and a minimum length of 8 (measured on
+    /// liver 2026-09-24, see NOTES "Pass 1 digestion settings align with Pass
+    /// 2"). The passes differ only in `semi_enzymatic`. This fails if either
+    /// template is edited alone.
+    #[test]
+    fn both_passes_share_missed_cleavages_and_min_len() {
+        let p1: serde_json::Value = serde_json::from_str(OPEN_SEARCH).unwrap();
+        let p2: serde_json::Value = serde_json::from_str(PASS2).unwrap();
+        for field in ["missed_cleavages", "min_len"] {
+            assert_eq!(
+                p1["database"]["enzyme"][field], p2["database"]["enzyme"][field],
+                "pass 1 and pass 2 disagree on `{field}`"
+            );
+        }
+        assert_eq!(p1["database"]["enzyme"]["missed_cleavages"], 1);
+        assert_eq!(p1["database"]["enzyme"]["min_len"], 8);
+    }
+
     /// Pass 1 refuses a non-`[0,0]` isotope window at runtime. The bundled
     /// default must not be the thing that trips it.
     #[test]

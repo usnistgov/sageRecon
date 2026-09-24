@@ -247,7 +247,8 @@ different claims.
 
 `--enzyme` accepts a preset name or an explicit rule. It sets enzyme IDENTITY
 only, never the search tuning (`missed_cleavages`, `min_len`, `max_len`,
-`semi_enzymatic`), which Pass 1 and Pass 2 set differently on purpose.
+`semi_enzymatic`), which each pass sets in its own template. Both passes allow
+1 missed cleavage and a minimum length of 8; only Pass 2 is semi-enzymatic.
 
 Fourteen presets ship. The rules are transcribed from Mascot's published enzyme
 list, with the deviations recorded in

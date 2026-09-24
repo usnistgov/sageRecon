@@ -280,8 +280,9 @@ pub fn parse(spec: &str) -> Result<Enzyme, EnzymeError> {
 /// ⚠ **IDENTITY ONLY, AND THAT IS A LOCK.** Exactly three fields are written:
 /// `cleave_at`, `restrict` and `c_terminal`. The tuning fields —
 /// `missed_cleavages`, `min_len`, `max_len`, `semi_enzymatic` — are LEFT ALONE,
-/// because Pass 1 and Pass 2 set them differently on purpose (pass 1 is
-/// `missed_cleavages: 2, min_len: 7`; pass 2 is `1`, `8`, `semi_enzymatic: true`).
+/// because each pass sets them in its own template (both passes are
+/// `missed_cleavages: 1, min_len: 8` since 2026-09-24; pass 2 adds
+/// `semi_enzymatic: true`).
 /// An `--enzyme` flag that quietly reset those would silently change the search
 /// depth of both passes.
 ///

@@ -3018,7 +3018,9 @@ exists to drift.
 rather than leaving blanks to be misread as zeros.**
 * **PTMs: five.** recon, Preview, PTM-Shepherd, MetaMorpheus, Mascot.
 * **Digestion: four.** Mascot stays OUT — `PFA=1` against recon's two missed
-  cleavages, and no peptide list to reclassify.
+  cleavages, and no peptide list to reclassify. (2026-09-24: recon's Pass 1
+  now allows one, like `PFA=1`. The committed liver comparison was made at
+  two. The missing peptide list still excludes Mascot.)
 * **Mass tolerance: two.** Only recon and Preview publish a comparable quantity.
 
 **Preview's mass accuracy is PARSED from its own `result_summary.html`**, not
@@ -6894,11 +6896,14 @@ advice.
     bug to "fix" by re-tuning thresholds — the fix is to stop scoring, not to
     re-weight.)
 
-- **The Pass 2 missed-cleavage rate excludes peptides with 2 or more missed
-  cleavages.** Pass 2 searches with `missed_cleavages: 1`, so Sage cannot
-  generate such a peptide. The rate counts peptides with exactly 1. On liver,
-  allowing 2 (and length 7) moves the rate by +0.14 percentage points only.
-  See "Pass 2 digestion settings stay at 1 and 8" (2026-09-24).
+- **recon does not see peptides with 2 or more missed cleavages.** Both
+  passes search with `missed_cleavages: 1` (Pass 1 since 2026-09-24), so Sage
+  cannot generate such a peptide. The Pass 2 rate counts peptides with exactly
+  1. On liver, allowing 2 (and length 7) in Pass 2 moves that rate by +0.14
+  percentage points only. The Pass 1 `missed_cleavage_2plus_pct` is 0 by
+  construction: 0 means "not searched", not "none found". At 2 missed
+  cleavages it read 2.13 % on liver. See "Pass 2 digestion settings stay at 1
+  and 8" and "Pass 1 digestion settings align with Pass 2" (2026-09-24).
 
 ## Intentional, not bugs
 Things that look wrong but are correct. Do not "fix" these.
@@ -10994,8 +10999,10 @@ error is larger. On liver the count did not move between 20 and 16.37 ppm.
 
 ## Pass 2 digestion settings stay at 1 and 8 (2026-09-24, Ben's rule, technote Appendix B item 2)
 
-**Decision: KEEP `missed_cleavages: 1`, `min_len: 8` in Pass 2.** Pass 1 keeps
-2 and 7. The passes stay different. The rejected alternative is (2, 7) in both
+**Decision: KEEP `missed_cleavages: 1`, `min_len: 8` in Pass 2.** At the time
+of this entry Pass 1 kept 2 and 7. (Superseded the same day: Pass 1 moved to 1
+and 8, so the passes now align. See "Pass 1 digestion settings align with
+Pass 2".) The rejected alternative is (2, 7) in both
 passes.
 
 **Ben's rule.** Adopt (2, 7) if it moves the missed-cleavage rate by more than
@@ -11049,9 +11056,10 @@ The Pass 2 ratio (59 s against 13 s) follows the candidate count (7.3 M against
 condition alone rejects (2, 7).
 
 **Stated limitation (kept).** The headline missed-cleavage rate counts peptides
-with exactly 1 missed cleavage, because Pass 2 cannot identify 2 or more. On
-liver, Pass 1 puts 2.1 % of PSMs at 2 or more. See "Known permanent
-limitations".
+with exactly 1 missed cleavage, because Pass 2 cannot identify 2 or more. With
+Pass 1 at 2 missed cleavages, liver put 2.13 % of Pass 1 PSMs at 2 or more.
+Since Pass 1 moved to 1 missed cleavage (same day), neither pass can see that
+class. See "Known permanent limitations".
 
 **Preview comparison.** Preview's `result_detail.html` (vendored at
 `_dev/liver-benchmark/preview/10mg_1_A_1/`) defines the rate as peptides that
@@ -11093,3 +11101,91 @@ above. Outputs are scratch, not committed.
 ⚠ **`discovery_settings` still does not record `max_peaks`** (see "Mod-discovery
 JSON does not record its own peak-detection config"). A cap-50 and a cap-500
 JSON are told apart only by the peak count.
+
+## Pass 1 digestion settings align with Pass 2 (2026-09-24, Ben's rule)
+
+**Decision: Pass 1 moves from `missed_cleavages: 2, min_len: 7` to `1, 8`.**
+Both passes now use (1, 8); only Pass 2 is semi-enzymatic. The rejected
+alternatives are the current (2, 7), and (1, 7) and (2, 8).
+
+**Ben's rule.** "Speed and accuracy is the game; have a reason to use more than
+one missed cleavage based on the compute-time hit." Adopt the FASTEST setting
+that (a) loses no recommendation corroborated by PTM-Shepherd, MetaMorpheus or
+Mascot, (b) leaves the MS1 and MS2 recommended tolerances unchanged, and (c)
+moves the Pass 2 missed-cleavage, ragged-N and ragged-C rates each by less
+than 0.5 pp. (1, 8) is the fastest and passes all three.
+
+**Method.** Liver `10mg_1_A_1`, `uniprot_sprot_iso_human-2018_06.fasta`,
+`--enzyme trypsin`, release build of `ad7a10e` (peak cap 500). Full `recon run`
+per arm, one after the other, with `--params` pointing at a copy of the bundled
+Pass 1 template where only the two fields change. Each arm's Pass 1
+`effective-params.json` was diffed against the (2, 7) arm: only
+`missed_cleavages`, `min_len` and the template path differ. Arms run in the
+order a, b, c, d, a, c, b, a. Outputs are scratch, not committed.
+
+| arm (mc, len) | a (2, 7) current | b (1, 8) | c (1, 7) | d (2, 8) |
+|---|---|---|---|---|
+| Pass 1 peptides generated | 4,938,962 | 2,737,667 | 2,963,660 | 4,666,672 |
+| Pass 1 Sage time, `[SAGE] Done` (s) | 71.7, 65.4 | 43.2, 43.9 | 45.9, 44.8 | 76.6 |
+| total `time -p` real (s) | 118.0, 110.7 | 89.8, 89.9 | 92.4, 92.0 | 123.6 |
+| Pass 1 PSMs, q <= 0.01 | 31783 | 31489 (-0.9 %) | 31766 | 31555 |
+| mod-discovery peaks | 171 | 183 | 175 | 173 |
+| fixed list | Carbamidomethyl C | same | same | same |
+| variable list | 12 | same 12 | same 12 | same 12 |
+| floor / carpet margin (PSMs) | 341.8 / 171.8 | 338.2 / 177.2 | 345.8 / 176.8 | 343.8 / 174.8 |
+| MS1 bias / MAD (ppm) | -1.417 / 0.627 | -1.408 / 0.627 | -1.416 / 0.626 | -1.411 / 0.627 |
+| Recommended MS1 / MS2 | 10 / 10 ppm | 10 / 10 ppm | 10 / 10 ppm | 10 / 10 ppm |
+| Pass 2 subset proteins | 1770 | 1700 | 1767 | 1751 |
+| Pass 2 missed cleavage, raw | 17.53 % | 17.58 % | 17.55 % | 17.55 % |
+| Pass 2 ragged-N, raw | 6.94 % | 6.94 %, 6.95 % | 6.93 %, 6.94 % | 6.96 % |
+| Pass 2 ragged-C, raw | 3.14 % | 3.18 %, 3.17 % | 3.16 %, 3.15 % | 3.14 % |
+| Pass 1 PSMs at 2+ missed | 2.13 % | 0 (not searched) | 0 (not searched) | 2.29 % |
+| Spearman vs PTM-Shepherd | 0.755 (n 68) | 0.762 (n 68) | 0.777 (n 66) | 0.784 (n 67) |
+| Spearman vs MetaMorpheus | 0.771 (n 13) | 0.747 (n 13) | 0.725 (n 13) | 0.778 (n 13) |
+| Spearman vs Mascot | 0.591 (n 66) | 0.652 (n 69) | 0.630 (n 66) | 0.607 (n 66) |
+
+Two values in one cell are two runs. The second (1, 8) run overlapped a short
+`cargo test` compile, which can only have slowed it. A third (2, 7) run
+(82.9 s Pass 1, 151.4 s total) overlapped a CPU-bound permutation job and is
+left out of the table. Composition values are `composition.*` in `liver_pass2.json`;
+the Pass 2 settings are (1, 8) in every arm. The variable list in every arm is
+the 12 of the (2, 7) arm: Oxidation M, Deamidation, Gln->pyro-Glu, Fe[III],
+Trioxidation, Met-loss+Acetylation, Dehydroalanine, Formylation K, Water Loss,
+Acetylation, Kynurenine W, -32.01 on M. No arm gains or loses one.
+Corroboration was matched at 0.01 Da on the three tools' peak lists; every
+entry except -32.01 on M is seen by at least one tool. Spearman is from
+`liver_mod_rank_comparison.py` pointed at each arm's JSON.
+
+**Why (1, 8) and not (1, 7).** (1, 8) is faster in both pairs of runs
+(Pass 1 43.2 and 43.9 s against 45.9 and 44.8 s). The two are within 5 %, so
+the deterministic candidate count breaks the tie: 2.74 M against 2.96 M
+peptides (-8 %). (1, 8) also aligns the two passes.
+
+**What the second missed cleavage bought, and why it is not kept.** Against
+about 1.6x the Pass 1 Sage time (65-72 s against 43-44 s; 1.8x the peptide
+count), (2, 7) gave: no recommendation, no tolerance change, Pass 2 composition
+within 0.05 pp, and 294 more Pass 1 PSMs (+0.9 %). Its one unique output is
+the Pass 1 2+ missed-cleavage share (2.13 % on liver). recon now reports that
+field as 0 by construction. This is the accepted cost. The Pass 2 subset is
+70 proteins smaller (1700 against 1770); that moved no Pass 2 rate by more
+than 0.05 pp.
+
+**-0.0 fix.** At `missed_cleavages: 1` the 2+ share was an empty `f64` sum,
+which is -0.0, and the JSON and console printed "-0.0". `report.rs`
+`pct_with_two_or_more_missed` folds from +0.0. Test:
+`two_plus_missed_is_positive_zero_when_the_class_is_absent` (compares bits).
+⚠ **Open for Ben:** the field could say "not measured" instead of 0. That is a
+schema change and is not done.
+
+**Guard.** `both_passes_share_missed_cleavages_and_min_len` in `defaults.rs`
+fails if either template changes alone.
+
+⚠ **For the regeneration step:** `liver_5way_report.py` (lines 20 and 128)
+writes "against recon's two" into the 5-way report as the reason Mascot is
+out of the digestion table. After a (1, 8) regeneration that reason is false;
+the missing peptide list remains the reason. Left unchanged here because the
+committed comparison was made at two.
+
+⚠ **Timing is on one machine, one file.** The Pass 1 ratio follows the
+candidate count (1.8x), so the direction is real. This changes the Tier 3
+snapshots and every committed report; regeneration is pending.

@@ -25,7 +25,8 @@ is reused here verbatim — `compare_mod_discovery.load_mascot`. See NOTES
 "Mascot error-tolerant adapter — MULTI-SITE ROLL-UP is load-bearing".
 
 ⚠ Mascot's counts are its OWN resolved-ET fraction, not PSM counts, and its
-`PFA=1` allows one missed cleavage against recon's two. Neither is a reason to
+`PFA=1` allows one missed cleavage, as recon's Pass 1 does since 2026-09-24
+(it allowed two before). Neither is a reason to
 compare counts — the claim here is RANK only.
 """
 import csv, json, re, os, collections

@@ -1113,13 +1113,7 @@ impl ReconReport {
             .find(|m| m.missed == 1)
             .map(|m| m.pct)
             .unwrap_or(0.0);
-        let mc2plus: f64 = digestion
-            .missed_cleavages
-            .distribution
-            .iter()
-            .filter(|m| m.missed >= 2)
-            .map(|m| m.pct)
-            .sum();
+        let mc2plus = pct_with_two_or_more_missed(&digestion.missed_cleavages.distribution);
 
         let digestion_summary = DigestionSummaryReport {
             missed_cleavage_0_pct: mc0,
@@ -2278,10 +2272,64 @@ The full texts are in <code>THIRD_PARTY_LICENSES.md</code>, shipped in the relea
     )
 }
 
+/// Percentage of PSMs with 2 or more missed cleavages.
+///
+/// A fold from +0.0, not `sum()`: an empty `f64` sum is -0.0, and Pass 1 at
+/// `missed_cleavages: 1` has no such PSM, so `sum()` wrote "-0.0" to the JSON
+/// and the console. The zero is by construction there: the search cannot
+/// generate the class, so 0 means "not searched", not "none found".
+fn pct_with_two_or_more_missed(distribution: &[crate::digestion::MissedCleavageCount]) -> f64 {
+    distribution
+        .iter()
+        .filter(|m| m.missed >= 2)
+        .fold(0.0, |acc, m| acc + m.pct)
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use crate::sage_results::Psm;
+
+    /// With no PSM at 2 or more, the value is +0.0, not -0.0. `assert_eq!`
+    /// cannot tell the two apart, so the test compares the bits.
+    #[test]
+    fn two_plus_missed_is_positive_zero_when_the_class_is_absent() {
+        use crate::digestion::MissedCleavageCount;
+        let dist = vec![
+            MissedCleavageCount {
+                missed: 0,
+                count: 80,
+                pct: 80.0,
+            },
+            MissedCleavageCount {
+                missed: 1,
+                count: 20,
+                pct: 20.0,
+            },
+        ];
+        assert_eq!(
+            pct_with_two_or_more_missed(&dist).to_bits(),
+            0.0f64.to_bits()
+        );
+        let with_two = vec![
+            MissedCleavageCount {
+                missed: 1,
+                count: 90,
+                pct: 90.0,
+            },
+            MissedCleavageCount {
+                missed: 2,
+                count: 7,
+                pct: 7.0,
+            },
+            MissedCleavageCount {
+                missed: 3,
+                count: 3,
+                pct: 3.0,
+            },
+        ];
+        assert_eq!(pct_with_two_or_more_missed(&with_two), 10.0);
+    }
 
     fn make_test_psm(peptide: &str, delta: f64) -> Psm {
         Psm {

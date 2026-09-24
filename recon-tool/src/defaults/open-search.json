@@ -3,8 +3,8 @@
   "database": {
     "bucket_size": 8192,
     "enzyme": {
-      "missed_cleavages": 2,
-      "min_len": 7,
+      "missed_cleavages": 1,
+      "min_len": 8,
       "max_len": 50,
       "cleave_at": "KR",
       "restrict": "P"
