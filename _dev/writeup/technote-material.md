@@ -419,6 +419,18 @@ arbitrary decimal.
 - **Fixed vs variable** is MetaMorpheus's `MT == "Common Fixed"` label,
   inherited and stated as such.
 
+**Where the design came from:** Sage, like any open search, reports a peptide
+plus a delta mass, with no localization score (nothing like Ascore). So recon
+cannot say which residue carries a mass. When the abundance floor alone gave
+unsatisfying results, Ben worked the problem through with Perplexity acting
+as an adversarial reviewer (2026-08-24/25). Three things came out of that
+back-and-forth:
+- a small curated candidate list (MetaMorpheus) instead of all of Unimod;
+- a population-level residue test (Fisher's exact test with an odds-ratio
+  floor) in place of per-PSM localization;
+- detailed rules for how each kind of modification enters the statistics:
+  protein termini, Met-loss, saturated backgrounds, satellites.
+
 **What is distinct:** the decision is routed by specificity. A mass that
 localizes to a residue must *prove* that localization against the file's own
 background. Only mods with no residue specificity face an abundance floor, and
@@ -737,8 +749,16 @@ on the Sage version.)
   - Cline (VS Code) with Claude Opus (planning) and Sonnet (implementation),
     2026-07-06 to 2026-07-15;
   - Claude Code from 2026-07-15 onward;
-  - Perplexity/Sonar to research and draft several reference notes. These are
-    secondary digests, and some still carry `[cite:N]` placeholders.
+  - Perplexity, in three roles:
+    - a coding-session host running Claude models on 2026-08-19;
+    - an adversarial reviewer in Ben's design discussions: the 2026-08-17
+      benchmark critique, and the Phase 5 statistics;
+    - research and drafts of several reference notes (Sonar). These are
+      secondary digests, and some still carry `[cite:N]` placeholders.
+- The adversarial review is part of the method, not only of the tooling. The
+  2026-08-17 critique of the benchmark (eight points, all adopted) found the
+  comparison script was reading −150..+100 Da instead of the true −100..+500 Da
+  overlap, which had hidden every peak above +100 Da.
 
 ---
 
@@ -845,6 +865,10 @@ Every point raised while building this material ends in one of three places.
   file was only a test.
 - The pre-repo "spec" in the first plan was Ben's own early ideas. It needs no
   citation.
+- The 2026-08-17 benchmark critique, recorded as coming from a "collaborator",
+  was Ben working with Perplexity as an adversarial reviewer. The Phase 5
+  statistics came out of the same kind of exchange. Both are disclosed in
+  `docs/AI_USAGE.md`.
 
 **Planned for the next release** (the note says these are coming)
 1. **ppm-to-Da conversion at m/z 600, not 500**, for ion-trap and quadrupole
