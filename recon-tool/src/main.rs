@@ -172,8 +172,8 @@ enum Commands {
         #[arg(long, default_value = "10")]
         min_peak_count: usize,
 
-        /// Maximum number of peaks to report (default: 50)
-        #[arg(long, default_value = "50")]
+        /// Maximum number of peaks to report (default: 500)
+        #[arg(long, default_value_t = recon_tool::mod_discovery::DEFAULT_MAX_PEAKS)]
         max_peaks: usize,
 
         /// Mass calibration mode for the delta-mass axis

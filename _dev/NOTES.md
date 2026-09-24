@@ -10846,8 +10846,9 @@ same to the right. Prominence is the height minus the higher of the two
 minima. A bin is a peak candidate when prominence > 0.3 × height. This is
 PTM-Shepherd's definition (`Prominence.java`, `PeakPicker.java`, master
 `61eebcb`, read from GitHub on 2026-09-24). The 0.3 ratio, the 0.01 Da bins,
-the >= 5 PSM candidate floor, the one-bin merge and the 50-peak cap are
-unchanged. Code: `DenseHistogram` and `topographic_prominence` in
+the >= 5 PSM candidate floor and the one-bin merge are unchanged. The peak
+cap was 50 at the time of this entry; it is now 500 (see "The peak cap is
+500"). Code: `DenseHistogram` and `topographic_prominence` in
 `mod_discovery.rs`.
 
 **What was wrong with the old rule** (`compute_prominence`, removed):
@@ -10893,6 +10894,8 @@ peak list.
 - Reported peaks 49 -> 50. Prominent centres before the 50 cap: 179 -> 171.
   ⚠ **The 50-peak cap binds on liver before AND after.** The list is the top 50
   centres by bin count, so a slot freed at the top admits a tail peak.
+  (Superseded 2026-09-24: the cap is now 500, and all 171 centres pass. The
+  counts below are the cap-50 measurement. See "The peak cap is 500".)
 - 10 peaks leave the list. Every one is a flank of a taller peak or of the zero
   smear, and none is prominent under the new rule:
   -0.0801 (165, Unmodified), -1.0582 (137), +16.9794 (116), -0.0982 (116,
@@ -11063,3 +11066,30 @@ two definitions are the same rule, but recon's search cannot supply the
 15.90 %. This cap does not explain that gap: the cap can only lower recon's
 rate. The Kil et al. 2011 paper was not re-read for this entry; the definition
 above is Preview's own report text.
+
+## The peak cap is 500 (2026-09-24, Ben)
+
+The peak cap is 500. It was 50, and that value had no rationale. On liver, 171 centres pass the prominence test; the cap of 50 cut 121 of them. At 500, recon gains four variable recommendations and loses none: Formylation K (28 PSMs), Acetylation (14), Kynurenine W (12), and -32.0066 on M (8). PTM-Shepherd, MetaMorpheus or Mascot see the first three; no tool sees -32.0066. Benjamini-Hochberg corrects across more tests, so existing q values rise up to about 2x on liver; no decision changes (tightest: Fe[III] q 0.0089 -> 0.0134). Floor, carpet margin and fixed list do not change. Spearman rho vs PTM-Shepherd 0.676 -> 0.755, vs Mascot 0.496 -> 0.591, vs MetaMorpheus 0.964 (n 7) -> 0.771 (n 13). Liver shows only that the cap must be >= 171. This changes the Tier 3 snapshots; regeneration is pending.
+
+**Source of 500.** PTM-Shepherd `peakpicking_topN = 500`, as recorded in the
+liver run's own `_dev/liver-benchmark/ptm-shepherd/liverShepherd/shepherd.config`.
+
+**Code.** `DEFAULT_MAX_PEAKS = 500` in `mod_discovery.rs`. The hidden
+`discover` subcommand's `--max-peaks` default now reads the same constant; it
+was a separate literal 50. Test: `the_default_cap_keeps_the_500_largest_centres`
+(600 isolated centres; exactly the 500 largest are kept). It fails with the
+cap at 50.
+
+**Verification (re-run for this entry).** `recon analyze` on the same liver
+open TSV (`full-run/liver_search/results.sage.tsv` in the development clone,
+mzML `10mg_1_A_1.mzML.gz`, FASTA `uniprot_sprot_iso_human-2018_06.fasta`),
+with a cap-50 build of HEAD `7a4450e` and the cap-500 build. One TSV, so no
+Sage run-to-run jitter. Peaks 50 -> 171. `variable` 8 -> 12, the four gains
+above, no loss. Shared q values rise by 1.95x, Fe[III] by 1.50x. Fixed list
+(Carbamidomethyl C), floor (341.8) and carpet margin (171.8) identical.
+Spearman from `liver_mod_rank_comparison.py` pointed at each JSON: the values
+above. Outputs are scratch, not committed.
+
+⚠ **`discovery_settings` still does not record `max_peaks`** (see "Mod-discovery
+JSON does not record its own peak-detection config"). A cap-50 and a cap-500
+JSON are told apart only by the peak count.

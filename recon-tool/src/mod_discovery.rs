@@ -86,6 +86,12 @@ pub const DEFAULT_MIN_PEAK_COUNT: usize = 5;
 /// Default tolerance for merging adjacent bins into a single peak
 pub const DEFAULT_PEAK_MERGE_TOLERANCE_DA: f64 = 0.01;
 
+/// Default maximum number of peak centres, taken in descending bin count.
+/// 500 matches PTM-Shepherd's `peakpicking_topN`. It was 50, with no stated
+/// reason, and on liver 171 centres pass the prominence test, so 50 cut 121
+/// of them (2026-09-24, see NOTES "The peak cap is 500").
+pub const DEFAULT_MAX_PEAKS: usize = 500;
+
 /// Threshold for "near zero" classification (unmodified)
 pub const NEAR_ZERO_THRESHOLD_DA: f64 = 0.1;
 
@@ -150,7 +156,7 @@ impl Default for ModDiscoveryConfig {
             bin_width_da: DEFAULT_BIN_WIDTH_DA,
             min_peak_count: DEFAULT_MIN_PEAK_COUNT,
             peak_merge_tolerance_da: DEFAULT_PEAK_MERGE_TOLERANCE_DA,
-            max_peaks: 50,
+            max_peaks: DEFAULT_MAX_PEAKS,
             fold_tolerance_da: DEFAULT_FOLD_TOLERANCE_BASE_DA,
             prominence_threshold: DEFAULT_PROMINENCE_THRESHOLD,
             calibration_mode: CalibrationMode::default(),
@@ -2136,6 +2142,23 @@ mod tests {
         // Worked by hand: 7 at index 4 walks left through 1 to 9 (higher),
         // min 1; right through 7, 2 to 12 (higher), min 2. 7 - max(1,2) = 5.
         assert_eq!(topographic_prominence(&rugged, 4), 5);
+    }
+
+    /// The default cap keeps the 500 largest prominent centres, and no more.
+    ///
+    /// 600 isolated bins, 10 bins apart with empty bins between them, so each
+    /// has its full height as prominence. Counts are 5 + i, all distinct, so
+    /// the 500 kept are exactly those with i >= 100. Liver has 171 prominent
+    /// centres; the old cap of 50 kept 50 of them, and fails this test.
+    #[test]
+    fn the_default_cap_keeps_the_500_largest_centres() {
+        assert_eq!(ModDiscoveryConfig::default().max_peaks, 500);
+        let profile: Vec<(i64, usize)> =
+            (0..600).map(|i| (1000 + 10 * i, 5 + i as usize)).collect();
+        let bins = detected_bins(&profile);
+        assert_eq!(bins.len(), 500, "the cap must bind at exactly 500");
+        let expected: Vec<i64> = (100..600).map(|i| 1000 + 10 * i).collect();
+        assert_eq!(bins, expected, "the cap must keep the largest centres");
     }
 
     #[test]
