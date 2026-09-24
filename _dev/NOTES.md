@@ -2841,11 +2841,25 @@ delivered and does not recalibrate spectra.
   **307 fragments high against 9820 low** — a 32:1 imbalance is not compatible
   with a centred distribution. recon still does not MEASURE the sign; it now has
   a reference value.
-* ⚠ **MS1 DISAGREES BY 1.42 ppm AND IS NOT RESOLVED.** recon -1.4193 ppm against
-  Preview 0.0 ppm on a balanced 943/850 split. Untested candidate causes:
-  Preview measured the `.mgf` after its own conversion; populations differ by an
-  order of magnitude (recon clean subset 7519 PSMs vs ~1793 precursors);
-  different peptide sets. **Do not present recon's MS1 bias as corroborated.**
+* ✅ **RESOLVED 2026-09-24: PREVIEW IS THE OUTLIER, NOT RECON.** Two other tools
+  measured the same raw file before any recalibration, and both agree with recon:
+  - MSFragger first-search calibration: MS1 median **-1.43 ppm**, MAD 0.97
+    (`reference-data/ptm-shepherd/liverShepherd/log_2026-09-01_09-18-03.txt`,
+    "MS1 (Old)"). The same log gives MS2 (Old) -3.02 ppm, matching Preview's
+    signed -3.1.
+  - MetaMorpheus Calibrate task, first round: MS1 median **-1.57 ppm**, IQR 1.23
+    (`reference-data/metamorpheus/liverMetaMorpheus/Task1-CalibrateTask/results.txt`).
+  - recon at v0.15: -1.4174 ppm, MAD 0.627, n=7574.
+
+  Preview's 0.0 ppm (943/850 split) is the value that disagrees. The candidate
+  causes are still untested: Preview measured the `.mgf` after its own
+  conversion, the populations differ (~1793 precursors vs 7574 PSMs), and the
+  peptide sets differ.
+  **recon's MS1 bias IS corroborated, by MSFragger and MetaMorpheus, not by
+  Preview.**
+  ⚠ The MS2 comparison above uses `mass_accuracy.fragment_median_ppm` (all kept
+  PSMs; 3.38 at v0.15). The calibration clean-subset value is 3.27 ppm
+  (`ms1_calibration.ms2_median_abs_ppm`). State which population is used.
 
 ### 🔒 CONFIG GHOSTS — the template is not the record, and now cannot pretend to be (2026-09-01)
 

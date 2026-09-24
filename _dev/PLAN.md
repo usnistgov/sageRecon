@@ -412,6 +412,22 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 
 ### Deferred / open — none of this is forgotten
 
+* **NEXT RELEASE: seven changes from the write-up review (2026-09-24).** The
+  list is in `_dev/writeup/technote-material.md`, Appendix B, "Planned for the
+  next release". In short:
+  1. ppm-to-Da at m/z 600, not 500;
+  2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
+     the passes consistent;
+  3. prominence uses the nearest higher bin;
+  4. screen tolerances from the measured error, and a glyco expert reviews the
+     oxonium rule;
+  5. remove the vestigial JSON blocks (a MAJOR schema change);
+  6. the documentation fixes;
+  7. the Fe[III] claim test on liver.
+
+  The technical note describes the shipped v0.1.3 behaviour and says these are
+  coming.
+
 * ⚠ **macOS DOWNLOADS ARE BLOCKED BY GATEKEEPER (2026-09-10).** Only Developer
   ID signing plus Apple notarization removes the block. That needs a paid Apple
   Developer account, and Ben decided not to get one for now. The README gives
