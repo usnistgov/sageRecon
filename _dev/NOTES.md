@@ -11376,6 +11376,12 @@ trace. Every regenerated report must carry that `git_commit` with no `-dirty`.
 - `comparison/LIVER-FOUR-TOOL-2026-09-01.{md,html}` and
   `LIVER-FIVE-TOOL-MODS-2026-09-01.{md,html}`: dated, hand-composed documents.
   `liver_5way_report.py` reads the MODS HTML only for its stylesheet.
+  (Done 2026-09-24: no script writes either document, and at `33d52c6`
+  `liver_5way_mods.py` reproduced only 21 of the MODS document's 80 table
+  rows, so both were already stale. Each now carries a dated note that its
+  recon numbers are superseded and where the current ones are. Tables and
+  prose were not rewritten. `liver_5way_report.py` output is unchanged by
+  the note.)
 - `nofixedmods/`, `psm-sensitivity/`, `calibration-benchmark/`,
   `2026-08-25-checks/`, `tier2_peg_*.json`, `step0_expected_anchors.json`:
   frozen or independent fixtures.

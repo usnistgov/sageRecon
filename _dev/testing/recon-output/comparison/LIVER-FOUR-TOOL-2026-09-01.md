@@ -1,5 +1,7 @@
 # Step 3.5 — liver, four sources, one rule
 
+> ⚠ **Superseded recon numbers (note added 2026-09-24).** This is a dated, hand-composed document. Its recon row and the prose built on it come from an earlier recon run (10621 peptides, missed cleavage 17.12 %). The current recon Pass 2 values, from `liver_four_tool_digestion.py` on the `ba4d30e` run, are 10697 peptides, missed cleavage 17.58 %, ragged-N 6.95 %, ragged-C 3.17 %, N:C 2.19. See `LIVER-FIVE-TOOL-2026-09-01.md` and `_dev/liver-benchmark/README.md`. The third-party rows do not change.
+
 NIST RM 8461 liver `10mg_1_A_1`. Four sources: **recon, Byonic Preview,
 PTM-Shepherd, MetaMorpheus**. All on the SAME 2018 database
 (`uniprot_sprot_iso_human-2018_06.fasta`). Provenance for every run:

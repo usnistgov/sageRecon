@@ -1,5 +1,7 @@
 # Liver mod discovery — five sources, one mass axis
 
+> ⚠ **Superseded recon columns (note added 2026-09-24).** This is a dated, hand-composed document. Its recon columns and the prose built on them come from a run with the 50-peak cap and the old prominence rule. For example, Carboxymethylation is no longer recommended on liver. The current recon side is in `LIVER-FIVE-TOOL-2026-09-01.md` (from `liver_5way_report.py` on the `ba4d30e` run). The third-party columns do not change.
+
 NIST RM 8461 liver `10mg_1_A_1`. The `fourway_comparison.md` treatment, run on
 liver — which that file does not cover — and with **Byonic Preview added as a
 fifth arm**. All on the same 2018 database. Provenance for every run:

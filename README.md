@@ -456,7 +456,11 @@ decide.
 
 ## Example output
 
-Two complete reports ship in this repository.
+Two complete reports ship in this repository. They were made on 2026-09-24 by
+a development build at commit `ba4d30e`, which still reports version 0.1.3.
+They use main report schema 4.0.0 and Pass 2 schema 2.0.0. The v0.1.3
+release binary writes schemas 3.2.0 and 1.1.0, so its output does not match
+these copies.
 
 The file demonstrated in [Quick start](#quick-start) is the NIST Candidate RM
 8461 human liver reference material (Orbitrap Fusion Lumos, tryptic; Davis,
