@@ -8,13 +8,10 @@
 //!
 //! Phase 7 implementation per PLAN.md.
 
-use crate::digestion::DigestionResult;
 use crate::mod_discovery::{DiscoverySettings, ModDiscoveryResult, Peak};
 use crate::mzml::MzmlStats;
 use crate::oxonium::OxoniumScreeningSummary;
 use crate::polymer::PolymerSearchResults;
-use crate::qc::QcResult;
-use crate::signal_fate::SignalFateResult;
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
@@ -177,18 +174,47 @@ use serde::{Deserialize, Serialize};
 /// NOT comparable with a 3.4.0 one. On liver: polymer 10 -> 4.55 ppm,
 /// oxonium 20 -> 16.37 ppm. See NOTES "Screen tolerances come from the
 /// measured error".
-pub const SCHEMA_VERSION: &str = "3.4.0";
+///
+/// ⚠ **4.0.0, 2026-09-24: BREAKING. Four blocks REMOVED, one field moved, one
+/// added.** Ben approved the removals (technote Appendix D; NOTES "Vestigial
+/// output and code removed"). A field in the output implies a claim, and these
+/// four made claims the tool does not stand behind:
+/// * `alkylation` REMOVED. It searched for a -57 Da shift on Cys and printed
+///   `fixed_mod_assumed: Carbamidomethyl`, which contradicts the
+///   alkylation-agnostic Pass 1. The alkylation state is read from the +57 peak
+///   and the recommendations.
+/// * `mass_accuracy` REMOVED. Its precursor fields summarised Sage's
+///   `precursor_ppm` over the whole open window (liver p95 76,782 ppm). The MS1
+///   number is `ms1_calibration.bias_ppm`. Its `fragment_median_ppm` MOVED to
+///   `ms1_calibration.ms2_all_psms_median_abs_ppm`, same population (all kept
+///   PSMs) and same median rule. `fragment_p95_ppm` is gone.
+/// * `digestion` (Pass 1) REMOVED. Pass 1 is fully enzymatic at one missed
+///   cleavage, so `ragged_ends_pct` and `missed_cleavage_2plus_pct` were 0 by
+///   construction. The digestion measurement is `composition` in
+///   `<output>_pass2.json`.
+/// * `signal_fate` REMOVED (README Future work 8).
+/// * `mod_discovery.discovery_settings.max_peaks` ADDED: the peak cap (500).
+///
+/// No value in any block that remains is changed by this version. A 3.x
+/// consumer that reads any of the four removed blocks breaks.
+pub const SCHEMA_VERSION: &str = "4.0.0";
 
 /// Schema version of the SEPARATE `<output>_pass2.json` artifact.
 ///
-/// Versioned apart from `SCHEMA_VERSION` on purpose: Pass 2 is produced by
-/// `recon run`, the analyze report by `recon analyze`, and the frozen
-/// `full-run/` set contains only the latter. One file moving must not force a
-/// version bump on the other.
+/// Versioned apart from `SCHEMA_VERSION` on purpose: `--no-pass2` writes the
+/// main report and no Pass 2 file, so one file moving must not force a version
+/// bump on the other.
 /// **1.1.0** (2026-08-31): added `composition` — the digestion numbers recon
 /// actually reports, on Preview's peptide basis and denominators, with per-class
 /// decoy subtraction. Additive, so 1.0.0 consumers keep working.
-pub const PASS2_SCHEMA_VERSION: &str = "1.1.0";
+///
+/// **2.0.0** (2026-09-24): BREAKING. `terminus`, `digestion` and `comparison`
+/// REMOVED. Each carried a PSM-basis semi-enzymatic rate beside the defined
+/// peptide-basis one in `composition` (liver: `terminus` 9.20 %, `digestion`
+/// 9.48 %), and `comparison` set Pass 1's rate, which is 0 by construction,
+/// beside it. `composition` is unchanged and is now the only digestion block.
+/// The HTML N:C ratio now comes from `composition` too.
+pub const PASS2_SCHEMA_VERSION: &str = "2.0.0";
 
 /// Input file information
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -206,15 +232,14 @@ pub struct InputInfo {
     /// The protein FASTA, as the path was given on the command line.
     ///
     /// Stored verbatim like `mzml_file`, NOT canonicalised: the report records
-    /// what the user passed. `None` for `recon analyze` without `--fasta`, which
-    /// is a supported call — the protein context is then simply not available.
+    /// what the user passed. `recon run` always sets it. `None` only in output
+    /// from the removed `recon analyze` subcommand run without `--fasta`.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub fasta_file: Option<String>,
     /// The protease the search and the digestion report used.
     ///
-    /// `None` for `recon analyze`, which has no `--enzyme`: it reads a TSV some
-    /// other command produced, so it cannot know the protease and must not guess
-    /// one.
+    /// `recon run` always sets it. `None` only in output from the removed
+    /// `recon analyze` subcommand, which had no `--enzyme` and did not guess one.
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub enzyme: Option<EnzymeInfo>,
 }
@@ -282,23 +307,6 @@ impl EnzymeInfo {
             )
         }
     }
-}
-
-/// Alkylation check results
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct AlkylationCheck {
-    /// Fixed modification assumed (e.g., "Carbamidomethyl +57.02 Da on C")
-    pub fixed_mod_assumed: String,
-    /// Number of Cys-containing PSMs
-    pub cys_psm_count: usize,
-    /// Percentage of total PSMs that contain Cys
-    pub cys_psm_pct: f64,
-    /// Number of Cys PSMs showing unalkylated signal (delta ~-57 Da)
-    pub unalkylated_count: usize,
-    /// Percentage of Cys PSMs that appear unalkylated
-    pub unalkylated_pct: f64,
-    /// Status message (e.g., "Alkylation appears complete")
-    pub status: String,
 }
 
 /// One recommended search modification.
@@ -436,7 +444,8 @@ pub struct NotRecommended {
 /// Whether the protein-terminal candidates could be tested at all, and against
 /// what.
 ///
-/// Present when `analyze --fasta` supplied the search database. Absent means the
+/// Present when the search database was supplied (`recon run` always supplies
+/// it; the removed `analyze` needed `--fasta`). Absent means the
 /// protein-terminal class was NOT TESTABLE and went to the abundance path — a
 /// different statement from "not supported", and the reason it is recorded as a
 /// block rather than left to be inferred from a missing recommendation.
@@ -528,21 +537,6 @@ pub struct ModDiscoverySummaryReport {
     pub discovery_settings: DiscoverySettings,
 }
 
-/// Signal fate summary for report
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct SignalFateSummaryReport {
-    /// Identification rate by MS2 spectrum count
-    pub id_rate_by_count_pct: f64,
-    /// Identification rate by MS2 TIC
-    pub id_rate_by_tic_pct: f64,
-    /// Number of identified spectra
-    pub identified_spectra: usize,
-    /// Total MS2 spectra
-    pub total_ms2_spectra: usize,
-    /// Chimeric scan percentage
-    pub chimera_rate_pct: f64,
-}
-
 /// Polymer contamination summary for report
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct PolymerSummaryReport {
@@ -580,65 +574,14 @@ pub struct OxoniumSummaryReport {
     pub tolerance: Option<crate::calibration::ScreenTolerance>,
 }
 
-/// Digestion summary for report
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct DigestionSummaryReport {
-    /// Percentage with 0 missed cleavages
-    pub missed_cleavage_0_pct: f64,
-    /// Percentage with 1 missed cleavage
-    pub missed_cleavage_1_pct: f64,
-    /// Percentage with 2+ missed cleavages
-    pub missed_cleavage_2plus_pct: f64,
-    /// Percentage of semi-tryptic (ragged ends)
-    pub ragged_ends_pct: f64,
-}
-
-/// Mass accuracy summary for report
-///
-/// ⚠ **THE TWO PRECURSOR FIELDS ARE SIGNED. THE TWO FRAGMENT FIELDS ARE NOT.**
-/// This block used to say all four were medians of |error| and that none could
-/// be negative. That described v0.14.x and became FALSE at the v0.15 pin.
-/// Corrected in place 2026-09-02; the committed `full-run/liver.json` already
-/// carried `precursor_median_ppm: -0.2771486`, a negative value in a field the
-/// doc said could not be negative.
-///
-/// Measured on the committed v0.15 serum output: 17591 of 68817 `precursor_ppm`
-/// values negative, 0 of 68817 `fragment_ppm` values negative.
-///
-/// None of the four measures instrument bias. **The signed MS1 number lives in
-/// `ms1_calibration.bias_ppm`**, reconstructed by
-/// `calibration::signed_precursor_ppm` from the OPEN search's own near-zero
-/// clean subset. No closed search is needed, or used, anywhere in recon.
-///
-/// The KEYS keep their names deliberately. Renaming them to `*_abs_ppm` would be
-/// a MAJOR schema bump under `_dev/reference-notes/result-schema.md` "Schema
-/// Versioning Policy", which is not warranted by a labelling fix. The rename is
-/// recorded in NOTES as a candidate for a future 2.0.0.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct MassAccuracySummaryReport {
-    /// Precursor (MS1) median of Sage's SIGNED `precursor_ppm`. Can be negative.
-    /// In an open search this is dominated by the delta mass, the PTM shift, not
-    /// by instrument calibration. It is not a mass accuracy and is not
-    /// comparable with `bias_ppm`.
-    pub precursor_median_ppm: f64,
-    /// Precursor (MS1) 95th percentile of the SIGNED distribution. Under v0.14
-    /// this was a coverage bound, "95 % of PSMs within X ppm". It is not that
-    /// any more, because the values carry a sign.
-    pub precursor_p95_ppm: f64,
-    /// Fragment (MS2) median ABSOLUTE ppm. `fragment_ppm` stayed absolute at
-    /// v0.15, so no signed MS2 bias can be read from it.
-    pub fragment_median_ppm: f64,
-    /// Fragment (MS2) 95th percentile ABSOLUTE ppm.
-    pub fragment_p95_ppm: f64,
-}
-
 /// Self-calibrated MS1/MS2 tolerance recommendation, measured from the open
 /// search's own clean subset (near-zero-delta, rank-1, target, q<0.01 PSMs —
 /// see NOTES "MS1 error from the wide search's clean subset"). Two MS1 numbers
 /// are reported deliberately (locked, do NOT conflate): `user_recommendation`
-/// is generous/asymmetric for the user's own next search; `pass2_window` is
-/// tight/bias-centered and hard-capped at +/-100 ppm, sized for an internal
-/// Pass 2 semi-tryptic search only. Present whenever the clean subset is
+/// is the ladder rung, symmetric about zero, for the user's own next search;
+/// `pass2_window` is `bias ± min(|bias| + 5*MAD, 100 ppm)`, unrounded and
+/// centred on the bias, sized for the internal Pass 2 search only. Present
+/// whenever the clean subset is
 /// non-empty; `None` when there were no qualifying PSMs (e.g. every PSM had a
 /// large delta mass, or too few target rank-1 hits cleared q<threshold).
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -678,16 +621,19 @@ pub struct Ms1CalibrationReport {
     /// here are NOT comparable with a 1.6.0 one.
     pub user_recommendation_low_ppm: f64,
     pub user_recommendation_high_ppm: f64,
-    /// Bias-centred Pass 2 `precursor_tol` window, in DELTA space.
+    /// Bias-centred Pass 2 `precursor_tol` window, in DELTA space:
+    /// `bias ± min(|bias| + 5*MAD, 100 ppm)`. See `calibration::ms1_pass2_window`.
     ///
-    /// ⚠ CHANGED 2026-08-28. The half-width was `3*MAD` with a `±100 ppm` cap;
-    /// both are gone. `3*MAD` was MEASURED to cover only 80.82 / 87.46 / 80.77 %
-    /// of confident PSMs, and the cap became unreachable once the width came
-    /// from the ladder (whose top rung is also 100). The half-width is now the
-    /// ladder rung, and measured coverage is 99.32 / 99.92 / 99.94 %.
+    /// ⚠ CHANGED TWICE. On 2026-08-28 the half-width went from `3*MAD` (80.82 /
+    /// 87.46 / 80.77 % coverage) to the ladder rung (99.32 / 99.92 / 99.94 %).
+    /// On 2026-08-29 it went from the rung to the unrounded requirement
+    /// `|bias| + 5*MAD`, capped at the ladder's top rung (100 ppm). Measured cost
+    /// of that second change, as lower bounds: serum keeps 94.16 % and bcell
+    /// 96.76 % of confident PSMs.
     ///
     /// NOT the same number as the user recommendation above: that is symmetric
-    /// about ZERO, this is centred on the measured BIAS.
+    /// about ZERO and rounded up to a rung; this is centred on the measured BIAS
+    /// and unrounded.
     ///
     /// ⚠ These are DELTA-space bounds. Sage's `precursor_tol` config is
     /// sign-INVERTED relative to them — see `pass2::precursor_tol_json`, which
@@ -733,16 +679,34 @@ pub struct Ms1CalibrationReport {
     /// ~15% low on serum (0.4440 here vs 0.5114 signed, like-for-like per-PSM).
     #[serde(default, skip_serializing_if = "Option::is_none")]
     pub ms2_spread_mad_ppm: Option<f64>,
+    /// Median of Sage's absolute `fragment_ppm` over ALL kept Pass-1 PSMs, not
+    /// only the clean subset. Added at schema 4.0.0.
+    ///
+    /// Moved here from the removed `mass_accuracy.fragment_median_ppm`, with the
+    /// same population and the same median rule (the upper middle element, see
+    /// `calibration::all_psms_median_abs_fragment_ppm`). It is the value NOTES
+    /// compares with Byonic Preview's MS2 |error| (liver: 3.38 against 3.5 ppm).
+    ///
+    /// Two MS2 populations, so say which one you quote. The HTML report shows
+    /// `ms2_median_abs_ppm`, the CLEAN-SUBSET value (liver 3.27). This field is
+    /// JSON only. `None` in a report older than 4.0.0, or when no PSM was kept.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub ms2_all_psms_median_abs_ppm: Option<f64>,
 }
 
 /// Pass 2 — the semi-enzymatic subset search, written to `<output>_pass2.json`.
 ///
 /// Deliberately a SEPARATE artifact rather than a block inside `ReconReport`.
-/// Pass 2 is produced by `recon run`; `ReconReport` is produced by `recon
-/// analyze`, and `_dev/testing/recon-output/full-run/` is a frozen set of ANALYZE
-/// outputs. Folding Pass 2 into that schema would move the regeneration on one
-/// more axis at the same time as the others, which is exactly what the
-/// regeneration impact trace exists to prevent.
+/// `ReconReport` is written before Pass 2 runs (and again after it), and
+/// `--no-pass2` produces no Pass 2 at all. Keeping the two files apart lets each
+/// carry its own schema version, so a change to one does not force a bump on
+/// the other.
+///
+/// Since 2.0.0 the file carries ONE digestion measurement, `composition`. The
+/// PSM-basis `terminus` and `digestion` blocks, and the Pass 1 against Pass 2
+/// `comparison`, were removed: each carried a second or third semi-enzymatic
+/// rate (liver 9.20 % and 9.48 %) that a reader could quote in place of the
+/// defined one.
 #[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Pass2Report {
     pub schema_version: String,
@@ -769,53 +733,15 @@ pub struct Pass2Report {
     /// The Pass-1 fragment tolerance the MS2 number is clamped against.
     pub pass1_fragment_tol: String,
 
-    /// Terminus breakdown over Pass 2's confident target PSMs.
-    pub terminus: crate::digestion::TerminusStats,
-    /// Missed cleavages and semi-tryptic rate as Pass 2 saw them.
-    ///
-    /// ⚠ PSM-basis, decoys already dropped, no per-class correction. Retained
-    /// because it is what 1.0.0 consumers read. `composition` is the reported
-    /// quantity; this is the raw material.
-    pub digestion: crate::digestion::DigestionResult,
-
-    /// THE REPORTED DIGESTION NUMBERS.
+    /// THE REPORTED DIGESTION NUMBERS, and the only ones in this file.
     ///
     /// Distinct peptides, Preview's denominators, per-class decoy subtraction.
     /// See `digestion::DigestionComposition` for the derivation and for the
     /// reference values this was validated against.
     pub composition: crate::digestion::DigestionComposition,
 
-    /// Pass-1 prediction against Pass-2 observation. See `Pass2Comparison`.
-    pub comparison: Pass2Comparison,
-
     /// Wall-clock seconds for the Pass 2 Sage search alone.
     pub pass2_search_seconds: f64,
-}
-
-/// What Pass 1 predicted about digestion, next to what Pass 2 measured.
-///
-/// The point of the comparison is that Pass 1 CANNOT see ragged termini: it is a
-/// fully-tryptic search, so every semi-tryptic peptide in the sample is either
-/// missed or mis-assigned. Pass 1's `semi_enzymatic_pct` therefore reads from
-/// Sage's own `semi_enzymatic` column on a search that could not generate one,
-/// and is expected to be ~0. Pass 2 is the measurement; Pass 1 is the control
-/// that shows the measurement was necessary.
-///
-/// ⚠ The two rates have DIFFERENT DENOMINATORS (each pass's own confident PSM
-/// count) and different search spaces (whole database vs subset). They are not
-/// a before/after of one quantity, and the difference must not be read as a
-/// delta. Both counts are carried so a reader can see that.
-#[derive(Debug, Clone, Serialize, Deserialize)]
-pub struct Pass2Comparison {
-    pub pass1_psms: usize,
-    pub pass1_semi_enzymatic_pct: f64,
-    pub pass2_psms: usize,
-    pub pass2_semi_enzymatic_pct: f64,
-    /// Semi-tryptic PSMs Pass 2 found that Pass 1's search space could not
-    /// have contained at all.
-    pub pass2_only_semi_enzymatic: usize,
-    /// Plain-language reading, generated so the JSON explains itself.
-    pub note: String,
 }
 
 /// Complete reconnaissance report
@@ -825,8 +751,8 @@ pub struct ReconReport {
     pub schema_version: String,
     /// Wall-clock seconds for the WHOLE run, filled in once every stage is done.
     ///
-    /// `None` from `analyze`, which is one stage of a run rather than the run.
-    /// `run` writes the report before Pass 2 (Pass 2 consumes it), then rewrites
+    /// `None` on the first write of a run. `run` writes the report before
+    /// Pass 2 (Pass 2 consumes it), then rewrites
     /// both files once the total is known — so this is genuinely the total and
     /// not the time to first output.
     #[serde(default, skip_serializing_if = "Option::is_none")]
@@ -849,23 +775,11 @@ pub struct ReconReport {
     /// Modification discovery results
     pub mod_discovery: ModDiscoverySummaryReport,
 
-    /// Signal fate results
-    pub signal_fate: SignalFateSummaryReport,
-
     /// Polymer contamination results
     pub polymer: PolymerSummaryReport,
 
     /// Oxonium screening results
     pub oxonium: OxoniumSummaryReport,
-
-    /// Digestion efficiency results
-    pub digestion: DigestionSummaryReport,
-
-    /// Mass accuracy results
-    pub mass_accuracy: MassAccuracySummaryReport,
-
-    /// Alkylation check results
-    pub alkylation: AlkylationCheck,
 
     /// Self-calibrated MS1/MS2 tolerance recommendation from the open
     /// search's clean subset (see `Ms1CalibrationReport` docs). `None` when
@@ -917,7 +831,7 @@ pub struct AnalyzerReport {
 impl ReconReport {
     /// Create a new report from analysis results
     ///
-    /// ⚠ `clippy::too_many_arguments` fires here (16/7) and is ALLOWED, not
+    /// ⚠ `clippy::too_many_arguments` fires here (12/7) and is ALLOWED, not
     /// fixed. Collapsing these into a struct is a signature change across the
     /// whole report-building path, and every argument is a measured quantity.
     /// The failure mode of that refactor is a silently swapped field, which is
@@ -932,12 +846,8 @@ impl ReconReport {
         enzyme: Option<&crate::enzyme::Enzyme>,
         mzml_stats: &MzmlStats,
         mod_discovery: &ModDiscoveryResult,
-        signal_fate: &SignalFateResult,
         polymer: &PolymerSearchResults,
         oxonium: &OxoniumScreeningSummary,
-        digestion: &DigestionResult,
-        qc: &QcResult,
-        alkylation: AlkylationCheck,
         ms1_calibration: Option<Ms1CalibrationReport>,
         recommendations: Option<ModRecommendations>,
         analyzers: Option<AnalyzerReport>,
@@ -1048,19 +958,6 @@ impl ReconReport {
             discovery_settings: mod_discovery.discovery_settings.clone(),
         };
 
-        // Build signal fate summary
-        let signal_fate_summary = SignalFateSummaryReport {
-            id_rate_by_count_pct: signal_fate.by_count.identified_pct.unwrap_or(0.0),
-            id_rate_by_tic_pct: signal_fate.by_intensity.identified_pct.unwrap_or(0.0),
-            identified_spectra: signal_fate.by_count.identified_spectra,
-            total_ms2_spectra: signal_fate
-                .unidentified
-                .as_ref()
-                .map(|u| u.total_ms2_spectra)
-                .unwrap_or(mzml_stats.ms2_spectra),
-            chimera_rate_pct: signal_fate.chimera_stats.chimera_rate_pct,
-        };
-
         // Build polymer summary
         let total_pct_tic = polymer.total_polymer_pct_tic();
         let contamination_level = if total_pct_tic < 0.1 {
@@ -1086,7 +983,7 @@ impl ReconReport {
             total_pct_tic,
             contamination_level,
             top_polymers,
-            // Set by the caller, which chose the tolerance (`recon analyze`).
+            // Set by the caller, which chose the tolerance.
             tolerance: None,
         };
 
@@ -1094,40 +991,8 @@ impl ReconReport {
         let oxonium_summary = OxoniumSummaryReport {
             glycopeptide_candidates: oxonium.glycopeptide_candidates,
             glycopeptide_pct: oxonium.glycopeptide_pct,
-            // Set by the caller, which chose the tolerance (`recon analyze`).
+            // Set by the caller, which chose the tolerance.
             tolerance: None,
-        };
-
-        // Build digestion summary
-        let mc0 = digestion
-            .missed_cleavages
-            .distribution
-            .iter()
-            .find(|m| m.missed == 0)
-            .map(|m| m.pct)
-            .unwrap_or(0.0);
-        let mc1 = digestion
-            .missed_cleavages
-            .distribution
-            .iter()
-            .find(|m| m.missed == 1)
-            .map(|m| m.pct)
-            .unwrap_or(0.0);
-        let mc2plus = pct_with_two_or_more_missed(&digestion.missed_cleavages.distribution);
-
-        let digestion_summary = DigestionSummaryReport {
-            missed_cleavage_0_pct: mc0,
-            missed_cleavage_1_pct: mc1,
-            missed_cleavage_2plus_pct: mc2plus,
-            ragged_ends_pct: digestion.semi_enzymatic.semi_enzymatic_pct,
-        };
-
-        // Build mass accuracy summary
-        let mass_accuracy_summary = MassAccuracySummaryReport {
-            precursor_median_ppm: qc.precursor_ppm.median,
-            precursor_p95_ppm: qc.precursor_ppm.percentile_95,
-            fragment_median_ppm: qc.fragment_ppm.median,
-            fragment_p95_ppm: qc.fragment_ppm.percentile_95,
         };
 
         ReconReport {
@@ -1138,72 +1003,12 @@ impl ReconReport {
             git_commit: crate::provenance::GIT_COMMIT.to_string(),
             input,
             mod_discovery: mod_discovery_summary,
-            signal_fate: signal_fate_summary,
             polymer: polymer_summary,
             oxonium: oxonium_summary,
-            digestion: digestion_summary,
-            mass_accuracy: mass_accuracy_summary,
-            alkylation,
             ms1_calibration,
             recommendations,
             analyzers,
         }
-    }
-}
-
-/// Compute alkylation check from PSMs
-///
-/// Looks for Cys-containing peptides with delta mass near -57 Da,
-/// which indicates unalkylated cysteine.
-pub fn compute_alkylation_check(psms: &[crate::sage_results::Psm]) -> AlkylationCheck {
-    const CARBAMIDOMETHYL_MASS: f64 = 57.021464;
-    const TOLERANCE_DA: f64 = 0.5;
-
-    // Filter to Cys-containing PSMs
-    let cys_psms: Vec<_> = psms.iter().filter(|p| p.peptide.contains('C')).collect();
-
-    let cys_psm_count = cys_psms.len();
-    let total_psms = psms.len();
-
-    let cys_psm_pct = if total_psms > 0 {
-        100.0 * (cys_psm_count as f64) / (total_psms as f64)
-    } else {
-        0.0
-    };
-
-    // Count PSMs with delta mass near -57 Da (unalkylated Cys)
-    let unalkylated_count = cys_psms
-        .iter()
-        .filter(|p| (p.delta_mass_corrected + CARBAMIDOMETHYL_MASS).abs() < TOLERANCE_DA)
-        .count();
-
-    let unalkylated_pct = if cys_psm_count > 0 {
-        100.0 * (unalkylated_count as f64) / (cys_psm_count as f64)
-    } else {
-        0.0
-    };
-
-    // Determine status
-    let status = if cys_psm_count == 0 {
-        "No Cys-containing peptides found".to_string()
-    } else if unalkylated_pct < 1.0 {
-        "✓ Alkylation appears complete".to_string()
-    } else if unalkylated_pct < 5.0 {
-        format!("⚠ Minor incomplete alkylation ({:.1}%)", unalkylated_pct)
-    } else {
-        format!(
-            "✗ Significant incomplete alkylation ({:.1}%)",
-            unalkylated_pct
-        )
-    };
-
-    AlkylationCheck {
-        fixed_mod_assumed: format!("Carbamidomethyl (+{:.2} Da) on C", CARBAMIDOMETHYL_MASS),
-        cys_psm_count,
-        cys_psm_pct,
-        unalkylated_count,
-        unalkylated_pct,
-        status,
     }
 }
 
@@ -1220,24 +1025,6 @@ pub fn print_report_summary(report: &ReconReport) {
     println!(
         "Tool: recon-tool v{} (commit {})",
         report.tool_version, report.git_commit
-    );
-    println!();
-
-    // Signal Fate
-    println!("--- SIGNAL FATE ---");
-    println!(
-        "ID Rate (% of {} MS2 spectra):  {:.1}% ({} identified)",
-        report.signal_fate.total_ms2_spectra,
-        report.signal_fate.id_rate_by_count_pct,
-        report.signal_fate.identified_spectra
-    );
-    println!(
-        "ID Rate (% of MS2 TIC):         {:.1}%",
-        report.signal_fate.id_rate_by_tic_pct
-    );
-    println!(
-        "Chimeric scans:                 {:.1}%",
-        report.signal_fate.chimera_rate_pct
     );
     println!();
 
@@ -1303,44 +1090,6 @@ pub fn print_report_summary(report: &ReconReport) {
     );
     println!();
 
-    // Digestion
-    println!("--- DIGESTION ---");
-    println!(
-        "Missed Cleavages (% of PSMs):  0: {:.1}% | 1: {:.1}% | 2+: {:.1}%",
-        report.digestion.missed_cleavage_0_pct,
-        report.digestion.missed_cleavage_1_pct,
-        report.digestion.missed_cleavage_2plus_pct
-    );
-    println!(
-        "Ragged Ends (% of PSMs):       {:.1}%",
-        report.digestion.ragged_ends_pct
-    );
-    println!();
-
-    // Mass Accuracy
-    println!("--- MASS ACCURACY ---");
-    println!(
-        "Fragment (MS2):          median |error| {:.2} ppm, 95th percentile {:.2} ppm",
-        report.mass_accuracy.fragment_median_ppm, report.mass_accuracy.fragment_p95_ppm
-    );
-    println!(
-        "                         (a MAGNITUDE, not a bias: Sage {} reports fragment_ppm as |error|)",
-        crate::sage_runner::SAGE_VERSION
-    );
-    println!("Precursor (MS1):         NOT a mass accuracy in an open search — see below.");
-    println!(
-        "                         raw signed precursor_ppm over ALL PSMs: median {:.2} ppm, 95th pct {:.2} ppm.",
-        report.mass_accuracy.precursor_median_ppm, report.mass_accuracy.precursor_p95_ppm
-    );
-    println!(
-        "                         This spans the whole open window because the precursor delta"
-    );
-    println!(
-        "                         carries the MODIFICATION mass. The usable MS1 number is the"
-    );
-    println!("                         self-calibrated bias in the next block.");
-    println!();
-
     // Self-calibrated MS1/MS2 recommendation (open-search clean subset)
     if let Some(ref cal) = report.ms1_calibration {
         println!("--- SELF-CALIBRATED TOLERANCE RECOMMENDATION (open-search clean subset) ---");
@@ -1379,15 +1128,18 @@ pub fn print_report_summary(report: &ReconReport) {
             ),
         }
         println!(
-            "  Pass 2 precursor_tol (tight, internal use only, capped ±100 ppm): {:+.2} to {:+.2} ppm",
+            "  Pass 2 precursor_tol (internal use only, bias ± min(|bias|+5*MAD, 100 ppm)): {:+.2} to {:+.2} ppm",
             cal.pass2_window_low_ppm, cal.pass2_window_high_ppm
         );
         if let (Some(bias), Some(mad)) = (cal.ms2_median_abs_ppm, cal.ms2_spread_mad_ppm) {
             println!(
-                "  MS2 |error|: {:.2} ppm, spread (MAD): {:.2} ppm \
+                "  MS2 |error|: {:.2} ppm, spread (MAD): {:.2} ppm, clean subset \
                  (Sage fragment_ppm — an intensity-weighted mean of |error|, NOT a signed bias)",
                 bias, mad
             );
+        }
+        if let Some(all) = cal.ms2_all_psms_median_abs_ppm {
+            println!("  MS2 |error| over ALL kept PSMs: {all:.2} ppm (median)");
         }
         if let (Some(lo), Some(hi)) = (cal.ms2_tolerance_low_ppm, cal.ms2_tolerance_high_ppm) {
             println!(
@@ -1397,25 +1149,6 @@ pub fn print_report_summary(report: &ReconReport) {
         }
         println!();
     }
-
-    // Alkylation Check
-    println!("--- ALKYLATION CHECK ---");
-    println!(
-        "Fixed mod assumed:       {}",
-        report.alkylation.fixed_mod_assumed
-    );
-    println!(
-        "Cys-containing PSMs:     {} / {} ({:.1}%)",
-        report.alkylation.cys_psm_count,
-        report.mod_discovery.total_psms,
-        report.alkylation.cys_psm_pct
-    );
-    println!(
-        "Unalkylated Cys signal:  {} PSMs ({:.1}% of Cys PSMs)",
-        report.alkylation.unalkylated_count, report.alkylation.unalkylated_pct
-    );
-    println!("Status:                  {}", report.alkylation.status);
-    println!();
 
     println!("================================================================================");
 }
@@ -1883,9 +1616,15 @@ with these modifications set will report higher numbers for the same chemistry.<
 ///
 /// ⚠ **THE MOCKUP READS ONLY PASS-2 VALUES HERE**, from `<output>_pass2.json`.
 /// `ReconReport` does not and must not carry them (see `Pass2Report`'s own doc),
-/// so Pass 2 is passed in beside the report. `recon analyze` never produces one,
-/// and `recon run --no-pass2` produces none either. When it is absent the
-/// section says so rather than showing zeros or vanishing.
+/// so Pass 2 is passed in beside the report. `recon run --no-pass2` produces
+/// none. When it is absent the section says so rather than showing zeros or
+/// vanishing.
+///
+/// ⚠ **EVERY NUMBER HERE IS ON ONE BASIS: distinct peptides, from
+/// `composition`.** The N:C ratio used to come from the PSM-basis `terminus`
+/// block while the three rates beside it came from `composition`, so one row
+/// mixed two bases. It is now `ragged_n_c_ratio`, from the same counts as the
+/// two ragged rates.
 fn digestion_section(pass2: Option<&Pass2Report>) -> String {
     let Some(p) = pass2 else {
         return r#"
@@ -1898,7 +1637,7 @@ first search alone: it is a fully enzymatic search and cannot generate a ragged 
         .to_string();
     };
 
-    let ratio = match p.terminus.n_c_ratio {
+    let ratio = match ragged_n_c_ratio(&p.composition) {
         Some(r) => format!("{r:.2}"),
         // No C-ragged peptides. A fabricated 0 or an infinity would both read as
         // a measurement.
@@ -1918,6 +1657,18 @@ first search alone: it is a fully enzymatic search and cannot generate a ragged 
         rn = p.composition.ragged_n.pct,
         rc = p.composition.ragged_c.pct,
     )
+}
+
+/// Ragged-N : ragged-C over distinct peptides, from the SAME counts as the two
+/// ragged rates the Digestion section prints (`composition.ragged_n` and
+/// `composition.ragged_c`, before decoy subtraction, as those rates are).
+/// `None` when no peptide is C-ragged, rather than an infinity or a fabricated 0.
+fn ragged_n_c_ratio(c: &crate::digestion::DigestionComposition) -> Option<f64> {
+    if c.ragged_c.numerator == 0 {
+        None
+    } else {
+        Some(c.ragged_n.numerator as f64 / c.ragged_c.numerator as f64)
+    }
 }
 
 /// Stylesheet for the report. Kept out of `format!` so the CSS braces need no
@@ -2005,12 +1756,13 @@ function reconCsv(){
 ///
 /// Layout is `_dev/testing/scripts/report_layout_mockup.py`, which IS the agreed
 /// design. Section order: header, detectors, mass accuracy, contamination,
-/// glycopeptides, digestion, recommended modifications, footer. Signal Fate, the
-/// Modification Landscape table and the Alkylation section are deliberately
-/// gone; they stay in the JSON and in the console summary.
+/// glycopeptides, digestion, recommended modifications, footer. The
+/// Modification Landscape table is deliberately not a section; it stays in the
+/// JSON and in the console summary. Signal Fate and the Alkylation check were
+/// removed from the JSON as well at schema 4.0.0.
 ///
-/// `pass2` supplies the Digestion section and is `None` for `recon analyze` and
-/// for `recon run --no-pass2`.
+/// `pass2` supplies the Digestion section and is `None` on the first write of a
+/// run and for `recon run --no-pass2`.
 pub fn generate_html_report(report: &ReconReport, pass2: Option<&Pass2Report>) -> String {
     let file_name = report
         .input
@@ -2036,8 +1788,8 @@ pub fn generate_html_report(report: &ReconReport, pass2: Option<&Pass2Report>) -
         .map(esc)
         .unwrap_or_else(|| "<span class=\"mut\">not recorded</span>".to_string());
 
-    // `recon analyze` has no `--enzyme` and cannot know the protease, so the
-    // "not recorded" fallback stays. It is never a guess at trypsin.
+    // Output from the removed `recon analyze` had no enzyme, so the "not
+    // recorded" fallback stays for older reports. It is never a guess at trypsin.
     let enzyme = match report.input.enzyme.as_ref() {
         Some(e) => format!("<b>{}</b>", esc(&e.one_line())),
         None => "<b class=\"mut\">not recorded in this report</b>".to_string(),
@@ -2272,122 +2024,72 @@ The full texts are in <code>THIRD_PARTY_LICENSES.md</code>, shipped in the relea
     )
 }
 
-/// Percentage of PSMs with 2 or more missed cleavages.
-///
-/// A fold from +0.0, not `sum()`: an empty `f64` sum is -0.0, and Pass 1 at
-/// `missed_cleavages: 1` has no such PSM, so `sum()` wrote "-0.0" to the JSON
-/// and the console. The zero is by construction there: the search cannot
-/// generate the class, so 0 means "not searched", not "none found".
-fn pct_with_two_or_more_missed(distribution: &[crate::digestion::MissedCleavageCount]) -> f64 {
-    distribution
-        .iter()
-        .filter(|m| m.missed >= 2)
-        .fold(0.0, |acc, m| acc + m.pct)
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::sage_results::Psm;
 
-    /// With no PSM at 2 or more, the value is +0.0, not -0.0. `assert_eq!`
-    /// cannot tell the two apart, so the test compares the bits.
-    #[test]
-    fn two_plus_missed_is_positive_zero_when_the_class_is_absent() {
-        use crate::digestion::MissedCleavageCount;
-        let dist = vec![
-            MissedCleavageCount {
-                missed: 0,
-                count: 80,
-                pct: 80.0,
-            },
-            MissedCleavageCount {
-                missed: 1,
-                count: 20,
-                pct: 20.0,
-            },
-        ];
-        assert_eq!(
-            pct_with_two_or_more_missed(&dist).to_bits(),
-            0.0f64.to_bits()
-        );
-        let with_two = vec![
-            MissedCleavageCount {
-                missed: 1,
-                count: 90,
-                pct: 90.0,
-            },
-            MissedCleavageCount {
-                missed: 2,
-                count: 7,
-                pct: 7.0,
-            },
-            MissedCleavageCount {
-                missed: 3,
-                count: 3,
-                pct: 3.0,
-            },
-        ];
-        assert_eq!(pct_with_two_or_more_missed(&with_two), 10.0);
-    }
-
-    fn make_test_psm(peptide: &str, delta: f64) -> Psm {
-        Psm {
-            scannr: 1,
-            rank: 1,
-            peptide: peptide.to_string(),
-            proteins: "PROTEIN".to_string(),
-            expmass: 1000.0 + delta,
-            calcmass: 1000.0,
-            isotope_error: 0,
-            delta_mass: delta,
-            delta_mass_corrected: delta,
-            hyperscore: 40.0,
-            matched_intensity_pct: 0.5,
-            longest_b: 5,
-            longest_y: 6,
-            ms2_intensity: 1000.0,
-            peptide_q: 0.001,
-            spectrum_q: 0.001,
-            is_decoy: false,
-            charge: 2,
-            rt: 30.0,
-            missed_cleavages: 0,
-            semi_enzymatic: false,
-            precursor_ppm: 2.0,
-            fragment_ppm: 5.0,
-            peptide_len: peptide.len() as u32,
+    fn rate(numerator: usize, denominator: usize) -> crate::digestion::Rate {
+        crate::digestion::Rate {
+            numerator,
+            denominator,
+            pct: 100.0 * numerator as f64 / denominator as f64,
         }
     }
 
-    #[test]
-    fn test_alkylation_check_complete() {
-        let psms = vec![
-            make_test_psm("PEPTCIDE", 0.0),  // Cys, alkylated (delta ~0)
-            make_test_psm("PEPTCIDE", 0.01), // Cys, alkylated
-            make_test_psm("PEPTIDE", 0.0),   // No Cys
-        ];
-
-        let check = compute_alkylation_check(&psms);
-
-        assert_eq!(check.cys_psm_count, 2);
-        assert_eq!(check.unalkylated_count, 0);
-        assert!(check.status.contains("complete"));
+    fn pass2_with(n_ragged: usize, c_ragged: usize) -> Pass2Report {
+        let den = 1000;
+        Pass2Report {
+            schema_version: PASS2_SCHEMA_VERSION.to_string(),
+            generated_at: Utc::now(),
+            tool_version: "test".to_string(),
+            git_commit: "test".to_string(),
+            source_file: "x.mzML".to_string(),
+            effective_params: "p.json".to_string(),
+            subset_fasta: "s.fasta".to_string(),
+            subset_proteins: 1,
+            ms1_window_low_ppm: -5.0,
+            ms1_window_high_ppm: 5.0,
+            ms2_tolerance: None,
+            pass1_fragment_tol: "±20 ppm".to_string(),
+            composition: crate::digestion::DigestionComposition {
+                peptides_classified: den,
+                peptides_unresolved: 0,
+                cleavage_completeness_pct: 80.0,
+                missed_cleavage: rate(200, den),
+                ragged_n: rate(n_ragged, den),
+                ragged_c: rate(c_ragged, den),
+                ragged_total: rate(n_ragged + c_ragged, den),
+                non_enzymatic_count: 0,
+                non_enzymatic_note: String::new(),
+                decoy_corrected: None,
+            },
+            pass2_search_seconds: 1.0,
+        }
     }
 
+    /// The Digestion section's N:C ratio is on the SAME basis as the two ragged
+    /// rates beside it: the distinct-peptide counts in `composition`. It used to
+    /// come from the PSM-basis `terminus` block. 75 / 25 peptides is 3.00; no
+    /// other count in this report can produce that value.
     #[test]
-    fn test_alkylation_check_incomplete() {
-        let psms = vec![
-            make_test_psm("PEPTCIDE", 0.0),    // Cys, alkylated
-            make_test_psm("PEPTCIDE", -57.02), // Cys, unalkylated!
-            make_test_psm("PEPTIDE", 0.0),     // No Cys
-        ];
+    fn the_digestion_ratio_uses_the_peptide_counts_of_the_printed_rates() {
+        let p = pass2_with(75, 25);
+        assert_eq!(ragged_n_c_ratio(&p.composition), Some(3.0));
+        let html = digestion_section(Some(&p));
+        assert!(
+            html.contains("<span>N : C ratio</span><b>3.00</b>"),
+            "ratio must be ragged_n / ragged_c peptides: {html}"
+        );
+        assert!(html.contains("<span>Ragged N</span><b>7.50%</b>"));
+        assert!(html.contains("<span>Ragged C</span><b>2.50%</b>"));
+    }
 
-        let check = compute_alkylation_check(&psms);
-
-        assert_eq!(check.cys_psm_count, 2);
-        assert_eq!(check.unalkylated_count, 1);
-        assert!((check.unalkylated_pct - 50.0).abs() < 0.1);
+    /// No C-ragged peptide: the ratio is not computed, never 0 or infinity.
+    #[test]
+    fn the_digestion_ratio_is_not_computed_without_a_c_ragged_peptide() {
+        let p = pass2_with(10, 0);
+        assert_eq!(ragged_n_c_ratio(&p.composition), None);
+        assert!(digestion_section(Some(&p)).contains("not computed"));
     }
 
     /// THE IDENTITY-ONLY LOCK, asserted rather than described.

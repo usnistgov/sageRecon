@@ -226,9 +226,9 @@ With `--output NAME` (or the default base name):
 
 | file | contents |
 |---|---|
-| `NAME.json` | The full report, schema version 3.4.0. |
+| `NAME.json` | The full report, schema version 4.0.0. |
 | `NAME.html` | The same report as a self-contained page for a human reader. |
-| `NAME_pass2.json` | The semi-enzymatic digestion measurement, schema version 1.1.0. Absent with `--no-pass2`. |
+| `NAME_pass2.json` | The semi-enzymatic digestion measurement, schema version 2.0.0. Absent with `--no-pass2`. |
 | `NAME_search/` | Sage's own outputs (`results.sage.tsv`, `results.json`) plus `effective-params.json`, the exact configuration the search ran with. |
 
 Two usage notes are worth stating before they cost you a run.
@@ -361,8 +361,9 @@ sections are:
 1. **Detectors.** Instrument model, MS1 and MS2 analyzer classes, MS2 scan count,
    and the pass-1 fragment tolerance that followed from them, with its basis
    (detected or assumed).
-2. **Mass accuracy.** Signed median precursor error, absolute median fragment
-   error, the measured MS2 tolerance interval, and a combined
+2. **Mass accuracy.** Signed median precursor error and absolute median fragment
+   error, both over the calibration clean subset (near-zero delta, rank 1,
+   target), the measured MS2 tolerance interval, and a combined
    **Recommended MS1 / MS2** setting for your next search. The MS1 half is
    quantized onto a {10, 20, 50, 100} ppm ladder covering `|bias| + 5×MAD`,
    because a user picks a search setting from a discrete set and precision below
@@ -392,9 +393,19 @@ sections are:
 
 The JSON report additionally carries blocks that have no separate HTML section:
 the full **modification discovery** histogram with per-peak PSM counts and
-intensities, the **alkylation** summary (observed cysteine
-chemistry and the unalkylated fraction), and the **MS1 calibration** detail
-behind the tolerance recommendation.
+intensities, and the **MS1 calibration** detail behind the tolerance
+recommendation. The calibration block also carries the median absolute fragment
+error over ALL kept Pass 1 PSMs (`ms2_all_psms_median_abs_ppm`), which is a
+different population from the clean-subset value the HTML shows. Say which one
+you quote.
+
+Schema 4.0.0 removed four JSON blocks that made claims the tool does not stand
+behind: `alkylation` (it assumed carbamidomethyl, which Pass 1 does not),
+`mass_accuracy` (its precursor figures spanned the whole open window), the
+Pass 1 `digestion` block (0 by construction for ragged ends), and
+`signal_fate`. Pass 2 schema 2.0.0 removed the PSM-basis `terminus`,
+`digestion` and `comparison` blocks, so `composition` is the one digestion
+measurement.
 
 ### Pass 2, the semi-enzymatic digestion measurement
 
@@ -417,10 +428,9 @@ majority.
 
 Three boundaries on this number are worth stating in advance.
 
-- **Pass 1's own semi-enzymatic rate is a control, not a prediction.** Pass 1 is a
-  fully-enzymatic search and cannot generate a ragged peptide, so it reads about
-  0 % by construction. The two rates have different denominators and different
-  search spaces, and their difference is not a delta.
+- **Pass 1 reports no digestion number.** It is a fully enzymatic search at one
+  missed cleavage. It cannot generate a ragged peptide or a peptide with two
+  missed cleavages, so those rates would be 0 by construction.
 - **Non-enzymatic peptides are reported as a count, never as a rate.** Under
   `semi_enzymatic` Sage only generates candidates with one non-specific terminus,
   so a fully non-enzymatic peptide is never scored. Measuring it needs a third,
@@ -584,8 +594,7 @@ MetaMorpheus (−0.295) with no third source to break the tie.
 
 **Stated non-goals.** There is no quantitation, no general QC, no parameter
 auto-configuration, and no re-run loop: the tool measures once, applies once, and
-reports both. If Pass 2's observed window disagrees with what Pass 1 predicted,
-that is reported as a note and never silently corrected. The tool also does not
+reports both. Nothing Pass 2 finds is fed back to correct Pass 1. The tool also does not
 judge sample quality. A recommendation is a search-parameter suggestion, never a
 verdict on the sample.
 
@@ -616,13 +625,11 @@ These are ordered by how much they would change what a user can trust.
    reported with proper error control.
 7. **Grow the file panel past four**, which would allow finer recommendation tiers
    and absolute rather than file-relative thresholds, if those prove stable.
-8. **Remove vestigial code left over from development.** Some functions were
-   built during development, kept as the design changed, and are no longer part
-   of the analysis this tool presents. The signal-fate block is the known case:
-   it still populates a JSON field and prints an identification rate to the
-   console, but it has no section in the report and it is not something we ask a
-   user to act on. These should be audited and removed rather than left to
-   accumulate, because a field in the output implies a claim we are making.
+8. **Keep vestigial output out.** A field in the output implies a claim we are
+   making. The known cases (signal fate, the alkylation check, the Pass 1
+   digestion block, the open-search precursor mass accuracy, and ten unused
+   development subcommands) were removed at schema 4.0.0. New fields should
+   meet the same test.
 
 ## Citation
 

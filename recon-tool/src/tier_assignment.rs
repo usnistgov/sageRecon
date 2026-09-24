@@ -1045,7 +1045,7 @@ pub fn to_report(
                 c.push(
                     "Protein-terminal modifications were NOT TESTABLE in this report. \
                      Proving a peptide starts at protein position 0 needs the search \
-                     FASTA, which was not supplied (`analyze --fasta`). Those \
+                     FASTA, which was not supplied. Those \
                      candidates were decided by abundance alone. That is 'not tested', \
                      not 'not supported'."
                         .to_string(),

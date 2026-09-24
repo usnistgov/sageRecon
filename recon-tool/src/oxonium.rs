@@ -73,7 +73,7 @@ pub const OXONIUM_FALLBACK_TOLERANCE_PPM: f64 = 20.0;
 pub struct OxoniumScreeningConfig {
     /// m/z tolerance, in the unit of the MS2 analyzer (default: 20 ppm).
     ///
-    /// `recon analyze` sets it from the run's own MS2 error when it can (see
+    /// `recon run` sets it from the run's own MS2 error when it can (see
     /// `calibration::oxonium_screen_tolerance`). A `Da` value is used as-is,
     /// so an ion trap is screened at a Dalton-scale window, not at 20 ppm.
     pub mz_tolerance: FragmentTolerance,

@@ -1,17 +1,15 @@
 //! Proteomics reconnaissance tool using Sage open search.
 //!
 //! This library provides modules for:
-//! - Running Sage as a subprocess
+//! - Running Sage in process, as a pinned library dependency
 //! - Parsing and filtering Sage results
 //! - Computing isotope-corrected delta masses
 //! - Modification discovery via delta-mass analysis
 //! - Unimod database parsing and annotation
-//! - Signal fate accounting (explained vs. unexplained signal)
+//! - MS1/MS2 self-calibration and tolerance recommendation
 //! - Polymer contamination detection (MS1)
 //! - Oxonium ion screening for glycopeptides (MS2)
-//! - MS1 precursor intensity extraction
-//! - Digestion efficiency metrics (missed cleavages, semi-tryptic)
-//! - Minimal QC metrics (mass accuracy, ID rate)
+//! - Pass 2 digestion composition (missed cleavage, ragged termini)
 //! - Unified report generation (JSON, text, HTML)
 //!
 //! # Example
@@ -20,7 +18,6 @@
 //! use recon_tool::sage_results::{parse_sage_results, FilterOptions};
 //! use recon_tool::unimod::UnimodDb;
 //! use recon_tool::mod_discovery::{run_mod_discovery, ModDiscoveryConfig};
-//! use recon_tool::signal_fate::compute_signal_fate;
 //! use std::path::Path;
 //!
 //! // Parse Sage results
@@ -35,11 +32,7 @@
 //! // Run mod discovery
 //! let discovery = run_mod_discovery(&results, &unimod, &ModDiscoveryConfig::default());
 //!
-//! // Compute signal fate
-//! let fate = compute_signal_fate(&results, Some(&discovery));
-//!
 //! println!("Found {} peaks", discovery.peaks.len());
-//! println!("Identified {} spectra", fate.by_count.identified_spectra);
 //! ```
 
 pub mod calibration;
@@ -55,11 +48,9 @@ pub mod peak_composition;
 pub mod polymer;
 pub mod protein_index;
 pub mod provenance;
-pub mod qc;
 pub mod report;
 pub mod sage_results;
 pub mod sage_runner;
-pub mod signal_fate;
 pub mod stats;
 pub mod tier_assignment;
 pub mod unimod;
@@ -96,13 +87,7 @@ pub use protein_index::{
     MIN_RESOLVED_FRACTION,
 };
 pub use provenance::{Provenance, ProvenanceInput, GIT_COMMIT, TOOL_VERSION};
-pub use report::{
-    compute_alkylation_check, generate_html_report, print_report_summary, AlkylationCheck,
-    Ms1CalibrationReport, ReconReport,
-};
+pub use report::{generate_html_report, print_report_summary, Ms1CalibrationReport, ReconReport};
 pub use sage_results::{FilterOptions, FilterStats, Psm, SageResults, C13_C12_DIFF};
 pub use sage_runner::{SageConfig, SageRunResult};
-pub use signal_fate::{
-    compute_signal_fate, compute_signal_fate_with_mzml, SignalFateResult, UnidentifiedSignal,
-};
 pub use unimod::{UnimodDb, UnimodEntry, UnimodMatch};

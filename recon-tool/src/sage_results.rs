@@ -392,7 +392,8 @@ fn extract_scan_number(scannr: &str) -> Option<u32> {
 /// Read the DISTINCT values of the `filename` column from a Sage results TSV.
 ///
 /// Sage writes the source raw-file BASENAME (e.g. `b1906_...mzML.gz`) into every
-/// row's `filename` column. Used by the `analyze` same-file provenance guard.
+/// row's `filename` column. Used by the report builder's same-file provenance
+/// guard.
 /// ⚠ Names are PERCENT-DECODED before they are returned. Sage v0.15 derives this
 /// column from `Url::path()`, so `my file.mzML` arrives as `my%20file.mzML`
 /// (`sage-cloudpath/src/lib.rs:36-38`). v0.14.7 returned it verbatim. Callers

@@ -7,10 +7,10 @@
 //! followed while the REPORT did not — a silently wrong number, and the digestion
 //! number is the one validated against Byonic Preview and MSFragger.
 //!
-//! ⚠ **NOT everything in the digestion report needs this.** `compute_digestion_stats`
-//! reads Sage's OWN `missed_cleavages` and `semi_enzymatic` columns, so it follows
-//! the configured enzyme for free. Only recon's own protein-context classification
-//! needs the rule restated here.
+//! The reported digestion numbers come from recon's own protein-context
+//! classification, which needs the rule restated here. (A PSM-basis summary
+//! that read Sage's own `missed_cleavages` and `semi_enzymatic` columns, and so
+//! followed the enzyme for free, was removed on 2026-09-24.)
 //!
 //! # The boundary rule, taken from Sage's source, not from the docs
 //!

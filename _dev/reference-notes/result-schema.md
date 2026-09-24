@@ -849,6 +849,39 @@ This schema follows semantic versioning:
 
 ## Changelog
 
+- **4.0.0** (2026-09-24): **BREAKING. Four blocks REMOVED from `<output>.json`.**
+  Ben approved the list (technote Appendix D). A field in the output implies a
+  claim, and these four made claims the tool does not stand behind.
+  * `alkylation` removed. It counted Cys PSMs at -57 Da and printed
+    `fixed_mod_assumed: "Carbamidomethyl (+57.02 Da) on C"`, which contradicts
+    the alkylation-agnostic Pass 1.
+  * `mass_accuracy` removed. `precursor_median_ppm` and `precursor_p95_ppm`
+    summarised Sage's `precursor_ppm` over the whole open window (liver p95
+    76,782 ppm). The MS1 number is `ms1_calibration.bias_ppm`.
+    `fragment_median_ppm` MOVED to
+    `ms1_calibration.ms2_all_psms_median_abs_ppm`: the same population (all
+    kept Pass-1 PSMs) and the same median rule (element `n / 2` of the sorted
+    values). It is the value compared with Byonic Preview. `fragment_p95_ppm`
+    is gone. The HTML shows `ms1_calibration.ms2_median_abs_ppm`, the
+    clean-subset value, which is a different population.
+  * `digestion` (Pass 1) removed. Pass 1 is fully enzymatic at one missed
+    cleavage, so `ragged_ends_pct` and `missed_cleavage_2plus_pct` were 0 by
+    construction. The digestion measurement is `composition` in
+    `<output>_pass2.json`.
+  * `signal_fate` removed (README Future work 8).
+  * `mod_discovery.discovery_settings.max_peaks` ADDED: the peak cap (500).
+    Optional; absent in older output.
+  No value in a block that remains changes.
+- **Pass 2 file, 2.0.0** (2026-09-24): **BREAKING.** `terminus`, `digestion`
+  and `comparison` REMOVED from `<output>_pass2.json`. Each put a PSM-basis
+  semi-enzymatic rate beside the peptide-basis one in `composition` (liver:
+  `terminus` 9.20 %, `digestion` 9.48 %), and `comparison` set Pass 1's rate,
+  0 by construction, beside it. `composition` is unchanged and is the only
+  digestion block. The HTML Digestion section's N:C ratio now comes from
+  `composition.ragged_n` / `composition.ragged_c` (distinct peptides), the same
+  counts as the rates printed beside it. It came from the PSM-basis
+  `terminus.n_c_ratio` before. On the committed full-run files: b1906 5.49 ->
+  5.58, liver 2.36 -> 2.21, serum 1.73 -> 1.55, bcell 1.91 -> 1.93.
 - **3.4.0** (2026-09-24): `polymer.tolerance` and `oxonium.tolerance` ADDED, each
   `{value, unit, source, basis}`. `source` is `"measured"` (from this run's own
   error) or `"fallback"` (the old fixed 10 ppm polymer / 20 ppm oxonium).

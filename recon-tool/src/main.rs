@@ -5,7 +5,6 @@
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand, ValueEnum};
 use recon_tool::curated_mods::CuratedDb;
-use recon_tool::digestion::compute_digestion_stats;
 use recon_tool::mod_discovery::{
     run_mod_discovery, CalibrationMode, ModDiscoveryConfig, PeakAssignmentMode,
     NEAR_ZERO_THRESHOLD_DA,
@@ -13,12 +12,8 @@ use recon_tool::mod_discovery::{
 use recon_tool::mzml::{extract_ms1_spectra, extract_ms2_spectra, get_max_mz, get_mzml_stats};
 use recon_tool::oxonium::{compute_screening_summary, screen_spectra, OxoniumScreeningConfig};
 use recon_tool::polymer::search_polymers;
-use recon_tool::qc::compute_qc_stats;
-use recon_tool::report::{
-    compute_alkylation_check, generate_html_report, print_report_summary, ReconReport,
-};
+use recon_tool::report::{generate_html_report, print_report_summary, ReconReport};
 use recon_tool::sage_results::{parse_sage_results, FilterOptions};
-use recon_tool::signal_fate::compute_signal_fate_with_mzml;
 use recon_tool::tier_assignment;
 use recon_tool::unimod::UnimodDb;
 
@@ -551,7 +546,7 @@ fn build_pass1_report(
     }
 
     // Step 1: Load mzML file
-    println!("[1/8] Loading mzML file: {}", mzml_path.display());
+    println!("[1/6] Loading mzML file: {}", mzml_path.display());
     let mzml_stats = get_mzml_stats(&mzml_path)?;
     let ms1_spectra = extract_ms1_spectra(&mzml_path)?;
     let ms2_spectra = extract_ms2_spectra(&mzml_path)?;
@@ -561,7 +556,7 @@ fn build_pass1_report(
     );
 
     // Step 2: Load Sage results
-    println!("[2/8] Loading Sage results: {}", tsv.display());
+    println!("[2/6] Loading Sage results: {}", tsv.display());
     let options = FilterOptions {
         q_threshold,
         ..Default::default()
@@ -578,7 +573,7 @@ fn build_pass1_report(
         Some(ref p) => p.display().to_string(),
         None => format!("<compiled into recon {}>", env!("CARGO_PKG_VERSION")),
     };
-    println!("[3/8] Loading Unimod database: {unimod_label}");
+    println!("[3/6] Loading Unimod database: {unimod_label}");
     // A path if the user gave one, otherwise the copy compiled into the binary.
     // Both go through the same parser, so the two routes cannot drift.
     let unimod = match unimod_path {
@@ -588,7 +583,7 @@ fn build_pass1_report(
     println!("       Loaded {} modifications", unimod.len());
 
     // Step 4: Run mod discovery
-    println!("[4/8] Running modification discovery...");
+    println!("[4/6] Running modification discovery...");
     let config = ModDiscoveryConfig {
         peak_assignment_mode,
         ..Default::default()
@@ -596,35 +591,8 @@ fn build_pass1_report(
     let mod_discovery = run_mod_discovery(&results, &unimod, &config);
     println!("       Found {} peaks", mod_discovery.peaks.len());
 
-    // Step 5: Compute signal fate
-    println!("[5/8] Computing signal fate...");
-    let signal_fate = compute_signal_fate_with_mzml(&results, Some(&mod_discovery), &mzml_stats);
-    println!(
-        "       ID rate: {:.1}% by count, {:.1}% by TIC",
-        signal_fate.by_count.identified_pct.unwrap_or(0.0),
-        signal_fate.by_intensity.identified_pct.unwrap_or(0.0)
-    );
-
-    // Step 6: Digestion and QC
-    // (The polymer and oxonium screens, steps 7 and 8, run LATER, after the
+    // (The polymer and oxonium screens, steps 5 and 6, run LATER, after the
     // calibration and analyzer detection they take their tolerances from.)
-    println!("[6/8] Computing digestion and QC metrics...");
-    let digestion = compute_digestion_stats(&results);
-    let qc = compute_qc_stats(&results, Some(&signal_fate));
-    println!(
-        "       Missed cleavage 0: {:.1}%, Semi-tryptic: {:.1}%",
-        digestion
-            .missed_cleavages
-            .distribution
-            .iter()
-            .find(|m| m.missed == 0)
-            .map(|m| m.pct)
-            .unwrap_or(0.0),
-        digestion.semi_enzymatic.semi_enzymatic_pct
-    );
-
-    // Compute alkylation check
-    let alkylation = compute_alkylation_check(&results.psms);
 
     // Self-calibrated MS1/MS2 tolerance recommendation, measured from THIS
     // open search's own clean subset (near-zero-delta, rank-1, target,
@@ -709,6 +677,10 @@ fn build_pass1_report(
                     ms2_tolerance_high_ppm: ms2_tol.as_ref().map(|t| t.high_ppm),
                     ms2_median_abs_ppm: ms2_tol.as_ref().map(|t| t.median_ppm),
                     ms2_spread_mad_ppm: ms2_tol.as_ref().map(|t| t.mad_ppm),
+                    // ALL kept PSMs, not the clean subset: the population of the
+                    // removed `mass_accuracy.fragment_median_ppm`.
+                    ms2_all_psms_median_abs_ppm:
+                        recon_tool::calibration::all_psms_median_abs_fragment_ppm(&results.psms),
                 })
             }
             None => {
@@ -949,7 +921,7 @@ fn build_pass1_report(
         explanation: d.explanation.clone(),
     });
 
-    // Steps 7 and 8: the screens, at tolerances from THIS run's measured
+    // Steps 5 and 6: the screens, at tolerances from THIS run's measured
     // error when it was measured (NOTES "Screen tolerances come from the
     // measured error"). They run after calibration and analyzer detection for
     // that reason; before 2026-09-24 they ran first, at fixed 10 / 20 ppm, and
@@ -961,7 +933,7 @@ fn build_pass1_report(
             .and_then(|c| c.user_recommendation_requirement_ppm),
     );
     println!(
-        "[7/8] Detecting polymer contamination at ±{:.2} {} ({}: {})...",
+        "[5/6] Detecting polymer contamination at ±{:.2} {} ({}: {})...",
         polymer_tolerance.value,
         polymer_tolerance.unit,
         polymer_tolerance.source,
@@ -982,7 +954,7 @@ fn build_pass1_report(
         pass1_ms2,
     );
     println!(
-        "[8/8] Screening for glycopeptides (oxonium ions) at ±{:.4} {} ({}: {})...",
+        "[6/6] Screening for glycopeptides (oxonium ions) at ±{:.4} {} ({}: {})...",
         oxonium_tolerance.value,
         oxonium_tolerance.unit,
         oxonium_tolerance.source,
@@ -1008,12 +980,8 @@ fn build_pass1_report(
         enzyme,
         &mzml_stats,
         &mod_discovery,
-        &signal_fate,
         &polymer,
         &oxonium,
-        &digestion,
-        &qc,
-        alkylation,
         ms1_calibration,
         recommendations,
         analyzers,
@@ -1040,7 +1008,7 @@ fn build_pass1_report(
 }
 
 /// Stages 3-5 of the one-command flow: subset FASTA, semi-enzymatic Pass 2
-/// search, terminus annotation, and the Pass-1-vs-Pass-2 comparison.
+/// search, and the digestion composition.
 ///
 /// Returns the wall-clock time spent inside the Pass 2 Sage search, so the
 /// caller can report it apart from Pass 1 and from recon's own work. Pass 2
@@ -1054,7 +1022,7 @@ fn build_pass1_report(
 /// run, and the HTML then says so.
 ///
 /// EVERYTHING Pass 2 needs was MEASURED by Pass 1: the MS1 window from
-/// `ms1_pass2_window` (the ladder rung centred on the measured bias), the MS2
+/// `ms1_pass2_window` (`bias ± min(|bias| + 5*MAD, 100 ppm)`), the MS2
 /// tolerance from `ms2_pass2_tolerance` (clamped to Pass 1's own window, in
 /// Pass 1's unit), and the protein set from Pass 1's identifications. Nothing
 /// here is a constant that a user has to know to change.
@@ -1077,8 +1045,8 @@ fn run_pass2(
     let zero = std::time::Duration::from_secs(0);
     if no_pass2 {
         println!();
-        println!("[PASS2] Skipped (--no-pass2). Digestion figures come from Pass 1 only,");
-        println!("        which is a FULLY TRYPTIC search and cannot see a ragged terminus.");
+        println!("[PASS2] Skipped (--no-pass2). The report has no digestion figures:");
+        println!("        Pass 1 is a FULLY ENZYMATIC search and cannot see a ragged terminus.");
         return Ok((zero, None));
     }
 
@@ -1203,26 +1171,12 @@ fn run_pass2(
         pass2_result.results_tsv.display()
     );
 
-    // --- Stage 5: terminus annotation ---------------------------------------
+    // --- Stage 5: digestion composition -------------------------------------
     let index = recon_tool::ProteinIndex::from_fasta(&subset)?;
-    let opts = recon_tool::FilterOptions {
-        q_threshold,
-        ..Default::default()
-    };
-    let pass2_results =
-        recon_tool::sage_results::parse_sage_results(&pass2_result.results_tsv, &opts)?;
-    let terminus =
-        recon_tool::digestion::compute_terminus_stats(&pass2_results.psms, &index, enzyme);
-    let digestion = recon_tool::digestion::compute_digestion_stats(&pass2_results);
-    println!();
-    recon_tool::digestion::print_terminus_summary(&terminus);
 
     // The reported composition needs DECOYS, to subtract them per specificity
-    // class the way Preview does. It is loaded SEPARATELY rather than reusing
-    // `pass2_results` with `keep_decoys` set, because `compute_digestion_stats`
-    // does not filter decoys itself — feeding it a mixed population would put
-    // decoy PSMs into a reported missed-cleavage distribution. Two loads of one
-    // TSV is cheap; a decoy leaking into a user-facing count is not.
+    // class the way Preview does. `compute_digestion_composition` splits the
+    // decoys out itself.
     let composition = {
         let with_decoys = recon_tool::sage_results::parse_sage_results(
             &pass2_result.results_tsv,
@@ -1235,41 +1189,6 @@ fn run_pass2(
         recon_tool::digestion::compute_digestion_composition(&with_decoys.psms, &index, enzyme)
     };
     recon_tool::digestion::print_composition_summary(&composition);
-
-    // --- Stage 5b: Pass-1 prediction vs Pass-2 observation -------------------
-    // Pass 1 is fully tryptic, so its semi-tryptic rate is a CONTROL that should
-    // sit near zero, not a prediction that Pass 2 refines. Saying so in the
-    // artifact stops the two numbers being read as a before/after.
-    let pass1_semi = report.digestion.ragged_ends_pct;
-    let pass1_n = report.mod_discovery.total_psms;
-    let semi_count = terminus.semi_enzymatic_total;
-    let comparison = recon_tool::report::Pass2Comparison {
-        pass1_psms: pass1_n,
-        pass1_semi_enzymatic_pct: pass1_semi,
-        pass2_psms: terminus.classified_psms,
-        pass2_semi_enzymatic_pct: terminus.semi_enzymatic_pct,
-        pass2_only_semi_enzymatic: semi_count,
-        note: format!(
-            "Pass 1 is a FULLY TRYPTIC search over the whole database and cannot \
-             generate a semi-tryptic peptide, so its {pass1_semi:.2} % is a control, \
-             not a prediction. Pass 2 is semi-enzymatic over {written} identified \
-             proteins and measured {:.2} % ({semi_count} PSMs). The two rates have \
-             DIFFERENT denominators ({pass1_n} vs {}) and different search spaces; \
-             their difference is not a delta.",
-            terminus.semi_enzymatic_pct, terminus.classified_psms
-        ),
-    };
-    println!();
-    println!("--- Pass 1 (control) vs Pass 2 (measurement) ---");
-    println!(
-        "  Pass 1 semi-tryptic: {:.2} % of {} PSMs  (fully-tryptic search — expected ~0)",
-        pass1_semi, pass1_n
-    );
-    println!(
-        "  Pass 2 semi-tryptic: {:.2} % of {} PSMs  ({} PSMs)",
-        terminus.semi_enzymatic_pct, terminus.classified_psms, semi_count
-    );
-    println!("  Different denominators and different search spaces — not a delta.");
 
     // --- Stage 5c: write the artifact ---------------------------------------
     let pass2_report = recon_tool::report::Pass2Report {
@@ -1285,10 +1204,7 @@ fn run_pass2(
         ms1_window_high_ppm: ms1_window.high_ppm,
         ms2_tolerance: ms2_tolerance.map(|t| t.to_string()),
         pass1_fragment_tol: decision.tolerance.to_string(),
-        terminus,
-        digestion,
         composition,
-        comparison,
         pass2_search_seconds: elapsed.as_secs_f64(),
     };
     let path = format!("{}_pass2.json", output_base.display());
@@ -1299,15 +1215,14 @@ fn run_pass2(
     Ok((elapsed, Some(pass2_report)))
 }
 
-/// One-command recon: wide open Sage search on <mzml>+<fasta>, then analyze.
+/// One-command recon: wide open Sage search on <mzml>+<fasta>, then the report.
 ///
-/// This orchestrates the two pure-Rust, already-proven pieces — `sage_runner`
-/// to run the wide open search, then `run_analyze_command` to build the unified
-/// report — behind a single `recon run <mzml> <fasta>` entry point. It does NOT
-/// yet run the semi-tryptic Pass 2 or the self-calibrated MS1 tolerance; those
-/// are separate follow-up passes (see PLAN "Default recon"). The FASTA and mzML
-/// override whatever the params template names, so the template supplies only
-/// the search settings (tolerances, enzyme, chimera), never the inputs.
+/// Stages: analyzer detection, the wide open Pass 1 search (`sage_runner`),
+/// the Pass-1 report (`build_pass1_report`, which also measures the MS1/MS2
+/// calibration), then the semi-enzymatic Pass 2 (`run_pass2`) in the window
+/// `bias ± min(|bias| + 5*MAD, 100 ppm)` that Pass 1 measured. The FASTA and
+/// mzML override whatever the params template names; see the `--params` and
+/// `--pass2-params` help for every field recon overrides.
 #[allow(clippy::too_many_arguments)]
 fn run_run_command(
     mzml: PathBuf,

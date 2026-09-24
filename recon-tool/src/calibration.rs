@@ -713,6 +713,31 @@ pub fn compute_ms2_tolerance(fragment_ppm_values: &[f64]) -> Option<Ms2Tolerance
     })
 }
 
+/// Median of Sage's absolute `fragment_ppm` over EVERY PSM given, for
+/// `ms1_calibration.ms2_all_psms_median_abs_ppm`.
+///
+/// The caller passes ALL kept Pass-1 PSMs (target, q <= threshold), not the
+/// clean subset. That is the population of the removed
+/// `mass_accuracy.fragment_median_ppm`, which NOTES compares with Byonic
+/// Preview's MS2 |error|.
+///
+/// ⚠ **THE MEDIAN RULE IS THE OLD ONE ON PURPOSE.** It is the element at index
+/// `n / 2` of the sorted values, with no averaging. For an even count that is
+/// the UPPER of the two middle values. `qc::compute_ppm_stats` used this rule,
+/// and the committed values (liver 3.382497) were made with it. A textbook
+/// median would move the number that is quoted against Preview.
+///
+/// `None` for an empty slice. The old code wrote 0.0, which reads as a
+/// measurement.
+pub fn all_psms_median_abs_fragment_ppm(psms: &[crate::sage_results::Psm]) -> Option<f64> {
+    if psms.is_empty() {
+        return None;
+    }
+    let mut v: Vec<f64> = psms.iter().map(|p| p.fragment_ppm).collect();
+    v.sort_by(|a, b| a.partial_cmp(b).unwrap_or(std::cmp::Ordering::Equal));
+    Some(v[v.len() / 2])
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -747,6 +772,63 @@ mod tests {
             spectrum_index: idx,
             is_decoy,
         }
+    }
+
+    fn full_psm(fragment_ppm: f64, delta_mass: f64) -> crate::sage_results::Psm {
+        crate::sage_results::Psm {
+            scannr: 1,
+            rank: 1,
+            peptide: "PEPTIDEK".to_string(),
+            proteins: "P1".to_string(),
+            expmass: 1000.0 + delta_mass,
+            calcmass: 1000.0,
+            isotope_error: 0,
+            delta_mass,
+            delta_mass_corrected: delta_mass,
+            hyperscore: 40.0,
+            matched_intensity_pct: 50.0,
+            longest_b: 5,
+            longest_y: 6,
+            ms2_intensity: 1000.0,
+            peptide_q: 0.001,
+            spectrum_q: 0.001,
+            is_decoy: false,
+            charge: 2,
+            rt: 30.0,
+            missed_cleavages: 0,
+            semi_enzymatic: false,
+            precursor_ppm: 2.0,
+            fragment_ppm,
+            peptide_len: 8,
+        }
+    }
+
+    /// The median rule of the removed `mass_accuracy.fragment_median_ppm`:
+    /// sorted[n / 2], so an even count takes the UPPER middle value. A textbook
+    /// median gives 2.5 here and would move the value quoted against Preview.
+    #[test]
+    fn all_psms_fragment_median_keeps_the_old_upper_middle_rule() {
+        let even: Vec<_> = [4.0, 1.0, 3.0, 2.0]
+            .iter()
+            .map(|&f| full_psm(f, 0.0))
+            .collect();
+        assert_eq!(all_psms_median_abs_fragment_ppm(&even), Some(3.0));
+        let odd: Vec<_> = [5.0, 1.0, 3.0].iter().map(|&f| full_psm(f, 0.0)).collect();
+        assert_eq!(all_psms_median_abs_fragment_ppm(&odd), Some(3.0));
+        assert_eq!(all_psms_median_abs_fragment_ppm(&[]), None);
+    }
+
+    /// The population is EVERY PSM given, not the near-zero clean subset. Two of
+    /// three PSMs here carry a modification delta; a clean-subset filter would
+    /// keep only the first and return 1.0.
+    #[test]
+    fn all_psms_fragment_median_does_not_filter_to_the_clean_subset() {
+        let psms = vec![
+            full_psm(1.0, 0.0),
+            full_psm(9.0, 15.9949),
+            full_psm(9.0, 57.0215),
+        ];
+        assert_eq!(all_psms_median_abs_fragment_ppm(&psms), Some(9.0));
     }
 
     #[test]

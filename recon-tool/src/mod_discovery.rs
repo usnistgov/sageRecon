@@ -390,6 +390,12 @@ pub struct DiscoverySettings {
     pub bin_width_da: f64,
     /// Minimum PSM count for a bin to be a peak candidate
     pub min_peak_count: usize,
+    /// The peak cap: at most this many peaks are reported
+    /// (`ModDiscoveryConfig::max_peaks`). Added at report schema 4.0.0, because
+    /// a peak list truncated at an unrecorded cap cannot be reproduced from the
+    /// file alone. `None` when read from older output, which did not record it.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub max_peaks: Option<usize>,
     /// Tolerance for merging bins into one peak
     pub peak_merge_tolerance_da: f64,
     /// Prominence threshold (fraction of bin count above baseline)
@@ -409,6 +415,7 @@ impl From<&ModDiscoveryConfig> for DiscoverySettings {
         Self {
             bin_width_da: c.bin_width_da,
             min_peak_count: c.min_peak_count,
+            max_peaks: Some(c.max_peaks),
             peak_merge_tolerance_da: c.peak_merge_tolerance_da,
             prominence_threshold: c.prominence_threshold,
             peak_assignment_mode: c.peak_assignment_mode,
@@ -2143,6 +2150,21 @@ mod tests {
         // Worked by hand: 7 at index 4 walks left through 1 to 9 (higher),
         // min 1; right through 7, 2 to 12 (higher), min 2. 7 - max(1,2) = 5.
         assert_eq!(topographic_prominence(&rugged, 4), 5);
+    }
+
+    /// The peak cap is recorded in `discovery_settings`, with the value the run
+    /// actually used, not the default. 123 is not the default, so a record that
+    /// copied `DEFAULT_MAX_PEAKS` or omitted the field fails.
+    #[test]
+    fn discovery_settings_record_the_peak_cap() {
+        let config = ModDiscoveryConfig {
+            max_peaks: 123,
+            ..Default::default()
+        };
+        let settings = DiscoverySettings::from(&config);
+        assert_eq!(settings.max_peaks, Some(123));
+        let v = serde_json::to_value(&settings).unwrap();
+        assert_eq!(v["max_peaks"], 123);
     }
 
     /// The default cap keeps the 500 largest prominent centres, and no more.

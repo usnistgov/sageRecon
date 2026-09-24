@@ -2866,6 +2866,9 @@ delivered and does not recalibrate spectra.
   ⚠ The MS2 comparison above uses `mass_accuracy.fragment_median_ppm` (all kept
   PSMs; 3.38 at v0.15). The calibration clean-subset value is 3.27 ppm
   (`ms1_calibration.ms2_median_abs_ppm`). State which population is used.
+  (Schema 4.0.0, 2026-09-24: the all-PSM value moved to
+  `ms1_calibration.ms2_all_psms_median_abs_ppm`, same population and median
+  rule. The HTML shows the clean-subset value.)
 
 ### 🔒 CONFIG GHOSTS — the template is not the record, and now cannot pretend to be (2026-09-01)
 
@@ -11181,17 +11184,16 @@ than 0.05 pp.
 which is -0.0, and the JSON and console printed "-0.0". `report.rs`
 `pct_with_two_or_more_missed` folds from +0.0. Test:
 `two_plus_missed_is_positive_zero_when_the_class_is_absent` (compares bits).
-⚠ **Open for Ben:** the field could say "not measured" instead of 0. That is a
-schema change and is not done.
+⚠ **Closed 2026-09-24:** the Pass 1 `digestion` block, which carried this
+field, was removed at schema 4.0.0. See "Vestigial output and code removed".
 
 **Guard.** `both_passes_share_missed_cleavages_and_min_len` in `defaults.rs`
 fails if either template changes alone.
 
-⚠ **For the regeneration step:** `liver_5way_report.py` (lines 20 and 128)
-writes "against recon's two" into the 5-way report as the reason Mascot is
-out of the digestion table. After a (1, 8) regeneration that reason is false;
-the missing peptide list remains the reason. Left unchanged here because the
-committed comparison was made at two.
+⚠ **Fixed 2026-09-24:** `liver_5way_report.py` wrote "against recon's two"
+into the 5-way report as the reason Mascot is out of the digestion table. That
+reason is false at (1, 8). The script now gives the missing peptide list as the
+reason and notes that the committed comparison was made at two.
 
 ⚠ **Timing is on one machine, one file.** The Pass 1 ratio follows the
 candidate count (1.8x), so the direction is real. This changes the Tier 3
@@ -11233,3 +11235,43 @@ a doc comment; nothing produced it.
 Pass 1, then the report builder read it again to record the same decision. The
 census from the first read is now passed in. The `analyzers` block is
 unchanged in content.
+
+**Main report JSON, schema 4.0.0.** Four blocks removed. Each made a claim the
+tool does not stand behind:
+- `alkylation`. It searched Cys PSMs for -57 Da and printed
+  `fixed_mod_assumed: Carbamidomethyl` and "Alkylation appears complete". Pass 1
+  assumes no fixed mod, so the block contradicted the design.
+- `mass_accuracy`. The precursor fields were Sage's `precursor_ppm` over the
+  whole open window (liver p95 76,782 ppm). The fragment median is kept: it is
+  the value compared with Preview (3.38 against 3.5 ppm on liver). It moved to
+  `ms1_calibration.ms2_all_psms_median_abs_ppm`, with the same population (all
+  kept Pass-1 PSMs) and the same median rule (element `n / 2`, the upper middle
+  for an even count). Tests pin both. The HTML still shows the clean-subset
+  `ms2_median_abs_ppm` (liver 3.27). Rejected alternative: drop the all-PSM
+  value and quote the clean subset against Preview. That would move a
+  corroboration that NOTES records, for no gain.
+- `digestion` (Pass 1). Ragged ends and 2+ missed cleavages are 0 by
+  construction at `missed_cleavages: 1`. The measurement is Pass 2
+  `composition`.
+- `signal_fate`. README Future work 8 already committed to it.
+`qc.rs` and `signal_fate.rs` had no other use and were deleted, with
+`compute_alkylation_check` and `compute_digestion_stats`.
+`discovery_settings.max_peaks` was added, so the peak cap is on record.
+
+**Pass 2 JSON, schema 2.0.0.** `terminus`, `digestion` and `comparison` were
+removed. On liver they put 9.20 % and 9.48 % (PSM basis) beside the defined
+peptide-basis rates in `composition`. Rejected alternative: rename them as
+"supporting". A renamed parent key still holds a `semi_enzymatic_pct` that a
+reader can quote. The console no longer prints the PSM-basis terminus table or
+the Pass 1 against Pass 2 lines.
+
+**HTML N:C.** The Digestion section printed rates from `composition` (peptides)
+and an N:C ratio from `terminus` (PSMs). The ratio now uses the same peptide
+counts as the rates. On the committed full-run files it moves: b1906 5.49 ->
+5.58, liver 2.36 -> 2.21, serum 1.73 -> 1.55, bcell 1.91 -> 1.93. Test:
+`the_digestion_ratio_uses_the_peptide_counts_of_the_printed_rates`.
+
+**Awaiting the regeneration step.** The committed full-run JSON and HTML, the
+examples and the Tier 3 snapshots were NOT regenerated here. Until they are,
+`html_report_regression` fails on the N:C line, and `run_validation.py` strong
+mode differs on the new `max_peaks` key.

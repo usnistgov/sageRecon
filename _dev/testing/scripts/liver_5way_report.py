@@ -16,10 +16,12 @@ project applies to `CuratedDb::load` delegating to `load_from_sources`.
 ⚠ THE THREE SECTIONS DO NOT SHARE A TOOL SET, ON PURPOSE.
 
 * **PTMs: five tools.** recon, Byonic Preview, PTM-Shepherd, MetaMorpheus, Mascot.
-* **Digestion: four.** Mascot is EXCLUDED and must stay excluded — its `PFA=1`
-  allows one missed cleavage against recon's two, and it ships no peptide list to
-  reclassify under recon's own terminus rule. Putting it in the digestion table
-  would be the same convention error as the four traps in NOTES.
+* **Digestion: four.** Mascot is EXCLUDED and must stay excluded: it ships no
+  peptide list to reclassify under recon's own terminus rule. Putting it in the
+  digestion table would be the same convention error as the four traps in NOTES.
+  (This used to also cite Mascot's `PFA=1` against recon's two missed
+  cleavages. Since 2026-09-24 both recon passes also allow one, so that is no
+  longer a reason. The committed 2026-09-01 comparison was made at two.)
 * **Mass tolerance: two.** Only recon and Preview report a comparable quantity.
   PTM-Shepherd, MetaMorpheus and Mascot are not in that table because their runs
   do not publish one on the same basis — absence of a column, not a measurement
@@ -79,10 +81,33 @@ def preview_mass_accuracy():
 
 
 def recon_mass_accuracy():
+    """recon's report, its calibration block, and the ALL-PSM MS2 median |error|.
+
+    The all-PSM median is the value compared with Preview. Schema 4.0.0 moved it
+    from `mass_accuracy.fragment_median_ppm` to
+    `ms1_calibration.ms2_all_psms_median_abs_ppm` (same population, same median
+    rule). Older reports are still read from the old key.
+    """
     import json
     d = json.loads(RECON_LIVER.read_text())
-    ma, cal = d["mass_accuracy"], d["ms1_calibration"]
-    return d, ma, cal
+    cal = d["ms1_calibration"]
+    f_all = cal.get("ms2_all_psms_median_abs_ppm")
+    if f_all is None:
+        f_all = d["mass_accuracy"]["fragment_median_ppm"]
+    return d, f_all, cal
+
+
+def shown(path):
+    """A path for the log line: relative to `_dev/` when inside it, else absolute.
+
+    `Path.relative_to` raises for a path outside ROOT, so `-o /tmp/x.md` wrote
+    the report and then crashed before printing the HTML companion.
+    """
+    p = path.resolve()
+    try:
+        return p.relative_to(ROOT)
+    except ValueError:
+        return p
 
 
 def section(text, start, end=None):
@@ -100,7 +125,7 @@ def main():
                     default=ROOT / "testing/recon-output/comparison/LIVER-FIVE-TOOL-2026-09-01.md")
     args = ap.parse_args()
 
-    d, ma, cal = recon_mass_accuracy()
+    d, f_all, cal = recon_mass_accuracy()
     sage_version = "unknown"
     try:
         import json
@@ -124,8 +149,8 @@ def main():
       "specific. The Sage version is part of the citation, not a footnote — the "
       "v0.14.7 -> v0.15.0-beta.2 upgrade moved most of them.\n")
     A("⚠ **The three sections deliberately use different tool sets.** PTMs have "
-      "five tools; digestion has four, because Mascot's `PFA=1` allows one missed "
-      "cleavage against recon's two and it ships no peptide list to reclassify; "
+      "five tools; digestion has four, because Mascot ships no peptide list to "
+      "reclassify; "
       "mass tolerance has two, because only recon and Preview publish a comparable "
       "quantity. A blank is 'this tool does not report it', never 'zero'.\n")
 
@@ -145,8 +170,8 @@ def main():
           "what the instrument delivered and does not recalibrate spectra.\n")
         A("| quantity | recon | Preview (pre-recal) | agreement |")
         A("|---|---|---|---|")
-        f_abs = ma["fragment_median_ppm"]
-        A(f"| MS2 median \\|error\\| | **{f_abs:.4f} ppm** | **{pv['fragment']['abs_ppm']:.1f} ppm** | "
+        f_abs = f_all
+        A(f"| MS2 median \\|error\\| (recon: all kept PSMs) | **{f_abs:.4f} ppm** | **{pv['fragment']['abs_ppm']:.1f} ppm** | "
           f"{abs(f_abs - pv['fragment']['abs_ppm']):.2f} ppm |")
         A(f"| MS2 signed median | not produced, by design | **{pv['fragment']['signed_ppm']:+.1f} ppm** | "
           f"recon has no signed MS2 number; Preview supplies the reference |")
@@ -204,12 +229,12 @@ def main():
     out = "\n".join(L) + "\n"
     args.out.parent.mkdir(parents=True, exist_ok=True)
     args.out.write_text(out, encoding="utf-8")
-    print(f"wrote {args.out.relative_to(ROOT)}  ({len(out.splitlines())} lines)")
+    print(f"wrote {shown(args.out)}  ({len(out.splitlines())} lines)")
 
     hp = args.out.with_suffix(".html")
     hp.write_text(to_html(out, "Liver, Five Ways: Digestion, Mass Tolerance, Mods"),
                   encoding="utf-8")
-    print(f"wrote {hp.relative_to(ROOT)}")
+    print(f"wrote {shown(hp)}")
 
 
 

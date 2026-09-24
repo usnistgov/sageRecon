@@ -33,7 +33,10 @@ d=json.load(open('testing/recon-output/full-run/serum.json'))
 p=json.load(open('testing/recon-output/full-run/serum_pass2.json'))
 e=lambda s: html.escape(str(s))
 inp=d['input']; an=d['analyzers']; cal=d['ms1_calibration']; pol=d['polymer']; ox=d['oxonium']
-rec=d['recommendations']; comp=p['composition']; term=p['terminus']
+rec=d['recommendations']; comp=p['composition']
+# N:C on the SAME basis as the rates (distinct peptides). Pass 2 schema 2.0.0
+# removed the PSM-basis `terminus` block this used to read.
+nc=comp['ragged_n']['numerator']/comp['ragged_c']['numerator']
 
 # `ms2_bias_ppm` was renamed `ms2_median_abs_ppm` at schema 2.1.0. Committed
 # artifacts predating that still carry the old key, so read either rather than
@@ -175,7 +178,7 @@ button{{font:inherit;font-size:12px;border:1px solid var(--line);background:#fff
   <div class=stat><span>Missed cleavage</span><b>{comp['missed_cleavage']['pct']:.2f}%</b></div>
   <div class=stat><span>Ragged N</span><b>{comp['ragged_n']['pct']:.2f}%</b></div>
   <div class=stat><span>Ragged C</span><b>{comp['ragged_c']['pct']:.2f}%</b></div>
-  <div class=stat><span>N : C ratio</span><b>{term['n_c_ratio']:.2f}</b></div>
+  <div class=stat><span>N : C ratio</span><b>{nc:.2f}</b></div>
 </div></div></section>
 
 <section><div class=hd><h2>Recommended search modifications</h2><button onclick="csv()">Copy as CSV</button></div><div class=bd>
