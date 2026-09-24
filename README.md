@@ -65,8 +65,8 @@ reports sit on the same axis, though we have not run Preview and recon on the
 same file and then reconciled the figures line by line.
 
 **It is fast enough to run routinely.** Our serum test file contains 41,788 MS/MS
-scans and completed in 95.2 seconds with the v0.1.2 binary on a standard work
-computer, with no performance tuning applied. Critically, that is one file on one
+scans and completed in 46.8 seconds with a v0.1.3 build (commit `ba4d30e`) on
+a standard work computer, with no performance tuning applied. Critically, that is one file on one
 machine and not a controlled benchmark: we have measured no comparative timing
 against any other tool, and we make no speed claim relative to one. What the
 figure supports is narrower and still useful: a survey at this cost can be run on
@@ -426,8 +426,8 @@ missed-cleavage and ragged rates taken over fully plus semi-enzymatic peptides
 and non-enzymatic peptides excluded from the denominator. Those are Byonic
 Preview's own denominators, read from its report for NIST liver RM 8461. Counts
 are decoy-subtracted per specificity class, as Preview does, which matters: on
-the liver reference the class FDR is 0.10 % for fully-tryptic peptides against
-10.10 % for semi-tryptic, so a global 1 % cut is carried by the fully-tryptic
+the liver reference the class FDR is 0.15 % for fully-tryptic peptides against
+9.15 % for semi-tryptic, so a global 1 % cut is carried by the fully-tryptic
 majority.
 
 Three boundaries on this number are worth stating in advance.
@@ -483,7 +483,11 @@ tryptic, 41,788 MS/MS scans), also ships here:
 
 Two independent surfaces are maintained, and they cover different things.
 
-**Unit and integration tests: 211 pass, 0 fail** (`cargo test` in `recon-tool`).
+**Unit and integration tests: 207 tests; with all local test data present,
+206 pass and 1 fails** (`cargo test` in `recon-tool`, 2026-09-24). The failure
+is `protein_context_moves_exactly_three_decisions`: its assumption that the
+protein context adds one near-zero p-value to the Benjamini-Hochberg sweep no
+longer holds on the larger peak lists, and it is open for review.
 These cover mass and formula arithmetic, the analyzer-class table against the
 PSI-MS controlled vocabulary, tolerance quantization in both the ppm and the
 Dalton regime, enzyme-rule parsing for all fourteen presets and the custom-rule
@@ -505,7 +509,7 @@ rather than fail, so the passing count does not tell you whether they ran. This
 does:
 
 ```
-cargo test -- --nocapture 2>&1 | grep skipping
+cargo test -- --nocapture 2>&1 | grep -E 'skipping|skipped:|SKIP:'
 ```
 
 Every line it prints names an input the suite could not reach. A checkout with

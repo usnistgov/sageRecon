@@ -10936,10 +10936,14 @@ peak list.
 **Other files** (`discover --min-peak-count 5`, not committed): serum 48 -> 49
 peaks, loses +58.0128 (93); bcell 47 -> 50, loses 16 flanks; b1906 48 -> 50,
 loses 14 flanks. The old binary reproduces all three regression snapshots
-exactly, so **`run_validation.py` Tier 3 will now FAIL until the snapshots are
-regenerated.** That is expected and is left to the planned regeneration step.
+exactly, so **`run_validation.py` Tier 3 failed until the snapshots were
+regenerated.** Done 2026-09-24; see "Change-regenerate after the 2026-09-24
+behaviour changes".
 Every `cargo test` data test (tier assignment on serum, bcell, b1906) still
-passes with the data present.
+passed with the data present. ⚠ Corrected 2026-09-24: those tests read their
+PEAKS from the committed `full-run/<f>.json`, which still held the old cap-50
+peak lists, so they did not exercise the new rule. After regeneration four of
+them failed; see "Change-regenerate after the 2026-09-24 behaviour changes".
 
 Schema bumped 3.2.0 -> 3.3.0 (MINOR, by the 1.1.0 precedent: a value
 correction on an existing field). Ben may prefer MAJOR under the "changed
@@ -11087,7 +11091,7 @@ above is Preview's own report text.
 
 ## The peak cap is 500 (2026-09-24, Ben)
 
-The peak cap is 500. It was 50, and that value had no rationale. On liver, 171 centres pass the prominence test; the cap of 50 cut 121 of them. At 500, recon gains four variable recommendations and loses none: Formylation K (28 PSMs), Acetylation (14), Kynurenine W (12), and -32.0066 on M (8). PTM-Shepherd, MetaMorpheus or Mascot see the first three; no tool sees -32.0066. Benjamini-Hochberg corrects across more tests, so existing q values rise up to about 2x on liver; no decision changes (tightest: Fe[III] q 0.0089 -> 0.0134). Floor, carpet margin and fixed list do not change. Spearman rho vs PTM-Shepherd 0.676 -> 0.755, vs Mascot 0.496 -> 0.591, vs MetaMorpheus 0.964 (n 7) -> 0.771 (n 13). Liver shows only that the cap must be >= 171. This changes the Tier 3 snapshots; regeneration is pending.
+The peak cap is 500. It was 50, and that value had no rationale. On liver, 171 centres pass the prominence test; the cap of 50 cut 121 of them. At 500, recon gains four variable recommendations and loses none: Formylation K (28 PSMs), Acetylation (14), Kynurenine W (12), and -32.0066 on M (8). PTM-Shepherd, MetaMorpheus or Mascot see the first three; no tool sees -32.0066. Benjamini-Hochberg corrects across more tests, so existing q values rise up to about 2x on liver; no decision changes (tightest: Fe[III] q 0.0089 -> 0.0134). Floor, carpet margin and fixed list do not change. Spearman rho vs PTM-Shepherd 0.676 -> 0.755, vs Mascot 0.496 -> 0.591, vs MetaMorpheus 0.964 (n 7) -> 0.771 (n 13). Liver shows only that the cap must be >= 171. This changes the Tier 3 snapshots; they were regenerated 2026-09-24 (see "Change-regenerate after the 2026-09-24 behaviour changes").
 
 **Source of 500.** PTM-Shepherd `peakpicking_topN = 500`, as recorded in the
 liver run's own `_dev/liver-benchmark/ptm-shepherd/liverShepherd/shepherd.config`.
@@ -11108,9 +11112,10 @@ above, no loss. Shared q values rise by 1.95x, Fe[III] by 1.50x. Fixed list
 Spearman from `liver_mod_rank_comparison.py` pointed at each JSON: the values
 above. Outputs are scratch, not committed.
 
-⚠ **`discovery_settings` still does not record `max_peaks`** (see "Mod-discovery
-JSON does not record its own peak-detection config"). A cap-50 and a cap-500
-JSON are told apart only by the peak count.
+✅ **Closed 2026-09-24: `discovery_settings.max_peaks` is recorded** (schema
+4.0.0, "Vestigial output and code removed"). Before that, a cap-50 and a
+cap-500 JSON were told apart only by the peak count (see "Mod-discovery JSON
+does not record its own peak-detection config").
 
 ## Pass 1 digestion settings align with Pass 2 (2026-09-24, Ben's rule)
 
@@ -11197,7 +11202,8 @@ reason and notes that the committed comparison was made at two.
 
 ⚠ **Timing is on one machine, one file.** The Pass 1 ratio follows the
 candidate count (1.8x), so the direction is real. This changes the Tier 3
-snapshots and every committed report; regeneration is pending.
+snapshots and every committed report; both were regenerated 2026-09-24 (see
+"Change-regenerate after the 2026-09-24 behaviour changes").
 
 ## Vestigial output and code removed (2026-09-24, Ben, technote Appendices C and D)
 
@@ -11275,10 +11281,11 @@ counts as the rates. On the committed full-run files it moves: b1906 5.49 ->
 5.58, liver 2.36 -> 2.21, serum 1.73 -> 1.55, bcell 1.91 -> 1.93. Test:
 `the_digestion_ratio_uses_the_peptide_counts_of_the_printed_rates`.
 
-**Awaiting the regeneration step.** The committed full-run JSON and HTML, the
-examples and the Tier 3 snapshots were NOT regenerated here. Until they are,
-`html_report_regression` fails on the N:C line, and `run_validation.py` strong
-mode differs on the new `max_peaks` key.
+**Regenerated 2026-09-24.** The committed full-run JSON and HTML, the
+examples and the Tier 3 snapshots were not regenerated in this commit. Until
+they were, `html_report_regression` failed on the N:C line, and
+`run_validation.py` strong mode differed on the new `max_peaks` key. See
+"Change-regenerate after the 2026-09-24 behaviour changes".
 
 **Documentation defects fixed (technote Appendix C), 2026-09-24.**
 - `THIRD_PARTY_LICENSES.md`: the Sage entry now says Sage is linked as a
@@ -11288,7 +11295,7 @@ mode differs on the new `max_peaks` key.
   code was taken: `_dev/temp-flowChart.md` records that `pyteomics.fasta` was
   only a FASTA parser in a Python prototype, and no Rust source names it. The
   credit was removed and mzdata credited instead. This changes the footer of
-  every HTML report (awaits regeneration).
+  every HTML report (regenerated 2026-09-24).
 - The Pass 2 window is now described one way everywhere:
   `bias ± min(|bias| + 5*MAD, 100 ppm)` (README, console, `main.rs`,
   `Ms1CalibrationReport`, `ms1_pass2_window`).
@@ -11391,3 +11398,126 @@ commits remove output and move no measurement, so these must hold:
   `|bias| + 5*MAD` of the same `ms1_calibration` block.
 Anything outside its band is reported as a failure to reproduce, not
 explained away.
+
+### Results (2026-09-24)
+
+**Build.** Release binary built at `ba4d30e` from a clean tree. All 12
+regenerated reports carry `git_commit: ba4d30e`, none `-dirty`. Every run was
+one at a time on this machine (6 CPUs, 8 GB).
+
+**Liver headline, `full-run/liver.json` and `full-run/liver_pass2.json`.**
+Every expected value in the trace reproduced inside its band:
+
+| quantity | value |
+|---|---|
+| Pass 1 PSMs (`mod_discovery.total_psms`) | 31489 (expected 31489) |
+| mod-discovery peaks | 183 (expected 183) |
+| fixed | Carbamidomethyl on C (1233 PSMs) |
+| variable (12) | Oxidation M, Deamidation NQ, Gln->pyro-Glu, Fe[III] DE, Trioxidation C, Met-loss+Acetylation, Dehydroalanine C, Formylation K, Water Loss (Glu->pyro-Glu), Acetylation, Oxidation to Kynurenine W, -32.0074 on M |
+| MS1 bias / MAD | -1.4076 / 0.6267 ppm (clean subset 7177 PSMs) |
+| Recommended MS1 / MS2 | 10 / 10 ppm |
+| polymer | 0.695 % TIC, Moderate, tolerance ±4.541 ppm (measured) |
+| glycopeptide candidates | 525 (0.92 % of MS2), tolerance ±16.34 ppm (measured) |
+| Pass 2 subset | 1700 proteins |
+| Pass 2 peptides classified | 10697 |
+| missed cleavage | 17.58 % (1880/10697) |
+| ragged-N / ragged-C | 6.95 % (743) / 3.17 % (339) |
+| class FDR fully / semi | 0.146 % / 9.150 % |
+| N:C (peptides) | 743 / 339 = 2.19 |
+| Spearman vs PTM-Shepherd / MetaMorpheus / Mascot | +0.762 (n 68) / +0.747 (n 13) / +0.652 (n 69) |
+| total runtime | 85.9 s (Pass 1 Sage 40.0 s, Pass 2 Sage 12.6 s, recon 33.3 s) |
+
+Invariant checked from the same JSON: `polymer.tolerance.value` = 4.5412042139995386
+= |bias| + 5*MAD, exactly. `liver_four_tool_digestion.py` reclassifies the Pass 2
+TSV in Python and gives the same 10697 / 17.58 / 6.95 / 3.17 %. The liver
+benchmark TSV holds 14952 target PSMs and 10697 distinct peptides at
+`peptide_q < 0.01`.
+
+**Two liver draws.** `examples/liver.json` is a second `recon run` of the same
+build: 10696 peptides, 83.5 s, the same PSM count, peaks and variable list.
+Quote `full-run/` for headline numbers; the example is for readers.
+
+**Other files, `full-run/`.** serum 15504 PSMs, 193 peaks, 8 variable, 52.7 s;
+bcell 71585, 268, 11, 152.2 s; b1906 27364, 155, 12, 116.0 s. bcell
+`bias_ppm` is exactly 0.0, as it was before the regeneration (not new).
+Paths in Sage's `results.json` are redacted to `file:///path/to/sageRecon/`.
+The inputs were links into another clone; the redacted path names the
+repository location, `_dev/testing/inputs/`.
+
+**Snapshots and Tier 3.** Snapshots regenerated with `discover
+--min-peak-count 5` (b1906 149 peaks, bcell 242, serum 177). The weak-mode
+fallback now lives in `regression-snapshots/weak-mode/`, written by the same
+command and build; the dated `04-discover-min5-*.json` stay as the record.
+`run_validation.py`: 17/17 in strong mode (all three T3 `[regenerated]`) and
+17/17 with the TSVs hidden (weak mode). RULE: regenerate the weak-mode copy
+whenever the snapshots are regenerated.
+
+**`cargo test`, all data present: 207 tests, 206 pass, 1 fails.**
+Repinned as recorded edits, each change attributed with a scratch probe that
+ran `assign` on the old and new peak lists:
+- `digestion_composition_integration`: peptides 10771 -> 10697, missed
+  cleavage 1888 -> 1880, ragged-N 745 -> 743, completeness 82.47 -> 82.42 %,
+  decoy-corrected ragged-N 6.20 -> 6.25 %, ragged-C 3.01 -> 3.03 %. Cause:
+  the Pass 2 subset shrank 1770 -> 1700 proteins with Pass 1 at (1, 8).
+  Bands unchanged.
+- `statistics_override_category_on_bcell`: 10 -> 13 (8 -> 10 without the
+  FASTA). Enter: +14.0151 Methylation (protein N-term), +47.9861
+  Trioxidation, -32.0047 oxidized M side-chain loss. Each peak was absent from
+  the old 47-peak list.
+- `statistics_drop_unsupported_candidates_on_serum`: 8 -> 7 (6 without the
+  FASTA, unchanged). Leaves: the +58.0128 Carboxymethylation flank, which
+  topographic prominence removes, as "Prominence is topographic" predicted.
+- `reproduces_the_prototype_on_b1906`: Carbamyl 217 -> 205 % of floor (530 PSMs
+  against a 259.0 floor); recommendation set (9, 1) -> (11, 1), entering
+  +47.9825 Trioxidation and -89.0296 Met-loss+Acetylation, both new peaks. The
+  pin now has a no-FASTA branch, (9, 1), measured.
+
+❌ **NOT FIXED, OPEN FOR BEN: `protein_context_moves_exactly_three_decisions`
+fails.** Message: `serum +21.9812: q ROSE 6.530166e-1 -> 6.538140e-1`. The
+assertion rests on a premise: the index adds ONE near-zero p-value to the BH
+sweep, and BH can then only lower the other q values. Measured with a
+temporary probe in `assign` (reverted): the index adds these p-values.
+
+| file | peaks | tests without -> with index | p-values added |
+|---|---|---|---|
+| serum, old peaks | 49 | 24 -> 25 | +14.0138: 2.3e-12 |
+| serum, new peaks | 193 | 39 -> 41 | +14.0137: 2.3e-12; **+42.0032: 0.99999999999828** |
+| bcell, new peaks | 268 | 40 -> 43 | -89.0289: 0; +14.0151: 5.4e-4; +42.0109: 4.4e-80 |
+| b1906, new peaks | 155 | 36 -> 39 | -89.0296: 5.5e-50; **+14.0153: 0.99999999997769**; +42.0104: 1.4e-25 |
+
+With a p near 1 added, BH q values of other tests can rise. So the premise is
+false on the new peak lists; BH is not shown to be wrong. The assertion was
+left unchanged, because correcting a gate after it fires needs Ben. Proposed
+restatement: q may not rise unless an added p-value exceeds the q in question;
+or assert only that no DECISION changes outside the moved set. The moved set
+itself also changed, and that check never ran because the q assertion fires
+first. With the new peaks, seven decisions move, not the pre-committed four:
+serum +14.0137 (n 55); bcell -89.0289 (198), +42.0109 (112), +14.0151 (26,
+new); b1906 +42.0104 (26), -89.0296 (17, new), +14.0153 (19, new, moves to
+`no_residue_support`, not to a recommendation).
+
+**Not regenerated, as the trace said:** `comparison/recon_vs_*.md`,
+`recon_nofixedmods_*.md`, `fourway_comparison.md`, `BENCHMARK-SUMMARY.md`,
+`satellite_check_corrected.md`, `LIVER-FOUR-TOOL-2026-09-01.*`,
+`LIVER-FIVE-TOOL-MODS-2026-09-01.*`, `_dev/writeup/technote-material.md`.
+They now describe older recon output.
+
+**Small checks, same day.**
+- mzdata 0.65.5 (`Cargo.lock`). Its registry `Cargo.toml` has
+  `license = "Apache-2.0"` and NO `authors` field. The licence text in
+  `THIRD_PARTY_LICENSES.md` matches the crate `LICENSE` except line endings
+  (the crate file is CRLF). The author name comes from the GitHub profile of
+  the owner `mobiusklein` ("Joshua Klein", API read 2026-09-24).
+  `THIRD_PARTY_LICENSES.md` now says so. The HTML footer's "Klein, J." is
+  unchanged.
+- `byonic-preview-methodology.md` against the vendored Kil 2011 PDF: every
+  numeric claim matches (THigh/TLow constants 23 and 15, t over decoys of at
+  least 9 residues, 300 peaks, 0.9995 M, 0.5 Da, semitryptic above 15). The
+  "thirty-odd modifications across seven assay categories" is not in the PDF;
+  the seven are Detailed Results sections A1 to A7. The note also said
+  Preview has no counterpart to recon's unannotated peaks; the PDF says
+  Preview "reports unrecognized (blind-search) modifications" with a
+  wild-card search, -50 to +150 Da. Both corrected in the note.
+  `ptm-stratification-design.md` lines 54 and 313 still make the claim
+  ("the commercial tools lack", "Preview to ~60 common mods") and were not
+  edited. README, `docs/` and `technote-material.md` do not make it.
