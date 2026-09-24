@@ -6894,6 +6894,12 @@ advice.
     bug to "fix" by re-tuning thresholds — the fix is to stop scoring, not to
     re-weight.)
 
+- **The Pass 2 missed-cleavage rate excludes peptides with 2 or more missed
+  cleavages.** Pass 2 searches with `missed_cleavages: 1`, so Sage cannot
+  generate such a peptide. The rate counts peptides with exactly 1. On liver,
+  allowing 2 (and length 7) moves the rate by +0.14 percentage points only.
+  See "Pass 2 digestion settings stay at 1 and 8" (2026-09-24).
+
 ## Intentional, not bugs
 Things that look wrong but are correct. Do not "fix" these.
 
@@ -8388,6 +8394,8 @@ This aligns with the tool's stated non-goals: "fast recon, not a general QC suit
 
 4. **Pass 2 config** — New `digestion-efficiency-pass2.json`:
    - `semi_enzymatic: true`, `missed_cleavages: 1`, `min_len: 8`
+     (tested against Pass 1's 2 and 7 on 2026-09-24 and KEPT; see "Pass 2
+     digestion settings stay at 1 and 8")
    - FASTA: subset to ~6,000 proteins (vs ~20,000 full)
 
 5. **Pass 2 is non-optional** — For only ~3 minutes additional runtime, we get enzyme performance metrics that can distinguish between trypsin sources (e.g., bovine vs porcine trypsin can show 10% vs 20% semi-tryptic rates). This is worth running by default.
@@ -10980,3 +10988,78 @@ error is larger. On liver the count did not move between 20 and 16.37 ppm.
 ⚠ **The Da branch is exercised by unit tests only**
 (`oxonium_screen_tolerance_keeps_the_analyzer_unit`,
 `a_da_tolerance_is_applied_in_daltons`). All committed files are Orbitrap.
+
+## Pass 2 digestion settings stay at 1 and 8 (2026-09-24, Ben's rule, technote Appendix B item 2)
+
+**Decision: KEEP `missed_cleavages: 1`, `min_len: 8` in Pass 2.** Pass 1 keeps
+2 and 7. The passes stay different. The rejected alternative is (2, 7) in both
+passes.
+
+**Ben's rule.** Adopt (2, 7) if it moves the missed-cleavage rate by more than
+0.5 percentage points AND Pass 2 runtime stays under about 2x the (1, 8) run and
+under about 5 minutes. (2, 7) fails both conditions on liver: +0.14 pp, and
+4.5x the Pass 2 Sage time.
+
+**Method.** Liver `10mg_1_A_1`, `uniprot_sprot_iso_human-2018_06.fasta`,
+`--enzyme trypsin`, HEAD `615239f`, release build. Four full `recon run`
+calls, one after the other, one run each. Arm a used the bundled template. Arms
+b, c and d used `--pass2-params` with a copy of the bundled template where only
+the two fields change. Each arm's `pass2-effective-params.json` was diffed
+against arm a: only `missed_cleavages`, `min_len`, the template path and the
+subset size differ. Outputs are scratch, not committed.
+
+| arm (mc, len) | a (1, 8) | b (2, 7) | c (2, 8) | d (1, 7) |
+|---|---|---|---|---|
+| Pass 2 Sage time (s) | 13 | 59 | 28 | 27 |
+| Pass 2 peptides generated | 4,158,875 | 7,348,292 | 6,979,517 | 4,484,518 |
+| total `time -p` real (s) | 123.9 | 183.2 | 280.9 | 202.1 |
+| subset proteins | 1770 | 1770 | 1771 | 1771 |
+| peptides classified | 10771 | 11658 | 10904 | 11524 |
+| fully enzymatic | 9686 | 10499 | 9809 | 10376 |
+| missed cleavage, raw | 1888/10771 = 17.53 % | 2060/11658 = 17.67 % | 2018/10904 = 18.51 % | 1925/11524 = 16.70 % |
+| of which exactly 1 / 2 or more | 1888 / 0 | 1937 / 123 | 1894 / 124 | 1925 / 0 |
+| missed cleavage, decoy-corrected | 17.38 % | 17.52 % | 18.30 % | 16.60 % |
+| ragged-N, raw | 6.94 % | 6.83 % | 6.84 % | 6.89 % |
+| ragged-C, raw | 3.14 % | 3.11 % | 3.20 % | 3.07 % |
+| class FDR fully / semi | 0.134 / 9.585 % | 0.171 / 9.146 % | 0.133 / 9.498 % | 0.173 / 9.146 % |
+
+Raw rates are `composition.*` in `liver_pass2.json`. The headline 17.53 % is
+the raw `composition.missed_cleavage`, so the rule was applied to it. The
+decoy-corrected rate moves by the same +0.14 pp.
+
+**Tripwires.** The 1 versus 2-or-more split was computed from each Pass 2
+`results.sage.tsv`: targets, `peptide_q <= 0.01`, distinct stripped residues,
+first occurrence, K or R not followed by P. The count with 1 or more equals the
+JSON numerator in all four arms. Arms a and d have 0 peptides with 2 or more,
+as the setting requires.
+
+**Why the rate barely moves.** The two changes pull in opposite directions.
+Allowing 2 missed cleavages alone (arm c) adds 124 peptides, all with a missed
+cleavage, and raises the rate by +0.98 pp. Length 7 alone (arm d) adds 753
+short peptides, mostly fully cleaved, and lowers it by -0.83 pp. Together
+(arm b) the net is +0.14 pp.
+
+⚠ **Timing is one run per arm.** Pass 1 time varied from 75 s to 170 s across
+the arms with the same Pass 1 settings, so the machine load was not constant.
+The Pass 2 ratio (59 s against 13 s) follows the candidate count (7.3 M against
+4.2 M peptides), so the direction is real. The exact ratio is not. The rate
+condition alone rejects (2, 7).
+
+**Stated limitation (kept).** The headline missed-cleavage rate counts peptides
+with exactly 1 missed cleavage, because Pass 2 cannot identify 2 or more. On
+liver, Pass 1 puts 2.1 % of PSMs at 2 or more. See "Known permanent
+limitations".
+
+**Preview comparison.** Preview's `result_detail.html` (vendored at
+`_dev/liver-benchmark/preview/10mg_1_A_1/`) defines the rate as peptides that
+"contain an internal K or R not followed by P". That is 1 or more, so Preview
+counts peptides with 2 or more. Its own identifications contain them: in
+`Spectrum.identifications.csv`, 33 of 1964 distinct stripped sequences have 2 or
+more (304 have exactly 1). This does NOT reconcile with its reported 319/2008,
+because the CSV basis differs from the report's. Preview's search settings in
+`run.prv` and `objs/params.prv` do not record a missed-cleavage limit. So the
+two definitions are the same rule, but recon's search cannot supply the
+2-or-more class and Preview's can. recon reads 17.53 % against Preview's
+15.90 %. This cap does not explain that gap: the cap can only lower recon's
+rate. The Kil et al. 2011 paper was not re-read for this entry; the definition
+above is Preview's own report text.

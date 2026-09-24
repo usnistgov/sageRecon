@@ -417,7 +417,8 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
   next release". In short:
   1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
   2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
-     the passes consistent;
+     the passes consistent (DONE 2026-09-24: tested, KEPT at 1 and 8, see
+     NOTES "Pass 2 digestion settings stay at 1 and 8");
   3. prominence uses the nearest higher bin (DONE 2026-09-24; schema 3.3.0);
   4. screen tolerances from the measured error (DONE 2026-09-24; schema
      3.4.0), and a glyco expert reviews the oxonium rule (OPEN);
