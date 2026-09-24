@@ -549,6 +549,140 @@ pub fn ms2_user_recommendation(
     }
 }
 
+/// The tolerance a screen (polymer MS1, oxonium MS2) used, and where it came
+/// from. Recorded in the report so a reader can tell a measured window from a
+/// fixed fallback.
+#[derive(Debug, Clone, PartialEq, serde::Serialize, serde::Deserialize)]
+pub struct ScreenTolerance {
+    /// Half-width of the window, in `unit`.
+    pub value: f64,
+    /// `"ppm"` or `"Da"`.
+    pub unit: String,
+    /// `"measured"`: derived from this run's own mass error.
+    /// `"fallback"`: the fixed value, because the error was not measured.
+    pub source: String,
+    /// How the value was derived, or why the fallback was used.
+    pub basis: String,
+}
+
+impl ScreenTolerance {
+    fn new(t: crate::mzml::FragmentTolerance, measured: bool, basis: String) -> Self {
+        let (value, unit) = match t {
+            crate::mzml::FragmentTolerance::Ppm(v) => (v, "ppm"),
+            crate::mzml::FragmentTolerance::Da(v) => (v, "Da"),
+        };
+        ScreenTolerance {
+            value,
+            unit: unit.to_string(),
+            source: if measured { "measured" } else { "fallback" }.to_string(),
+            basis,
+        }
+    }
+
+    /// The tolerance as the typed value the screens take.
+    pub fn as_fragment_tolerance(&self) -> crate::mzml::FragmentTolerance {
+        match self.unit.as_str() {
+            "Da" => crate::mzml::FragmentTolerance::Da(self.value),
+            _ => crate::mzml::FragmentTolerance::Ppm(self.value),
+        }
+    }
+}
+
+/// The polymer screen's MS1 tolerance.
+///
+/// `ms1_requirement_ppm` is `|bias| + 5*MAD` from the clean subset: the same
+/// unrounded number behind the user recommendation
+/// (`Ms1UserRecommendation::measured_requirement_ppm`). It is used as the
+/// half-width directly, not quantized to a rung, because the screen reads THIS
+/// run's scans, where there is no drift to allow for. This is the reasoning
+/// [`ms1_pass2_window`] uses. The window is symmetric about zero, and the
+/// `|bias|` term makes it contain the bias-centred `5*MAD` window.
+///
+/// Capped at the top ladder rung (100 ppm), as [`ms1_pass2_window`] is, so a
+/// pathological measurement cannot open the screen without limit.
+///
+/// Fallback: `polymer::POLYMER_FALLBACK_TOLERANCE_PPM` (10 ppm, mzSniffer's
+/// default) when the MS1 error was not measured.
+pub fn polymer_screen_tolerance(ms1_requirement_ppm: Option<f64>) -> ScreenTolerance {
+    use crate::mzml::FragmentTolerance::Ppm;
+    let top = *MS1_TOLERANCE_LADDER_PPM.last().unwrap();
+    match ms1_requirement_ppm.filter(|r| r.is_finite() && *r > 0.0) {
+        Some(r) if r > top => ScreenTolerance::new(
+            Ppm(top),
+            true,
+            format!(
+                "MS1 |bias| + 5*MAD = {r:.2} ppm from ms1_calibration, capped at the \
+                 top ladder rung ({top} ppm)"
+            ),
+        ),
+        Some(r) => ScreenTolerance::new(
+            Ppm(r),
+            true,
+            "MS1 |bias| + 5*MAD from ms1_calibration".to_string(),
+        ),
+        None => ScreenTolerance::new(
+            Ppm(crate::polymer::POLYMER_FALLBACK_TOLERANCE_PPM),
+            false,
+            "MS1 error not measured; mzSniffer default".to_string(),
+        ),
+    }
+}
+
+/// The oxonium screen's MS2 tolerance.
+///
+/// It is the Pass-2 fragment tolerance, [`ms2_pass2_tolerance`], from the
+/// measured median MS2 |error| and the pass-1 fragment tolerance of the
+/// detected MS2 analyzer. So it takes the analyzer's UNIT: 5x the median in
+/// ppm, or for an ion trap or quadrupole 2x the median converted at
+/// [`PASS2_MS2_REPRESENTATIVE_MZ`], in Da. Both are clamped to the pass-1
+/// window.
+///
+/// ⚠ The MS2 error is measured on PEPTIDE fragments. Oxonium ions sit at
+/// 138-366 m/z, below most of them. The ppm error there is not measured and
+/// may be larger. Flagged for the glycoproteomics review (technote Appendix B
+/// item 4).
+///
+/// Fallback: `oxonium::OXONIUM_FALLBACK_TOLERANCE_PPM` (20 ppm) when the MS2
+/// error was not measured, or when the MS2 analyzer was not detected so the
+/// unit is unknown. `pass1` is `(tolerance, assumed)` from
+/// `Ms2TolDecision`; an ASSUMED unit is used, and the basis says so.
+pub fn oxonium_screen_tolerance(
+    ms2_median_abs_ppm: Option<f64>,
+    pass1: Option<(crate::mzml::FragmentTolerance, bool)>,
+) -> ScreenTolerance {
+    use crate::mzml::FragmentTolerance::{Da, Ppm};
+    let fallback = |why: &str| {
+        ScreenTolerance::new(
+            Ppm(crate::oxonium::OXONIUM_FALLBACK_TOLERANCE_PPM),
+            false,
+            why.to_string(),
+        )
+    };
+    let Some(median) = ms2_median_abs_ppm.filter(|m| m.is_finite() && *m > 0.0) else {
+        return fallback("MS2 error not measured; fixed default");
+    };
+    let Some((pass1_tol, assumed)) = pass1 else {
+        return fallback("MS2 analyzer not detected, so the unit is unknown; fixed default");
+    };
+    let t = ms2_pass2_tolerance(median, pass1_tol);
+    let rule = match pass1_tol {
+        Ppm(_) => format!(
+            "Pass-2 fragment tolerance: {PASS2_MS2_PPM_MULTIPLIER} x median MS2 |error| \
+             ({median:.2} ppm), clamped to pass-1 {pass1_tol}"
+        ),
+        Da(_) => format!(
+            "Pass-2 fragment tolerance: {PASS2_MS2_DA_MULTIPLIER} x median MS2 |error| \
+             ({median:.2} ppm) at m/z {PASS2_MS2_REPRESENTATIVE_MZ}, clamped to pass-1 {pass1_tol}"
+        ),
+    };
+    let basis = if assumed {
+        format!("{rule}; MS2 analyzer ASSUMED, not detected")
+    } else {
+        rule
+    };
+    ScreenTolerance::new(t, true, basis)
+}
+
 /// Round UP to the nearest tenth of a Dalton — the Da regime's ladder step.
 ///
 /// ⚠ **A naive `(v * 10.0).ceil() / 10.0` IS WRONG HERE, and the failure was
@@ -1047,6 +1181,59 @@ mod tests {
                 ),
                 other => panic!("expected Da, got {other}"),
             }
+        }
+    }
+
+    /// The polymer screen uses the measured MS1 requirement, caps it, and
+    /// falls back to exactly the old fixed value.
+    #[test]
+    fn polymer_screen_tolerance_is_measured_capped_or_the_old_fixed_value() {
+        // liver's measured requirement (|-1.417| + 5 x 0.627).
+        let t = polymer_screen_tolerance(Some(4.552621373866106));
+        assert_eq!((t.value, t.unit.as_str()), (4.552621373866106, "ppm"));
+        assert_eq!(t.source, "measured");
+        let t = polymer_screen_tolerance(Some(250.0));
+        assert_eq!((t.value, t.source.as_str()), (100.0, "measured"));
+        assert!(t.basis.contains("capped"), "{}", t.basis);
+        for missing in [None, Some(0.0), Some(f64::NAN)] {
+            let t = polymer_screen_tolerance(missing);
+            assert_eq!((t.value, t.unit.as_str()), (10.0, "ppm"));
+            assert_eq!(t.source, "fallback");
+        }
+    }
+
+    /// The oxonium screen takes the Pass-2 tolerance in the analyzer's unit,
+    /// and falls back to exactly the old fixed 20 ppm.
+    #[test]
+    fn oxonium_screen_tolerance_keeps_the_analyzer_unit() {
+        use crate::mzml::FragmentTolerance::{Da, Ppm};
+        // Orbitrap, liver's measured median: 5 x 3.2739295 = 16.37 ppm.
+        let t = oxonium_screen_tolerance(Some(3.2739295), Some((Ppm(20.0), false)));
+        assert_eq!(t.unit, "ppm");
+        assert!((t.value - 16.3696475).abs() < 1e-9, "{}", t.value);
+        assert_eq!(t.source, "measured");
+        assert_eq!(t.as_fragment_tolerance(), Ppm(t.value));
+        // A large error is clamped to the pass-1 window, never above it.
+        let t = oxonium_screen_tolerance(Some(30.0), Some((Ppm(20.0), false)));
+        assert_eq!(t.value, 20.0);
+        // Ion trap: Da, 2 x 600 ppm at m/z 600 = 0.72 Da, inside ±1.0 Da.
+        let t = oxonium_screen_tolerance(Some(600.0), Some((Da(1.0), false)));
+        assert_eq!(t.unit, "Da");
+        assert!((t.value - 0.72).abs() < 1e-9, "{}", t.value);
+        assert_eq!(t.as_fragment_tolerance(), Da(t.value));
+        // An assumed unit is used, and said.
+        let t = oxonium_screen_tolerance(Some(3.0), Some((Ppm(20.0), true)));
+        assert_eq!(t.source, "measured");
+        assert!(t.basis.contains("ASSUMED"), "{}", t.basis);
+        // Fallbacks: no measurement, a zero measurement, or no analyzer.
+        for (m, p) in [
+            (None, Some((Ppm(20.0), false))),
+            (Some(0.0), Some((Ppm(20.0), false))),
+            (Some(3.0), None),
+        ] {
+            let t = oxonium_screen_tolerance(m, p);
+            assert_eq!((t.value, t.unit.as_str()), (20.0, "ppm"));
+            assert_eq!(t.source, "fallback");
         }
     }
 

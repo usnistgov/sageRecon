@@ -5,7 +5,7 @@
 //!
 //! Reference: `_dev/reference-notes/oxonium-ions.md`
 
-use crate::mzml::Ms2Spectrum;
+use crate::mzml::{FragmentTolerance, Ms2Spectrum};
 use serde::{Deserialize, Serialize};
 
 /// Oxonium ion definitions with m/z values and names
@@ -63,11 +63,20 @@ pub const OXONIUM_IONS: &[OxoniumIon] = &[
     },
 ];
 
+/// The fixed oxonium tolerance, used when the run's MS2 error is not measured.
+/// Unsourced (technote Appendix E, row 8). Kept as the fallback so a run with
+/// no calibration screens exactly as it did before 2026-09-24.
+pub const OXONIUM_FALLBACK_TOLERANCE_PPM: f64 = 20.0;
+
 /// Configuration for oxonium ion screening
 #[derive(Debug, Clone)]
 pub struct OxoniumScreeningConfig {
-    /// m/z tolerance in ppm (default: 20.0)
-    pub mz_tolerance_ppm: f64,
+    /// m/z tolerance, in the unit of the MS2 analyzer (default: 20 ppm).
+    ///
+    /// `recon analyze` sets it from the run's own MS2 error when it can (see
+    /// `calibration::oxonium_screen_tolerance`). A `Da` value is used as-is,
+    /// so an ion trap is screened at a Dalton-scale window, not at 20 ppm.
+    pub mz_tolerance: FragmentTolerance,
     /// Minimum number of oxonium ions required (default: 2)
     pub min_oxonium_ions: usize,
     /// Top percentage of peaks to consider (default: 0.10 = 10%)
@@ -79,7 +88,7 @@ pub struct OxoniumScreeningConfig {
 impl Default for OxoniumScreeningConfig {
     fn default() -> Self {
         Self {
-            mz_tolerance_ppm: 20.0,
+            mz_tolerance: FragmentTolerance::Ppm(OXONIUM_FALLBACK_TOLERANCE_PPM),
             min_oxonium_ions: 2,
             top_peak_fraction: 0.10,
             require_mandatory: true,
@@ -152,7 +161,10 @@ pub fn screen_spectrum(
     let mut has_mandatory = false;
 
     for oxonium in OXONIUM_IONS {
-        let tol = config.mz_tolerance_ppm * oxonium.mz / 1_000_000.0;
+        let tol = match config.mz_tolerance {
+            FragmentTolerance::Ppm(ppm) => ppm * oxonium.mz / 1_000_000.0,
+            FragmentTolerance::Da(da) => da,
+        };
 
         // Check if any peak matches this oxonium ion and is in top peaks
         let found = spectrum
@@ -304,6 +316,24 @@ mod tests {
             mz,
             intensity,
         }
+    }
+
+    /// A Da tolerance is applied as-is. HexNAc and Hex-HexNAc 0.4 Da off
+    /// their exact m/z, as a unit-resolution trap may report them, match at
+    /// ±0.5 Da and do not match at 20 ppm (0.004 Da at m/z 204).
+    #[test]
+    fn a_da_tolerance_is_applied_in_daltons() {
+        let spectrum =
+            make_test_spectrum(vec![204.0867 + 0.4, 366.1395 + 0.4], vec![5000.0, 4000.0]);
+        let at = |tol| OxoniumScreeningConfig {
+            mz_tolerance: tol,
+            top_peak_fraction: 1.0,
+            ..Default::default()
+        };
+        let da = screen_spectrum(&spectrum, &at(FragmentTolerance::Da(0.5)));
+        assert!(da.is_glycopeptide_candidate, "{:?}", da.detected_ion_names);
+        let ppm = screen_spectrum(&spectrum, &at(FragmentTolerance::Ppm(20.0)));
+        assert_eq!(ppm.oxonium_ions_detected, 0);
     }
 
     #[test]

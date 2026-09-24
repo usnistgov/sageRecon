@@ -166,7 +166,18 @@ use serde::{Deserialize, Serialize};
 /// existing field is a MINOR bump with a non-comparability note. A 3.2.0
 /// report's peak list and recommendations are NOT comparable with a 3.3.0 one.
 /// See NOTES "Prominence is topographic".
-pub const SCHEMA_VERSION: &str = "3.3.0";
+///
+/// Bumped to 3.4.0 on 2026-09-24: `polymer.tolerance` and `oxonium.tolerance`
+/// ADDED (`value`, `unit`, `source`, `basis`). The two screens now take their
+/// tolerance from the run's own measured error: polymer MS1 = `|bias| + 5*MAD`
+/// (capped at 100 ppm), oxonium MS2 = the Pass-2 fragment tolerance in the
+/// analyzer's unit. The old fixed 10 ppm and 20 ppm are the fallbacks, with
+/// `source: "fallback"`. Additive, but `polymer.*` and `oxonium.*` VALUES move
+/// whenever calibration is available, so a 3.3.0 report's screen results are
+/// NOT comparable with a 3.4.0 one. On liver: polymer 10 -> 4.55 ppm,
+/// oxonium 20 -> 16.37 ppm. See NOTES "Screen tolerances come from the
+/// measured error".
+pub const SCHEMA_VERSION: &str = "3.4.0";
 
 /// Schema version of the SEPARATE `<output>_pass2.json` artifact.
 ///
@@ -541,6 +552,10 @@ pub struct PolymerSummaryReport {
     pub contamination_level: String,
     /// Top polymers by %TIC
     pub top_polymers: Vec<PolymerEntry>,
+    /// The MS1 tolerance the screen used, and whether it was measured from this
+    /// run or the fixed fallback. Added at schema 3.4.0; absent in older output.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tolerance: Option<crate::calibration::ScreenTolerance>,
 }
 
 /// Single polymer entry
@@ -559,6 +574,10 @@ pub struct OxoniumSummaryReport {
     pub glycopeptide_candidates: usize,
     /// Percentage of MS2 spectra that are glycopeptide candidates
     pub glycopeptide_pct: f64,
+    /// The MS2 tolerance the screen used, and whether it was measured from this
+    /// run or the fixed fallback. Added at schema 3.4.0; absent in older output.
+    #[serde(default, skip_serializing_if = "Option::is_none")]
+    pub tolerance: Option<crate::calibration::ScreenTolerance>,
 }
 
 /// Digestion summary for report
@@ -1067,12 +1086,16 @@ impl ReconReport {
             total_pct_tic,
             contamination_level,
             top_polymers,
+            // Set by the caller, which chose the tolerance (`recon analyze`).
+            tolerance: None,
         };
 
         // Build oxonium summary
         let oxonium_summary = OxoniumSummaryReport {
             glycopeptide_candidates: oxonium.glycopeptide_candidates,
             glycopeptide_pct: oxonium.glycopeptide_pct,
+            // Set by the caller, which chose the tolerance (`recon analyze`).
+            tolerance: None,
         };
 
         // Build digestion summary

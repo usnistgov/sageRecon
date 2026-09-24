@@ -10918,3 +10918,65 @@ passes with the data present.
 Schema bumped 3.2.0 -> 3.3.0 (MINOR, by the 1.1.0 precedent: a value
 correction on an existing field). Ben may prefer MAJOR under the "changed
 semantics" rule; the 3.0.0 entry was that kind of call.
+
+## Screen tolerances come from the measured error (2026-09-24, Ben, technote Appendix B item 4)
+
+**The rule now** (`calibration::polymer_screen_tolerance`,
+`calibration::oxonium_screen_tolerance`, wired in `run_analyze_command`):
+- **Polymer, MS1:** `|bias| + 5*MAD` from the clean subset. This is the same
+  unrounded number behind the user recommendation
+  (`ms1_calibration.user_recommendation_requirement_ppm`). It is NOT quantized
+  to a rung: the screen reads this run's own scans, so there is no drift to
+  allow for. `ms1_pass2_window` uses the same reasoning. It is capped at the
+  top ladder rung (100 ppm). The window is symmetric about zero; the `|bias|`
+  term makes it contain the bias-centred window.
+- **Oxonium, MS2:** `ms2_pass2_tolerance(median |MS2 error|, pass-1 tolerance)`,
+  in the unit of the detected MS2 analyzer. For ppm analyzers that is 5x the
+  median, clamped to the pass-1 window. For an ion trap or quadrupole it is 2x
+  the median converted at m/z 600, in Da, clamped to the pass-1 window.
+  `OxoniumScreeningConfig::mz_tolerance` is now a `FragmentTolerance`, so a Da
+  value is applied as Daltons.
+- **Fallbacks** are the old fixed values, so a run with no calibration screens
+  exactly as before: polymer 10 ppm (mzSniffer default), oxonium 20 ppm
+  (unsourced). Oxonium also falls back when the MS2 analyzer was not detected,
+  because the unit is then unknown. An ASSUMED analyzer unit is used, and the
+  `basis` says so.
+- **Recorded in the JSON:** `polymer.tolerance` and `oxonium.tolerance`, each
+  `{value, unit, source, basis}`, `source` = `"measured"` or `"fallback"`.
+  Schema 3.3.0 -> 3.4.0 (MINOR, additive). The HTML does not show them yet.
+
+**Stage order changed in `analyze`.** The screens ran before calibration. They
+now run after calibration, the recommendations and analyzer detection, as
+steps 7 and 8; digestion/QC is step 6. The provenance guard still runs first.
+A FASTA mismatch now stops the run before the screens, not after.
+
+**Invariant checked:** a liver `analyze` after the change against the one
+before it: `mod_discovery`, `recommendations`, `ms1_calibration`,
+`analyzers`, `digestion`, `mass_accuracy`, `alkylation` and `input` are
+identical.
+`signal_fate.id_rate_by_tic_pct` differs in the 15th significant digit, the
+known run-to-run float jitter (see "The Da recommendation is quantized").
+
+**Measured on liver** (same inputs as "Prominence is topographic"; outputs not
+committed):
+
+| screen | before | after |
+|---|---|---|
+| polymer tolerance | 10 ppm (fixed) | ±4.55 ppm (measured: bias -1.42, MAD 0.63) |
+| polymer %TIC | 0.793 % | 0.696 % |
+| polymer level | Moderate (0.1-1%) | Moderate (0.1-1%) |
+| oxonium tolerance | 20 ppm (fixed) | ±16.37 ppm (measured: 5 x 3.27 ppm) |
+| glycopeptide candidates | 525 (0.92 %) | 525 (0.92 %) |
+
+Every top polymer loses a little %TIC (PEG+2H 0.074 -> 0.058, Tween-20
+0.044 -> 0.032, PEG+3H 0.036 -> 0.022). Tween-60 (0.016 %) leaves the top ten
+and IGEPAL CA-630 (0.011 %) enters it.
+
+⚠ **Open, for the glycoproteomics review.** The MS2 error is measured on
+PEPTIDE fragments. Oxonium ions sit at 138-366 m/z, below most of them, and
+their ppm error is not measured. A tighter window could miss them if their
+error is larger. On liver the count did not move between 20 and 16.37 ppm.
+
+⚠ **The Da branch is exercised by unit tests only**
+(`oxonium_screen_tolerance_keeps_the_analyzer_unit`,
+`a_da_tolerance_is_applied_in_daltons`). All committed files are Orbitrap.

@@ -849,6 +849,14 @@ This schema follows semantic versioning:
 
 ## Changelog
 
+- **3.4.0** (2026-09-24): `polymer.tolerance` and `oxonium.tolerance` ADDED, each
+  `{value, unit, source, basis}`. `source` is `"measured"` (from this run's own
+  error) or `"fallback"` (the old fixed 10 ppm polymer / 20 ppm oxonium).
+  Polymer MS1 = `|bias| + 5*MAD`, capped at 100 ppm. Oxonium MS2 = the Pass-2
+  fragment tolerance (`ms2_pass2_tolerance`), in the analyzer's unit. Additive,
+  but the screen VALUES move whenever calibration is available: on liver,
+  polymer %TIC 0.793 -> 0.696 at 4.55 ppm, oxonium candidates 525 -> 525 at
+  16.37 ppm. A 3.3.0 screen result is NOT comparable with a 3.4.0 one.
 - **3.3.0** (2026-09-24): no field added, removed or renamed. `mod_discovery.peaks[]`
   and the `recommendations` built from them CHANGE, because prominence is now
   topographic (see "Prominence-Based Peak Detection"). On liver, 10 of 49

@@ -1386,7 +1386,7 @@ fn run_oxonium_screen_command(
     println!();
 
     let config = OxoniumScreeningConfig {
-        mz_tolerance_ppm: tol_ppm,
+        mz_tolerance: recon_tool::mzml::FragmentTolerance::Ppm(tol_ppm),
         min_oxonium_ions: min_ions,
         top_peak_fraction: top_fraction,
         require_mandatory: true,
@@ -1674,30 +1674,10 @@ fn run_analyze_command(
         signal_fate.by_intensity.identified_pct.unwrap_or(0.0)
     );
 
-    // Step 6: Polymer detection
-    println!("[6/8] Detecting polymer contamination...");
-    let max_mz = get_max_mz(&ms1_spectra);
-    let spectra_iter = ms1_spectra
-        .iter()
-        .map(|s| (s.rt, s.tic, s.mz.as_slice(), s.intensity.as_slice()));
-    let polymer = search_polymers(spectra_iter, max_mz, 10.0);
-    println!(
-        "       Polymer %TIC: {:.2}%",
-        polymer.total_polymer_pct_tic()
-    );
-
-    // Step 7: Oxonium screening
-    println!("[7/8] Screening for glycopeptides (oxonium ions)...");
-    let oxonium_config = OxoniumScreeningConfig::default();
-    let oxonium_results = screen_spectra(&ms2_spectra, &oxonium_config);
-    let oxonium = compute_screening_summary(&oxonium_results);
-    println!(
-        "       Glycopeptide candidates: {} ({:.1}%)",
-        oxonium.glycopeptide_candidates, oxonium.glycopeptide_pct
-    );
-
-    // Step 8: Digestion and QC
-    println!("[8/8] Computing digestion and QC metrics...");
+    // Step 6: Digestion and QC
+    // (The polymer and oxonium screens, steps 7 and 8, run LATER, after the
+    // calibration and analyzer detection they take their tolerances from.)
+    println!("[6/8] Computing digestion and QC metrics...");
     let digestion = compute_digestion_stats(&results);
     let qc = compute_qc_stats(&results, Some(&signal_fate));
     println!(
@@ -2009,9 +1989,13 @@ fn run_analyze_command(
     // their instrument at all. A ppm ladder is meaningless for an ion trap.
     // Detection failure is NOT fatal: the report simply omits the block rather
     // than losing every other number in it.
+    // The pass-1 MS2 tolerance and whether its unit was assumed: the oxonium
+    // screen below needs the analyzer's UNIT. `None` when detection failed.
+    let mut pass1_ms2: Option<(recon_tool::mzml::FragmentTolerance, bool)> = None;
     let analyzers = match recon_tool::detect_analyzers(&mzml_path) {
         Ok(census) => {
             let d = census.ms2_decision();
+            pass1_ms2 = Some((d.tolerance, d.assumed));
             println!();
             println!(
                 "[ANALYZER] MS1 {:?} | MS2 {:?} -> pass-1 fragment_tol {}{}",
@@ -2041,8 +2025,58 @@ fn run_analyze_command(
         }
     };
 
+    // Steps 7 and 8: the screens, at tolerances from THIS run's measured
+    // error when it was measured (NOTES "Screen tolerances come from the
+    // measured error"). They run after calibration and analyzer detection for
+    // that reason; before 2026-09-24 they ran first, at fixed 10 / 20 ppm, and
+    // those values are now the recorded fallbacks.
+    println!();
+    let polymer_tolerance = recon_tool::calibration::polymer_screen_tolerance(
+        ms1_calibration
+            .as_ref()
+            .and_then(|c| c.user_recommendation_requirement_ppm),
+    );
+    println!(
+        "[7/8] Detecting polymer contamination at ±{:.2} {} ({}: {})...",
+        polymer_tolerance.value,
+        polymer_tolerance.unit,
+        polymer_tolerance.source,
+        polymer_tolerance.basis
+    );
+    let max_mz = get_max_mz(&ms1_spectra);
+    let spectra_iter = ms1_spectra
+        .iter()
+        .map(|s| (s.rt, s.tic, s.mz.as_slice(), s.intensity.as_slice()));
+    let polymer = search_polymers(spectra_iter, max_mz, polymer_tolerance.value);
+    println!(
+        "       Polymer %TIC: {:.2}%",
+        polymer.total_polymer_pct_tic()
+    );
+
+    let oxonium_tolerance = recon_tool::calibration::oxonium_screen_tolerance(
+        ms1_calibration.as_ref().and_then(|c| c.ms2_median_abs_ppm),
+        pass1_ms2,
+    );
+    println!(
+        "[8/8] Screening for glycopeptides (oxonium ions) at ±{:.4} {} ({}: {})...",
+        oxonium_tolerance.value,
+        oxonium_tolerance.unit,
+        oxonium_tolerance.source,
+        oxonium_tolerance.basis
+    );
+    let oxonium_config = OxoniumScreeningConfig {
+        mz_tolerance: oxonium_tolerance.as_fragment_tolerance(),
+        ..Default::default()
+    };
+    let oxonium_results = screen_spectra(&ms2_spectra, &oxonium_config);
+    let oxonium = compute_screening_summary(&oxonium_results);
+    println!(
+        "       Glycopeptide candidates: {} ({:.1}%)",
+        oxonium.glycopeptide_candidates, oxonium.glycopeptide_pct
+    );
+
     // Build unified report
-    let report = ReconReport::from_analyses(
+    let mut report = ReconReport::from_analyses(
         &mzml_path.display().to_string(),
         &tsv.display().to_string(),
         &unimod_label,
@@ -2060,6 +2094,8 @@ fn run_analyze_command(
         recommendations,
         analyzers,
     );
+    report.polymer.tolerance = Some(polymer_tolerance);
+    report.oxonium.tolerance = Some(oxonium_tolerance);
 
     let elapsed = start.elapsed();
     println!();

@@ -415,12 +415,12 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 * **NEXT RELEASE: seven changes from the write-up review (2026-09-24).** The
   list is in `_dev/writeup/technote-material.md`, Appendix B, "Planned for the
   next release". In short:
-  1. ppm-to-Da at m/z 600, not 500;
+  1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
   2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
      the passes consistent;
-  3. prominence uses the nearest higher bin;
-  4. screen tolerances from the measured error, and a glyco expert reviews the
-     oxonium rule;
+  3. prominence uses the nearest higher bin (DONE 2026-09-24; schema 3.3.0);
+  4. screen tolerances from the measured error (DONE 2026-09-24; schema
+     3.4.0), and a glyco expert reviews the oxonium rule (OPEN);
   5. remove the vestigial JSON blocks (a MAJOR schema change);
   6. the documentation fixes;
   7. the Fe[III] claim test on liver.

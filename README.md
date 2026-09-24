@@ -225,7 +225,7 @@ With `--output NAME` (or the default base name):
 
 | file | contents |
 |---|---|
-| `NAME.json` | The full report, schema version 3.3.0. |
+| `NAME.json` | The full report, schema version 3.4.0. |
 | `NAME.html` | The same report as a self-contained page for a human reader. |
 | `NAME_pass2.json` | The semi-enzymatic digestion measurement, schema version 1.1.0. Absent with `--no-pass2`. |
 | `NAME_search/` | Sage's own outputs (`results.sage.tsv`, `results.json`) plus `effective-params.json`, the exact configuration the search ran with. |
@@ -370,10 +370,15 @@ sections are:
    to the nearest 0.1 Da.
 3. **Contamination.** Common polymer series (PEG, PPG, Tween, polysiloxane and
    others) as a percentage of MS1 TIC, with a per-series breakdown and a
-   qualitative level.
+   qualitative level. The MS1 tolerance is this run's measured `|bias| + 5×MAD`
+   (at most 100 ppm), or 10 ppm when the MS1 error could not be measured.
 4. **Glycopeptides.** Oxonium-ion screening: the count of candidate MS2 spectra
    and their percentage of all MS2. This flags glycopeptide presence; it does not
-   identify glycopeptides.
+   identify glycopeptides. The MS2 tolerance is the Pass-2 fragment tolerance
+   derived from this run's measured fragment error, in the analyzer's unit, or
+   20 ppm when that error could not be measured. The JSON records which
+   tolerance each screen used and whether it was measured (`polymer.tolerance`,
+   `oxonium.tolerance`).
 5. **Digestion.** Missed-cleavage rate, ragged N-terminus and ragged C-terminus
    rates, and their ratio, from the semi-enzymatic Pass 2 (described below).
 6. **Recommended search modifications.** Three tables: fixed, variable, and

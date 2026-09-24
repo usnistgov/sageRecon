@@ -316,6 +316,12 @@ fn find_peaks(
     total_intensity
 }
 
+/// The fixed polymer MS1 tolerance: mzSniffer's default. Used only when the
+/// run's own MS1 error is not measured (see
+/// `calibration::polymer_screen_tolerance`), so a run with no calibration
+/// screens exactly as it did before 2026-09-24.
+pub const POLYMER_FALLBACK_TOLERANCE_PPM: f64 = 10.0;
+
 /// Search for polymers in MS1 spectra
 ///
 /// # Arguments
