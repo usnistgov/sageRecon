@@ -1990,15 +1990,14 @@ Built from commit {git_commit} &middot; report schema v{schema_version}
 <a href="https://github.com/smith-chem-wisc/metamorpheus">github.com/smith-chem-wisc/metamorpheus</a> &mdash;
 Solntsev, Shortreed, Frey, Smith. <i>J. Proteome Res.</i> 2018, 17(5), 1844&ndash;1851. doi:10.1021/acs.jproteome.7b00873<br>
 <b>mzSniffer</b> (polymer detection) &mdash; <a href="https://github.com/wfondrie/mzsniffer">github.com/wfondrie/mzsniffer</a> &mdash; no publication.<br>
-<b>Pyteomics</b> (code ideas) &mdash; <a href="https://github.com/levitsky/pyteomics">github.com/levitsky/pyteomics</a> &mdash;
-Levitsky, Klein, Ivanov, Gorshkov. <i>J. Proteome Res.</i> 2019, 18(2), 709&ndash;714. doi:10.1021/acs.jproteome.8b00717<br>
+<b>mzdata</b> (mzML reading) &mdash; <a href="https://github.com/mobiusklein/mzdata">github.com/mobiusklein/mzdata</a> &mdash; Klein, J.<br>
 <b>Unimod</b> &mdash; <a href="https://www.unimod.org/">unimod.org</a> &mdash; Design Science License.
 </div></details>
 <details><summary>Licence &mdash; NIST</summary><div class="bd">
 NIST Software Licensing Statement. The full text is in <code>LICENSE.md</code>, shipped beside this tool.
 </div></details>
 <details><summary>Licence &mdash; third party</summary><div class="bd">
-Sage (MIT), mzSniffer (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License).
+Sage (MIT), mzSniffer (Apache 2.0), mzdata (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License).
 The full texts are in <code>THIRD_PARTY_LICENSES.md</code>, shipped in the release archive.
 </div></details>
 </footer>

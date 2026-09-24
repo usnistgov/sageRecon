@@ -11,16 +11,17 @@ license, reproduced in full below.
 Source: https://github.com/lazear/sage
 License: MIT
 
-**Binary redistribution notice:** This software invokes an unmodified Sage
-binary, pinned to tag `v0.15.0-beta.2`, git commit
-`df9219951cc9a54cf4cd55d76541af24b687bd3d`, on `github.com/lazear/sage`.
-No modifications are made to the Sage source or binary. The MIT license text
-below applies to both.
+**Redistribution notice:** Sage is linked into the `recon` binary as a Rust
+library. The crates `sage-core`, `sage-cli` and `sage-cloudpath` are Cargo git
+dependencies pinned to tag `v0.15.0-beta.2`, git commit
+`df9219951cc9a54cf4cd55d76541af24b687bd3d`, on `github.com/lazear/sage`
+(see `recon-tool/Cargo.toml` and `recon-tool/Cargo.lock`). No modifications
+are made to the Sage source. Every `recon` release binary therefore contains
+Sage in object form, and the MIT license text below applies to it.
 
-⚠ **This notice describes the PIN, not a shipped artifact.** No release archive
-exists yet, so nothing is distributed today. When one is built, list the exact
-platform binaries it contains here. Corrected 2026-09-01: this section named
-v0.14.7 and a Windows x86-64 binary, both superseded by A1 landing 1.
+Corrected 2026-09-24: this section said recon "invokes an unmodified Sage
+binary". No separate Sage binary has existed since Sage became a library
+dependency on 2026-09-01.
 
 MIT License
 
@@ -68,6 +69,31 @@ limitations under the License.
 Note: portions of this project's polymer-detection logic are ported/adapted
 from mzSniffer. Modified files carry a notice indicating they have been
 changed from the original, per Apache License 2.0 Section 4(b).
+
+---
+
+## mzdata
+
+Source: https://github.com/mobiusklein/mzdata
+License: Apache License, Version 2.0
+Version: 0.65.5 (crates.io; pinned in `recon-tool/Cargo.lock`)
+Author: Joshua Klein
+
+`recon` links mzdata as a Rust library to read mzML files. It is used
+unmodified. The crate's own `LICENSE` file is the unmodified Apache 2.0 text
+and names no copyright holder; the crate ships no `NOTICE` file.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+    http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
 
 ---
 

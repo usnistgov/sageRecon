@@ -62,8 +62,9 @@ When the mass spectrometer selects the wrong isotope peak (e.g., M+1 instead of 
 
 ### Isotope-Corrected Delta Mass
 ```
-corrected_delta = delta_mass - (isotope_error × 1.0086649158849)
+corrected_delta = delta_mass - (isotope_error × 1.003355)
 ```
+1.003355 Da is the ¹³C − ¹²C mass difference (`C13_C12_DIFF` in `sage_results.rs`), the spacing of the isotope envelope. It is not the free neutron mass (1.008665 Da), which an earlier version of this note used.
 The delta mass after accounting for isotope selection error.
 
 ---

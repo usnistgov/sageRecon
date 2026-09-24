@@ -30,6 +30,6 @@ viable default only.
 
 **Isotope correction (for reference):**
 ```text
-corrected_delta = (expmass − calcmass) − (isotope_error × NEUTRON)
-NEUTRON = 1.0086649158849
+corrected_delta = (expmass − calcmass) − (isotope_error × C13_C12_DIFF)
+C13_C12_DIFF = 1.003355   (¹³C − ¹²C; not the free neutron mass, 1.008665)
 ```

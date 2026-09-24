@@ -118,21 +118,18 @@ The `results.sage.tsv` file contains these columns (in order):
 
 ## Isotope Error and Delta Mass Artifacts
 
-### The 52.91 Da Peak — Isotope Selection Artifact
+### Isotope selection artifacts
 
-A delta mass of exactly **+52.905 Da** (often seen as ~52.91 Da in histograms) typically represents a **triply ¹³C isotope shift** — an instrument peak-picking artifact, not a biological modification.
+The instrument sometimes selects an isotope peak (M+1, M+2, M+3) instead of the
+monoisotopic peak (M+0). Each extra ¹³C adds 1.003355 Da to the neutral mass, so
+selecting M+n shifts the measured precursor mass by n × 1.003355 Da, whatever
+the charge state. These artifacts sit near integer Daltons (about +1.003,
++2.007, +3.010 Da).
 
-**What happens:**
-1. High-resolution mass spectrometers (Orbitrap, Q-TOF) sometimes miss the monoisotopic peak (M+0)
-2. Instead, the instrument selects the third heavy isotope peak (M+3) for fragmentation
-3. Each ¹³C atom adds ~1.0033 Da, so M+3 selection shifts the measured precursor mass by ~3 × 1.0033 Da ≈ 3.01 Da
-4. But the **charge state** matters: for a +3 charge, the m/z shift is 3.01/3 ≈ 1.00 Da, which gets multiplied back to mass as 3.01 Da
-5. For higher charge states or different isotope selections, you can get larger apparent delta masses
-
-**The 52.91 Da case specifically:**
-- This appears when the instrument selects an isotope peak that's ~53 Da heavier than the monoisotopic mass
-- This can happen with very high charge states or when the monoisotopic peak is below detection threshold
-- **No actual chemical or biological modification is present** — it's purely an instrument artifact
+⚠ **Corrected 2026-09-24.** This section used to say a +52.91 Da peak is a
+"triply ¹³C isotope shift". That is wrong: three ¹³C atoms add about 3.01 Da,
+not 52.91 Da, and no charge state changes the neutral-mass shift. Do not read a
++52.91 Da peak as an isotope artifact. Its identity is not settled in this note.
 
 **Reference:** PMID 40160755 — "Comparison of the Human Plasma Peptides from the Fit of Fragmentation Spectra versus Accurate Monoisotopic Precursor Mass"
 
@@ -144,10 +141,12 @@ A delta mass of exactly **+52.905 Da** (often seen as ~52.91 Da in histograms) t
 Sage reports `isotope_error` as the number of isotope shifts detected. To get the true delta mass:
 
 ```
-corrected_delta = (expmass - calcmass) - (isotope_error × 1.0086649158849)
+corrected_delta = (expmass - calcmass) - (isotope_error × 1.003355)
 ```
 
-Where 1.0086649158849 Da is the neutron mass (mass difference between ¹³C and ¹²C).
+Where 1.003355 Da is the mass difference between ¹³C and ¹²C (`C13_C12_DIFF`),
+the spacing of the isotope envelope. It is NOT the free neutron mass
+(1.0086649 Da), which this note used before 2026-09-24.
 
 ### Expected Isotope Error Distribution
 

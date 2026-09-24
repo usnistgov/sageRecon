@@ -5,7 +5,7 @@
 //!
 //! | acceptor | instrument | rule |
 //! |---|---|---|
-//! | residue-specific | statistics | Fisher exact, odds ratio, BH. `OR >= 2 AND q < 0.05` |
+//! | residue-specific | statistics | Fisher exact, odds ratio, BH. `OR >= OR_MIN AND q <= Q_MAX` (2 and 0.05, both bounds inclusive) |
 //! | unspecific (`TG=X`, or saturated background) | abundance | `count >= X% floor` |
 //! | isotope satellite | — | demoted before either test |
 //! | not curated | — | unannotated tail, never tiered |

@@ -905,6 +905,10 @@ Every point raised while building this material ends in one of three places.
 
 ## Appendix C. Documentation defects to fix in the next release
 
+**Done 2026-09-24**, except the dirty-tree provenance of the committed reports
+(needs the regeneration step) and the Perplexity digests (not in scope). See
+NOTES "Vestigial output and code removed".
+
 - `THIRD_PARTY_LICENSES.md`:
   - the Sage entry still says recon "invokes an unmodified Sage binary";
   - mzdata is missing;
@@ -940,6 +944,9 @@ Every point raised while building this material ends in one of three places.
   placeholders (mass-error-reporting, incomplete-alkylation-detection).
 
 ## Appendix D. Vestigial code and JSON to remove in the next release (checked against code, 2026-09-24)
+
+**Done 2026-09-24** (main schema 4.0.0, Pass 2 schema 2.0.0). See NOTES
+"Vestigial output and code removed" for what was kept and why.
 
 README "Future work" item 8 already commits to this: "a field in the output
 implies a claim we are making". The HTML report (`generate_html_report`) reads

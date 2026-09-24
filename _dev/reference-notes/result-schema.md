@@ -1,17 +1,48 @@
 # Reconnaissance Report JSON Schema
 
-**Version:** 1.0.0
-**Last updated:** 2026-07-15 (body carries content through Phase 7B)
+**Current versions:** main report `4.0.0`, Pass 2 file `2.0.0` (2026-09-24).
 
-> **Freshness note:** the schema body was extended through Phase 7B (see the
-> mass-calibration, neutron-folding, and prominence peak-detection sections
-> below), though it originated in Phase 1. Current project state lives in
-> `PLAN.md`'s status block, not here. During Phase 8 validation, verify these
-> field definitions against the actual `ReconResult` struct in
-> `recon-tool/src/` — they have not been diffed field-for-field.
+> ⚠ **THE AUTHORITATIVE DEFINITION IS THE CODE, NOT THIS FILE.** The structs
+> `ReconReport` and `Pass2Report` in `recon-tool/src/report.rs` define both
+> files, field by field, with the reasoning in their doc comments.
+> `SCHEMA_VERSION` and `PASS2_SCHEMA_VERSION` in the same file carry the
+> version history. The section "Current structure" below is a map of the top
+> level. The sections after it ("Design Principles" through "Implementation
+> Notes") are the **v1.0.0 design body from 2026-07**. They are kept as
+> history and do NOT describe the current output: several blocks they define
+> (`signal_fate`, `diagnostic_ions`, `digestion`, `qc`) no longer exist. The
+> Changelog at the end is current.
 
-This document defines the complete JSON schema for the reconnaissance report output.
-This is the contract between all analysis modules and both the CLI and future GUI.
+## Current structure
+
+### `<output>.json` (schema 4.0.0)
+
+| key | what it holds |
+|---|---|
+| `schema_version`, `generated_at`, `tool_version`, `git_commit` | Provenance. |
+| `runtime_seconds` | Wall-clock time of the whole run. Absent on the first write. |
+| `input` | mzML, Sage TSV, Unimod source, FASTA, MS1/MS2 spectrum counts, and the enzyme identity (`name`, `cleave_at`, `restrict`, `c_terminal`). |
+| `mod_discovery` | `total_psms`, `unmodified_pct`, every detected `peaks[]` entry (delta mass, counts, intensities, annotations), and `discovery_settings` (bin width, peak floor, peak cap `max_peaks`, merge tolerance, prominence threshold, assignment and calibration modes, folding switches). |
+| `polymer` | Polymer %TIC, level, top series, and the MS1 `tolerance` used. |
+| `oxonium` | Glycopeptide candidate count and %, and the MS2 `tolerance` used. |
+| `ms1_calibration` | Clean-subset MS1 bias and MAD, the user recommendation, the Pass 2 window (`bias ± min(\|bias\| + 5*MAD, 100 ppm)`), the MS2 tolerance, the clean-subset MS2 median \|error\| (`ms2_median_abs_ppm`, shown in the HTML), and the all-PSM MS2 median \|error\| (`ms2_all_psms_median_abs_ppm`, JSON only). Absent when the clean subset is empty. |
+| `recommendations` | Fixed, variable, not-recommended and notable-unannotated modifications, with the decision route, evidence, protein context and caveats. |
+| `analyzers` | Instrument model, MS1/MS2 analyzers, and the Pass-1 fragment tolerance with its basis. |
+
+Removed at 4.0.0: `alkylation`, `mass_accuracy`, `digestion`, `signal_fate`.
+
+### `<output>_pass2.json` (schema 2.0.0)
+
+| key | what it holds |
+|---|---|
+| `schema_version`, `generated_at`, `tool_version`, `git_commit` | Provenance. |
+| `source_file`, `effective_params`, `subset_fasta`, `subset_proteins` | What Pass 2 searched. |
+| `ms1_window_low_ppm`, `ms1_window_high_ppm` | The MS1 window applied, in delta space. |
+| `ms2_tolerance`, `pass1_fragment_tol` | The MS2 tolerance applied, and the Pass-1 value it is clamped to. |
+| `composition` | THE digestion measurement: distinct peptides, missed cleavage, ragged N and C, per-class decoy subtraction. |
+| `pass2_search_seconds` | Pass 2 Sage time. |
+
+Removed at 2.0.0: `terminus`, `digestion`, `comparison`.
 
 ---
 

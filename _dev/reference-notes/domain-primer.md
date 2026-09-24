@@ -50,8 +50,11 @@ mass. Picking M+1 instead of M+0 makes the measured mass ~1.003 Da too high.
 Sage reports this as `isotope_error`; we correct for it:
 
 ```text
-corrected_delta = delta_mass - (isotope_error × 1.0086649158849)
+corrected_delta = delta_mass - (isotope_error × 1.003355)
 ```
+
+1.003355 Da is the ¹³C − ¹²C mass difference (`C13_C12_DIFF`), the spacing
+between isotope peaks. It is not the free neutron mass (1.008665 Da).
 
 ## What are oxonium ions?
 

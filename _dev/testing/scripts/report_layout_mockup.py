@@ -215,12 +215,11 @@ modifications set will report higher numbers for the same chemistry.</div>
 <b>MetaMorpheus</b> (curated modification list) — <a href="https://github.com/smith-chem-wisc/metamorpheus">github.com/smith-chem-wisc/metamorpheus</a> —
 Solntsev, Shortreed, Frey, Smith. <i>J. Proteome Res.</i> 2018, 17(5), 1844–1851. doi:10.1021/acs.jproteome.7b00873<br>
 <b>mzSniffer</b> (polymer detection) — <a href="https://github.com/wfondrie/mzsniffer">github.com/wfondrie/mzsniffer</a> — no publication.<br>
-<b>Pyteomics</b> (code ideas) — <a href="https://github.com/levitsky/pyteomics">github.com/levitsky/pyteomics</a> —
-Levitsky, Klein, Ivanov, Gorshkov. <i>J. Proteome Res.</i> 2019, 18(2), 709–714. doi:10.1021/acs.jproteome.8b00717<br>
+<b>mzdata</b> (mzML reading) &mdash; <a href="https://github.com/mobiusklein/mzdata">github.com/mobiusklein/mzdata</a> &mdash; Klein, J.<br>
 <b>Unimod</b> — <a href="https://www.unimod.org/">unimod.org</a> — Design Science License.
 </div></details>
 <details><summary>Licence — NIST</summary><div class=bd>NIST Software Licensing Statement (LICENSE.md) rendered here.</div></details>
-<details><summary>Licence — third party</summary><div class=bd>THIRD_PARTY_LICENSES.md: Sage (MIT), mzSniffer (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License, full text).</div></details>
+<details><summary>Licence &mdash; third party</summary><div class=bd>THIRD_PARTY_LICENSES.md: Sage (MIT), mzSniffer (Apache 2.0), mzdata (Apache 2.0), MetaMorpheus (MIT), Unimod (Design Science License, full text).</div></details>
 </footer>
 </div>
 <script>

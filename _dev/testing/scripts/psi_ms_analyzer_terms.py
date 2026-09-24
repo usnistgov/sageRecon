@@ -127,8 +127,8 @@ CLASS_BASIS = {
                 "window set generously above the 20 ppm high-res ceiling.",
     "AstralTof": "CURATED. <5 ppm RMS drift over 24h external cal, ~3 ppm internal. "
                  "Same bucket as Orbitrap: Astral is high-res, not a legacy QTOF.",
-    "LegacyTof": "CURATED. Typical ~10-30 ppm; 30 ppm is already a common default, "
-                 "so the pass-1 window is set well above it.",
+    "LegacyTof": "CURATED. About 30 ppm is typical, and timsTOF can reach about "
+                 "60 ppm; the pass-1 window pads that to 100 ppm.",
     "IonTrap": "CURATED. 0.3-0.8 Da typical at unit resolution. A ppm figure is "
                "meaningless here.",
     "Unclassified": "FALLBACK. No bucket. recon does not halt: it searches at the "

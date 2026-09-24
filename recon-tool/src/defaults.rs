@@ -11,12 +11,15 @@
 //!
 //! WHAT IS BUNDLED, AND WHAT IS NOT.
 //!
-//! * **Bundled:** the two search templates and the four curated mod files. Around
-//!   20 KB in total, all of it text this project authors or curates.
-//! * **NOT bundled:** `unimod.xml` (2.4 MB) and any FASTA. Those stay CLI
-//!   arguments. Size is only half the reason; the other half is that they are
-//!   third-party data whose redistribution terms are not settled in
-//!   `THIRD_PARTY_LICENSES.md`. Do not embed them without settling that first.
+//! * **Bundled:** the two search templates, the four curated mod files, and
+//!   `unimod.xml` (about 2.4 MB, see `UNIMOD` below). `--unimod` is an
+//!   override, not a requirement. Unimod's Design Science License terms are
+//!   settled in `THIRD_PARTY_LICENSES.md`, and the release archive ships
+//!   `unimod.xml` and that file beside the binary.
+//! * **NOT bundled:** any FASTA. It stays a CLI argument.
+//!
+//! (Corrected 2026-09-24. This header said `unimod.xml` was not bundled, which
+//! stopped being true when `UNIMOD` was compiled in.)
 //!
 //! THE DIVERGENCE PROBLEM, AND THE GUARD.
 //!

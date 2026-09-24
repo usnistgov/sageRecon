@@ -11275,3 +11275,39 @@ counts as the rates. On the committed full-run files it moves: b1906 5.49 ->
 examples and the Tier 3 snapshots were NOT regenerated here. Until they are,
 `html_report_regression` fails on the N:C line, and `run_validation.py` strong
 mode differs on the new `max_peaks` key.
+
+**Documentation defects fixed (technote Appendix C), 2026-09-24.**
+- `THIRD_PARTY_LICENSES.md`: the Sage entry now says Sage is linked as a
+  pinned library, not invoked as a binary. mzdata 0.65.5 (Joshua Klein,
+  Apache 2.0) was added; its crate `LICENSE` names no copyright holder and it
+  ships no `NOTICE`. The HTML footer credited Pyteomics for "code ideas". No
+  code was taken: `_dev/temp-flowChart.md` records that `pyteomics.fasta` was
+  only a FASTA parser in a Python prototype, and no Rust source names it. The
+  credit was removed and mzdata credited instead. This changes the footer of
+  every HTML report (awaits regeneration).
+- The Pass 2 window is now described one way everywhere:
+  `bias ± min(|bias| + 5*MAD, 100 ppm)` (README, console, `main.rs`,
+  `Ms1CalibrationReport`, `ms1_pass2_window`).
+- `--params` / `--pass2-params`: README and `--help` now list every field the
+  code overrides, and the two refusals (Pass 1 `isotope_errors` must be
+  `[0, 0]`; Pass 2 must be semi-enzymatic).
+- `defaults.rs` header: `unimod.xml` IS bundled.
+- `mzml.rs`: section comments said 50 ppm where the constants are 20. The TOF
+  comment now gives Ben's rationale: about 30 ppm typical, timsTOF up to about
+  60 ppm, padded to 100. `psi_ms_analyzer_terms.py` and
+  `ms2-analyzer-tolerance-table.md` carry the same text.
+- `glossary.md`, `domain-primer.md`, `fallback-mod-table.md`,
+  `sage-config-and-gotchas.md`: isotope spacing is 1.003355 Da (¹³C − ¹²C),
+  not the neutron mass. The "52.91 Da = triply ¹³C" claim was removed; three
+  ¹³C add about 3.01 Da.
+- `result-schema.md`: a current-structure map now heads the file and points to
+  `ReconReport` / `Pass2Report`; the v1.0.0 body is labelled as history.
+- `byonic-preview-methodology.md`: the PDF is vendored; the claims are still
+  not re-verified against it.
+- `tier_assignment.rs` header: `q <= Q_MAX`. `curated_mods.rs`: no `label_for`
+  exists. `pass2.rs`: the `-1` isotope pointer now says no measurement is
+  recorded.
+- `liver_5way_report.py`: Mascot's exclusion no longer cites "recon's two"
+  missed cleavages, and `-o` outside `_dev/` no longer crashes.
+- Already fixed before this pass: `liver_mod_rank_comparison.py` reads
+  `recon-tool/resources/unimod.xml`.

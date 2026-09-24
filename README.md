@@ -207,13 +207,13 @@ for a normal run.
 | advanced flag | effect |
 |---|---|
 | `-u`, `--unimod <PATH>` | Use an external `unimod.xml` instead of the compiled-in copy. |
-| `--params <PATH>` | Open-search parameter template. `mzml_paths`, `database.fasta` and the enzyme identity are overridden at run time; everything else comes from the template. |
+| `--params <PATH>` | Open-search parameter template. Overridden at run time: `mzml_paths`, `database.fasta`, the enzyme identity (`cleave_at`, `restrict`, `c_terminal`), `fragment_tol` (from the detected MS2 analyzer), and the modifications (`static_mods` and `variable_mods` emptied, `max_variable_mods` 0). The run refuses a template whose `isotope_errors` is not `[0, 0]`. Everything else, including `precursor_tol`, comes from the template. |
 | `--search-out <DIR>` | Directory for Sage output. Defaults to `<NAME>_search`. |
 | `--cleave-at <RESIDUES>` | Override the resolved enzyme's cleavage residues, for example `KR`. |
 | `--restrict <RESIDUES>` | Override the restriction residues. An empty string means none. |
 | `--c-terminal <BOOL>` | Override whether cleavage is C-terminal to the matched residue. |
 | `-q`, `--q-threshold <F>` | PSM q-value threshold, default `0.01`. Changing it makes results incomparable with our pinned baselines, which are all at 0.01. |
-| `--pass2-params <PATH>` | Pass-2 parameter template. Its `precursor_tol`, `fragment_tol` and `database.fasta` are overridden with what Pass 1 measured. |
+| `--pass2-params <PATH>` | Pass-2 parameter template. Overridden at run time: `precursor_tol` (the window Pass 1 measured), `fragment_tol` (from Pass 1's measured MS2 error, when there is one), `isotope_errors` (`[0, 3]`), `database.fasta` (the subset), the enzyme identity, and the modifications (emptied). The run refuses a template that does not set `database.enzyme.semi_enzymatic` to `true`. Everything else comes from the template. |
 | `--no-pass2` | Skip the semi-enzymatic pass. It roughly doubles wall-clock time, so this exists for the case where only the open-search report is wanted. |
 
 One further subcommand, `discover`, exists as an internal development tool. The
@@ -410,10 +410,14 @@ measurement.
 ### Pass 2, the semi-enzymatic digestion measurement
 
 The proteins Pass 1 identified are written to a subset FASTA and re-searched
-semi-enzymatically, inside a window centred on the measured mass bias rather than
-on zero. That bias-centred rung covered 99.3–99.9 % of real PSMs across our four
-test files, against 81–87 % for a `bias ± 3×MAD` window, and no MAD multiple
-transferred between instruments. Peptide termini are then classified against the
+semi-enzymatically, inside the MS1 window `bias ± min(|bias| + 5×MAD, 100 ppm)`.
+It is centred on the measured mass bias rather than on zero, and it is not
+rounded up to a ladder rung. A `bias ± 3×MAD` window covered only 81–87 % of
+confident PSMs on our test files, and no MAD multiple transferred between
+instruments. Rounding up to the rung covered 99.3–99.9 % but made Pass 2 slow
+on a file with many proteins. Measured on Pass 2 output searched at the rung,
+the unrounded window keeps 94.2 % (serum) and 96.8 % (B-cell) of confident
+PSMs; both are lower bounds. Peptide termini are then classified against the
 protein sequences.
 
 The reported quantity is defined, not inferred. The headline is **cleavage

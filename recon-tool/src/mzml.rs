@@ -539,7 +539,7 @@ pub struct MassAnalyzerTerm {
 /// The curated CSV names MS:1000082/78/83 but not MS:1000264 or MS:1000291;
 /// both are added here for that reason.
 pub const MASS_ANALYZER_TERMS: &[MassAnalyzerTerm] = &[
-    // --- Orbitrap-class, 50 ppm --------------------------------------------
+    // --- Orbitrap-class, 20 ppm --------------------------------------------
     MassAnalyzerTerm {
         accession: "MS:1000484",
         name: "orbitrap",
@@ -554,7 +554,7 @@ pub const MASS_ANALYZER_TERMS: &[MassAnalyzerTerm] = &[
         class: AnalyzerClass::Orbitrap,
         bucket_source: BucketSource::ExtendedHere,
     },
-    // --- Astral, 50 ppm ----------------------------------------------------
+    // --- Astral, 20 ppm ----------------------------------------------------
     MassAnalyzerTerm {
         accession: "MS:1003379",
         name: "asymmetric track lossless time-of-flight analyzer",
@@ -729,11 +729,11 @@ pub const ORBITRAP_MS2_HALF_WIDTH_PPM: f64 = 20.0;
 /// Astral. Typical <5 ppm RMS on external calibration, ~3 ppm internal.
 /// Same bucket as Orbitrap: Astral behaves like a high-res TOF, not a legacy QTOF.
 ///
-/// **DEFINED AS the Orbitrap constant, not as a second literal.** It read `50.0`
+/// **TIED TO the Orbitrap constant by a test, not by an alias.** It read `50.0`
 /// while Orbitrap read `50.0`, so "same bucket as Orbitrap" was true only by
 /// coincidence; the moment Orbitrap moved to 20 they silently disagreed, and the
 /// doc comment above became false. `astral_is_not_bucketed_with_legacy_tof`
-/// caught exactly that. Binding the two removes the way they can drift apart.
+/// caught exactly that, and now asserts the two are equal (see below).
 ///
 /// ⚠ No Astral file exists in the test set — all four are FTMS — so this is a
 /// CURATED choice following the stated intent, not a measurement.
@@ -745,7 +745,10 @@ pub const ORBITRAP_MS2_HALF_WIDTH_PPM: f64 = 20.0;
 /// `ORBITRAP_MS2_HALF_WIDTH_PPM` — so the two still cannot drift apart unnoticed.
 pub const ASTRAL_MS2_HALF_WIDTH_PPM: f64 = 20.0;
 
-/// Legacy TOF / QTOF. Typical ~10-30 ppm, and 30 ppm is already a common default.
+/// Legacy TOF / QTOF. About 30 ppm is typical, and timsTOF can reach about
+/// 60 ppm. The pass-1 window pads that to 100 ppm (Ben's rationale, recorded
+/// 2026-09-24). This comment used to cite a "30 ppm default" as the reason.
+/// ⚠ CURATED, not measured: no TOF file is in the test set.
 pub const LEGACY_TOF_MS2_HALF_WIDTH_PPM: f64 = 100.0;
 
 /// Ion trap / quadrupole. Typical 0.3-0.8 Da at unit resolution.

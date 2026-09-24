@@ -26,8 +26,14 @@ use crate::calibration::Ms1Pass2Window;
 use crate::mzml::FragmentTolerance;
 use anyhow::{anyhow, Context, Result};
 
-/// Pass 2 isotope offsets. See `write_pass2_params_from_text` for the measurement that
-/// dropped the templates' `-1`.
+/// Pass 2 isotope offsets, `[0, 3]`. The templates shipped `[-1, 3]`.
+///
+/// No measurement of dropping the `-1` is recorded. This doc used to point to
+/// one in `write_pass2_params_from_text`, and there is none there. The change
+/// is listed only as an axis in the NOTES entry on the 2026-08-31 `full-run/`
+/// regeneration (schema 1.7.0). The related Pass 1 measurement is the NOTES
+/// CLOSED-NEGATIVE entry on `isotope_errors: [-1, 2]` (2026-08-25). The guard is
+/// `pass2_drops_the_minus_one_isotope_offset`.
 pub const PASS2_ISOTOPE_ERRORS: [i32; 2] = [0, 3];
 use std::path::{Path, PathBuf};
 

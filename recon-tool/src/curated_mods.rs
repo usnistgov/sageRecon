@@ -34,7 +34,8 @@ pub const CAT_COMMON_FIXED: &str = "Common Fixed";
 
 #[derive(Debug, Clone)]
 pub struct CuratedMod {
-    /// `ID`, with a small override table applied (see `label_for`).
+    /// Display label. It is `ID` verbatim: no override table is applied. (This
+    /// doc once pointed to a `label_for` override function that does not exist.)
     pub label: String,
     /// Raw `ID` as written upstream.
     pub id: String,

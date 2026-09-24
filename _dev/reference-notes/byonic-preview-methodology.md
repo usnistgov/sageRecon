@@ -2,7 +2,7 @@ Byonic Preview surveys a shotgun proteomics run before the real search, and emit
 
 **Source:** Kil YJ, Becker C, Sandoval W, Goldberg D, Bern M. *Preview: A Program for Surveying Shotgun Proteomics Tandem Mass-Spectrometry Data.* Analytical Chemistry 2011 Jun 13; 83(13): 5259–5267. PMC3134881.
 
-**⚠ Read from PMC on 2026-08-24. The PDF is NOT vendored in this repo.** Everything here is a web read and must be re-verified against a repo copy before the step-5 write-up cites it. Do not treat this note as a source in its own right — it is a summary, and a summary is not a source.
+**⚠ Read from PMC on 2026-08-24.** The PDF is now vendored in this repo, at `kil-2011-preview-AnalChem-83-5259.pdf` beside this note. The claims below have NOT yet been re-verified against it. Everything here is a web read and must be checked against the PDF before the step-5 write-up cites it. Do not treat this note as a source in its own right. It is a summary, and a summary is not a source.
 
 ***
 
@@ -58,6 +58,6 @@ Preview evaluates on the order of thirty-odd modifications across seven assay ca
 
 ## Open items against this note
 
-- **Vendor the PDF.** Then re-verify every claim above against it and drop this warning.
+- **Re-verify every claim above against the vendored PDF**, then drop the warning at the top. (The PDF itself is vendored; corrected 2026-09-24.)
 - Confirm whether the decoy subtraction applies to the reported modification counts a user acts on, or only to internal estimates.
 - Confirm whether `THigh` / `TLow` gate modification *reporting* or only database construction. The distinction decides how directly the threshold maps onto recon's tier floor.

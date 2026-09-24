@@ -157,10 +157,13 @@ enum Commands {
         #[arg(short, long, help_heading = "Advanced")]
         unimod: Option<PathBuf>,
 
-        /// Open-search params template. mzml_paths, database.fasta and the enzyme
-        /// identity are OVERRIDDEN at runtime; everything else (tolerances,
-        /// chimera, and so on) comes from this template. Defaults to the bundled
-        /// open-search template.
+        /// Open-search params template. OVERRIDDEN at runtime: mzml_paths,
+        /// database.fasta, the enzyme identity (cleave_at, restrict, c_terminal),
+        /// fragment_tol (set from the detected MS2 analyzer), and the mods
+        /// (static_mods and variable_mods emptied, max_variable_mods 0). The run
+        /// REFUSES a template whose isotope_errors is not [0, 0]. Everything else
+        /// (precursor_tol, chimera, and so on) comes from this template.
+        /// Defaults to the bundled open-search template.
         #[arg(long, help_heading = "Advanced")]
         params: Option<PathBuf>,
 
@@ -185,9 +188,13 @@ enum Commands {
         #[arg(short, long, default_value = "0.01", help_heading = "Advanced")]
         q_threshold: f64,
 
-        /// Pass-2 params template (semi-enzymatic subset search). Its
-        /// precursor_tol, fragment_tol and database.fasta are OVERRIDDEN with what
-        /// Pass 1 measured; everything else comes from the template.
+        /// Pass-2 params template (semi-enzymatic subset search). OVERRIDDEN at
+        /// runtime: precursor_tol (the window Pass 1 measured), fragment_tol
+        /// (from Pass 1's measured MS2 error, when there is one), isotope_errors
+        /// (set to [0, 3]), database.fasta (the subset), the enzyme identity, and
+        /// the mods (emptied, max_variable_mods 0). The run REFUSES a template
+        /// that does not set database.enzyme.semi_enzymatic = true. Everything
+        /// else comes from the template.
         #[arg(long, help_heading = "Advanced")]
         pass2_params: Option<PathBuf>,
 
@@ -650,7 +657,7 @@ fn build_pass1_report(
                     }
                 );
                 println!(
-                    "       User recommendation: ±{:.0} ppm (quantized from |bias|+5×MAD = {:.2}) | Pass 2 window (±100 ppm cap): {:+.2} to {:+.2} ppm",
+                    "       User recommendation: ±{:.0} ppm (quantized from |bias|+5×MAD = {:.2}) | Pass 2 window (bias ± min(|bias|+5×MAD, 100)): {:+.2} to {:+.2} ppm",
                     user_rec.recommended_tolerance_ppm,
                     stats.bias_ppm.abs() + 5.0 * stats.mad_ppm,
                     pass2.low_ppm, pass2.high_ppm
