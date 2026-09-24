@@ -11315,3 +11315,79 @@ mode differs on the new `max_peaks` key.
   missed cleavages, and `-o` outside `_dev/` no longer crashes.
 - Already fixed before this pass: `liver_mod_rank_comparison.py` reads
   `recon-tool/resources/unimod.xml`.
+
+## Change-regenerate after the 2026-09-24 behaviour changes (Ben approved, 2026-09-24)
+
+### Downstream-impact trace (written BEFORE the regeneration)
+
+**What moved in code.** m/z 600 Da conversion (`cdb970c`), topographic
+prominence (`bed06ea`), measured screen tolerances (`615239f`), Pass 2 at
+(1, 8) (`7a4450e`), peak cap 500 (`ad7a10e`), Pass 1 at (1, 8) (`395c2f7`),
+vestigial removal with main schema 4.0.0 and Pass 2 schema 2.0.0 (`b2a4c07`,
+`6d1104b`, `9417e1d`, `33d52c6`). `analyze` is gone; `recon run` reruns Sage,
+so every q-derived count is a new draw. Band them; never assert equality.
+
+**Build.** One release build from a clean tree at the commit that holds this
+trace. Every regenerated report must carry that `git_commit` with no `-dirty`.
+
+**Committed files that WILL change:**
+1. `examples/liver.{json,html}`, `examples/liver_pass2.json`,
+   `examples/serum.{json,html}`, `examples/serum_pass2.json`. Run from a
+   scratch folder with basename links, as before (`serum.mzML.gz` is a link
+   to `2019-4-9_909c_0311.mzML.gz`).
+2. `_dev/testing/recon-output/full-run/`, all four files: `<f>.json`,
+   `<f>.html`, `<f>_pass2.json`, `<f>_search/effective-params.json`,
+   `<f>_search/results.json`, `<f>_search/pass2/pass2-effective-params.json`,
+   `<f>_search/pass2/results.json` (28 files). Run from `_dev/` with
+   `testing/inputs/...` relative paths. Absolute paths in Sage's
+   `results.json` are redacted to `file:///path/to/sageRecon/...`.
+3. `_dev/testing/regression-snapshots/discover_{b1906,bcell,serum}.snapshot.json`,
+   from `discover --min-peak-count 5` on the pinned `step1-open-*` TSVs.
+4. The Tier 3 weak-mode fallback. It compares the snapshot with the dated
+   `2026-08-25-checks/04-discover-min5-*.json`, which predate the Unimod
+   entity fix (`Lys-&gt;Allysine`) and every change above. That is the cause
+   of the 3 weak-mode Tier 3 failures. The dated files stay (NOTES and
+   `07-peak-window-overlap.txt` cite them). A fresh fallback is written by the
+   same command as the snapshot, and `run_validation.py` points at it.
+5. `_dev/liver-benchmark/recon/pass2/results.sage.tsv` (copied from
+   `full-run/liver_search/pass2/`), and `_dev/liver-benchmark/README.md`
+   (recon version row, the TSV's PSM and peptide counts, the rank and
+   digestion tables).
+6. `_dev/testing/recon-output/comparison/LIVER-FIVE-TOOL-2026-09-01.{md,html}`,
+   written by `liver_5way_report.py`.
+7. Documents: `README.md` (liver class FDRs, test and gate counts, serum
+   runtime line, the skip-check command), this file (the "pending" and
+   "awaiting regeneration" lines, edited in place), `PLAN.md` status.
+
+**Committed files that read recon output and will NOT be regenerated:**
+- `comparison/recon_vs_*.md`, `recon_nofixedmods_*.md`,
+  `fourway_comparison.md`, `BENCHMARK-SUMMARY.md`,
+  `satellite_check_corrected.md`. They need `_dev/testing/reference-data/`,
+  which is withheld from this repository, and several read `nofixedmods/`,
+  which is a frozen `discover` output. Not in this request. They go stale
+  against the new `full-run/` and are named in the session report.
+- `comparison/LIVER-FOUR-TOOL-2026-09-01.{md,html}` and
+  `LIVER-FIVE-TOOL-MODS-2026-09-01.{md,html}`: dated, hand-composed documents.
+  `liver_5way_report.py` reads the MODS HTML only for its stylesheet.
+- `nofixedmods/`, `psm-sensitivity/`, `calibration-benchmark/`,
+  `2026-08-25-checks/`, `tier2_peg_*.json`, `step0_expected_anchors.json`:
+  frozen or independent fixtures.
+- `_dev/writeup/technote-material.md`: a source record with its own
+  superseded-value table. Not edited here.
+
+**Expected liver values, written before the run.** Source: the (1, 8) arm of
+"Pass 1 digestion settings align with Pass 2", built at `ad7a10e`. The later
+commits remove output and move no measurement, so these must hold:
+- Pass 1 PSMs 31489, band ±0.5 %. Peaks 183, band ±3 (q-boundary PSMs can
+  move a small peak across the floor).
+- Fixed list: Carbamidomethyl C. Variable list: the same 12 names.
+- MS1 bias -1.408 ppm, MAD 0.627 ppm, each ±0.01. Recommended MS1 / MS2
+  10 / 10 ppm, exact.
+- Pass 2 subset 1700 proteins ±1 %. Missed cleavage 17.58 %, ragged-N
+  6.94 %, ragged-C 3.18 %, each ±0.1 pp.
+- Spearman vs PTM-Shepherd 0.762 (n 68), MetaMorpheus 0.747 (n 13), Mascot
+  0.652 (n 69), each ±0.03, n ±2.
+- Invariant, from one JSON: `polymer.tolerance.value` equals
+  `|bias| + 5*MAD` of the same `ms1_calibration` block.
+Anything outside its band is reported as a failure to reproduce, not
+explained away.
