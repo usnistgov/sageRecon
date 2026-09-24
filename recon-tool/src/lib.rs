@@ -75,20 +75,17 @@ pub use mod_discovery::{
     ModDiscoveryConfig, ModDiscoveryResult, Peak, PeakAssignmentMode,
 };
 pub use mzml::{
-    bucket_tolerance, class_from_accession, class_from_filter_string, compute_ms1_signal_fate,
-    detect_analyzers, detect_analyzers_sampled, extract_ms1_spectra, extract_ms2_spectra,
-    extract_precursor_intensities, get_max_mz, get_mzml_stats, print_analyzer_census,
-    print_mzml_stats, resolve_ms2_tolerance, AnalyzerCensus, AnalyzerClass, AnalyzerCounts,
+    bucket_tolerance, class_from_accession, class_from_filter_string, detect_analyzers,
+    detect_analyzers_sampled, extract_ms1_spectra, extract_ms2_spectra, get_max_mz, get_mzml_stats,
+    print_analyzer_census, resolve_ms2_tolerance, AnalyzerCensus, AnalyzerClass, AnalyzerCounts,
     BucketSource, FragmentTolerance, MassAnalyzerTerm, Ms1Spectrum, Ms2Spectrum, Ms2TolDecision,
-    MzmlStats, PrecursorIntensityResult, PrecursorQuery, ToleranceBasis, ASTRAL_MS2_HALF_WIDTH_PPM,
-    DEFAULT_ANALYZER_SAMPLE, FILTER_STRING_ANALYZERS, ION_TRAP_MS2_HALF_WIDTH_DA,
-    LEGACY_TOF_MS2_HALF_WIDTH_PPM, MASS_ANALYZER_TERMS, ORBITRAP_MS2_HALF_WIDTH_PPM,
-    UNKNOWN_MS2_FALLBACK_PPM,
+    MzmlStats, ToleranceBasis, ASTRAL_MS2_HALF_WIDTH_PPM, DEFAULT_ANALYZER_SAMPLE,
+    FILTER_STRING_ANALYZERS, ION_TRAP_MS2_HALF_WIDTH_DA, LEGACY_TOF_MS2_HALF_WIDTH_PPM,
+    MASS_ANALYZER_TERMS, ORBITRAP_MS2_HALF_WIDTH_PPM, UNKNOWN_MS2_FALLBACK_PPM,
 };
 pub use oxonium::{
-    compute_screening_summary, print_screening_summary, screen_spectra, screen_spectrum,
-    OxoniumIon, OxoniumScreeningConfig, OxoniumScreeningResult, OxoniumScreeningSummary,
-    OXONIUM_IONS,
+    compute_screening_summary, screen_spectra, screen_spectrum, OxoniumIon, OxoniumScreeningConfig,
+    OxoniumScreeningResult, OxoniumScreeningSummary, OXONIUM_IONS,
 };
 pub use pass2::{precursor_tol_json, Pass2Plan};
 pub use polymer::{

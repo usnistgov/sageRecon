@@ -357,29 +357,8 @@ pub fn ms1_user_recommendation(stats: &MassErrorStats) -> Ms1UserRecommendation 
     }
 }
 
-/// ⚠ RETIRED 2026-08-28 — SUBSUMED BY THE LADDER, kept only as documentation.
-///
-/// This was a real backstop while the Pass 2 half-width was `3*MAD`, which is
-/// unbounded: a noisy file could produce an arbitrarily wide window. The window
-/// now comes from `MS1_TOLERANCE_LADDER_PPM`, whose TOP RUNG IS ALSO 100, so
-/// `min(rung, 100)` was always just the rung and the cap could never bind.
-///
-/// **Proven, not assumed:** deleting the `.min(...)` left the cap's own test
-/// passing, so that test had been asserting the ladder's top rung all along. A
-/// guard that cannot fail is worse than no guard — see NOTES "Gate audit".
-///
-/// The ceiling it argued for is now the ladder's top rung, and the original
-/// reasoning still supports that value: a tighter ceiling (±15–20 ppm) would
-/// systematically clip TOF instruments, which run 50–80 ppm out of the box, so
-/// 100 is TOF-safe and stops only pathological fits. That justification is
-/// CURATED, not measured — all three test files land on the FIRST rung, so we
-/// have no data on rungs 2–4 at all.
-#[deprecated(note = "subsumed by MS1_TOLERANCE_LADDER_PPM's top rung; see NOTES")]
-pub const PASS2_HALF_WIDTH_CAP_PPM: f64 = 100.0;
-
-/// Pass 2 `precursor_tol`: the ladder rung, CENTRED ON THE MEASURED BIAS.
-///
-/// Pass 2 `precursor_tol` window: the MEASURED requirement, centred on the bias.
+/// Pass 2 `precursor_tol` window: the MEASURED requirement, centred on the bias,
+/// `bias ± min(|bias| + 5*MAD, 100 ppm)`.
 ///
 /// **⚠ CHANGED TWICE. Read both, because the second change reverses part of the
 /// first.**
@@ -419,8 +398,9 @@ pub const PASS2_HALF_WIDTH_CAP_PPM: f64 = 100.0;
 pub fn ms1_pass2_window(stats: &MassErrorStats) -> Ms1Pass2Window {
     // The unrounded requirement, NOT the rung. The ladder's top rung stays the
     // ceiling so a pathological measurement cannot open the window without
-    // limit -- that bound is what `PASS2_HALF_WIDTH_CAP_PPM` used to argue for,
-    // and it becomes reachable again now that the width is no longer a rung.
+    // limit. That bound is what the old `PASS2_HALF_WIDTH_CAP_PPM` constant
+    // argued for (retired 2026-08-28, removed 2026-09-24). It became reachable
+    // again when the width stopped being a rung.
     let top = *MS1_TOLERANCE_LADDER_PPM.last().unwrap();
     let half_width = ms1_tolerance_requirement(stats.bias_ppm, stats.mad_ppm).min(top);
     Ms1Pass2Window {

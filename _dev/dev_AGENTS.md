@@ -268,7 +268,9 @@ hash AND confirm the remote accepted the push.
     `reference-notes/mascot-enzymes.md`. Identity only — never the tuning fields.
   * **The argument surface is FROZEN:**
     `recon run <MZML> <FASTA> --enzyme <ENZYME> [--output NAME]`. mzml and fasta
-    positional; `unimod.xml` compiled in; 11 development subcommands hidden.
+    positional; `unimod.xml` compiled in; one development subcommand hidden
+    (`discover`, which `run_validation.py` calls). The other ten were removed
+    2026-09-24 because no committed script or test called them.
   * **`three_layer_ms1` was REMOVED** from the report and survived only as
     `signal-fate --three-layer`.
     ⚠ **Superseded 2026-09-02: Ben decided it does not belong in `recon` at

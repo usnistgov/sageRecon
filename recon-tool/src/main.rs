@@ -5,26 +5,20 @@
 use anyhow::{Context, Result};
 use clap::{Parser, Subcommand, ValueEnum};
 use recon_tool::curated_mods::CuratedDb;
-use recon_tool::digestion::{compute_digestion_stats, print_digestion_summary};
+use recon_tool::digestion::compute_digestion_stats;
 use recon_tool::mod_discovery::{
     run_mod_discovery, CalibrationMode, ModDiscoveryConfig, PeakAssignmentMode,
     NEAR_ZERO_THRESHOLD_DA,
 };
-use recon_tool::mzml::{
-    self, extract_ms1_spectra, extract_ms2_spectra, get_max_mz, get_mzml_stats, print_mzml_stats,
-};
-use recon_tool::oxonium::{
-    compute_screening_summary, print_screening_summary, screen_spectra, OxoniumScreeningConfig,
-};
+use recon_tool::mzml::{extract_ms1_spectra, extract_ms2_spectra, get_max_mz, get_mzml_stats};
+use recon_tool::oxonium::{compute_screening_summary, screen_spectra, OxoniumScreeningConfig};
 use recon_tool::polymer::search_polymers;
-use recon_tool::qc::{compute_qc_stats, print_qc_summary};
+use recon_tool::qc::compute_qc_stats;
 use recon_tool::report::{
     compute_alkylation_check, generate_html_report, print_report_summary, ReconReport,
 };
 use recon_tool::sage_results::{parse_sage_results, FilterOptions};
-use recon_tool::signal_fate::{
-    compute_signal_fate, compute_signal_fate_with_mzml, print_signal_fate_summary,
-};
+use recon_tool::signal_fate::compute_signal_fate_with_mzml;
 use recon_tool::tier_assignment;
 use recon_tool::unimod::UnimodDb;
 
@@ -32,7 +26,6 @@ use recon_tool::unimod::UnimodDb;
 /// abundance path. Chosen 2026-08-25: gate 1 reads 0/0/0 and gate 4 reads 0 at
 /// this value on all three test files. See NOTES "Step 2 unblocked".
 const FLOOR_PCT_OF_TOP: f64 = 20.0;
-use std::collections::HashMap;
 use std::path::PathBuf;
 
 #[derive(Parser)]
@@ -85,73 +78,6 @@ impl From<PeakAssignmentArg> for PeakAssignmentMode {
 
 #[derive(Subcommand)]
 enum Commands {
-    /// Parse and validate Sage results TSV
-    #[command(hide = true)]
-    Parse {
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Only include PSMs with isotope_error == 0
-        #[arg(long)]
-        isotope_zero_only: bool,
-
-        /// Show delta mass histogram
-        #[arg(long)]
-        histogram: bool,
-    },
-
-    /// Report which mass analyzer acquired the MS1 and MS2 scans, and the
-    /// pass-1 fragment tolerance that implies. Reads only the mzML — no search,
-    /// no PSMs — so it can run before the pass-1 search that it informs.
-    #[command(hide = true)]
-    DetectAnalyzer {
-        /// Path to the mzML file (.mzML or .mzML.gz)
-        #[arg(short, long, required_unless_present = "table")]
-        mzml: Option<PathBuf>,
-
-        /// Emit the census as JSON instead of a text summary
-        #[arg(long)]
-        json: bool,
-
-        /// Print the CV term -> fragment tolerance table and exit
-        #[arg(long)]
-        table: bool,
-    },
-
-    /// Compare the two peak-assignment modes on one file (step-2 decision aid)
-    #[command(hide = true)]
-    ComparePeakAssignment {
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Path to unimod.xml. Optional: a copy is compiled into this binary
-        /// and is used when this is not given.
-        #[arg(short, long)]
-        unimod: Option<PathBuf>,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Minimum PSM count for a peak (default: 5, matching `analyze`)
-        #[arg(long, default_value = "5")]
-        min_peak_count: usize,
-
-        /// Only report peaks whose delta mass is in this window, e.g. 0.8 1.2
-        #[arg(long, num_args = 2, value_names = ["LOW", "HIGH"])]
-        window: Option<Vec<f64>>,
-
-        /// Output text file (default: stdout)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-    },
-
     /// Run modification discovery on Sage results
     #[command(hide = true)]
     Discover {
@@ -192,188 +118,6 @@ enum Commands {
         /// Show summary only (no JSON output)
         #[arg(long)]
         summary_only: bool,
-    },
-
-    /// Compute signal fate accounting (explained vs. unexplained signal)
-    #[command(hide = true)]
-    SignalFate {
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Path to mzML file (optional, for unidentified signal calculation)
-        #[arg(short, long)]
-        mzml: Option<PathBuf>,
-
-        /// Path to unimod.xml (optional, for annotation status)
-        #[arg(short, long)]
-        unimod: Option<PathBuf>,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Compute MS1 precursor intensity signal fate (requires --mzml)
-        #[arg(long)]
-        ms1_intensity: bool,
-
-        /// RT window for MS1 precursor lookup in minutes (default: 1.0)
-        #[arg(long, default_value = "1.0")]
-        rt_window: f64,
-
-        /// m/z tolerance for MS1 precursor lookup in ppm (default: 20.0)
-        #[arg(long, default_value = "20.0")]
-        mz_tol_ppm: f64,
-
-        /// Output JSON file (default: stdout)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-
-        /// Show summary only (no JSON output)
-        #[arg(long)]
-        summary_only: bool,
-    },
-
-    /// Parse mzML file and show statistics (MS1/MS2 counts, TIC)
-    #[command(hide = true)]
-    MzmlStats {
-        /// Path to mzML file (.mzML or .mzML.gz)
-        #[arg(short, long)]
-        mzml: PathBuf,
-
-        /// Output JSON file (default: stdout summary)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-    },
-
-    /// Detect polymer contamination in MS1 spectra (PEG, PPG, Triton, etc.)
-    #[command(hide = true)]
-    PolymerStats {
-        /// Path to mzML file (.mzML or .mzML.gz)
-        #[arg(short, long)]
-        mzml: PathBuf,
-
-        /// m/z tolerance in ppm (default: 10.0)
-        #[arg(long, default_value = "10.0")]
-        tol_ppm: f64,
-
-        /// Output JSON file (default: stdout summary)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-
-        /// Show summary only (no JSON output)
-        #[arg(long)]
-        summary_only: bool,
-    },
-
-    /// Screen MS2 spectra for oxonium ions (glycopeptide detection)
-    #[command(hide = true)]
-    OxoniumScreen {
-        /// Path to mzML file (.mzML or .mzML.gz)
-        #[arg(short, long)]
-        mzml: PathBuf,
-
-        /// m/z tolerance in ppm (default: 20.0)
-        #[arg(long, default_value = "20.0")]
-        tol_ppm: f64,
-
-        /// Minimum oxonium ions required (default: 2)
-        #[arg(long, default_value = "2")]
-        min_ions: usize,
-
-        /// Top peak fraction to consider (default: 0.10 = 10%)
-        #[arg(long, default_value = "0.10")]
-        top_fraction: f64,
-
-        /// Output JSON file (default: stdout summary)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-
-        /// Show summary only (no JSON output)
-        #[arg(long)]
-        summary_only: bool,
-    },
-
-    /// Compute digestion efficiency metrics (missed cleavages, semi-tryptic)
-    #[command(hide = true)]
-    DigestionStats {
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Output JSON file (default: stdout summary)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-
-        /// Show summary only (no JSON output)
-        #[arg(long)]
-        summary_only: bool,
-    },
-
-    /// Compute QC metrics (mass accuracy, ID rate)
-    #[command(hide = true)]
-    QcStats {
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Path to mzML file (optional, for ID rate calculation)
-        #[arg(short, long)]
-        mzml: Option<PathBuf>,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Output JSON file (default: stdout summary)
-        #[arg(short, long)]
-        output: Option<PathBuf>,
-
-        /// Show summary only (no JSON output)
-        #[arg(long)]
-        summary_only: bool,
-    },
-
-    /// Run full reconnaissance analysis and generate unified report
-    #[command(hide = true)]
-    Analyze {
-        /// Path to mzML file (.mzML or .mzML.gz)
-        #[arg(short, long)]
-        mzml: PathBuf,
-
-        /// Path to results.sage.tsv
-        #[arg(short, long)]
-        tsv: PathBuf,
-
-        /// Path to unimod.xml. Optional: a copy is compiled into this binary
-        /// and is used when this is not given.
-        #[arg(short, long)]
-        unimod: Option<PathBuf>,
-
-        /// Optional path to the search FASTA. Supply the SAME database the
-        /// search used. It is what makes protein-terminal modifications
-        /// testable: Sage's TSV has no start-position column, so proving a
-        /// peptide sits at protein position 0 needs the protein sequences.
-        /// Without it those candidates are decided by abundance instead, and
-        /// the report records that they were not testable.
-        #[arg(long)]
-        fasta: Option<PathBuf>,
-
-        /// Q-value threshold (default: 0.01)
-        #[arg(short, long, default_value = "0.01")]
-        q_threshold: f64,
-
-        /// Output base name (generates .json, .html)
-        #[arg(short, long)]
-        output: PathBuf,
-
-        /// How PSMs are grouped into peaks. Recorded in the output JSON.
-        #[arg(long, value_enum, default_value_t = PeakAssignmentArg::Merge)]
-        peak_assignment: PeakAssignmentArg,
     },
 
     /// Run the full reconnaissance on one mzML file.
@@ -465,37 +209,6 @@ fn main() -> Result<()> {
     let cli = Cli::parse();
 
     match cli.command {
-        Commands::Parse {
-            tsv,
-            q_threshold,
-            isotope_zero_only,
-            histogram,
-        } => {
-            run_parse_command(tsv, q_threshold, isotope_zero_only, histogram)?;
-        }
-        Commands::DetectAnalyzer { mzml, json, table } => {
-            if table {
-                print_analyzer_tolerance_table();
-            }
-            if let Some(mzml) = mzml {
-                let census = recon_tool::detect_analyzers(&mzml)?;
-                if json {
-                    println!("{}", serde_json::to_string_pretty(&census)?);
-                } else {
-                    recon_tool::print_analyzer_census(&census);
-                }
-            }
-        }
-        Commands::ComparePeakAssignment {
-            tsv,
-            unimod,
-            q_threshold,
-            min_peak_count,
-            window,
-            output,
-        } => {
-            run_compare_peak_assignment(tsv, unimod, q_threshold, min_peak_count, window, output)?;
-        }
         Commands::Discover {
             tsv,
             unimod,
@@ -517,94 +230,6 @@ fn main() -> Result<()> {
                 peak_assignment.into(),
                 output,
                 summary_only,
-            )?;
-        }
-        Commands::SignalFate {
-            tsv,
-            mzml,
-            unimod,
-            q_threshold,
-            ms1_intensity,
-            rt_window,
-            mz_tol_ppm,
-            output,
-            summary_only,
-        } => {
-            run_signal_fate_command(
-                tsv,
-                mzml,
-                unimod,
-                q_threshold,
-                ms1_intensity,
-                rt_window,
-                mz_tol_ppm,
-                output,
-                summary_only,
-            )?;
-        }
-        Commands::MzmlStats { mzml, output } => {
-            run_mzml_stats_command(mzml, output)?;
-        }
-        Commands::PolymerStats {
-            mzml,
-            tol_ppm,
-            output,
-            summary_only,
-        } => {
-            run_polymer_stats_command(mzml, tol_ppm, output, summary_only)?;
-        }
-        Commands::OxoniumScreen {
-            mzml,
-            tol_ppm,
-            min_ions,
-            top_fraction,
-            output,
-            summary_only,
-        } => {
-            run_oxonium_screen_command(
-                mzml,
-                tol_ppm,
-                min_ions,
-                top_fraction,
-                output,
-                summary_only,
-            )?;
-        }
-        Commands::DigestionStats {
-            tsv,
-            q_threshold,
-            output,
-            summary_only,
-        } => {
-            run_digestion_stats_command(tsv, q_threshold, output, summary_only)?;
-        }
-        Commands::QcStats {
-            tsv,
-            mzml,
-            q_threshold,
-            output,
-            summary_only,
-        } => {
-            run_qc_stats_command(tsv, mzml, q_threshold, output, summary_only)?;
-        }
-        Commands::Analyze {
-            mzml,
-            tsv,
-            unimod,
-            fasta,
-            q_threshold,
-            output,
-            peak_assignment,
-        } => {
-            run_analyze_command(
-                mzml,
-                tsv,
-                unimod,
-                fasta,
-                None, // `analyze` has no --enzyme: the protease is not knowable here
-                q_threshold,
-                output,
-                peak_assignment.into(),
             )?;
         }
         Commands::Run {
@@ -643,113 +268,11 @@ fn main() -> Result<()> {
     Ok(())
 }
 
-fn run_parse_command(
-    tsv: PathBuf,
-    q_threshold: f64,
-    isotope_zero_only: bool,
-    histogram: bool,
-) -> Result<()> {
-    let options = FilterOptions {
-        q_threshold,
-        isotope_error_zero_only: isotope_zero_only,
-        ..Default::default()
-    };
-
-    println!("Parsing: {}", tsv.display());
-    println!("Q-value threshold: {}", q_threshold);
-    println!("Isotope zero only: {}", isotope_zero_only);
-    println!();
-
-    let results = parse_sage_results(&tsv, &options)?;
-
-    // Print filter stats
-    println!("=== Filter Statistics ===");
-    println!(
-        "Total PSMs before filter: {}",
-        results.filter_stats.total_before_filter
-    );
-    println!("Decoys removed: {}", results.filter_stats.decoys_removed);
-    println!("Q-value filtered: {}", results.filter_stats.q_filtered);
-    println!(
-        "Isotope filtered: {}",
-        results.filter_stats.isotope_filtered
-    );
-    println!(
-        "PSMs after filter: {}",
-        results.filter_stats.total_after_filter
-    );
-    println!();
-
-    // Print isotope error distribution
-    println!("=== Isotope Error Distribution (before filtering) ===");
-    let mut isotope_vec: Vec<_> = results.isotope_error_distribution.iter().collect();
-    isotope_vec.sort_by_key(|(k, _)| *k);
-    for (error, count) in isotope_vec {
-        let pct = 100.0 * (*count as f64) / (results.filter_stats.total_before_filter as f64);
-        println!("  isotope_error {}: {} ({:.1}%)", error, count, pct);
-    }
-    println!();
-
-    // Print chimera stats
-    let by_scan = results.psms_by_scan();
-    let chimeric_scans: usize = by_scan.values().filter(|v| v.len() > 1).count();
-    println!("=== Chimera Statistics ===");
-    println!("Unique scans: {}", by_scan.len());
-    println!("Scans with multiple PSMs: {}", chimeric_scans);
-    if !by_scan.is_empty() {
-        println!(
-            "Chimeric scan percentage: {:.1}%",
-            100.0 * (chimeric_scans as f64) / (by_scan.len() as f64)
-        );
-    }
-    println!();
-
-    // Delta mass histogram
-    if histogram {
-        println!("=== Delta Mass Histogram (top 20, 0.01 Da bins) ===");
-        let mut delta_counts: HashMap<i64, usize> = HashMap::new();
-        for psm in &results.psms {
-            // Use corrected delta mass, bin to 0.01 Da
-            let bin = (psm.delta_mass_corrected * 100.0).round() as i64;
-            *delta_counts.entry(bin).or_insert(0) += 1;
-        }
-
-        let mut counts_vec: Vec<_> = delta_counts.into_iter().collect();
-        counts_vec.sort_by_key(|b| std::cmp::Reverse(b.1));
-
-        println!("{:<15} {:<10} {:<10}", "Delta (Da)", "Count", "Pct");
-        println!("{}", "-".repeat(35));
-        for (bin, count) in counts_vec.iter().take(20) {
-            let delta = (*bin as f64) / 100.0;
-            let pct = 100.0 * (*count as f64) / (results.psms.len() as f64);
-            println!("{:<15.2} {:<10} {:<10.1}%", delta, count, pct);
-        }
-        println!();
-        println!("Unique delta bins: {}", counts_vec.len());
-    }
-
-    println!("=== Summary ===");
-    println!("Total filtered PSMs: {}", results.psms.len());
-
-    Ok(())
-}
-
-/// Run both peak-assignment modes on one file and print them side by side.
-///
-/// This exists to answer a step-2 decision, not to produce a deliverable: are a
-/// pair of adjacent bins one population or two? Both modes satisfy the
-/// exclusive-assignment invariant, so the peak COUNTS are trustworthy in both;
-/// what differs is the grouping.
-///
-/// The composition column is a diagnostic only — see `peak_composition`. It is
-/// not wired into annotation and does not change any number reported here.
 /// Load Unimod: the CLI path when given, the compiled-in copy otherwise.
 ///
 /// `unimod.xml` is embedded (`defaults::UNIMOD`), so no subcommand needs a path.
-/// `run` already worked this way; `analyze`, `discover` and
-/// `compare-peak-assignment` each declared a REQUIRED `--unimod` and so could
-/// not run without the repo beside them. NOTES said the flag was an override
-/// everywhere, which was true of `run` alone.
+/// `discover` once declared a REQUIRED `--unimod` and so could not run without
+/// the repo beside it.
 fn load_unimod(path: Option<PathBuf>) -> Result<UnimodDb> {
     match path {
         Some(p) => {
@@ -764,160 +287,6 @@ fn load_unimod(path: Option<PathBuf>) -> Result<UnimodDb> {
             UnimodDb::from_embedded()
         }
     }
-}
-
-fn run_compare_peak_assignment(
-    tsv: PathBuf,
-    unimod_path: Option<PathBuf>,
-    q_threshold: f64,
-    min_peak_count: usize,
-    window: Option<Vec<f64>>,
-    output: Option<PathBuf>,
-) -> Result<()> {
-    use recon_tool::peak_composition::site_support;
-    use std::fmt::Write as _;
-
-    let options = FilterOptions {
-        q_threshold,
-        ..Default::default()
-    };
-    let results = parse_sage_results(&tsv, &options)?;
-    let unimod = load_unimod(unimod_path)?;
-
-    let (low, high) = match window.as_deref() {
-        Some([l, h]) => (*l, *h),
-        _ => (f64::NEG_INFINITY, f64::INFINITY),
-    };
-
-    let mut out = String::new();
-    writeln!(out, "{}", "=".repeat(96))?;
-    writeln!(out, "PEAK ASSIGNMENT COMPARISON")?;
-    writeln!(out, "  input          {}", tsv.display())?;
-    writeln!(out, "  PSMs kept      {}", results.psms.len())?;
-    writeln!(out, "  min_peak_count {min_peak_count}   q<={q_threshold}")?;
-    if low.is_finite() {
-        writeln!(out, "  window         [{low}, {high}] Da")?;
-    }
-    writeln!(out, "{}", "=".repeat(96))?;
-
-    let mut summaries: Vec<(PeakAssignmentMode, usize, usize)> = Vec::new();
-
-    for mode in [PeakAssignmentMode::Merge, PeakAssignmentMode::Split] {
-        let config = ModDiscoveryConfig {
-            min_peak_count,
-            peak_assignment_mode: mode,
-            ..Default::default()
-        };
-        let discovery = run_mod_discovery(&results, &unimod, &config);
-
-        // Peak counts must never sum past the run. Print the numbers; do not assert
-        // in prose.
-        let claimed: usize = discovery.peaks.iter().map(|p| p.count).sum();
-
-        writeln!(out)?;
-        writeln!(out, "--- {mode:?} ---")?;
-        writeln!(
-            out,
-            "  peaks {}   PSMs claimed by all peaks {} of {} total",
-            discovery.peaks.len(),
-            claimed,
-            discovery.summary.total_psms
-        )?;
-        writeln!(
-            out,
-            "  {:>10}  {:>6}  {:>6}  {:<24}  {:>6}  {:>6}  {:>6}  {:>5}",
-            "delta_Da", "count", "promin", "annotation", "sites", "in-pk", "bg", "enr"
-        )?;
-
-        for peak in discovery
-            .peaks
-            .iter()
-            .filter(|p| p.delta_mass >= low && p.delta_mass <= high)
-        {
-            // Exactly the PSMs detection assigned to this peak. Not reconstructed
-            // from delta_mass and a guessed tolerance — that is how two earlier
-            // check scripts produced false answers.
-            let peak_psms: Vec<&recon_tool::sage_results::Psm> =
-                peak.psm_indices.iter().map(|&i| &results.psms[i]).collect();
-
-            let (name, sites) = match peak.annotations.first() {
-                Some(a) => (a.name.clone(), a.sites.clone()),
-                None => ("(unannotated)".to_string(), vec![]),
-            };
-            let support = site_support(&peak_psms, &results.psms, &sites);
-            let site_str: String = support.sites.iter().collect();
-            // No testable residue sites (Unmodified, or a terminus-only mod) means
-            // there is nothing to measure. Print "-" rather than a 0% that reads
-            // like a measured absence of support.
-            let testable = !support.sites.is_empty();
-            let enr = match support.enrichment() {
-                Some(e) if testable => format!("{e:.2}"),
-                _ => "-".to_string(),
-            };
-            let in_pk = if testable {
-                format!("{:.0}%", 100.0 * support.fraction())
-            } else {
-                "-".to_string()
-            };
-            let bg = if testable {
-                format!("{:.0}%", 100.0 * support.background_fraction)
-            } else {
-                "-".to_string()
-            };
-
-            writeln!(
-                out,
-                "  {:>10.5}  {:>6}  {:>6}  {:<24}  {:>6}  {:>6}  {:>6}  {:>5}",
-                peak.delta_mass,
-                peak.count,
-                peak.prominence,
-                if name.len() > 24 {
-                    name[..24].to_string()
-                } else {
-                    name
-                },
-                if site_str.is_empty() {
-                    "-".to_string()
-                } else {
-                    site_str
-                },
-                in_pk,
-                bg,
-                enr
-            )?;
-        }
-
-        summaries.push((mode, discovery.peaks.len(), claimed));
-    }
-
-    writeln!(out)?;
-    writeln!(out, "{}", "=".repeat(96))?;
-    for (mode, n_peaks, claimed) in &summaries {
-        writeln!(
-            out,
-            "  {:<6?}  {:>3} peaks   {:>6} PSM claims",
-            mode, n_peaks, claimed
-        )?;
-    }
-    writeln!(
-        out,
-        "\n  'in-pk' is the share of the peak's PSMs whose peptide CONTAINS one of\n  \
-         the listed residues. 'bg' is the same share over the whole run, and 'enr'\n  \
-         is in-pk / bg. READ THE CEILING: enrichment cannot exceed 1/bg, so a\n  \
-         common residue set gives a low ceiling and a weak test — N or Q occurs in\n  \
-         most tryptic peptides by chance, capping enr near 1.2, while a rare\n  \
-         residue like C or W discriminates strongly. Sequence membership only; it\n  \
-         cannot say the mod SITS on that residue. A DIAGNOSTIC, not a gate."
-    )?;
-
-    match output {
-        Some(path) => {
-            std::fs::write(&path, &out)?;
-            println!("Wrote {}", path.display());
-        }
-        None => print!("{out}"),
-    }
-    Ok(())
 }
 
 // `clippy::too_many_arguments`: these mirror the CLI flags one-for-one. A
@@ -1075,453 +444,6 @@ fn run_discover_command(
     Ok(())
 }
 
-#[allow(clippy::too_many_arguments)] // see run_discover_command
-fn run_signal_fate_command(
-    tsv: PathBuf,
-    mzml_path: Option<PathBuf>,
-    unimod_path: Option<PathBuf>,
-    q_threshold: f64,
-    ms1_intensity: bool,
-    rt_window: f64,
-    mz_tol_ppm: f64,
-    output: Option<PathBuf>,
-    summary_only: bool,
-) -> Result<()> {
-    use recon_tool::mzml::{build_precursor_queries_from_psms, extract_precursor_intensities};
-    use recon_tool::signal_fate::Ms1SignalFate;
-
-    // Parse Sage results
-    println!("Loading Sage results: {}", tsv.display());
-    let options = FilterOptions {
-        q_threshold,
-        ..Default::default()
-    };
-    let results = parse_sage_results(&tsv, &options)?;
-    println!(
-        "  Loaded {} PSMs (q <= {})",
-        results.psms.len(),
-        q_threshold
-    );
-
-    // Track mzML path for MS1 extraction
-    let mzml_file_path = mzml_path.clone();
-
-    // Optionally load mzML stats for unidentified signal calculation
-    let mzml_stats = if let Some(ref mzml_file) = mzml_path {
-        println!("Loading mzML file: {}", mzml_file.display());
-        let stats = get_mzml_stats(mzml_file)?;
-        println!("  MS2 spectra: {}", stats.ms2_spectra);
-        println!("  Total MS2 TIC: {:.2e}", stats.total_ms2_tic);
-        Some(stats)
-    } else {
-        None
-    };
-
-    // Optionally load Unimod and run mod discovery for annotation status
-    let mod_discovery = if let Some(unimod_file) = unimod_path {
-        println!("Loading Unimod database: {}", unimod_file.display());
-        let unimod = UnimodDb::from_xml(&unimod_file)?;
-        println!("  Loaded {} modifications", unimod.len());
-
-        println!("Running modification discovery for annotation status...");
-        let config = ModDiscoveryConfig::default();
-        Some(run_mod_discovery(&results, &unimod, &config))
-    } else {
-        println!("  (No Unimod provided - all modified PSMs will be marked unannotated)");
-        None
-    };
-
-    // Compute signal fate (with or without mzML stats)
-    println!("Computing signal fate accounting...");
-    let mut fate = if let Some(ref stats) = mzml_stats {
-        compute_signal_fate_with_mzml(&results, mod_discovery.as_ref(), stats)
-    } else {
-        compute_signal_fate(&results, mod_discovery.as_ref())
-    };
-
-    // Compute MS1 signal fate if requested
-    if ms1_intensity {
-        if let Some(ref mzml_file) = mzml_file_path {
-            println!();
-            println!("Computing MS1 precursor intensity signal fate...");
-            println!("  RT window: ±{:.1} min", rt_window);
-            println!("  m/z tolerance: {} ppm", mz_tol_ppm);
-
-            // Extract MS1 spectra
-            let ms1_spectra = extract_ms1_spectra(mzml_file)?;
-            println!("  Extracted {} MS1 spectra", ms1_spectra.len());
-
-            // Compute total MS1 TIC
-            let total_ms1_tic: f64 = ms1_spectra.iter().map(|s| s.tic).sum();
-            println!("  Total MS1 TIC: {:.2e}", total_ms1_tic);
-
-            // Build precursor queries from PSMs
-            let queries = build_precursor_queries_from_psms(&results.psms);
-            println!("  Built {} precursor queries", queries.len());
-
-            // Extract precursor intensities
-            let intensity_results =
-                extract_precursor_intensities(&ms1_spectra, &queries, rt_window, mz_tol_ppm);
-
-            // Compute MS1 signal fate
-            let explained_intensity: f64 = intensity_results.iter().map(|r| r.intensity).sum();
-            let psms_with_ms1 = intensity_results
-                .iter()
-                .filter(|r| r.intensity > 0.0)
-                .count();
-            let psms_without_ms1 = intensity_results.len() - psms_with_ms1;
-
-            let explained_pct = if total_ms1_tic > 0.0 {
-                100.0 * explained_intensity / total_ms1_tic
-            } else {
-                0.0
-            };
-
-            let unexplained_intensity = if total_ms1_tic > explained_intensity {
-                total_ms1_tic - explained_intensity
-            } else {
-                0.0
-            };
-
-            let unexplained_pct = if total_ms1_tic > 0.0 {
-                100.0 * unexplained_intensity / total_ms1_tic
-            } else {
-                0.0
-            };
-
-            fate.ms1_signal_fate = Some(Ms1SignalFate {
-                total_ms1_tic,
-                explained_intensity,
-                explained_pct,
-                unexplained_intensity,
-                unexplained_pct,
-                psms_with_ms1,
-                psms_without_ms1,
-            });
-
-            println!(
-                "  PSMs with MS1 signal: {} / {}",
-                psms_with_ms1,
-                queries.len()
-            );
-
-            // Also compute improved MS1 signal fate with all enhancements
-            println!();
-            println!("Computing improved MS1 signal fate (isotope envelope, deduplicated)...");
-            let improved_fate = mzml::compute_improved_ms1_signal_fate(
-                &ms1_spectra,
-                &queries,
-                3,    // ±3 MS1 scans
-                10.0, // 10 ppm tolerance
-            );
-            mzml::print_improved_ms1_signal_fate(&improved_fate);
-        } else {
-            println!();
-            println!("Warning: --ms1-intensity requires --mzml to be specified");
-        }
-    }
-
-    // Print summary
-    println!();
-    print_signal_fate_summary(&fate);
-
-    // Output JSON if requested
-    if !summary_only {
-        let json = serde_json::to_string_pretty(&fate)?;
-
-        if let Some(output_path) = output {
-            std::fs::write(&output_path, &json)?;
-            println!();
-            println!("Results written to: {}", output_path.display());
-        } else {
-            println!();
-            println!("=== JSON Output ===");
-            println!("{}", json);
-        }
-    }
-
-    Ok(())
-}
-
-fn run_mzml_stats_command(mzml_path: PathBuf, output: Option<PathBuf>) -> Result<()> {
-    println!("Parsing mzML file: {}", mzml_path.display());
-    let start = std::time::Instant::now();
-
-    let stats = get_mzml_stats(&mzml_path)?;
-
-    let elapsed = start.elapsed();
-    println!("  Parsed in {:.2}s", elapsed.as_secs_f64());
-    println!();
-
-    // Print summary
-    print_mzml_stats(&stats);
-
-    // Output JSON if requested
-    if let Some(output_path) = output {
-        let json = serde_json::to_string_pretty(&stats)?;
-        std::fs::write(&output_path, &json)?;
-        println!();
-        println!("Results written to: {}", output_path.display());
-    }
-
-    Ok(())
-}
-
-fn run_polymer_stats_command(
-    mzml_path: PathBuf,
-    tol_ppm: f64,
-    output: Option<PathBuf>,
-    summary_only: bool,
-) -> Result<()> {
-    println!("Extracting MS1 spectra from: {}", mzml_path.display());
-    let start = std::time::Instant::now();
-
-    let ms1_spectra = extract_ms1_spectra(&mzml_path)?;
-    let max_mz = get_max_mz(&ms1_spectra);
-
-    println!("  Extracted {} MS1 spectra", ms1_spectra.len());
-    println!("  Max m/z: {:.1}", max_mz);
-    println!("  Tolerance: {} ppm", tol_ppm);
-    println!();
-
-    println!("Searching for polymer contamination...");
-    let spectra_iter = ms1_spectra
-        .iter()
-        .map(|s| (s.rt, s.tic, s.mz.as_slice(), s.intensity.as_slice()));
-
-    let results = search_polymers(spectra_iter, max_mz, tol_ppm);
-
-    let elapsed = start.elapsed();
-    println!("  Completed in {:.2}s", elapsed.as_secs_f64());
-    println!();
-
-    println!("=== Polymer Contamination Summary ===");
-    println!();
-    println!("Total MS1 TIC: {:.2e}", results.total_tic);
-    println!(
-        "Total polymer %TIC: {:.2}%",
-        results.total_polymer_pct_tic()
-    );
-    println!();
-
-    println!("Polymer Detection (sorted by %TIC):");
-    println!("{:<35} {:>12} {:>10}", "Polymer", "Intensity", "%TIC");
-    println!("{}", "-".repeat(60));
-
-    for (name, pct) in results.polymers_by_pct_tic() {
-        if pct > 0.0 {
-            let poly = results.polymers.iter().find(|p| p.name == name).unwrap();
-            println!(
-                "{:<35} {:>12.2e} {:>10.4}%",
-                name, poly.total_intensity, pct
-            );
-        }
-    }
-
-    let detected_count = results
-        .polymers
-        .iter()
-        .filter(|p| p.total_intensity > 0.0)
-        .count();
-    println!();
-    println!(
-        "Polymers detected: {} / {}",
-        detected_count,
-        results.polymers.len()
-    );
-
-    let total_pct = results.total_polymer_pct_tic();
-    let level = if total_pct < 0.1 {
-        "Low (< 0.1%)"
-    } else if total_pct < 1.0 {
-        "Moderate (0.1-1%)"
-    } else if total_pct < 5.0 {
-        "High (1-5%)"
-    } else {
-        "Very High (> 5%)"
-    };
-    println!("Contamination level: {}", level);
-
-    if !summary_only {
-        let json_output = serde_json::json!({
-            "total_tic": results.total_tic,
-            "total_polymer_pct_tic": results.total_polymer_pct_tic(),
-            "contamination_level": level,
-            "polymers": results.polymers_by_pct_tic().into_iter()
-                .filter(|(_, pct)| *pct > 0.0)
-                .map(|(name, pct)| {
-                    let poly = results.polymers.iter().find(|p| p.name == name).unwrap();
-                    serde_json::json!({ "name": name, "total_intensity": poly.total_intensity, "pct_tic": pct })
-                })
-                .collect::<Vec<_>>(),
-        });
-        let json = serde_json::to_string_pretty(&json_output)?;
-        if let Some(output_path) = output {
-            std::fs::write(&output_path, &json)?;
-            println!("\nResults written to: {}", output_path.display());
-        } else {
-            println!("\n=== JSON Output ===\n{}", json);
-        }
-    }
-    Ok(())
-}
-
-fn run_oxonium_screen_command(
-    mzml_path: PathBuf,
-    tol_ppm: f64,
-    min_ions: usize,
-    top_fraction: f64,
-    output: Option<PathBuf>,
-    summary_only: bool,
-) -> Result<()> {
-    println!("Extracting MS2 spectra from: {}", mzml_path.display());
-    let start = std::time::Instant::now();
-
-    let ms2_spectra = extract_ms2_spectra(&mzml_path)?;
-
-    println!("  Extracted {} MS2 spectra", ms2_spectra.len());
-    println!("  Tolerance: {} ppm", tol_ppm);
-    println!("  Min oxonium ions: {}", min_ions);
-    println!("  Top peak fraction: {:.0}%", top_fraction * 100.0);
-    println!();
-
-    let config = OxoniumScreeningConfig {
-        mz_tolerance: recon_tool::mzml::FragmentTolerance::Ppm(tol_ppm),
-        min_oxonium_ions: min_ions,
-        top_peak_fraction: top_fraction,
-        require_mandatory: true,
-    };
-
-    println!("Screening for oxonium ions...");
-    let results = screen_spectra(&ms2_spectra, &config);
-    let summary = compute_screening_summary(&results);
-
-    let elapsed = start.elapsed();
-    println!("  Completed in {:.2}s", elapsed.as_secs_f64());
-    println!();
-
-    print_screening_summary(&summary);
-
-    if !summary_only {
-        let json = serde_json::to_string_pretty(&summary)?;
-        if let Some(output_path) = output {
-            std::fs::write(&output_path, &json)?;
-            println!("\nResults written to: {}", output_path.display());
-        } else {
-            println!("\n=== JSON Output ===\n{}", json);
-        }
-    }
-    Ok(())
-}
-
-fn run_digestion_stats_command(
-    tsv: PathBuf,
-    q_threshold: f64,
-    output: Option<PathBuf>,
-    summary_only: bool,
-) -> Result<()> {
-    println!("Loading Sage results: {}", tsv.display());
-    let options = FilterOptions {
-        q_threshold,
-        ..Default::default()
-    };
-    let results = parse_sage_results(&tsv, &options)?;
-    println!(
-        "  Loaded {} PSMs (q <= {})",
-        results.psms.len(),
-        q_threshold
-    );
-    println!();
-
-    println!("Computing digestion efficiency metrics...");
-    let digestion = compute_digestion_stats(&results);
-
-    // Print summary
-    print_digestion_summary(&digestion);
-
-    // Output JSON if requested
-    if !summary_only {
-        let json = serde_json::to_string_pretty(&digestion)?;
-        if let Some(output_path) = output {
-            std::fs::write(&output_path, &json)?;
-            println!("\nResults written to: {}", output_path.display());
-        } else {
-            println!("\n=== JSON Output ===\n{}", json);
-        }
-    }
-    Ok(())
-}
-
-fn run_qc_stats_command(
-    tsv: PathBuf,
-    mzml_path: Option<PathBuf>,
-    q_threshold: f64,
-    output: Option<PathBuf>,
-    summary_only: bool,
-) -> Result<()> {
-    println!("Loading Sage results: {}", tsv.display());
-    // Capture input paths as strings for the provenance envelope before the
-    // Option values get moved/borrowed below.
-    let tsv_path_str = tsv.display().to_string();
-    let mzml_path_str = mzml_path.as_ref().map(|p| p.display().to_string());
-    let options = FilterOptions {
-        q_threshold,
-        ..Default::default()
-    };
-    let results = parse_sage_results(&tsv, &options)?;
-    println!(
-        "  Loaded {} PSMs (q <= {})",
-        results.psms.len(),
-        q_threshold
-    );
-
-    // Optionally compute signal fate for ID rate
-    let signal_fate = if let Some(mzml_file) = mzml_path {
-        println!("Loading mzML file: {}", mzml_file.display());
-        let stats = get_mzml_stats(&mzml_file)?;
-        println!("  MS2 spectra: {}", stats.ms2_spectra);
-        let fate = compute_signal_fate_with_mzml(&results, None, &stats);
-        Some(fate)
-    } else {
-        None
-    };
-
-    println!("Computing QC metrics...");
-    let qc = compute_qc_stats(&results, signal_fate.as_ref());
-
-    // Print summary
-    print_qc_summary(&qc);
-
-    // Output JSON if requested
-    if !summary_only {
-        // Provenance envelope: only qc-stats carries it. The comment here used to
-        // say "analyze + qc-stats"; that is false. `Provenance` is built in this
-        // function alone, and no committed report JSON has a `provenance` key.
-        // The analyze and run reports carry flat tool_version and git_commit
-        // fields instead. Discover and the snapshots carry neither, on purpose,
-        // so their output stays byte-stable for regression comparison.
-        let mut inputs: Vec<(&str, &str)> = vec![("tsv", tsv_path_str.as_str())];
-        if let Some(ref m) = mzml_path_str {
-            inputs.push(("mzml", m.as_str()));
-        }
-        let provenance =
-            recon_tool::provenance::Provenance::new(chrono::Utc::now().to_rfc3339(), inputs);
-        // Attach MS1 accuracy + provenance alongside the QC struct for the JSON view.
-        let json_out = serde_json::json!({
-            "provenance": provenance,
-            "qc": qc,
-        });
-        let json = serde_json::to_string_pretty(&json_out)?;
-        if let Some(output_path) = output {
-            std::fs::write(&output_path, &json)?;
-            println!("\nResults written to: {}", output_path.display());
-        } else {
-            println!("\n=== JSON Output ===\n{}", json);
-        }
-    }
-    Ok(())
-}
-
 /// Write `<base>.json` and `<base>.html`.
 ///
 /// Factored out so `run` can call it TWICE: once before Pass 2, which consumes
@@ -1532,7 +454,7 @@ fn run_qc_stats_command(
 /// `pass2` supplies the HTML report's Digestion section, whose numbers live ONLY
 /// in `<base>_pass2.json` and are deliberately not folded into `ReconReport`
 /// (see `report::Pass2Report`). It is therefore `None` on the FIRST write of a
-/// run, on every `recon analyze`, and on `recon run --no-pass2`. The JSON is not
+/// run, and on `recon run --no-pass2`. The JSON is not
 /// affected either way.
 fn write_report_files(
     report: &ReconReport,
@@ -1552,17 +474,26 @@ fn write_report_files(
     Ok(())
 }
 
+/// Build the Pass-1 report from the open-search TSV, and write it.
+///
+/// Called only by `recon run`. It was once also the hidden `analyze`
+/// subcommand, which was removed with the other unused development
+/// subcommands.
+///
+/// `census` is the analyzer census `run` read BEFORE the Pass-1 search. It is
+/// passed in, not read again, so the mzML is scanned for analyzers once per run
+/// and the report records the same decision the search used.
 #[allow(clippy::too_many_arguments)] // see run_discover_command
-fn run_analyze_command(
+fn build_pass1_report(
     mzml_path: PathBuf,
     tsv: PathBuf,
     unimod_path: Option<PathBuf>,
     fasta: Option<PathBuf>,
-    // The protease, for the report's `input.enzyme` block. `recon analyze` has no
-    // `--enzyme` and passes `None`; `recon run` passes the enzyme it resolved.
-    // Analysis uses it nowhere — `analyze` classifies termini from Sage's own
-    // columns — so this is a record, not a new input to a measurement.
+    // The protease, for the report's `input.enzyme` block. Analysis uses it
+    // nowhere here (Pass 1 reads missed cleavages and termini from Sage's own
+    // columns), so this is a record, not a new input to a measurement.
     enzyme: Option<&recon_tool::enzyme::Enzyme>,
+    census: &recon_tool::AnalyzerCensus,
     q_threshold: f64,
     output: PathBuf,
     peak_assignment_mode: PeakAssignmentMode,
@@ -1594,7 +525,7 @@ fn run_analyze_command(
     // Check 3 always applies (guards the report's OWN inputs): the report is
     // built from the open TSV; --mzml must be one of the files that open TSV
     // actually contains, else the report would be built on one file's PSMs while
-    // labelled another. The open TSV MAY be multi-file — analyze does NOT
+    // labelled another. The open TSV MAY be multi-file; this function does NOT
     // currently restrict PSMs to --mzml (see NOTES: multi-file open TSV is a
     // latent mixing bug tracked separately), so this check is the only thing
     // standing between a mislabelled --mzml and a wrong report.
@@ -1611,9 +542,9 @@ fn run_analyze_command(
     }
     if open_files.len() > 1 {
         // Not fatal on its own, but the caller should know the report is drawn
-        // from a multi-file open TSV that analyze does not restrict to --mzml.
+        // from a multi-file open TSV that is not restricted to --mzml.
         eprintln!(
-            "WARNING: open TSV spans {} raw files {:?}; analyze does NOT restrict PSMs to --mzml '{}'. \
+            "WARNING: open TSV spans {} raw files {:?}; recon does NOT restrict PSMs to --mzml '{}'. \
              Mod-discovery/signal-fate numbers mix all {} runs. See NOTES (multi-file open TSV).",
             open_files.len(), open_files, mzml_basename, open_files.len()
         );
@@ -1987,43 +918,36 @@ fn run_analyze_command(
     // set the pass-1 fragment tolerance BEFORE the search; recording it here is
     // what lets a reader tell whether the tolerance recommendation applies to
     // their instrument at all. A ppm ladder is meaningless for an ion trap.
-    // Detection failure is NOT fatal: the report simply omits the block rather
-    // than losing every other number in it.
+    //
+    // The census is the one `run` read before the search. It used to be read
+    // from the mzML a second time here, only to record the first decision.
     // The pass-1 MS2 tolerance and whether its unit was assumed: the oxonium
-    // screen below needs the analyzer's UNIT. `None` when detection failed.
-    let mut pass1_ms2: Option<(recon_tool::mzml::FragmentTolerance, bool)> = None;
-    let analyzers = match recon_tool::detect_analyzers(&mzml_path) {
-        Ok(census) => {
-            let d = census.ms2_decision();
-            pass1_ms2 = Some((d.tolerance, d.assumed));
-            println!();
-            println!(
-                "[ANALYZER] MS1 {:?} | MS2 {:?} -> pass-1 fragment_tol {}{}",
-                d.ms1_analyzers,
-                d.ms2_analyzers,
-                d.tolerance,
-                if d.assumed {
-                    "  (ASSUMED, not detected)"
-                } else {
-                    ""
-                }
-            );
-            Some(recon_tool::report::AnalyzerReport {
-                instrument_model: census.instrument_model.clone(),
-                ms1_analyzers: d.ms1_analyzers.clone(),
-                ms2_analyzers: d.ms2_analyzers.clone(),
-                ms2_switched: census.ms2_switched(),
-                pass1_fragment_tol: d.tolerance.to_string(),
-                basis: format!("{:?}", d.basis),
-                assumed: d.assumed,
-                explanation: d.explanation.clone(),
-            })
+    // screen below needs the analyzer's UNIT.
+    let d = census.ms2_decision();
+    let pass1_ms2: Option<(recon_tool::mzml::FragmentTolerance, bool)> =
+        Some((d.tolerance, d.assumed));
+    println!();
+    println!(
+        "[ANALYZER] MS1 {:?} | MS2 {:?} -> pass-1 fragment_tol {}{}",
+        d.ms1_analyzers,
+        d.ms2_analyzers,
+        d.tolerance,
+        if d.assumed {
+            "  (ASSUMED, not detected)"
+        } else {
+            ""
         }
-        Err(e) => {
-            log::warn!("analyzer detection failed, block omitted: {e:#}");
-            None
-        }
-    };
+    );
+    let analyzers = Some(recon_tool::report::AnalyzerReport {
+        instrument_model: census.instrument_model.clone(),
+        ms1_analyzers: d.ms1_analyzers.clone(),
+        ms2_analyzers: d.ms2_analyzers.clone(),
+        ms2_switched: census.ms2_switched(),
+        pass1_fragment_tol: d.tolerance.to_string(),
+        basis: format!("{:?}", d.basis),
+        assumed: d.assumed,
+        explanation: d.explanation.clone(),
+    });
 
     // Steps 7 and 8: the screens, at tolerances from THIS run's measured
     // error when it was measured (NOTES "Screen tolerances come from the
@@ -2106,7 +1030,7 @@ fn run_analyze_command(
     print_report_summary(&report);
 
     // Write output files
-    // No Pass 2 here by construction: `analyze` is one stage, not a run.
+    // No Pass 2 here: this is the first write. `run` writes again after Pass 2.
     write_report_files(&report, None, &output, true)?;
 
     println!();
@@ -2552,16 +1476,15 @@ fn run_run_command(
     );
     println!();
 
-    // --- Stage 2: analyze the open results into the unified report -----------
-    // Reuse the existing analyze path verbatim so the report is identical to a
-    // manual `recon analyze` on the same TSV — no divergent second code path.
+    // --- Stage 2: build the unified report from the open results -------------
     println!("[ANALYZE] Building unified report from the open-search results...");
-    let report = run_analyze_command(
+    let report = build_pass1_report(
         mzml.clone(),
         sage_result.results_tsv.clone(),
         unimod,
         Some(fasta.clone()), // the search database IS the protein context
         Some(&enzyme),       // recorded in the report; `run` resolved it above
+        &census,             // read once, before the search; not re-read here
         q_threshold,
         output_base.clone(),
         PeakAssignmentMode::default(), // Merge — settled 2026-08-25, see NOTES
@@ -2608,54 +1531,4 @@ fn run_run_command(
     println!("================================================================================");
 
     Ok(())
-}
-
-/// Print every PSI-MS mass analyzer term recon recognises, and the pass-1 MS2
-/// fragment tolerance each one implies. Generated from the shipped table, so it
-/// cannot drift from what the code actually does.
-fn print_analyzer_tolerance_table() {
-    use recon_tool::{
-        bucket_tolerance, BucketSource, FILTER_STRING_ANALYZERS, MASS_ANALYZER_TERMS,
-        UNKNOWN_MS2_FALLBACK_PPM,
-    };
-
-    println!("PSI-MS mass analyzer terms (children of MS:1000443) -> pass-1 MS2 fragment_tol");
-    println!("{:-<104}", "");
-    println!(
-        "{:<13} {:<52} {:<24} {:<12}",
-        "accession", "CV name", "MS2 fragment_tol", "bucket from"
-    );
-    println!("{:-<104}", "");
-    for term in MASS_ANALYZER_TERMS {
-        let tol = match bucket_tolerance(term.class) {
-            Some(t) => t.to_string(),
-            None => format!("fallback ±{UNKNOWN_MS2_FALLBACK_PPM} ppm"),
-        };
-        println!(
-            "{:<13} {:<52} {:<24} {:<12}",
-            term.accession,
-            term.name,
-            tol,
-            match term.bucket_source {
-                BucketSource::Curated => "curated",
-                BucketSource::ExtendedHere => "extended",
-            }
-        );
-    }
-    println!("{:-<104}", "");
-    println!();
-    println!("Thermo filter-string analyzer tokens (MS:1000512), the preferred per-scan signal:");
-    for (token, class) in FILTER_STRING_ANALYZERS {
-        let tol = match bucket_tolerance(*class) {
-            Some(t) => t.to_string(),
-            None => format!("fallback ±{UNKNOWN_MS2_FALLBACK_PPM} ppm"),
-        };
-        println!("  {:<8} -> {:<40} {}", token, class.label(), tol);
-    }
-    println!();
-    println!("'curated' = bucket named in reference-notes/analyzer-tolerances/.");
-    println!("'extended' = assigned by CV parentage; see ms2-analyzer-tolerance-table.md.");
-    println!("An analyzer with no bucket does NOT halt recon: it falls back to");
-    println!("±{UNKNOWN_MS2_FALLBACK_PPM} ppm and the run reports that it did.");
-    println!();
 }

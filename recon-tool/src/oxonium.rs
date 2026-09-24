@@ -275,34 +275,6 @@ pub fn compute_screening_summary(results: &[OxoniumScreeningResult]) -> OxoniumS
     }
 }
 
-/// Print a summary of oxonium ion screening results
-pub fn print_screening_summary(summary: &OxoniumScreeningSummary) {
-    println!("=== Oxonium Ion Screening Summary ===");
-    println!();
-    println!("Total MS2 spectra screened: {}", summary.total_spectra);
-    println!(
-        "Glycopeptide candidates: {} ({:.1}%)",
-        summary.glycopeptide_candidates, summary.glycopeptide_pct
-    );
-    println!();
-
-    println!("Oxonium Ion Detection Rates:");
-    for (name, rate) in &summary.ion_detection_rates {
-        println!("  {:<20} {:.1}%", name, rate);
-    }
-    println!();
-
-    println!("Ion Count Distribution:");
-    for (count, spectra) in &summary.ion_count_distribution {
-        let pct = if summary.total_spectra > 0 {
-            (*spectra as f64) / (summary.total_spectra as f64) * 100.0
-        } else {
-            0.0
-        };
-        println!("  {} ions: {} spectra ({:.1}%)", count, spectra, pct);
-    }
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;

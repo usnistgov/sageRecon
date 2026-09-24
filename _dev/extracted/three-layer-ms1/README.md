@@ -73,16 +73,21 @@ Functions:
 
 ## Interface: what it needs from a host crate
 
-These items **stayed in recon** because live, non-three-layer code still calls
-them. A host crate must supply equivalents. This is the full dependency
-surface.
+These items **stayed in recon** when three-layer was extracted, because live,
+non-three-layer code still called them. A host crate must supply equivalents.
+This is the full dependency surface.
+
+⚠ **2026-09-24: three of them are no longer in recon.** `PrecursorQuery`,
+`build_precursor_queries_from_psms` and `extract_precursor_intensities` were
+removed with the `signal-fate` subcommand, which was their last caller. Recover
+them from git history (`recon-tool/src/mzml.rs` before that removal) for a port.
 
 | item | recon location | why it stayed |
 |---|---|---|
-| `Ms1Spectrum` | `mzml.rs` | Used by polymer detection, precursor intensity, improved MS1 fate. Also re-exported from `lib.rs`. |
-| `PrecursorQuery` | `mzml.rs` | Same. Re-exported from `lib.rs`. |
-| `build_precursor_queries_from_psms` | `mzml.rs` | Also called by the `--ms1-intensity` path in `main.rs`. |
-| `extract_precursor_intensities` | `mzml.rs` | Same. Re-exported from `lib.rs`. |
+| `Ms1Spectrum` | `mzml.rs` | Used by polymer detection. Also re-exported from `lib.rs`. |
+| `PrecursorQuery` | removed 2026-09-24 | Was in `mzml.rs`. Recover from git history. |
+| `build_precursor_queries_from_psms` | removed 2026-09-24 | Was in `mzml.rs`, called by `signal-fate --ms1-intensity`. |
+| `extract_precursor_intensities` | removed 2026-09-24 | Was in `mzml.rs`. Recover from git history. |
 | `extract_scan_from_id` | `mzml.rs` | Also called by `extract_ms2_from_reader`. **Private** to that module — a port must copy it or make it public. |
 | `Psm` | `sage_results.rs` | The whole result parser. `compute_mod_breakdown` reads its `delta_mass_corrected` field. |
 

@@ -847,9 +847,12 @@ help heading. `recon --help` now shows ONE command.
   commands. Verified by running `analyze` from a scratch directory outside the
   repo with no `--unimod`: it reports the database as compiled in, loads 1560
   entries, and produces 7 recommendations.
-* **The 11 development subcommands are `hide = true`.** They still run, and
-  `testing/scripts/` still calls `parse`, `discover`, `analyze` and
-  `compare-peak-assignment`. They are simply not part of the product surface.
+* **One development subcommand remains, `discover`, and it is `hide = true`.**
+  Corrected in place 2026-09-24. This bullet said 11 hidden subcommands ran and
+  that `testing/scripts/` called `parse`, `discover`, `analyze` and
+  `compare-peak-assignment`. A grep of the committed scripts and tests found
+  only `run_validation.py` calling `discover`. The other ten were removed. See
+  "Vestigial output and code removed".
 * **`--q-threshold` went to Advanced deliberately.** Every pinned baseline is at
   0.01; a visible knob invites numbers that cannot be compared with them.
 
@@ -1640,8 +1643,9 @@ the ladder's top rung all along. **Fourth member of the family in "Gate audit �
 The test is replaced by `pass2_window_is_bounded_by_the_ladder_top_rung`, which
 asserts against `MS1_TOLERANCE_LADDER_PPM` — the mechanism that actually bounds it.
 
-The constant is `#[deprecated]` with its reasoning kept, and dropped from the
-public re-exports. **The ceiling it argued for survives as the ladder's top rung**,
+The constant was `#[deprecated]` with its reasoning kept, and dropped from the
+public re-exports. (Removed outright 2026-09-24, technote Appendix D. It had no
+users.) **The ceiling it argued for survives as the ladder's top rung**,
 and its original justification still supports that value: a tighter ceiling
 (±15–20 ppm) would systematically clip TOF instruments, which run 50–80 ppm out of
 the box. ⚠ That justification is CURATED, not measured — all three files land on
@@ -6312,7 +6316,9 @@ Current limitations:
   a bin edge, and of the 6 that survive that test, 5 are `split` promoting chunks of
   the ±1/±2 Da background to named peaks. **The exception is real:** on the B-cell
   file, two genuine populations 10.6 mDa apart are merged into one reported peak.
-  Use `recon compare-peak-assignment` to reproduce the comparison on any file, and
+  The `compare-peak-assignment` subcommand that reproduced this comparison was
+  removed 2026-09-24, because no committed script or test called it. Recover it
+  from git history if the comparison is needed again. Use
   `testing/scripts/subbin_delta_histogram.py` to look below the 10 mDa bin grid.
 - ✅ **THERE IS NO SAGE BINARY ANY MORE (2026-09-01).** Sage is compiled INTO
   `recon` as a pinned Cargo dependency, so `DEFAULT_SAGE_PATHS`, `SAGE_PATH`,
@@ -6380,8 +6386,9 @@ Current limitations:
   and quadrupole ±1.0 Da. The analyzer term set is derived from a pinned HUPO-PSI
   PSI-MS CV snapshot; see
   [reference-notes/ms2-analyzer-tolerance-table.md](reference-notes/ms2-analyzer-tolerance-table.md).
-  Run `recon detect-analyzer --mzml <file>` to see what it decides, or
-  `--table` for the full CV-to-tolerance mapping.
+  `recon run` prints what it decides at its `[DETECT]` step. (The hidden
+  `detect-analyzer` subcommand and its `--table` view were removed 2026-09-24.
+  The CV-to-tolerance mapping is `MASS_ANALYZER_TERMS` in `mzml.rs`.)
   Recon never refuses to search on analyzer grounds: an unreadable analyzer, an
   analyzer with no bucket, or a run whose MS2 detector changes part-way all fall
   back to ±20 ppm, flag the assumption, and report the detectors seen.
@@ -11189,3 +11196,40 @@ committed comparison was made at two.
 ⚠ **Timing is on one machine, one file.** The Pass 1 ratio follows the
 candidate count (1.8x), so the direction is real. This changes the Tier 3
 snapshots and every committed report; regeneration is pending.
+
+## Vestigial output and code removed (2026-09-24, Ben, technote Appendices C and D)
+
+Ben approved the removal list in `_dev/writeup/technote-material.md`
+Appendix D. Each item was checked against the code before it was removed.
+
+**Hidden subcommands.** Ten of the eleven were removed: `parse`,
+`detect-analyzer`, `compare-peak-assignment`, `signal-fate`, `mzml-stats`,
+`polymer-stats`, `oxonium-screen`, `digestion-stats`, `qc-stats` and
+`analyze`. A grep of `_dev/testing/scripts/`, `recon-tool/tests/` and `.github/`
+found no caller. `discover` stays: `run_validation.py` calls it for the Tier 3
+snapshot regeneration. The function behind `analyze` stays as
+`build_pass1_report`, because `run` calls it.
+Rejected alternative: keep them hidden. A hidden command is still code that
+must compile and stay correct, and several printed numbers that the report
+does not carry.
+
+**Kept, and why.** `CalibrationMode::None` / `PpmConstant` and
+`PeakAssignmentMode::Split` stay. The unit tests in `mod_discovery.rs` and
+`tests/peak_assignment_test.rs` use them, and `discover` still exposes them
+through `--calibration` and `--peak-assignment`. Satellite folding stays: it
+is disabled by design, not vestigial.
+
+**Also removed.** The MS1 precursor-intensity code in `mzml.rs`
+(`PrecursorQuery`, `build_precursor_queries_from_psms`,
+`extract_precursor_intensities`, `compute_ms1_signal_fate` and the "improved"
+MS1 fate). Its only caller was `signal-fate --ms1-intensity`. The extracted
+three-layer tool lists three of these as dependencies; its README now says
+where to recover them. `print_mzml_stats` and `print_screening_summary` lost
+their only callers and were removed. The deprecated `PASS2_HALF_WIDTH_CAP_PPM`
+had no users and was removed. The `"combination"` annotation source was only
+a doc comment; nothing produced it.
+
+**One analyzer read per run.** `run` read the mzML for analyzers before
+Pass 1, then the report builder read it again to record the same decision. The
+census from the first read is now passed in. The `analyzers` block is
+unchanged in content.

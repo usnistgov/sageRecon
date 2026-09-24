@@ -227,7 +227,8 @@ pub struct PeakAnnotation {
     pub sites: Vec<String>,
     /// Unimod classification
     pub classification: String,
-    /// Source: "unimod", "intrinsic", or "combination"
+    /// Source: "unimod" or "intrinsic". A "combination" source (two-mod
+    /// decomposition) was once declared here; nothing ever produced it.
     pub source: String,
 }
 

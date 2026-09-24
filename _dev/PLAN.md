@@ -821,7 +821,8 @@ recon output, and the search is cheap because it runs on a subset FASTA.
       test was ill-posed — it needs a CLOSED search, not the open one.)
 - [x] ✅ **Analyzer-aware MS2 tolerance — BUILT 2026-08-28** (parallel session).
       Pass-1 MS2 tolerance now comes from the MS2 analyzer, read from the mzML
-      before the search. `recon detect-analyzer` exposes it; `run` applies it.
+      before the search. `run` applies it and prints it. (The `detect-analyzer`
+      subcommand that also exposed it was removed 2026-09-24.)
       **The old body of this item is corrected in place below — do not read the
       superseded numbers as current.**
       * ~~`fragment_tol` appears in NO Rust source file~~ — TRUE WHEN WRITTEN, no

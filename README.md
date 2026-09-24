@@ -216,8 +216,9 @@ for a normal run.
 | `--pass2-params <PATH>` | Pass-2 parameter template. Its `precursor_tol`, `fragment_tol` and `database.fasta` are overridden with what Pass 1 measured. |
 | `--no-pass2` | Skip the semi-enzymatic pass. It roughly doubles wall-clock time, so this exists for the case where only the open-search report is wanted. |
 
-Eleven further subcommands exist as internal development tools. They are hidden
-from `--help` and are not part of the product surface.
+One further subcommand, `discover`, exists as an internal development tool. The
+validation harness uses it. It is hidden from `--help` and is not part of the
+product surface.
 
 ### Output files
 
