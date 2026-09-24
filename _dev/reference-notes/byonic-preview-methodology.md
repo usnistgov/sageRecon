@@ -2,7 +2,7 @@ Byonic Preview surveys a shotgun proteomics run before the real search, and emit
 
 **Source:** Kil YJ, Becker C, Sandoval W, Goldberg D, Bern M. *Preview: A Program for Surveying Shotgun Proteomics Tandem Mass-Spectrometry Data.* Analytical Chemistry 2011 Jun 13; 83(13): 5259–5267. PMC3134881.
 
-**⚠ Read from PMC on 2026-08-24.** The PDF is now vendored in this repo, at `kil-2011-preview-AnalChem-83-5259.pdf` beside this note. The claims below have NOT yet been re-verified against it. Everything here is a web read and must be checked against the PDF before the step-5 write-up cites it. Do not treat this note as a source in its own right. It is a summary, and a summary is not a source.
+**⚠ Read from PMC on 2026-08-24.** The PDF is now vendored in this repo, at `kil-2011-preview-AnalChem-83-5259.pdf` beside this note (the NIH author manuscript, 18 PDF pages). **The NUMERIC claims were checked against it on 2026-09-24**, with the PDF page of each: `THigh = max { s+1, 23 }` and `TLow = max { t+1, 15 }`, t over decoys of at least 9 residues (p. 4); the 300 most intense peaks (p. 3); rounding to the closest integer to 0.9995 M (p. 3); the 0.5 Da isotope remark (p. 6); the reverse keeps the last residue (p. 5); semitryptic and nontryptic peptides above 15 enter the database with their reverses (p. 7). All match. One scope claim did NOT match and is corrected below. The non-numeric claims are still a web read. Do not treat this note as a source in its own right. It is a summary, and a summary is not a source.
 
 ***
 
@@ -52,12 +52,14 @@ When Preview promotes a peptide into the peptide database for a later search, it
 
 ## Scope limits worth carrying into the write-up
 
-Preview evaluates on the order of thirty-odd modifications across seven assay categories, with individual searches restricted to the subset relevant to a sample type. Recon's differentiator — reporting delta-mass peaks with no Unimod match at all — has no counterpart here. `ptm-stratification-design.md` already records this as the capability both commercial tools lack; this note is the source for the Preview half of that claim. [pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC3134881/)
+Preview's Detailed Results page has seven sections, A1 to A7 (p. 6): mass accuracy, cysteine treatment, digestion, oxidation, chemical modifications, PTMs and unanticipated modifications. Only A4 to A7 are modification assays. The paper gives no total count of modifications; the earlier "thirty-odd modifications across seven assay categories" is not in the PDF and is withdrawn.
+
+❌ **Corrected 2026-09-24: Preview DOES report modifications with no known identity.** This note said recon's unannotated delta-mass peaks have no counterpart in Preview. The PDF contradicts that. Preview "reports unrecognized (blind-search) modifications" (p. 2). Assay A7 searches a wild-card modification, any integer mass from -50 to +150 Da by default on one residue, and reports high-scoring wild-card identifications in a separate spreadsheet (p. 7). The differences that remain are narrower: integer-mass resolution, a -50 to +150 Da default range against recon's -100 to +500 Da, and a spreadsheet for expert inspection rather than a ranked peak list. `ptm-stratification-design.md` cites this note for the Preview half of a "both commercial tools lack" claim; that claim must be re-read against this correction before the write-up uses it. [pmc.ncbi.nlm.nih.gov](https://pmc.ncbi.nlm.nih.gov/articles/PMC3134881/)
 
 ***
 
 ## Open items against this note
 
-- **Re-verify every claim above against the vendored PDF**, then drop the warning at the top. (The PDF itself is vendored; corrected 2026-09-24.)
+- **Re-verify the NON-numeric claims above against the vendored PDF**, then drop the warning at the top. The numeric claims and the scope claim were checked 2026-09-24.
 - Confirm whether the decoy subtraction applies to the reported modification counts a user acts on, or only to internal estimates.
 - Confirm whether `THigh` / `TLow` gate modification *reporting* or only database construction. The distinction decides how directly the threshold maps onto recon's tier floor.

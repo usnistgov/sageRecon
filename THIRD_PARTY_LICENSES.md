@@ -80,7 +80,9 @@ Version 2.0: full text" at the end of this file.
 Source: https://github.com/mobiusklein/mzdata
 License: Apache License, Version 2.0
 Version: 0.65.5 (crates.io; pinned in `recon-tool/Cargo.lock`)
-Author: Joshua Klein
+Author: Joshua Klein. The crate's `Cargo.toml` has no `authors` field; its
+`license` field is `Apache-2.0`. The name is the GitHub profile name of the
+repository owner, `mobiusklein` (read 2026-09-24).
 
 `recon` links mzdata as a Rust library to read mzML files. It is used
 unmodified. The crate's own `LICENSE` file is the unmodified Apache 2.0 text
