@@ -11229,7 +11229,11 @@ three-layer tool lists three of these as dependencies; its README now says
 where to recover them. `print_mzml_stats` and `print_screening_summary` lost
 their only callers and were removed. The deprecated `PASS2_HALF_WIDTH_CAP_PPM`
 had no users and was removed. The `"combination"` annotation source was only
-a doc comment; nothing produced it.
+a doc comment; nothing produced it. Found in a second pass and removed for the
+same reason: `provenance::Provenance` (only `qc-stats` built it; the flat
+`GIT_COMMIT` and `TOOL_VERSION` stay), `peak_composition::site_support` (only
+`compare-peak-assignment` called it), and `TerminusClass::ALL` / `label()`
+(only the removed PSM-basis terminus summary used them).
 
 **One analyzer read per run.** `run` read the mzML for analyzers before
 Pass 1, then the report builder read it again to record the same decision. The

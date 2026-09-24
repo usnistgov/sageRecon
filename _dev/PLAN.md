@@ -309,7 +309,7 @@ A cold start that re-plans any of them is going backwards.
 |---|---|
 | Sage as a library | DONE `a4f09b9`. Cargo git dep at `df92199`. No binary, no `SAGE_PATH`. |
 | Licences | DONE `e076ab3`, `122d14a`. MetaMorpheus MIT; Unimod DSL, full text vendored. |
-| `three_layer_ms1` | REMOVED from the report `e000d0d`. Survives as `signal-fate --three-layer`. |
+| `three_layer_ms1` | REMOVED from the report `e000d0d`. Moved out of recon to `_dev/extracted/three-layer-ms1/`. (The `signal-fate` subcommand that once carried `--three-layer` was itself removed 2026-09-24.) |
 | Enzyme as a parameter | DONE `5c8135c`, `39c775d`, `cb7ba0d`. 14 Mascot-sourced presets. |
 | tryptic -> enzymatic | DONE `91f47bd`, including serialised keys. |
 | Argument surface | FROZEN `77c6611`. Positional mzml/fasta, `--enzyme` required, Unimod embedded. |

@@ -86,7 +86,7 @@ pub use protein_index::{
     target_accessions, write_subset_fasta, ProteinIndex, MIN_PEPTIDES_PER_PROTEIN,
     MIN_RESOLVED_FRACTION,
 };
-pub use provenance::{Provenance, ProvenanceInput, GIT_COMMIT, TOOL_VERSION};
+pub use provenance::{GIT_COMMIT, TOOL_VERSION};
 pub use report::{generate_html_report, print_report_summary, Ms1CalibrationReport, ReconReport};
 pub use sage_results::{FilterOptions, FilterStats, Psm, SageResults, C13_C12_DIFF};
 pub use sage_runner::{SageConfig, SageRunResult};

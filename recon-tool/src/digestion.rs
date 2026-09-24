@@ -34,31 +34,6 @@ pub enum TerminusClass {
     ProteinNotFound,
 }
 
-impl TerminusClass {
-    /// Every class, in report order. An absent key and a zero count are
-    /// different claims, so the report seeds all six rather than materialising
-    /// only the ones that occurred.
-    pub const ALL: [TerminusClass; 6] = [
-        TerminusClass::FullyEnzymatic,
-        TerminusClass::SemiNRagged,
-        TerminusClass::SemiCRagged,
-        TerminusClass::NonEnzymatic,
-        TerminusClass::NotFound,
-        TerminusClass::ProteinNotFound,
-    ];
-
-    pub fn label(self) -> &'static str {
-        match self {
-            TerminusClass::FullyEnzymatic => "fully_enzymatic",
-            TerminusClass::SemiNRagged => "semi_n_ragged",
-            TerminusClass::SemiCRagged => "semi_c_ragged",
-            TerminusClass::NonEnzymatic => "non_enzymatic",
-            TerminusClass::NotFound => "not_found",
-            TerminusClass::ProteinNotFound => "protein_not_found",
-        }
-    }
-}
-
 /// Is the peptide N-terminus a tryptic one?
 ///
 /// True at protein position 0, after initiator-methionine excision, or when the

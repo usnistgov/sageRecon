@@ -74,7 +74,7 @@ as a **+500** delta. Delta here is `expmass − calcmass`.
 |---|---|---|
 | `precursor_tol.da [-500,100]` | pass-1 template | open MOD window, Da (above) |
 | `fragment_tol.ppm [-20,20]` | pass-1 template | pass-1 MS2 setting; hardcoded, NOT detector-aware yet |
-| `PASS2_HALF_WIDTH_CAP_PPM = 100` | `calibration.rs` | RETIRED: `#[deprecated]`, zero code references. Kept here as history only. |
+| `PASS2_HALF_WIDTH_CAP_PPM = 100` | (removed) | RETIRED 2026-08-28, then REMOVED from `calibration.rs` 2026-09-24. History only. The Pass 2 window is `bias ± min(\|bias\| + 5*MAD, 100 ppm)`, bounded by the ladder's top rung. |
 | `{10,20,50,100}` ppm ladder | `calibration.rs` | the user-facing MS1 tolerance RECOMMENDATION (an output) |
 
 **REVISED by Ben 2026-09-03. The ladder now serves MS1 AND a ppm MS2.** It used

@@ -119,8 +119,9 @@ enum Commands {
     ///
     /// Two Sage searches and one report: a wide open search that assumes no fixed
     /// modifications, then a semi-enzymatic Pass 2 over the identified proteins.
-    /// Reports which modifications are present, where the signal went, how well
-    /// the digest worked, and what mass tolerances the data supports.
+    /// Reports which modifications are present, what contaminants and
+    /// glycopeptides it sees, how well the digest worked, and what mass
+    /// tolerances the data supports.
     Run {
         /// The mzML file to analyse (.mzML or .mzML.gz).
         #[arg(value_name = "MZML")]
