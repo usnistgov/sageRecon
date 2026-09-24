@@ -888,7 +888,9 @@ This schema follows semantic versioning:
   `ms1_calibration.ms2_tolerance_high_ppm`, which the JSON already carries.
   ⚠ The MS2 recommendation is quantized onto the `{10,20,50,100}` ppm ladder
   ONLY when the MS2 analyzer is ppm-based. An ion trap or quadrupole gets
-  DALTONS — the measured ppm converted at m/z 500 and doubled. A ppm rung on a
+  DALTONS: the measured ppm converted at m/z 500 and doubled. (Corrected
+  2026-09-24: the conversion point is now m/z 600. HTML only; no JSON field
+  carries it, so no schema bump.) A ppm rung on a
   unit-resolution trap is meaningless. All four committed test files are
   Orbitraps, so the dalton branch is covered by unit tests and by no real data.
 - **3.1.0** (2026-09-03): `input.fasta_file` and `input.enzyme` ADDED. The report

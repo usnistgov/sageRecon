@@ -365,8 +365,9 @@ sections are:
    quantized onto a {10, 20, 50, 100} ppm ladder covering `|bias| + 5×MAD`,
    because a user picks a search setting from a discrete set and precision below
    a rung is unusable. The MS2 half is the measured fragment spread on the same
-   ladder when the MS2 analyzer is ppm-based, and is converted to Daltons and
-   rounded up to the nearest 0.1 Da when it is not.
+   ladder when the MS2 analyzer is ppm-based. When it is not (ion trap,
+   quadrupole), it is converted to Daltons at m/z 600, doubled, and rounded up
+   to the nearest 0.1 Da.
 3. **Contamination.** Common polymer series (PEG, PPG, Tween, polysiloxane and
    others) as a percentage of MS1 TIC, with a per-series breakdown and a
    qualitative level.

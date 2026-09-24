@@ -1603,11 +1603,13 @@ pass 1 could not have made).
   per-fragment". The superseded figures: 2× covers 83.5 / 90.9 / 94.4 %,
   3× covers 95.5 / 97.7 / 99.5 %, 5× covers 99.6 / 99.8 / 100.0 %.
 * **Da analyzers (ion trap, quadrupole — the ONLY Da buckets): Ben's rule.**
-  Convert the measured ppm to Da at a representative fragment m/z of 500, then
+  Convert the measured ppm to Da at a representative fragment m/z of 600, then
   DOUBLE it. ⚠ A CURATED ASSUMPTION, not a measurement: we have no ion-trap file.
   Deliberately not the 5× used for ppm analyzers, because a trap's error already
-  sits near its resolution limit. The m/z 500 assumption is exact only there — it
-  over-estimates by 25% at m/z 400 and under-estimates by 17% at m/z 600. Doing
+  sits near its resolution limit. ⚠ **CHANGED 2026-09-24: the point was m/z 500.**
+  See "The Da recommendation is quantized to a tenth of a Dalton" for the
+  evidence. The m/z 600 point is exact only there. It under-converts the serum
+  median fragment (652) by about 8 % and over-converts at m/z 400 by 50 %. Doing
   better needs per-fragment m/z, i.e. `--annotate-matches`. ⚠ That was recorded
   as "declined"; a probe WAS run and is committed at
   `testing/search-output/probe-serum-annotate-matches/`. It is still not wired
@@ -9946,8 +9948,26 @@ last failure mode is not hypothetical — see "an assertion that never RUNS".
 ## The Da recommendation is quantized to a tenth of a Dalton (2026-09-03, Ben) (locked)
 
 **The rule:** for a trap or quadrupole MS2, convert the measured ppm to Da at
-`PASS2_MS2_REPRESENTATIVE_MZ` (500), multiply by `PASS2_MS2_DA_MULTIPLIER` (2),
-**then round UP to the nearest 0.1 Da**. The tenth-Da step is the Da regime's
+`PASS2_MS2_REPRESENTATIVE_MZ` (600), multiply by `PASS2_MS2_DA_MULTIPLIER` (2),
+**then round UP to the nearest 0.1 Da**.
+
+⚠ **The conversion point CHANGED 500 -> 600 on 2026-09-24** (Ben, technote
+Appendix B item 1). The old code comment said most fragments fall at 400-600
+m/z, with 500 as the midpoint. The data contradicts that. On serum (Sage v0.15,
+10,511 PSMs at q <= 0.01, 154,842 matched fragments) the median fragment m/z is
+652, the intensity-weighted median is 732, and only 17.6 % fall in 400-600.
+600 is the point the 2026-08-28 design discussion intended. These numbers are
+copied from `_dev/writeup/technote-material.md`. The script that made them
+(`serum_window_and_fragments.py`) is in the private archive, not in this
+repository, and they were not re-measured for this change. 600 is still below
+both medians; the ×2 multiplier covers the gap. Rejected alternative: 652 (the
+measured median). It is one file's value, and the task was to restore the
+intended point, not to fit a new one. Only the Da regime (ion trap,
+quadrupole) moves. All committed reports are Orbitrap, so no committed number
+moves. Verified by diffing a liver `analyze` before and after: only
+`id_rate_by_tic_pct` and `polymer.total_pct_tic` differ, in the 15th
+significant digit, and a second run of the OLD binary differs from the first in
+the same two fields (float summation order). The tenth-Da step is the Da regime's
 LADDER and exists for the ppm ladder's own reason: a user picks a search setting
 from an effectively discrete set, so precision below the step is unusable.
 
@@ -9957,13 +9977,16 @@ recommendation and leaves the pass-2 window alone.
 
 **Rejected alternative:** "convert, round up to 0.1, and DROP the ×2". It is the
 more literal reading of the request and it halves the recommendation — a ~600
-ppm trap would get 0.3 Da instead of 0.6. Rejected by Ben: the ×2 is the cushion
+ppm trap would get 0.3 Da instead of 0.6 (m/z 500 arithmetic, as decided on
+2026-09-03; at m/z 600 it is 0.4 Da instead of 0.8). Rejected by Ben: the ×2 is the cushion
 for a miscalibrated trap, and quantizing is not a reason to delete it. A floor at
 0.3 Da was also offered and not taken.
 
-**Worked values** (the plausible unit-resolution band): 300 ppm -> 0.3 Da,
-400 -> 0.4, 600 -> 0.6, 800 -> 0.8, 1600 -> 1.6. Rounding is UP, never to
-nearest: 301 ppm is 0.301 Da and reports 0.4, not 0.3.
+**Worked values at m/z 600** (the plausible unit-resolution band, updated
+2026-09-24): 250 ppm -> 0.3 Da, 500 -> 0.6, 600 -> 0.72 -> 0.8, 800 -> 0.96 ->
+1.0, 1600 -> 1.92 -> 2.0. Rounding is UP, never to nearest: 251 ppm is 0.3012 Da
+and reports 0.4, not 0.3. (The m/z 500 values were 300 -> 0.3, 600 -> 0.6,
+800 -> 0.8.)
 
 **Nothing committed can move.** The MS2 recommendation reaches only an HTML
 string (`report.rs`), never a serialised JSON field, and all four committed
@@ -9997,14 +10020,17 @@ Da result never numerically equals a value in `MS1_TOLERANCE_LADDER_PPM`
 
 It was only ever a PROXY for "the Da branch did not call `ladder_rung`", and
 quantizing makes those values legitimately reachable: 99999 ppm gives 99.999 Da,
-which rounds UP to exactly 100.0. Worse, `ladder_rung(99999)` is ALSO 100.0 — so
+which rounds UP to exactly 100.0 (m/z 500 arithmetic; at m/z 600, from
+2026-09-24, it gives 119.999 Da and 120.0, but other inputs still land on a
+rung). Worse, `ladder_rung(99999)` is ALSO 100.0, so
 at that input **no value-based check can separate the two paths at all**. The
 proxy could not do its job and had started rejecting a correct answer.
 
 What replaces it, and why it is stronger: the real claim is about the UNIT, and
 the match arms enforce it directly (a Da analyzer must return `Da(_)`). The
 arithmetic is pinned by `a_da_analyzer_is_quantized_to_a_tenth_of_a_dalton`,
-which asserts 300 ppm -> 0.3 Da. If the Da branch ever called `ladder_rung(300)`
+which asserts 250 ppm -> 0.3 Da (300 ppm at m/z 500 until 2026-09-24). If the Da
+branch ever called `ladder_rung(250)`
 it would return 100.0 and that test FAILS — a direct check where the old one was
 a coincidence check.
 

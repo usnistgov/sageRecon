@@ -235,7 +235,8 @@ downstream step can recover PSMs that were never made.
    MS2".** That was wrong from 2026-09-03, when the report moved to one combined
    `Recommended MS1 / MS2`. `calibration.rs::ms2_user_recommendation` quantizes a
    ppm analyzer onto this same ladder (`FragmentTolerance::Ppm(ladder_rung(..))`)
-   and sends a Da analyzer down the m/z 500 conversion instead. The protection
+   and sends a Da analyzer down the m/z 600 conversion instead (m/z 500 until
+   2026-09-24). The protection
    the old wording was reaching for still holds: a ladder rung is meaningless for
    an ion trap, and any Da analyzer in a mixed census wins.
 

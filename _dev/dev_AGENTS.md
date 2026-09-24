@@ -85,8 +85,8 @@ SAME rung.
 ⚠ **The reason behind the old rule still holds, and is the constraint:** a ppm
 ladder is meaningless for an ion trap or quadrupole, which needs ~0.5-1.0 Da.
 So the ladder applies ONLY when the MS2 analyzer is ppm-based. For a Da class
-the recommendation is converted at m/z 500, doubled, **and then rounded UP to
-the nearest 0.1 Da**, using `PASS2_MS2_REPRESENTATIVE_MZ`,
+the recommendation is converted at m/z 600 (was 500 until 2026-09-24), doubled,
+**and then rounded UP to the nearest 0.1 Da**, using `PASS2_MS2_REPRESENTATIVE_MZ`,
 `PASS2_MS2_DA_MULTIPLIER` and `round_up_to_tenth_da`. Any Da analyzer in
 a mixed MS2 census wins, so a trap can never receive a rung.
 

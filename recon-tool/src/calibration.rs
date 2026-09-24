@@ -446,13 +446,26 @@ pub const PASS2_MS2_DA_MULTIPLIER: f64 = 2.0;
 
 /// Representative fragment m/z for the ppm→Da conversion.
 ///
-/// ⚠ ALSO AN ASSUMPTION. Most fragment ions of interest fall in 400–600 m/z as
-/// singly-charged species; 500 is the midpoint. The conversion is exact only at
-/// that m/z — at 400 it over-estimates the Da width by 25%, at 600 it
-/// under-estimates by 17%. We cannot do better without per-fragment m/z, which
-/// would need `sage --annotate-matches` (declined — see NOTES "MS2 stays
-/// absolute").
-pub const PASS2_MS2_REPRESENTATIVE_MZ: f64 = 500.0;
+/// ⚠ A CHOSEN POINT, not a measured one. It matters ONLY for a Da-regime MS2
+/// analyzer (ion trap, quadrupole). A ppm analyzer never reaches it.
+///
+/// **Changed 500 -> 600 on 2026-09-24.** 600 is the point the 2026-08-28 design
+/// discussion intended. The old comment said most fragments fall at 400-600 m/z,
+/// with 500 as the midpoint. The data contradicts that. On serum (Sage v0.15,
+/// 10,511 PSMs at q <= 0.01, 154,842 matched fragments), the matched fragments
+/// have a median m/z of 652 and an intensity-weighted median of 732, and only
+/// 17.6 % fall in 400-600. Source: `_dev/writeup/technote-material.md`, which
+/// records a measurement by `serum_window_and_fragments.py` in the private
+/// archive. That script is NOT in this repository, and the numbers were not
+/// re-measured here.
+///
+/// 600 is still BELOW both medians. At the median fragment (652) it
+/// under-converts by about 8 %, and at the intensity-weighted median (732) by
+/// about 18 %. [`PASS2_MS2_DA_MULTIPLIER`] (x2) covers that gap. The conversion
+/// is exact only at 600: at 400 it over-estimates the Da width by 50 %. Per-
+/// fragment m/z would need `sage --annotate-matches` (declined, see NOTES "MS2
+/// stays absolute").
+pub const PASS2_MS2_REPRESENTATIVE_MZ: f64 = 600.0;
 
 /// Pass 2 `fragment_tol`, in the UNIT the detected analyzer requires.
 ///
@@ -501,7 +514,7 @@ pub fn ms2_pass2_tolerance(
 ///   uses. A user picks a search setting from an effectively discrete set, and
 ///   that argument does not change between MS1 and MS2.
 /// * **Da analyzer** — Ben's recorded rule: convert the measured ppm to Da at
-///   [`PASS2_MS2_REPRESENTATIVE_MZ`] (500), multiply by
+///   [`PASS2_MS2_REPRESENTATIVE_MZ`] (600), multiply by
 ///   [`PASS2_MS2_DA_MULTIPLIER`] (2), then round UP to the nearest tenth of a
 ///   Dalton via [`round_up_to_tenth_da`]. The two constants are reused rather
 ///   than restated so the pass-2 rule and the recommendation cannot drift apart.
@@ -903,9 +916,10 @@ mod tests {
         // A pathological measurement must be clamped to pass 1, never exceed it.
         assert_eq!(ms2_pass2_tolerance(400.0, Ppm(50.0)), Ppm(50.0));
         // Ion trap: the unit comes from pass 1, NOT from the measurement.
-        // 800 ppm at m/z 500 = 0.4 Da, doubled = 0.8 Da, inside the 1.0 Da window.
+        // 800 ppm at m/z 600 = 0.48 Da, doubled = 0.96 Da, inside the 1.0 Da window.
+        // (At the old m/z 500 point this was 0.8 Da; changed 2026-09-24.)
         match ms2_pass2_tolerance(800.0, Da(1.0)) {
-            Da(v) => assert!((v - 0.8).abs() < 1e-9, "got {v}"),
+            Da(v) => assert!((v - 0.96).abs() < 1e-9, "got {v}"),
             other => panic!("an ion trap must keep Da, got {other}"),
         }
         // And clamped there too.
@@ -926,9 +940,10 @@ mod tests {
         // numerically equals one of {10,20,50,100}. That was only ever a proxy
         // for "the Da branch did not call `ladder_rung`", and quantizing to a
         // tenth of a Dalton (2026-09-03) makes those values legitimately
-        // reachable: 99999 ppm gives 99.999 Da, which rounds UP to exactly
-        // 100.0. Worse, `ladder_rung(99999)` is ALSO 100.0, so at that input no
-        // value-based check can tell the two paths apart at all — the proxy
+        // reachable: at the old m/z 500 point, 99999 ppm gave 99.999 Da, which
+        // rounds UP to exactly 100.0 (at m/z 600 it is 119.999 Da, so 120.0).
+        // Worse, `ladder_rung(99999)` is ALSO 100.0, so at that input no
+        // value-based check could tell the two paths apart at all; the proxy
         // cannot do its job, and it now rejects a correct answer.
         //
         // The real claim is about the UNIT, and the match arms below enforce it
@@ -945,16 +960,17 @@ mod tests {
             }
         }
         // The recorded rule, worked through: a unit-resolution trap measuring
-        // 600 ppm gives 600e-6 * 500 = 0.3 Da, doubled = 0.6 Da. That sits in the
-        // 0.3-0.8 Da band `ION_TRAP_MS2_HALF_WIDTH_DA` documents as typical.
+        // 600 ppm gives 600e-6 * 600 = 0.36 Da, doubled = 0.72 Da, rounded UP to
+        // 0.8 Da. That sits in the 0.3-0.8 Da band `ION_TRAP_MS2_HALF_WIDTH_DA`
+        // documents as typical. (At the old m/z 500 point it was 0.6 Da.)
         match ms2_user_recommendation(600.0, Da(ION_TRAP_MS2_HALF_WIDTH_DA)) {
-            Da(v) => assert!((v - 0.6).abs() < 1e-12, "got {v}"),
+            Da(v) => assert!((v - 0.8).abs() < 1e-12, "got {v}"),
             other => panic!("expected Da, got {other}"),
         }
     }
 
     /// The Da branch is QUANTIZED to a tenth of a Dalton — the Da regime's
-    /// ladder step (Ben, 2026-09-03). Convert at m/z 500, double, round UP.
+    /// ladder step (Ben, 2026-09-03). Convert at m/z 600, double, round UP.
     #[test]
     fn a_da_analyzer_is_quantized_to_a_tenth_of_a_dalton() {
         use crate::mzml::FragmentTolerance::Da;
@@ -966,13 +982,17 @@ mod tests {
         };
 
         // Worked by hand across the documented 0.3-0.8 Da unit-resolution band:
-        // ppm * 500 / 1e6 * 2, then up to the next tenth.
+        // ppm * 600 / 1e6 * 2, then up to the next tenth. The first four land
+        // exactly on a tenth; the last four do not, and must round UP.
         for (ppm, want) in [
-            (300.0, 0.3),
-            (400.0, 0.4),
-            (600.0, 0.6),
-            (800.0, 0.8),
-            (1600.0, 1.6),
+            (250.0, 0.3),
+            (500.0, 0.6),
+            (750.0, 0.9),
+            (1000.0, 1.2),
+            (300.0, 0.4),
+            (600.0, 0.8),
+            (800.0, 1.0),
+            (1600.0, 2.0),
         ] {
             assert!(
                 (rec(ppm) - want).abs() < 1e-12,
@@ -982,9 +1002,9 @@ mod tests {
         }
 
         // Rounding is UP, never to nearest: anything above a step takes the next
-        // one. 301 ppm is 301e-6 * 500 = 0.1505 Da, doubled to 0.301, which is
+        // one. 251 ppm is 251e-6 * 600 = 0.1506 Da, doubled to 0.3012, which is
         // barely over the 0.3 step and must therefore report 0.4, not 0.3.
-        assert!((rec(301.0) - 0.4).abs() < 1e-12, "got {}", rec(301.0));
+        assert!((rec(251.0) - 0.4).abs() < 1e-12, "got {}", rec(251.0));
         // A well-calibrated measurement still cannot recommend below one step.
         assert!((rec(1.0) - 0.1).abs() < 1e-12, "got {}", rec(1.0));
 

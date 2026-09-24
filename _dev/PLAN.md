@@ -328,7 +328,7 @@ A cold start that re-plans any of them is going backwards.
 ### Next, in order
 
 (a) ⚠ **PARTLY CLOSED 2026-09-03. The RULE is settled by Ben; the INPUT question
-    is still open but now bounded.** The Da recommendation is convert at m/z 500,
+    is still open but now bounded.** The Da recommendation is convert at m/z 600 (500 until 2026-09-24),
     double, **then round UP to the nearest 0.1 Da** — the Da regime's ladder.
     What remains open is unchanged in kind: `ms2_user_recommendation` feeds both
     branches `ms1_calibration.ms2_tolerance_high_ppm`, the measured fragment
@@ -474,7 +474,8 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
   change, so it needs a version bump and the usual downstream trace.
 * `decoy_ragged_side` is validated at 96.63 % ON TRYPSIN and inverts for
   N-terminal cleavers with nothing measured behind it. Ben: test after release.
-* The ion-trap Da path (ppm at m/z 500, doubled) is curated, never measured.
+* The ion-trap Da path (ppm at m/z 600, doubled; m/z 500 until 2026-09-24) is
+  curated, never measured.
 * Alkylation beyond carbamidomethyl — reagent table belongs in recon's own code
   cited to Unimod, NOT in `Mods.txt`. Ben decides the list.
 * **✅ DONE 2026-09-04 — the repo was renamed to `sageRecon`** (from
