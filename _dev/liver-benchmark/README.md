@@ -24,16 +24,16 @@ Each setting below was read from the file named in the last column.
 
 | tool | version | key settings | source file |
 |---|---|---|---|
-| recon | 0.1.1, Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
-| PTM-Shepherd | FragPipe 23.1, MSFragger 4.4.1, PTM-Shepherd 3.0.2 | Stock FragPipe Open workflow with all fixed and variable mods removed (`add_C_cysteine` is commented out; all 29 `add_*` lines are 0.0; no `variable_mod` line is active). Precursor -150 to +500 Da. Fragment 20 ppm. `calibrate_mass = 2`. `num_enzyme_termini = 2` (fully tryptic). `allowed_missed_cleavage_1 = 2`. `isotope_error = 0`. | `ptm-shepherd/liverShepherd/fragger.params`, `fragpipe.workflow`, log |
+| recon | 0.1.1 (`git_commit: b62c331-dirty`), Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
+| PTM-Shepherd | FragPipe 23.1, MSFragger 4.4.1, PTM-Shepherd 3.0.2 | FragPipe Open workflow (the operator's description) with all fixed and variable mods removed (`add_C_cysteine` is commented out; all 29 `add_*` lines are 0.0; no `variable_mod` line is active). Precursor -150 to +500 Da. Fragment 20 ppm. `calibrate_mass = 2`. `num_enzyme_termini = 2` (fully tryptic). `allowed_missed_cleavage_1 = 2`. `isotope_error = 0`. | `ptm-shepherd/liverShepherd/fragger.params`, `fragpipe.workflow`, log |
 | MetaMorpheus | 1.1.7 | Three tasks: Calibrate, G-PTM-D, Search. `ListOfModsFixed` and `ListOfModsVariable` are empty in all three. The G-PTM-D list holds Carbamidomethyl on C (Common Fixed) and Oxidation on M (Common Variable), so +57 is discovered. Calibrate: MS1 10 ppm, MS2 30 ppm. Search: MS1 5 ppm, MS2 20 ppm. `SpecificProtease = "trypsin"`, 2 missed cleavages. | `metamorpheus/liverMetaMorpheus/Task Settings/*.toml`, `allResults.txt` |
 | Mascot | 2.6.0 (see note) | Error-tolerant search (`ERRORTOLERANT=1`). `MODS=` and `IT_MODS=` are empty, so its Carbamidomethyl is a discovery. MS1 10 ppm, MS2 20 ppm. Trypsin, `PFA=1`. | `mascot/error-tolerant/Human_ertol-2018.par` |
 | Byonic Preview | v3.2.0 | The operator set `CysMod=+57.021464`, so its +57 is an input, not a discovery. `DigestLetters=KR`. No mass tolerance is an input. Run 2019-03-14. | `preview/10mg_1_A_1/objs/params.prv`, `result_summary.html` |
 
 Notes on the table:
 
-- The Mascot version is not in the vendored Mascot files. The operator
-  recorded it. `MascotErrorTol-liver.txt` is the modification summary copied
+- No vendored Mascot file states a version. The 2.6.0 comes from the
+  operator's record in `_dev/writeup/technote-material.md`. `MascotErrorTol-liver.txt` is the modification summary copied
   by hand from the Mascot report.
 - Both Preview HTML pages say v3.2.0. The title bar of `preview-ui.jpg` says
   v3.6.0. We report v3.2.0, from the pages that hold the results. The
@@ -51,7 +51,7 @@ input is missing. It does not report a partial comparison.
 | `liver_mod_rank_comparison.py` | `ptm-shepherd/liverShepherd/global.profile.tsv`, `metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv`, `mascot/error-tolerant/MascotErrorTol-liver.txt` | `_dev/testing/recon-output/full-run/liver.json`, `recon-tool/resources/unimod.xml` | Spearman rank agreement of mod counts |
 | `liver_four_tool_digestion.py` | `recon/pass2/results.sage.tsv`, `ptm-shepherd/liverShepherd/peptide.tsv`, `metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv` | `examples/uniprot_sprot_iso_human-2018_06.fasta` | missed cleavage, ragged-N, ragged-C |
 | `liver_5way_mods.py` | `ptm-shepherd/liverShepherd/global.modsummary.tsv`, `mascot/error-tolerant/MascotErrorTol-liver.txt`, `metamorpheus/liverMetaMorpheus/Task3-SearchTask/AllPeptides.psmtsv`, `preview/10mg_1_A_1/objs/VariableMods.txt` | `liver.json`, `unimod.xml` | five-tool mod table |
-| `liver_5way_report.py` | `preview/10mg_1_A_1/result_summary.html` | the two scripts above, `liver.json` | the composed five-tool report |
+| `liver_5way_report.py` | `preview/10mg_1_A_1/result_summary.html` | `liver_four_tool_digestion.py`, `liver_5way_mods.py`, `liver.json` | the composed five-tool report |
 | none (read by hand) | `ptm-shepherd/liverShepherd/log_2026-09-01_09-18-03.txt`, `metamorpheus/liverMetaMorpheus/Task1-CalibrateTask/results.txt` | | MS1 calibration medians |
 
 `recon/pass2/results.sage.tsv` is recon's own pass-2 Sage output for this
@@ -137,16 +137,28 @@ Results:
 - `fragment_mz_experimental`: median 605.3758, intensity-weighted median
   726.4010. 17.27 % of matched fragments are at 400 to 600 m/z.
 
-The two Sage TSVs (21 MB and 16 MB) are not committed. To make them again:
+The two Sage TSVs (21 MB and 16 MB) are not committed. To make them again,
+save this as `config.json`. It is the exact file used on 2026-09-24.
+
+```json
+{
+  "database": {
+    "static_mods": { "C": 57.0215 },
+    "generate_decoys": true
+  },
+  "precursor_tol": { "da": [-3.5, 1.25] },
+  "fragment_tol": { "ppm": [-10, 10] },
+  "annotate_matches": true
+}
+```
+
+Then run:
 
 ```bash
-sage config.json --annotate-matches \
+sage config.json --annotate-matches --disable-telemetry-i-dont-want-to-improve-sage \
   -f examples/uniprot_sprot_iso_human-2018_06.fasta -o OUT 10mg_1_A_1.mzML.gz
 python3 _dev/liver-benchmark/window_and_fragments.py OUT
 ```
-
-`config.json` holds the settings above. The `database`, `precursor_tol` and
-`fragment_tol` blocks of `results.json` show them.
 
 ## Redaction
 
