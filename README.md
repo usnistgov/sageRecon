@@ -225,7 +225,7 @@ With `--output NAME` (or the default base name):
 
 | file | contents |
 |---|---|
-| `NAME.json` | The full report, schema version 3.2.0. |
+| `NAME.json` | The full report, schema version 3.3.0. |
 | `NAME.html` | The same report as a self-contained page for a human reader. |
 | `NAME_pass2.json` | The semi-enzymatic digestion measurement, schema version 1.1.0. Absent with `--no-pass2`. |
 | `NAME_search/` | Sage's own outputs (`results.sage.tsv`, `results.json`) plus `effective-params.json`, the exact configuration the search ran with. |

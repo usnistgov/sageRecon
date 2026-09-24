@@ -986,6 +986,11 @@ fn detect_peaks_with_prominence(
     config: &ModDiscoveryConfig,
     total_intensity: f64,
 ) -> Vec<Peak> {
+    // The landscape prominence is measured on: EVERY bin, dense, with empty
+    // bins as 0. Only the candidates below (count >= min_peak_count) can become
+    // peaks, but all bins shape the valleys. See `topographic_prominence`.
+    let landscape = DenseHistogram::new(histogram, config.bin_width_da);
+
     // Filter to bins above minimum count
     // With PSM-level fold-to-zero, no bins are marked as folded at detection time
     let candidate_bins: Vec<&HistogramBin> = histogram
@@ -997,7 +1002,7 @@ fn detect_peaks_with_prominence(
     let mut peaks_with_prominence: Vec<(usize, &HistogramBin, usize)> = Vec::new();
 
     for (idx, bin) in candidate_bins.iter().enumerate() {
-        let prominence = compute_prominence(bin, &candidate_bins, 0.5); // Search ±0.5 Da
+        let prominence = landscape.prominence_at(bin.bin_center);
 
         // Accept if prominence > threshold * count
         let threshold = (config.prominence_threshold * bin.count as f64) as usize;
@@ -1181,54 +1186,116 @@ fn detect_peaks_with_prominence(
     peaks
 }
 
-/// Compute prominence for a bin (height above local baseline)
-fn compute_prominence(bin: &HistogramBin, all_bins: &[&HistogramBin], search_range: f64) -> usize {
-    let bin_center = bin.bin_center;
-    let bin_count = bin.count;
+/// The histogram as a DENSE array of counts, indexed by bin, with empty bins
+/// as 0. Prominence is a property of the whole landscape, so it must see the
+/// empty bins and the bins below `min_peak_count` that the sparse histogram and
+/// the candidate list leave out.
+struct DenseHistogram {
+    /// Bin index (`round(center / width)`) of `counts[1]`.
+    first_index: i64,
+    /// `counts[0]` and the last entry are PADDING zeros: the bins just beyond
+    /// the outermost non-empty bin hold no PSMs, so a walk that reaches the
+    /// edge of the observed range meets an empty bin, exactly as it would in a
+    /// histogram laid out over the whole search window.
+    counts: Vec<usize>,
+    bin_width: f64,
+}
 
-    // Find left base: minimum count between this bin and next higher bin to the left
-    let mut left_base = 0usize;
-    for other in all_bins.iter() {
-        if other.bin_center < bin_center
-            && other.bin_center > bin_center - search_range
-            && other.count > bin_count
-        {
-            // Found a higher bin to the left, find minimum between
-            for between in all_bins.iter() {
-                if between.bin_center > other.bin_center
-                    && between.bin_center < bin_center
-                    && (left_base == 0 || between.count < left_base)
-                {
-                    left_base = between.count;
+impl DenseHistogram {
+    fn new(histogram: &[HistogramBin], bin_width: f64) -> Self {
+        // Bin INDICES, never float centers: `bin_center` is `idx * width`, and
+        // the float round trip is exact only through `round`.
+        let index = |c: f64| (c / bin_width).round() as i64;
+        let (first_index, counts) = match (histogram.first(), histogram.last()) {
+            (Some(first), Some(last)) => {
+                let lo = index(first.bin_center);
+                let hi = index(last.bin_center);
+                let mut counts = vec![0usize; (hi - lo + 3) as usize];
+                for b in histogram {
+                    counts[(index(b.bin_center) - lo + 1) as usize] += b.count;
                 }
+                (lo, counts)
             }
+            _ => (0, Vec::new()),
+        };
+        // Invariant: laying the histogram out densely conserves PSMs. Every
+        // sparse bin lands in exactly one dense slot, and the padding is 0.
+        let sparse_total: usize = histogram.iter().map(|b| b.count).sum();
+        let dense_total: usize = counts.iter().sum();
+        assert_eq!(
+            dense_total, sparse_total,
+            "dense histogram must hold exactly the PSMs of the sparse one"
+        );
+        Self {
+            first_index,
+            counts,
+            bin_width,
+        }
+    }
+
+    fn prominence_at(&self, bin_center: f64) -> usize {
+        let idx = (bin_center / self.bin_width).round() as i64;
+        let pos = (idx - self.first_index + 1) as usize;
+        topographic_prominence(&self.counts, pos)
+    }
+}
+
+/// Topographic prominence of `counts[i]`, as PTM-Shepherd computes it
+/// (`Prominence.java`, master `61eebcb`).
+///
+/// Walk left from `i` until a STRICTLY higher bin or the edge, and take the
+/// minimum count met (including `i` itself). Do the same to the right. The
+/// prominence is the height minus the HIGHER of the two minima. Empty bins are
+/// 0, so a bin separated from every taller bin by an empty bin keeps its full
+/// height as prominence.
+///
+/// **Replaced 2026-09-24.** The old `compute_prominence` differed in three
+/// ways. Together they changed 10 of the 49 reported liver peaks (NOTES
+/// "Prominence is topographic"):
+/// 1. It took the FIRST higher bin within 0.5 Da in array order, which is the
+///    FARTHEST to the left, not the nearest.
+/// 2. It saw only candidate bins (>= `min_peak_count`), so empty bins and
+///    small bins could never be the valley.
+/// 3. It searched only within ±0.5 Da. With no higher bin in that range it set
+///    the base to 0 and gave the full height.
+///
+/// **No search range.** PTM-Shepherd computes prominence over the whole
+/// histogram, and a range makes a bin's prominence depend on a distance that
+/// has no physical meaning. On 0.01 Da bins the walk almost always meets an
+/// empty bin within a few bins and stops there, because the minimum cannot go
+/// below 0, so dropping the range costs nothing in practice.
+///
+/// **Ties.** PTM-Shepherd adds random noise (< 1e-5) to every bin to break
+/// ties. recon must be deterministic, so an EQUAL neighbour is not higher and
+/// the walk continues through it. Two equal adjacent bins on a plateau both
+/// keep their prominence; the peak merge step then joins them.
+fn topographic_prominence(counts: &[usize], i: usize) -> usize {
+    let h = counts[i];
+
+    let mut left_min = h;
+    for &c in counts[..i].iter().rev() {
+        if c > h {
+            break;
+        }
+        left_min = left_min.min(c);
+        if left_min == 0 {
+            break; // the minimum cannot go lower
+        }
+    }
+
+    let mut right_min = h;
+    for &c in &counts[i + 1..] {
+        if c > h {
+            break;
+        }
+        right_min = right_min.min(c);
+        if right_min == 0 {
             break;
         }
     }
 
-    // Find right base: minimum count between this bin and next higher bin to the right
-    let mut right_base = 0usize;
-    for other in all_bins.iter() {
-        if other.bin_center > bin_center
-            && other.bin_center < bin_center + search_range
-            && other.count > bin_count
-        {
-            // Found a higher bin to the right, find minimum between
-            for between in all_bins.iter() {
-                if between.bin_center < other.bin_center
-                    && between.bin_center > bin_center
-                    && (right_base == 0 || between.count < right_base)
-                {
-                    right_base = between.count;
-                }
-            }
-            break;
-        }
-    }
-
-    // Prominence = count - max(left_base, right_base)
-    let base = left_base.max(right_base);
-    bin_count.saturating_sub(base)
+    // Both minima include `h`, so neither exceeds it: 0 <= prominence <= h.
+    h - left_min.max(right_min)
 }
 
 /// Fold satellite peaks onto their parent peaks
@@ -1933,11 +2000,142 @@ mod tests {
             },
         ];
 
-        let bin_refs: Vec<&HistogramBin> = bins.iter().collect();
+        let landscape = DenseHistogram::new(&bins, 0.01);
 
-        // The peak at 0.02 should have high prominence
-        let prominence = compute_prominence(&bins[2], &bin_refs, 0.5);
-        assert!(prominence > 50); // Should be at least 100 - 50 = 50
+        // The peak at 0.02 is the global maximum. Both walks reach the empty
+        // padding bin, so its prominence is its full height.
+        assert_eq!(landscape.prominence_at(0.02), 100);
+        // 0.01 (50) is a shoulder of 0.02: the nearest higher bin is adjacent,
+        // so the right minimum is 50 itself and the prominence is 0.
+        assert_eq!(landscape.prominence_at(0.01), 0);
+        // 0.00 (10) is at the edge. Left: the padding 0. Right: 0.01 (50) is
+        // higher at once, so the right minimum is 10 itself. Prominence 0.
+        assert_eq!(landscape.prominence_at(0.00), 0);
+    }
+
+    /// Build PSMs whose deltas fill the given 0.01 Da bins with the given counts,
+    /// then run the real histogram and peak detector on them. Returns the peak
+    /// bin indices (delta / bin width, rounded).
+    fn detected_bins(profile: &[(i64, usize)]) -> Vec<i64> {
+        let config = ModDiscoveryConfig::default();
+        let mut deltas = Vec::new();
+        for &(idx, n) in profile {
+            for _ in 0..n {
+                deltas.push(idx as f64 * config.bin_width_da);
+            }
+        }
+        let psms: Vec<Psm> = deltas
+            .iter()
+            .map(|&d| make_test_psm(d, 100.0, 30.0))
+            .collect();
+        let (histogram, total_intensity) =
+            build_histogram_from_deltas(&deltas, &psms, config.bin_width_da);
+        let peaks =
+            detect_peaks_with_prominence(&histogram, &deltas, &psms, &config, total_intensity);
+        let mut bins: Vec<i64> = peaks
+            .iter()
+            .map(|p| (p.delta_mass / config.bin_width_da).round() as i64)
+            .collect();
+        bins.sort();
+        bins
+    }
+
+    /// The NEAREST higher bin sets the base, not the leftmost one in range.
+    ///
+    /// Bin 5004 (count 50) is a shoulder of 5002 (count 60): the dip between
+    /// them is only 45. Its topographic prominence is 50 - 45 = 5, below
+    /// 0.3 x 50, so it is NOT a peak. The code before 2026-09-24 took the FIRST
+    /// higher bin in array order within 0.5 Da (5000, count 100), used the
+    /// minimum between 5000 and 5004 (6), and so reported prominence 44 and a
+    /// separate peak at 50.04 Da.
+    #[test]
+    fn prominence_uses_the_nearest_higher_bin_not_the_leftmost() {
+        let profile = [
+            (5000, 100),
+            (5001, 6),
+            (5002, 60),
+            (5003, 45),
+            (5004, 50),
+            (5005, 6),
+            (5006, 5),
+        ];
+        let bins = detected_bins(&profile);
+        assert!(
+            !bins.contains(&5004),
+            "50.04 Da is a shoulder of 50.02 Da and must not be a peak; got {bins:?}"
+        );
+        assert!(bins.contains(&5000), "got {bins:?}");
+        assert!(bins.contains(&5002), "got {bins:?}");
+    }
+
+    /// An EMPTY bin between a bin and a taller one counts as 0.
+    ///
+    /// Bin 6005 (count 40) is separated from 6000 (count 100) by bin 6003,
+    /// which holds no PSMs. The valley therefore reaches 0 and 6005 has its
+    /// full height as prominence. The code before 2026-09-24 saw only bins with
+    /// >= 5 PSMs, skipped the empty bin, took the valley as 30, and rejected
+    /// 6005 (prominence 10, below 0.3 x 40).
+    #[test]
+    fn prominence_counts_an_empty_bin_as_zero() {
+        let profile = [
+            (6000, 100),
+            (6001, 30),
+            (6002, 30),
+            // 6003 is empty
+            (6004, 30),
+            (6005, 40),
+            (6006, 10),
+        ];
+        let bins = detected_bins(&profile);
+        assert!(
+            bins.contains(&6005),
+            "60.05 Da is separated by an empty bin and must be a peak; got {bins:?}"
+        );
+    }
+
+    /// A bin below `min_peak_count` is still part of the landscape. It cannot
+    /// be a peak, but it can be the valley. Same profile as above, with 6003
+    /// holding 2 PSMs instead of none: the valley is 2, prominence 38.
+    #[test]
+    fn prominence_sees_bins_below_the_candidate_floor() {
+        let profile = [
+            (6000, 100),
+            (6001, 30),
+            (6002, 30),
+            (6003, 2),
+            (6004, 30),
+            (6005, 40),
+            (6006, 10),
+        ];
+        let bins = detected_bins(&profile);
+        assert!(
+            bins.contains(&6005),
+            "a 2-PSM valley must separate 60.05 Da from 60.00 Da; got {bins:?}"
+        );
+    }
+
+    /// A bin ADJACENT to a taller one is a shoulder: prominence 0. The code
+    /// before 2026-09-24 found no candidate bin between the two, left the base
+    /// at 0, and gave the shoulder its full height (68 here). The merge step
+    /// hid that for the peak list, but not for the recorded value.
+    #[test]
+    fn an_adjacent_shoulder_has_zero_prominence() {
+        // index:        pad  98   99  pad
+        let counts = [0usize, 114, 68, 0];
+        assert_eq!(topographic_prominence(&counts, 2), 0);
+        assert_eq!(topographic_prominence(&counts, 1), 114);
+        // Equal neighbours are not higher: the walk passes through them.
+        let plateau = [0usize, 50, 50, 0];
+        assert_eq!(topographic_prominence(&plateau, 1), 50);
+        assert_eq!(topographic_prominence(&plateau, 2), 50);
+        // The result never exceeds the height, whatever the landscape.
+        let rugged = [0usize, 3, 9, 1, 7, 7, 2, 12, 0, 5, 0];
+        for i in 1..rugged.len() - 1 {
+            assert!(topographic_prominence(&rugged, i) <= rugged[i]);
+        }
+        // Worked by hand: 7 at index 4 walks left through 1 to 9 (higher),
+        // min 1; right through 7, 2 to 12 (higher), min 2. 7 - max(1,2) = 5.
+        assert_eq!(topographic_prominence(&rugged, 4), 5);
     }
 
     #[test]

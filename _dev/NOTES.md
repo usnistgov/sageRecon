@@ -9124,6 +9124,8 @@ The mod discovery output was annotating raw, uncalibrated, un-folded delta masse
 1. **K-scaled fold tolerance: 12 mDa + (|k|-1) × 4.5 mDa** — Deamidation (+0.984) is 11.2 mDa from k=1 position (+1.003355), just outside the 12 mDa base tolerance. This preserves real deamidation while folding isotope artifacts.
 
 2. **Prominence threshold: 0.3 × count** — Noise floor has prominence ≈ 0, real PTM peaks rise sharply.
+   (The ratio is unchanged. HOW prominence is computed changed on 2026-09-24:
+   see "Prominence is topographic".)
 
 3. **No hyperscore gate** — Monoisotope misassignments score as well as unmodified (fragments match perfectly, error is on precursor only). Hyperscore is not a discriminator.
 
@@ -10827,3 +10829,92 @@ confirmed byte-identical to what was uploaded. Both macOS binaries were
 extracted from the downloaded copies and run (`recon 0.1.3`); the Windows
 binary was run with `--help` on the laptop itself, output confirmed correct.
 The full 9-step manual checklist passed clean.
+
+## Prominence is topographic (2026-09-24, Ben, technote Appendix B item 3)
+
+**The rule now.** For each bin, walk left to the nearest STRICTLY higher bin,
+or to the edge. Take the minimum count met, including the bin itself. Do the
+same to the right. Prominence is the height minus the higher of the two
+minima. A bin is a peak candidate when prominence > 0.3 × height. This is
+PTM-Shepherd's definition (`Prominence.java`, `PeakPicker.java`, master
+`61eebcb`, read from GitHub on 2026-09-24). The 0.3 ratio, the 0.01 Da bins,
+the >= 5 PSM candidate floor, the one-bin merge and the 50-peak cap are
+unchanged. Code: `DenseHistogram` and `topographic_prominence` in
+`mod_discovery.rs`.
+
+**What was wrong with the old rule** (`compute_prominence`, removed):
+1. It took the FIRST higher bin within 0.5 Da in array order. That is the
+   farthest to the left, not the nearest.
+2. It saw only candidate bins (>= 5 PSMs). An empty bin or a small bin could
+   never be the valley.
+3. With no candidate between the bin and the higher bin, the base stayed 0, so
+   a bin ADJACENT to a taller one got its full height as prominence.
+
+**Decision: no search range.** The ±0.5 Da limit is gone. PTM-Shepherd
+computes prominence over the whole histogram, and a range makes a bin's
+prominence depend on a distance with no physical meaning. On 0.01 Da bins a
+walk meets an empty bin within a few bins almost everywhere, and the minimum
+cannot go below 0, so the walk stops there. The range therefore bound only in
+dense regions, such as the zero smear, where it gave the wrong answer.
+Rejected alternative: keep ±0.5 Da and treat the range edge as a wall. That
+keeps a parameter nobody chose for a reason.
+
+**Two departures from PTM-Shepherd, both deliberate:**
+- Ties. PTM-Shepherd adds random noise below 1e-5 to break ties. recon must be
+  deterministic, so an EQUAL neighbour is not higher and the walk continues.
+  Both bins of a two-bin plateau keep their prominence; the merge joins them.
+- Edges. recon's histogram is sparse. The dense array is padded with one empty
+  bin on each side, because the bins beyond the outermost observed bin hold no
+  PSMs. PTM-Shepherd's histogram spans the whole window with zeros, which has
+  the same effect.
+
+**Invariant, asserted in code:** the dense array holds exactly the PSMs of the
+sparse histogram (`DenseHistogram::new`).
+
+**Tests that fail under the old rule** (run against the old code before the
+change; all three failed): `prominence_uses_the_nearest_higher_bin_not_the_leftmost`,
+`prominence_counts_an_empty_bin_as_zero`,
+`prominence_sees_bins_below_the_candidate_floor`. They drive the real
+`detect_peaks_with_prominence`. `an_adjacent_shoulder_has_zero_prominence`
+checks the value directly, because the merge step hides that defect in the
+peak list.
+
+**Measured on liver** (`recon analyze`, open TSV
+`full-run/liver_search/results.sage.tsv`, mzML `10mg_1_A_1.mzML.gz`, FASTA
+`uniprot_sprot_iso_human-2018_06.fasta`; outputs not committed):
+- Reported peaks 49 -> 50. Prominent centres before the 50 cap: 179 -> 171.
+  ⚠ **The 50-peak cap binds on liver before AND after.** The list is the top 50
+  centres by bin count, so a slot freed at the top admits a tail peak.
+- 10 peaks leave the list. Every one is a flank of a taller peak or of the zero
+  smear, and none is prominent under the new rule:
+  -0.0801 (165, Unmodified), -1.0582 (137), +16.9794 (116), -0.0982 (116,
+  Unmodified), -1.0786 (114), +0.9417 (103), +58.0037 (89, Carboxymethyl),
+  -0.1282 (81), -1.0991 (63), +0.8799 (49). Example: bins 58.00 / 58.01 /
+  58.02 hold 40 / 63 / 125 PSMs, a monotonic rise to the 58.02 peak.
+- 11 peaks enter. One is new: +1.0223 (55), separated from the 0.98-0.99
+  deamidation bins by two empty bins. The other 10 were prominent before and
+  were cut by the cap: +14.9891 (40), -2.0507 (36), +39.9946 (33),
+  +15.0113 (31), +115.0422 (30), +130.0382 (28), -1.9814 (28), +64.9808 (27),
+  -3.0477 (24), -18.0104 (22).
+- Shared peaks: no count changes. `unmodified_pct` unchanged (51.28 %).
+- **Recommendations change.** `variable` loses Carboxymethylation (+58.0037,
+  89 PSMs, statistics, OR 6.30, sites CKW) and gains Water Loss (Glu->pyro-Glu)
+  (-18.0104, 22 PSMs, statistics, OR 16.91). The fixed list, the floor (341.8)
+  and the carpet margin (171.8) do not move. `not_recommended` loses the seven
+  unannotated flanks and gains the entering tail peaks.
+  ⚠ **Open question for Ben.** The +58.00 shoulder had OR 6.30 on C/K/W. C is
+  also the acceptor of the +58.025 Carbamidomethyl ¹³C satellite beside it, so
+  the old call may have been that satellite's low flank. The new rule cannot
+  resolve two components 19 mDa apart on 0.01 Da bins.
+
+**Other files** (`discover --min-peak-count 5`, not committed): serum 48 -> 49
+peaks, loses +58.0128 (93); bcell 47 -> 50, loses 16 flanks; b1906 48 -> 50,
+loses 14 flanks. The old binary reproduces all three regression snapshots
+exactly, so **`run_validation.py` Tier 3 will now FAIL until the snapshots are
+regenerated.** That is expected and is left to the planned regeneration step.
+Every `cargo test` data test (tier assignment on serum, bcell, b1906) still
+passes with the data present.
+
+Schema bumped 3.2.0 -> 3.3.0 (MINOR, by the 1.1.0 precedent: a value
+correction on an existing field). Ben may prefer MAJOR under the "changed
+semantics" rule; the 3.0.0 entry was that kind of call.

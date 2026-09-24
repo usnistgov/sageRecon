@@ -153,7 +153,20 @@ use serde::{Deserialize, Serialize};
 /// same pass. That is HTML only and adds no field: the MS2 rung is derived at
 /// render time from `ms1_calibration.ms2_tolerance_high_ppm`, which is already in
 /// the JSON.
-pub const SCHEMA_VERSION: &str = "3.2.0";
+///
+/// Bumped to 3.3.0 on 2026-09-24: NO field is added, removed or renamed, but
+/// `mod_discovery.peaks[]` CHANGES. Prominence is now topographic, as in
+/// PTM-Shepherd: the nearest strictly higher bin on each side, the minimum over
+/// every bin between (empty bins count as 0), over the whole histogram. The old
+/// rule took the first higher bin within 0.5 Da in array order and saw only
+/// bins with >= 5 PSMs. On liver 10 of the 49 reported peaks leave the list
+/// (flanks of taller peaks and of the zero smear) and 11 enter it, and
+/// `recommendations.variable` loses Carboxymethylation (+58.004) and gains
+/// Water Loss (-18.010). Follows the 1.1.0 precedent: a value correction on an
+/// existing field is a MINOR bump with a non-comparability note. A 3.2.0
+/// report's peak list and recommendations are NOT comparable with a 3.3.0 one.
+/// See NOTES "Prominence is topographic".
+pub const SCHEMA_VERSION: &str = "3.3.0";
 
 /// Schema version of the SEPARATE `<output>_pass2.json` artifact.
 ///

@@ -126,6 +126,13 @@ Bins at ±k × C13_C12_DIFF (k = 1,2,3) are identified as monoisotope misassignm
 
 Peaks are detected using prominence filtering (height above local baseline must exceed 30% of bin count) rather than simple threshold + merge. This eliminates diffuse noise while preserving real PTM peaks.
 
+Since 3.3.0 (2026-09-24) the prominence is TOPOGRAPHIC, as in PTM-Shepherd
+(`Prominence.java`): walk left and right from the bin to the nearest strictly
+higher bin (or the edge), take the minimum count met on each side (empty bins
+count as 0), and subtract the higher of the two minima from the height. It uses
+the whole histogram, with no search range. Before 3.3.0 it took the first
+higher bin within 0.5 Da in array order and saw only bins with >= 5 PSMs.
+
 ### Schema
 
 ```json
@@ -842,6 +849,13 @@ This schema follows semantic versioning:
 
 ## Changelog
 
+- **3.3.0** (2026-09-24): no field added, removed or renamed. `mod_discovery.peaks[]`
+  and the `recommendations` built from them CHANGE, because prominence is now
+  topographic (see "Prominence-Based Peak Detection"). On liver, 10 of 49
+  reported peaks leave the list and 11 enter it; `recommendations.variable`
+  loses Carboxymethylation (+58.004) and gains Water Loss (-18.010). A 3.2.0
+  peak list is NOT comparable with a 3.3.0 one. MINOR, by the 1.1.0 precedent
+  (a value correction on an existing field).
 - **3.2.0** (2026-09-03): `recommendations.not_recommended[]` and
   `recommendations.notable_unannotated[]` gained THREE optional fields:
   `count_pct`, `sites` and `position`. A 3.1.0 consumer keeps working.
