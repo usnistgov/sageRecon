@@ -22,11 +22,14 @@ foreach ($arm in 'vanilla', 'recon_guided', 'vanilla_repeat') {
   $p = Start-Process -FilePath $Sage -NoNewWindow -PassThru `
     -ArgumentList @($cfg, '--disable-telemetry-i-dont-want-to-improve-sage', '-f', $Fasta, '-o', (Join-Path $Work $arm), $Mzml) `
     -RedirectStandardError (Join-Path $Work "$arm.stderr.log")
+  # Reading the handle now is required: without it, ExitCode is empty after exit.
+  $null = $p.Handle
   $peak = 0
   while (-not $p.HasExited) {
     try { $p.Refresh(); if ($p.PeakWorkingSet64 -gt $peak) { $peak = $p.PeakWorkingSet64 } } catch {}
     Start-Sleep -Seconds 2
   }
+  $p.WaitForExit()
   $sw.Stop()
   if ($p.ExitCode -ne 0) { throw "Sage failed on $arm (exit $($p.ExitCode)); see $arm.stderr.log" }
   # Same wording run.sh gets from /usr/bin/time -l, so summarize.py reads both.
