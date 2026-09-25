@@ -3522,6 +3522,17 @@ was regenerated 2026-08-31 at +-20 ppm, which changes the PSM set.
 signed path — liver reads -1.4193 in the same regenerated set. Inspect the
 pre-aggregation distribution if it ever becomes load-bearing. Left open on the
 token budget, deliberately.
+2026-09-25: bcell is a development file. Not investigated further, because the
+technical note's evidence is liver only (Ben). One probe had already run on the
+regenerated `full-run/bcell_search/results.sage.tsv`, and it is recorded, not
+pursued: the clean subset is 18204 PSMs (30340 before the hyperscore guard),
+matching the report. 642 of the 18204 signed values are exactly 0.0; in each,
+the `expmass` and `calcmass` strings are identical (e.g. `2043.0637`), so
+Sage's `precursor_ppm` also reads 0.0. There are 8858 negative and 8704
+positive values, so both middle values (ranks 9102 and 9103) fall in the zero
+group, and the median is exactly 0.0. The mean is +0.0195 ppm. No duplicated
+scans. The masses print with 1 to 5 decimals, which looks like shortest f32
+text; that was NOT checked against Sage's source.
 
 ### 🔒 ACCEPTANCE CRITERION: method spread must be small against sample spread (2026-08-31)
 
@@ -5194,6 +5205,10 @@ the 188 true PSMs.
 **RESULT — exactly THREE decisions move across the three files.**
 Asserted by `tier_assignment_integration::protein_context_moves_exactly_three_decisions`,
 which runs `assign` twice per file, with and without the index, and diffs the tiers.
+⚠ SUPERSEDED 2026-09-25: the count is not pinned any more. The test is now
+`protein_context_moves_only_explained_decisions` and asserts the mechanism. With
+the 500-peak cap, seven decisions move. See "The protein-context test asserts the
+mechanism (2026-09-25)". The table below is the 2026-08-27 record.
 
 | file | what moved | OR |
 |---|---|---|
@@ -11478,8 +11493,9 @@ ran `assign` on the old and new peak lists:
   +47.9825 Trioxidation and -89.0296 Met-loss+Acetylation, both new peaks. The
   pin now has a no-FASTA branch, (9, 1), measured.
 
-❌ **NOT FIXED, OPEN FOR BEN: `protein_context_moves_exactly_three_decisions`
-fails.** Message: `serum +21.9812: q ROSE 6.530166e-1 -> 6.538140e-1`. The
+✅ **RESOLVED 2026-09-25, see "The protein-context test asserts the mechanism
+(2026-09-25)" below.** The record of the failure stays here.
+**`protein_context_moves_exactly_three_decisions` failed.** Message: `serum +21.9812: q ROSE 6.530166e-1 -> 6.538140e-1`. The
 assertion rests on a premise: the index adds ONE near-zero p-value to the BH
 sweep, and BH can then only lower the other q values. Measured with a
 temporary probe in `assign` (reverted): the index adds these p-values.
@@ -11525,5 +11541,45 @@ They now describe older recon output.
   Preview "reports unrecognized (blind-search) modifications" with a
   wild-card search, -50 to +150 Da. Both corrected in the note.
   `ptm-stratification-design.md` lines 54 and 313 still make the claim
-  ("the commercial tools lack", "Preview to ~60 common mods") and were not
-  edited. README, `docs/` and `technote-material.md` do not make it.
+  ("the commercial tools lack", "Preview to ~60 common mods"). Corrected
+  2026-09-25 to match this note. README, `docs/` and `technote-material.md` do not make it.
+
+### The protein-context test asserts the mechanism (2026-09-25)
+
+Ben's call. `protein_context_moves_exactly_three_decisions` is replaced by
+`protein_context_moves_only_explained_decisions`. A recorded edit.
+
+**Why.** The old test pinned the SET of moved decisions, and assumed the index
+adds one near-zero p-value to the BH sweep, so no q can rise. With the 500-peak
+cap (`ad7a10e`) the sweep is larger, and the index adds p-values near 1 (serum
++42.0032, b1906 +14.0153). A q can then rise, and the set grew from four to
+seven. A count is a property of the peak list. The mechanism is the claim.
+
+**What it asserts now.** Every changed decision (tier or label) must have one of
+two explanations, in `explain_change`:
+1. The peak has a curated candidate that needs protein context
+   (`needs_protein_context`: protein-terminal or Met-loss). Any change is allowed.
+2. Otherwise the candidates and p-values are the same in both runs, and only the
+   BH family grew. The change must be `statistics` <-> `no_residue_support`,
+   each side must obey the rule (OR >= 2 and q <= 0.05, or not) with its own
+   numbers, and if the same candidate won both times, its OR must be identical
+   and its q must cross 0.05.
+A decision that did not change must keep its odds ratio, unless (1) applies.
+Nothing else may change. The test also requires at least one protein-context
+move, so an index with no effect fails.
+
+**Measured, all data present.** Seven decisions move, all by explanation 1:
+serum +14.0137 (n 55); bcell -89.0289 (198), +42.0109 (112), +14.0151 (26);
+b1906 +42.0104 (26), +14.0153 (19, to `no_residue_support`), -89.0296 (17).
+None moves by explanation 2 on this data.
+
+**It fails on an unexplained change.** `unexplained_decision_change_is_rejected`
+takes a real bcell statistics peak with no protein-context candidate and feeds
+three wrong "with index" decisions: a jump to `BelowFloor`, a flip to
+`no_residue_support` with passing numbers, and the odds ratio times 1.01. Each
+returns `Err`. The same `BelowFloor` jump returns `Ok` when a protein-context
+candidate is present.
+
+**Rejected alternative:** repin the count to seven. That repeats the failure: the
+next peak-list change moves it again, and a count cannot tell an explained move
+from an unexplained one.

@@ -175,7 +175,7 @@ fn statistics_override_category_on_bcell() {
     // once the FASTA is supplied: -89.0289 Met-loss+Acetylation (OR 4231) and
     // +42.0109 Acetylation at a protein N-terminus (OR 174, which REPLACES the
     // `TG=K anywhere` reading that scored OR 1.19 and failed). See
-    // `protein_context_moves_exactly_three_decisions` below.
+    // `protein_context_moves_only_explained_decisions` below.
     // This count is 8 when the FASTA is absent and the test skips the index.
     // ⚠ REPINNED 2026-09-24, a recorded edit: 10 -> 13 with the FASTA, 8 -> 10
     // without. The peaks come from the regenerated full-run/bcell.json, which
@@ -449,163 +449,276 @@ fn evidence(d: &Decision) -> Option<(f64, f64)> {
     }
 }
 
-/// I1 — exactly THREE decisions move when the protein context is supplied.
+/// Why one peak's decision may differ between the run without the protein
+/// index and the run with it. `Err` names a change that has no explanation.
+///
+/// Two mechanisms are allowed, and nothing else:
+///
+/// 1. PROTEIN CONTEXT. The peak has a curated candidate that needs the
+///    protein position (protein-terminal or Met-loss). Without the index that
+///    candidate is untestable; with it, it is tested. Any change is allowed.
+/// 2. BH FAMILY GROWTH. The peak has NO such candidate, so its candidates and
+///    their p-values are the same in both runs. Only the BH family changed: the
+///    index adds the protein-context p-values to the sweep, so every other q can
+///    move, in either direction (an added p near 1, such as serum +42.0032 or
+///    b1906 +14.0153, can raise the rest). The odds ratio cannot move, because
+///    it is computed per candidate. So a change here is allowed only between
+///    `statistics` and `no_residue_support`, each side must satisfy the rule
+///    (OR >= OR_MIN and q <= Q_MAX, or not) with its own numbers, and when the
+///    same candidate won both times, its odds ratio must be identical and its q
+///    must have crossed Q_MAX.
+///
+/// A peak whose decision did not change must also keep its odds ratio, unless
+/// mechanism 1 applies.
+fn explain_change(
+    has_protein_context: bool,
+    a: &recon_tool::tier_assignment::TieredPeak,
+    b: &recon_tool::tier_assignment::TieredPeak,
+) -> Result<bool, String> {
+    use recon_tool::tier_assignment::{OR_MIN, Q_MAX};
+    let changed = variant(&a.decision) != variant(&b.decision) || a.label != b.label;
+    if has_protein_context {
+        return Ok(changed);
+    }
+    let passes = |d: &Decision| evidence(d).map(|(o, q)| o >= OR_MIN && q <= Q_MAX);
+    if !changed {
+        if let (Some((oa, _)), Some((ob, _))) = (evidence(&a.decision), evidence(&b.decision)) {
+            if (oa - ob).abs() >= 1e-9 {
+                return Err(format!(
+                    "odds ratio moved {oa} -> {ob} with no protein context"
+                ));
+            }
+        }
+        return Ok(false);
+    }
+    let consistent = |d: &Decision| match d {
+        Decision::Statistics { .. } => passes(d) == Some(true),
+        Decision::NoResidueSupport { .. } => passes(d) == Some(false),
+        _ => false,
+    };
+    if !consistent(&a.decision) || !consistent(&b.decision) {
+        return Err(format!(
+            "decision changed with no protein-context candidate, and not by a q \
+             crossing Q_MAX: {:?} {:?} -> {:?} {:?}",
+            a.label, a.decision, b.label, b.decision
+        ));
+    }
+    if a.label == b.label {
+        let (oa, qa) = evidence(&a.decision).unwrap();
+        let (ob, qb) = evidence(&b.decision).unwrap();
+        if (oa - ob).abs() >= 1e-9 || (qa <= Q_MAX) == (qb <= Q_MAX) {
+            return Err(format!(
+                "same candidate, but not a pure q shift across Q_MAX: \
+                 OR {oa} -> {ob}, q {qa:.6e} -> {qb:.6e}"
+            ));
+        }
+    }
+    Ok(true)
+}
+
+/// Run both arms on one file. Returns `(peak, has_protein_context, without,
+/// with)` per peak, or `None` when the data is absent.
+#[allow(clippy::type_complexity)]
+fn both_arms(
+    key: &str,
+    index: &ProteinIndex,
+) -> Option<
+    Vec<(
+        bool,
+        recon_tool::tier_assignment::TieredPeak,
+        recon_tool::tier_assignment::TieredPeak,
+    )>,
+> {
+    let tsv = repo().join(format!(
+        "_dev/testing/search-output/step1-open-{key}/results.sage.tsv"
+    ));
+    if !tsv.exists() {
+        eprintln!("skipping: {} absent", tsv.display());
+        return None;
+    }
+    let opts = FilterOptions {
+        q_threshold: 1.0,
+        ..Default::default()
+    };
+    let psms: Vec<_> = parse_sage_results(&tsv, &opts)
+        .expect("TSV must parse")
+        .psms
+        .into_iter()
+        .filter(|p| p.rank == 1 && p.spectrum_q < 0.01)
+        .collect();
+    let unimod = UnimodDb::from_xml(&repo().join("recon-tool/resources/unimod.xml")).unwrap();
+    let (curated, _) =
+        CuratedDb::load_from_sources(recon_tool::defaults::CURATED_MODS, unimod.elements())
+            .unwrap();
+    let report: serde_json::Value = serde_json::from_str(
+        &std::fs::read_to_string(
+            repo().join(format!("_dev/testing/recon-output/full-run/{key}.json")),
+        )
+        .unwrap(),
+    )
+    .unwrap();
+    let peaks: Vec<(f64, usize)> = report["mod_discovery"]["peaks"]
+        .as_array()
+        .unwrap()
+        .iter()
+        .map(|p| {
+            (
+                p["delta_mass"].as_f64().unwrap(),
+                p["count"].as_u64().unwrap() as usize,
+            )
+        })
+        .filter(|(d, _)| d.abs() >= 0.1)
+        .collect();
+    let floor = peaks.iter().map(|(_, c)| *c).max().unwrap() as f64 * 0.20;
+
+    // I2 / I3 — the two structural guards, printed per file.
+    let (resolved, total) = index.resolution(&psms);
+    let frac = resolved as f64 / total as f64;
+    let nterm = psms
+        .iter()
+        .filter(|p| {
+            index.starts_protein(
+                &recon_tool::peak_composition::residues_of(&p.peptide),
+                &p.proteins,
+            )
+        })
+        .count();
+    let nterm_pct = 100.0 * nterm as f64 / total as f64;
+    println!(
+        "{key}: {resolved}/{total} accessions resolved ({:.2}%), \
+         {nterm} at protein position 0 ({nterm_pct:.3}%)",
+        100.0 * frac
+    );
+    assert!(
+        frac >= recon_tool::protein_index::MIN_RESOLVED_FRACTION,
+        "{key}: only {:.2}% of target PSMs resolve — wrong FASTA?",
+        100.0 * frac
+    );
+    assert!(
+        nterm_pct < 5.0,
+        "{key}: {nterm_pct:.3}% at protein position 0 — the lookup is matching \
+         too much and the positional test would carry no information"
+    );
+
+    let without = assign(&peaks, &psms, &curated, floor, None);
+    let with = assign(&peaks, &psms, &curated, floor, Some(index));
+    assert_eq!(without.len(), with.len(), "{key}: peak count changed");
+    Some(
+        without
+            .into_iter()
+            .zip(with)
+            .map(|(a, b)| {
+                let ctx = curated
+                    .candidates(a.delta_mass, recon_tool::tier_assignment::CURATED_TOL_DA)
+                    .iter()
+                    .any(|c| c.needs_protein_context());
+                (ctx, a, b)
+            })
+            .collect(),
+    )
+}
+
+/// I1 — supplying the protein index changes only EXPLAINED decisions.
 ///
 /// Run the same three files with and without the index and diff the decisions.
-/// The pre-committed claim: the three protein-terminal candidates that land on a
-/// real peak become testable and all three pass. Nothing else on any file moves.
+/// Every changed decision must be explained by `explain_change`: either the
+/// peak has a protein-terminal or Met-loss candidate, or the change is a q
+/// crossing Q_MAX because the BH family grew. Nothing else may change.
 ///
-/// This is the CONVENTION check the synthetic unit tests cannot be. The answer
-/// is known independently of this code: the band is 98.9% NME-permissive at
-/// residue 2 against a 55.3% background, which is what N-terminal acetylation
-/// enzymology predicts and what a residue-2 acceptor test would NOT produce.
+/// ⚠ REWRITTEN 2026-09-25, a recorded edit. This test pinned the moved SET
+/// (three decisions under Sage v0.14.7, four at v0.15). With the 500-peak cap
+/// (ad7a10e) the sweep holds more tests and the index adds p-values near 1,
+/// so the set became seven and the old "q can only fall" premise became false.
+/// A count is a property of the peak list; the mechanism is the claim. See
+/// NOTES "The protein-context test asserts the mechanism".
+///
+/// The CONVENTION evidence is unchanged and independent of this code: the band
+/// is 98.9% NME-permissive at residue 2 against a 55.3% background.
 /// `_dev/testing/scripts/protein_nterm_evidence.py` produces those numbers.
 #[test]
-fn protein_context_moves_exactly_three_decisions() {
+fn protein_context_moves_only_explained_decisions() {
     let Some(index) = protein_index() else { return };
-
     let mut moved: Vec<String> = Vec::new();
     for key in ["serum", "bcell", "b1906"] {
-        let tsv = repo().join(format!(
-            "_dev/testing/search-output/step1-open-{key}/results.sage.tsv"
-        ));
-        if !tsv.exists() {
-            eprintln!("skipping: {} absent", tsv.display());
+        let Some(rows) = both_arms(key, &index) else {
             return;
-        }
-        let opts = FilterOptions {
-            q_threshold: 1.0,
-            ..Default::default()
         };
-        let psms: Vec<_> = parse_sage_results(&tsv, &opts)
-            .expect("TSV must parse")
-            .psms
-            .into_iter()
-            .filter(|p| p.rank == 1 && p.spectrum_q < 0.01)
-            .collect();
-        let unimod = UnimodDb::from_xml(&repo().join("recon-tool/resources/unimod.xml")).unwrap();
-        let (curated, _) =
-            CuratedDb::load_from_sources(recon_tool::defaults::CURATED_MODS, unimod.elements())
-                .unwrap();
-        let report: serde_json::Value = serde_json::from_str(
-            &std::fs::read_to_string(
-                repo().join(format!("_dev/testing/recon-output/full-run/{key}.json")),
-            )
-            .unwrap(),
-        )
-        .unwrap();
-        let peaks: Vec<(f64, usize)> = report["mod_discovery"]["peaks"]
-            .as_array()
-            .unwrap()
-            .iter()
-            .map(|p| {
-                (
-                    p["delta_mass"].as_f64().unwrap(),
-                    p["count"].as_u64().unwrap() as usize,
-                )
-            })
-            .filter(|(d, _)| d.abs() >= 0.1)
-            .collect();
-        let floor = peaks.iter().map(|(_, c)| *c).max().unwrap() as f64 * 0.20;
-
-        // I2 / I3 — the two structural guards, printed per file.
-        let (resolved, total) = index.resolution(&psms);
-        let frac = resolved as f64 / total as f64;
-        let nterm = psms
-            .iter()
-            .filter(|p| {
-                index.starts_protein(
-                    &recon_tool::peak_composition::residues_of(&p.peptide),
-                    &p.proteins,
-                )
-            })
-            .count();
-        let nterm_pct = 100.0 * nterm as f64 / total as f64;
-        println!(
-            "{key}: {resolved}/{total} accessions resolved ({:.2}%), \
-             {nterm} at protein position 0 ({nterm_pct:.3}%)",
-            100.0 * frac
-        );
-        assert!(
-            frac >= recon_tool::protein_index::MIN_RESOLVED_FRACTION,
-            "{key}: only {:.2}% of target PSMs resolve — wrong FASTA?",
-            100.0 * frac
-        );
-        assert!(
-            nterm_pct < 5.0,
-            "{key}: {nterm_pct:.3}% at protein position 0 — the lookup is matching \
-             too much and the positional test would carry no information"
-        );
-
-        let without = assign(&peaks, &psms, &curated, floor, None);
-        let with = assign(&peaks, &psms, &curated, floor, Some(&index));
-        assert_eq!(without.len(), with.len(), "{key}: peak count changed");
-        for (a, b) in without.iter().zip(with.iter()) {
-            let tier_moved = variant(&a.decision) != variant(&b.decision) || a.label != b.label;
-            if tier_moved {
-                moved.push(format!("{key} {:+.4} n={}", a.delta_mass, a.count));
-                println!(
-                    "  MOVED {key} {:+.4} n={}  {:?} {:?}\n            ->  {:?} {:?}",
-                    a.delta_mass, a.count, a.label, a.decision, b.label, b.decision
-                );
-                // Where the tier moved, a different candidate won, so its odds
-                // ratio is EXPECTED to differ. Nothing to assert here.
-                continue;
-            }
-            // I5 — more p-values enter the BH sweep, so every other q moves.
-            // What must NOT move is the EVIDENCE: an odds ratio is computed per
-            // candidate and cannot depend on how many other tests ran. And BH
-            // with an extra near-zero p at rank 1 can only LOWER the rest, so a
-            // q that rose would mean the correction is being applied wrongly.
-            // bcell's Fe[II] sits at q = 0.0300 against a 0.05 threshold, so
-            // this is checked, not assumed.
-            if let (Some((oa, qa)), Some((ob, qb))) = (evidence(&a.decision), evidence(&b.decision))
-            {
-                assert!(
-                    (oa - ob).abs() < 1e-9,
-                    "{key} {:+.4}: odds ratio moved {oa} -> {ob}; it must not depend \
-                     on the size of the sweep",
-                    a.delta_mass
-                );
-                assert!(
-                    qb <= qa + 1e-12,
-                    "{key} {:+.4}: q ROSE {qa:.6e} -> {qb:.6e}; adding a near-zero \
-                     p-value at rank 1 can only lower the rest",
-                    a.delta_mass
-                );
+        for (ctx, a, b) in &rows {
+            match explain_change(*ctx, a, b) {
+                Ok(true) => {
+                    let why = if *ctx { "protein context" } else { "BH family" };
+                    moved.push(format!("{key} {:+.4} n={} ({why})", a.delta_mass, a.count));
+                    println!(
+                        "  MOVED {key} {:+.4} n={} [{why}] {:?} {:?}\n            ->  {:?} {:?}",
+                        a.delta_mass, a.count, a.label, a.decision, b.label, b.decision
+                    );
+                }
+                Ok(false) => {}
+                Err(e) => panic!("{key} {:+.4} n={}: {e}", a.delta_mass, a.count),
             }
         }
     }
-
-    // THE PRE-COMMITTED SET. Three decisions move, and only these three.
-    //
-    // All three are protein-terminal candidates that no PSM could decide without
-    // the FASTA. Two of them (+42.0109, +14.0149) carry `TG=X`, which the original
-    // step-2 rule read as "unspecific, route to abundance" -- a rule written when
-    // protein position was unknowable. The position is the specificity.
-    // ⚠ RE-BASELINED for Sage v0.15 (2026-09-01). Under v0.14.7 this set had
-    // THREE members and the test was named for it. It now has FOUR: b1906
-    // +42.0105 Acetylation qualifies at a protein N-terminus on the v0.15 PSM
-    // set and did not before. The counts on the surviving three also moved
-    // (-89.0289 n=209 -> -89.0288 n=202, +14.0149 n=52 -> +14.0138 n=54).
-    // This is a DECISION RECORD, and the decision it records is unchanged:
-    // protein context promotes exactly the candidates whose position is testable.
-    // The math is identical; the PSM set underneath it is not.
-    let expected: Vec<String> = vec![
-        "serum +14.0138 n=54".to_string(),  // Methylation, protein N-term
-        "bcell +42.0109 n=120".to_string(), // Acetylation, protein N-term
-        "bcell -89.0288 n=202".to_string(), // Met-loss+Acetylation
-        "b1906 +42.0105 n=25".to_string(),  // Acetylation, protein N-term (NEW at v0.15)
-    ];
-    let mut got = moved.clone();
-    got.sort();
-    let mut want = expected.clone();
-    want.sort();
-    println!("\ndecisions that moved: {got:#?}");
-    assert_eq!(
-        got, want,
-        "the set of moved decisions is not the pre-committed one"
+    println!("\ndecisions that moved: {moved:#?}");
+    // The index must do something, or the test proves nothing about it.
+    assert!(
+        moved.iter().any(|m| m.ends_with("(protein context)")),
+        "no protein-context decision moved; the index had no effect"
     );
+}
+
+/// The check in I1 must FAIL on an unexplained change. Feed it deliberately
+/// wrong inputs, built from real bcell data, and require an `Err` each time.
+#[test]
+fn unexplained_decision_change_is_rejected() {
+    let Some(index) = protein_index() else { return };
+    let Some(rows) = both_arms("bcell", &index) else {
+        return;
+    };
+    // A peak decided by statistics with no protein-context candidate.
+    let (_, a, b) = rows
+        .iter()
+        .find(|(ctx, a, b)| {
+            !ctx && matches!(a.decision, Decision::Statistics { .. })
+                && variant(&a.decision) == variant(&b.decision)
+        })
+        .expect("bcell has a plain statistics peak");
+    assert_eq!(
+        explain_change(false, a, b),
+        Ok(false),
+        "the real pair is explained"
+    );
+
+    // 1. The tier moves to one no q shift can produce.
+    let mut wrong = b.clone();
+    wrong.decision = Decision::BelowFloor;
+    assert!(
+        explain_change(false, a, &wrong).is_err(),
+        "tier jump accepted"
+    );
+
+    // 2. The tier flips to no_residue_support while the numbers still pass.
+    let (o, q) = evidence(&b.decision).unwrap();
+    let mut wrong = b.clone();
+    wrong.decision = Decision::NoResidueSupport { odds_ratio: o, q };
+    assert!(
+        explain_change(false, a, &wrong).is_err(),
+        "inconsistent flip accepted"
+    );
+
+    // 3. The odds ratio moves while the tier holds.
+    let mut wrong = b.clone();
+    if let Decision::Statistics { odds_ratio, .. } = &mut wrong.decision {
+        *odds_ratio *= 1.01;
+    }
+    assert!(
+        explain_change(false, a, &wrong).is_err(),
+        "odds-ratio move accepted"
+    );
+
+    // The same wrong change IS allowed when a protein-context candidate is present.
+    let mut wrong = b.clone();
+    wrong.decision = Decision::BelowFloor;
+    assert_eq!(explain_change(true, a, &wrong), Ok(true));
 }
 
 /// The promoted peak, pinned with its actual 2x2 outcome.

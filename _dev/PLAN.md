@@ -431,9 +431,11 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
   **2026-09-24: committed outputs REGENERATED for items 1 to 6** (examples,
   `full-run/`, Tier 3 snapshots, liver benchmark TSV, five-tool report) at
   `ba4d30e`. `run_validation.py` 17/17. `cargo test` with all data: 206 of
-  207 pass. OPEN for Ben: `protein_context_moves_exactly_three_decisions`
-  fails because its one-near-zero-p premise is false on the larger peak
-  lists. See NOTES "Change-regenerate after the 2026-09-24 behaviour
+  207 pass. `protein_context_moves_exactly_three_decisions`
+  failed because its one-near-zero-p premise is false on the larger peak
+  lists. RESOLVED 2026-09-25: replaced by
+  `protein_context_moves_only_explained_decisions`, which asserts the
+  mechanism. See NOTES "Change-regenerate after the 2026-09-24 behaviour
   changes".
 
   The technical note describes the shipped v0.1.3 behaviour and says these are
