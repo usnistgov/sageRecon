@@ -11626,3 +11626,18 @@ same time; runtime is not a measurement here.
 **Gates after the regeneration.** `cargo test`, all data present, no skips:
 208 of 208 pass. `run_validation.py`: 17/17 passed, 0 failed (strong mode;
 G2/liver NOT CHECKED, as before, because liver has no step-0 anchor).
+
+### Claim test redesigned: vanilla vs recon-guided, two searches (2026-09-25)
+
+Ben's call. The four-arm design was dropped. It searched all 13 recon mods, which
+no expert would do, and it needed about 115 GB. recon is written for an expert
+user, who filters its list. The test now compares two searches on liver:
+Ben's vanilla (fixed +57 C; variable Ox M, pyro-Glu Q, Deamidation N/Q, protein
+N-term acetyl; 20/20 ppm) against a recon-guided search (the same, plus pyro-Glu
+E, Fe[III] D/E and Met-loss+Acetylation; 10/10 ppm). The guided list applies
+Ben's rule: keep a mod at about 10 % or more of the +57 C PSM count (1233). The
+line falls at Trioxidation (131), which is also impossible with a fixed +57 C.
+Both searches use missed cleavages 1, length 8 (recon's settings). Ben runs
+them on a larger machine with `_dev/liver-benchmark/claim-test/run.sh`. The
+laptop (8 GB) swapped hard on the old vanilla arm (about 17 GB peak), so no
+laptop result is used.
