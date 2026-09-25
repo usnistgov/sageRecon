@@ -21,14 +21,21 @@ Written before the first search. Not changed after the results.
 - "Acceptable runtime cost" (my choice, for Ben to review): arm 4 wall time
   at most 3x arm 1, and the run finishes without the watchdog (peak RSS
   under 6.5 GB on this 8 GB machine, so no swap-bound run).
+- Amendment (2026-09-25, after arm 1 started, before any identification
+  count was seen): the 6.5 GB memory limit is dropped from the gate. Arm 1,
+  the vanilla search, needs about 17 GB of footprint by itself, so the
+  limit fails every arm and tests nothing. The runs move to a larger
+  machine. The gate is now: arm 4 completes, and its wall time is at most
+  3x arm 1 on the same machine. Peak memory is reported for each arm, not
+  gated. `analyze.py` applies this gate.
 
-## Status (2026-09-25): arms 1 and 2 in progress. Arms 3 and 4 are on hold.
+## Status (2026-09-25): a run kit. The claim is not tested yet.
 
-Arm 1 is running (swap-bound); arm 2 follows it. Arms 3, 4 and the arm 4
-stages did not run. Ben must
-move the laptop, and the memory estimate below says they cannot run in
-memory on it. The coordinator stopped the work before arm 3. The claim is
-not tested yet. There is no verdict.
+The laptop (8 GB) cannot run this test. Arm 1 alone ran swap-bound for
+over an hour. Ben's decision: run all four arms on one larger machine,
+with `run_claim_test.sh`, then import the outputs and run `analyze.py`.
+One laptop arm 1 run is kept in `laptop-arm1/` as a cross-check of the
+identifications (not of the runtime). There is no verdict yet.
 
 ## What and why
 
@@ -156,45 +163,98 @@ The count ignores the 500 to 5000 Da mass filter and decoys, so treat it
 as a ratio. If memory scales with it, arms 3 and 4 need about 7 times arm
 1's footprint.
 
-## How to rerun
+## How to run it (the run kit)
 
-Python 3 standard library only. Run one Sage search at a time.
+Use one machine for every arm, so the runtimes compare. Suggested: 64 GB
+of RAM or more (arm 1 needs about 17 GB; arms 3 and 4 hold about 7 times
+as many peptide forms, see above). Close other heavy work while it runs;
+the script records the load average before each arm.
+
+### 1. Get Sage at the pinned rev
+
+Build it from source (Rust from https://rustup.rs):
 
 ```bash
-# 1. configs (from the repository root)
-python3 _dev/liver-benchmark/claim-test/build_configs.py
-
-# 2. Sage at the pin
-git clone https://github.com/lazear/sage && cd sage
+git clone https://github.com/lazear/sage.git sage-df92199
+cd sage-df92199
 git checkout df9219951cc9a54cf4cd55d76541af24b687bd3d
 cargo build --release
-
-# 3. a work folder with the inputs, so results.json records relative paths
-mkdir WORK && cd WORK
-ln -s /path/to/10mg_1_A_1.mzML.gz .
-ln -s /path/to/sageRecon/examples/uniprot_sprot_iso_human-2018_06.fasta .
-ln -s /path/to/sage/target/release/sage sage
-cp /path/to/sageRecon/_dev/liver-benchmark/claim-test/configs/arm*.json .
-python3 /path/to/sageRecon/_dev/liver-benchmark/claim-test/run_arm.py \
-  ./sage arm1_vanilla.json out_arm1_vanilla \
-  10mg_1_A_1.mzML.gz uniprot_sprot_iso_human-2018_06.fasta
-# ... the same for each arm, output folder out_<config name>
-
-# 4. counts and tables (writes claim-test/results.md)
-python3 _dev/liver-benchmark/claim-test/analyze.py WORK
+./target/release/sage --version     # must print: sage 0.15.0-beta.2
 ```
 
-`run_arm.py` wraps Sage in `/usr/bin/time -l` (macOS) and writes
-`run_meta.json`. `CLAIM_MEM_LIMIT_GB` (default 30) and
-`CLAIM_WALL_LIMIT_S` (default 14400) set its watchdog.
+The binary is `sage-df92199/target/release/sage`. `_dev/dev_AGENTS.md` records
+this rev as tag `v0.15.0-beta.2`, so a release download of that tag may
+also do, but only a source build lets the script check the rev
+(`--sage-src`).
+
+### 2. Get the inputs
+
+- `10mg_1_A_1.mzML.gz`, sha256
+  `460cd316cb95f0db468dfdbcdaeabcb195ba51eff585a1af2ae861f37575512e`
+  (the copy in Ben's `sageRecon/_dev/testing/inputs/`; raw data PRIDE
+  PXD013608).
+- `examples/uniprot_sprot_iso_human-2018_06.fasta` from this repository,
+  sha256 `75cc5a96a489a04b385e07a3d4caa223cf361a3727b267c8961b86211c14c922`.
+
+### 3. Run
+
+From the repository root:
+
+```bash
+bash _dev/liver-benchmark/claim-test/run_claim_test.sh \
+  --sage /path/to/sage-df92199/target/release/sage \
+  --sage-src /path/to/sage-df92199 \
+  --mzml /path/to/10mg_1_A_1.mzML.gz \
+  --fasta examples/uniprot_sprot_iso_human-2018_06.fasta \
+  --work /path/to/claim-work
+```
+
+- It checks the Sage version, the source rev, and both sha256 sums, and
+  stops on any mismatch. `--check-only` does the checks and stops.
+- It runs, one at a time: arm 1, arm 2, arm 3, arm 4, then arm 1 again
+  (the noise band). `--stages` adds the two arm 4 stages. `--no-repeat`
+  drops the repeat.
+- It stops before an arm if another Sage search is running.
+- A failed arm (for example out of memory) is recorded and the next arm
+  runs. Rerun the same command to retry: finished arms are skipped.
+- macOS and Linux (`/usr/bin/time -l` or `-v`; on Linux install the `time`
+  package). On Windows, use WSL with a Linux build of Sage.
+- Each arm writes `claim-work/out_<config>/`: `results.sage.tsv`,
+  `results.json`, `sage.log` (Sage's log and the time report),
+  `run_meta.json` (wall time, peak memory, load). The folder also gets
+  `machine.tsv` and `runs.tsv`.
+
+### 4. Import and analyze
+
+If the runs were on another machine, copy the whole work folder back (or
+just every `out_*/` folder plus `machine.tsv`). Then, from the repository
+root:
+
+```bash
+python3 _dev/liver-benchmark/claim-test/analyze.py /path/to/claim-work
+```
+
+It writes `claim-test/results.md`: the per-arm table (PSMs, peptides,
+modified forms, protein groups, gained and lost vs arm 1, wall time, peak
+memory), PSMs per mass shift, the PTM-Shepherd / MetaMorpheus / Mascot
+counts for each recon-only mod, arm 1 against `laptop-arm1/`, and the
+verdict against the criterion above.
+
+To commit the run: copy `results.md`, `machine.tsv`, `runs.tsv`, and each
+arm's `results.json`, `run_meta.json` and `sage.log` into
+`claim-test/results/<arm>/`. Redact personal paths as
+`_dev/liver-benchmark/README.md` does. Do not commit the TSVs (each is
+tens of MB).
 
 ## Files
 
 - `build_configs.py`, `configs/`: the Sage configs and the mod mapping.
-- `run_arm.py`: one search, with timing and a memory watchdog.
+- `run_claim_test.sh`: the run kit (all arms, checks, timing).
+- `run_arm.py`: one search with a memory watchdog (macOS). Used for the
+  laptop run only.
 - `analyze.py`: counts, overlap with arm 1, PSMs per mod, and the
   PTM-Shepherd / MetaMorpheus / Mascot liver counts for each recon-only
   mod (parsers imported from `_dev/testing/scripts/compare_4way.py`).
 - `estimate_forms.py`: the peptide-form count behind the memory estimate.
-- `results/`: per-arm `results.json` (Sage's record of the search),
-  `run_meta.json`, and `sage.log`. The Sage TSVs are not committed.
+- `laptop-arm1/`: the laptop arm 1 run: `counts.json`, the sorted
+  peptide list, Sage's `results.json`, `sage.log` and `run_meta.json`.

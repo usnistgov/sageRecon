@@ -14,8 +14,18 @@ Definitions (fixed before the runs, see README):
   Modified forms (distinct `peptide` strings) are reported as well.
 - Protein groups: distinct `protein_groups` strings of target rows with
   protein_group_q <= 0.01.
+Verdict (criterion fixed in README before any run): arm 4 must identify
+more peptides than arm 1, by more than the arm 1 vs arm 1 repeat difference,
+with arm 4 wall time at most 3x arm 1 and a completed run.
+
+    python3 analyze.py WORKDIR [--write-reference DIR]
+
+--write-reference saves arm 1's counts and sorted peptide list to DIR (used
+once, for the laptop cross-check in laptop-arm1/). If laptop-arm1/ exists,
+arm 1 is compared with it.
 Python 3 standard library only.
 """
+import gzip
 import csv
 import json
 import os
@@ -25,6 +35,8 @@ import sys
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.abspath(os.path.join(HERE, "..", "..", ".."))
 Q = 0.01
+RUNTIME_RATIO_MAX = 3.0
+REF = os.path.join(HERE, "laptop-arm1")
 
 ARMS = [
     ("arm1_vanilla", "1 vanilla (vanilla mods, 20/20 ppm)"),
@@ -111,8 +123,84 @@ def third_party(targets):
     return out
 
 
+def verdict(res):
+    L = ["", "## Verdict against the pre-set criterion", ""]
+    ok = lambda a: a in res and res[a][2] is not None
+    peps = {a: len(res[a][2][1]) for a in res if res[a][2] is not None}
+    wall = {a: res[a][1]["wall_seconds"] for a in res}
+    if not ok("arm1_vanilla"):
+        return L + ["Arm 1 is missing or failed. No verdict."]
+    p1 = peps["arm1_vanilla"]
+    if ok("arm1_vanilla_rep"):
+        noise = abs(p1 - peps["arm1_vanilla_rep"])
+        L.append(f"- Noise band: arm 1 {p1} vs repeat {peps['arm1_vanilla_rep']} peptides, "
+                 f"difference {noise}.")
+    else:
+        noise = None
+        L.append("- Noise band: no arm 1 repeat. The gain cannot be tested against noise.")
+    for a, what in (("arm2_vanilla_mods_recon_tol", "tolerance effect (arm 2 - arm 1)"),
+                    ("arm3_recon_mods_vanilla_tol", "mod effect (arm 3 - arm 1)")):
+        if ok(a):
+            L.append(f"- {what}: {peps[a] - p1:+d} peptides.")
+        else:
+            L.append(f"- {what}: arm missing or failed.")
+    if not ok("arm4_recon_full"):
+        L.append("- Arm 4 is missing or failed: the claim is not shown on this machine. "
+                 "If stages ran, their rows above show how far recon's mods went.")
+        return L + ["", "**Verdict: NOT MET (arm 4 did not complete).**"]
+    gain = peps["arm4_recon_full"] - p1
+    ratio = wall["arm4_recon_full"] / wall["arm1_vanilla"] if wall["arm1_vanilla"] else float("inf")
+    L.append(f"- Arm 4 - arm 1: {gain:+d} peptides. Wall time ratio arm 4 / arm 1: {ratio:.2f} "
+             f"(limit {RUNTIME_RATIO_MAX}).")
+    if ok("arm2_vanilla_mods_recon_tol") and ok("arm3_recon_mods_vanilla_tol"):
+        inter = gain - (peps["arm2_vanilla_mods_recon_tol"] - p1) - (peps["arm3_recon_mods_vanilla_tol"] - p1)
+        L.append(f"- Interaction (arm 4 gain minus the two single effects): {inter:+d} peptides.")
+    more = gain > (noise if noise is not None else 0)
+    cheap = ratio <= RUNTIME_RATIO_MAX
+    met = more and cheap and noise is not None
+    why = []
+    if not more:
+        why.append("no peptide gain beyond the noise band")
+    if not cheap:
+        why.append(f"runtime {ratio:.2f}x > {RUNTIME_RATIO_MAX}x")
+    if noise is None:
+        why.append("no arm 1 repeat")
+    L.append("")
+    L.append("**Verdict: " + ("MET." if met else "NOT MET (" + "; ".join(why) + ").") + "**")
+    return L
+
+
+def reference(res, write_dir=None):
+    if "arm1_vanilla" not in res or res["arm1_vanilla"][2] is None:
+        return []
+    psms, peps, forms, groups = res["arm1_vanilla"][2]
+    counts = {"psms": len(psms), "peptides": len(peps), "modified_forms": len(forms),
+              "protein_groups": len(groups)}
+    if write_dir:
+        os.makedirs(write_dir, exist_ok=True)
+        with open(os.path.join(write_dir, "counts.json"), "w") as fh:
+            json.dump(counts, fh, indent=2)
+        with gzip.open(os.path.join(write_dir, "peptides.txt.gz"), "wt") as fh:
+            fh.write("\n".join(sorted(peps)) + "\n")
+        return []
+    if not os.path.exists(os.path.join(REF, "counts.json")):
+        return []
+    ref = json.load(open(os.path.join(REF, "counts.json")))
+    with gzip.open(os.path.join(REF, "peptides.txt.gz"), "rt") as fh:
+        rp = set(fh.read().split())
+    L = ["", "## Arm 1 against the laptop run (laptop-arm1/)", "",
+         "| count | laptop | this run |", "|---|---|---|"]
+    for k, v in counts.items():
+        L.append(f"| {k} | {ref[k]} | {v} |")
+    L.append(f"\nPeptides only in the laptop run: {len(rp - peps)}; only in this run: "
+             f"{len(peps - rp)}. Small differences are q-value jitter; a large one means "
+             f"a different Sage build or input.")
+    return L
+
+
 def main():
     work = sys.argv[1]
+    write_ref = sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "--write-reference" else None
     res = {}
     for arm, desc in ARMS:
         d = os.path.join(work, "out_" + arm)
@@ -178,6 +266,12 @@ def main():
         f = lambda v: "none" if v is None else str(v)
         L.append(f"| {lab} | {m:+.6f} | {n} | {f(s)} | {f(mm)} | {f(ma)} |")
 
+    if write_ref:
+        reference(res, write_ref)
+        print(f"wrote reference to {write_ref}")
+        return
+    L += reference(res)
+    L += verdict(res)
     text = "\n".join(L) + "\n"
     with open(os.path.join(HERE, "results.md"), "w") as fh:
         fh.write("# Claim test results (generated by analyze.py)\n\n" + text)
