@@ -11622,3 +11622,7 @@ same time; runtime is not a measurement here.
 `ba4d30e`. No gate needs them: `run_validation.py` strips `tool_version` and
 `git_commit` before comparing. `_dev/liver-benchmark/recon/` stays the dated
 `ba4d30e` snapshot its README names.
+
+**Gates after the regeneration.** `cargo test`, all data present, no skips:
+208 of 208 pass. `run_validation.py`: 17/17 passed, 0 failed (strong mode;
+G2/liver NOT CHECKED, as before, because liver has no step-0 anchor).
