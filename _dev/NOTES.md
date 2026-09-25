@@ -11641,3 +11641,15 @@ Both searches use missed cleavages 1, length 8 (recon's settings). Ben runs
 them on a larger machine with `_dev/liver-benchmark/claim-test/run.sh`. The
 laptop (8 GB) swapped hard on the old vanilla arm (about 17 GB peak), so no
 laptop result is used.
+
+### Claim test result on liver (2026-09-25)
+
+Ben ran the two searches on a 32 GB Windows laptop. Recon-guided against
+vanilla: stripped sequences 15,310 against 15,185 (+0.8 %), protein groups
+1,432 against 1,396 (+2.6 %), PSMs +0.6 %. The vanilla repeat was identical, so
+the gain is not noise. The added mods hold 716 PSMs vanilla cannot see: Fe[III]
+D/E 407, Met-loss+Acetylation 273, pyro-Glu E 36. Cost: 5.7x wall time (63 s to
+355 s) and 2.2x peak memory (10.0 to 22.3 GB). Verdict, Ben's framing: recon
+says what is in the sample at a level worth searching for; the compute trade-off
+is the user's call for their engine and resources. See
+`_dev/liver-benchmark/claim-test/README.md`.

@@ -70,7 +70,36 @@ peptide q <= 0.01 than vanilla, by more than the vanilla-vs-repeat noise, at a
 runtime and memory cost an expert would accept. A null or negative result is
 reported as found.
 
-## Results
+## Results (2026-09-25)
 
-Not yet run. Commit `claim-work/summary.md` here as `results.md` (and the two
-`results.json` files, paths redacted with `redact_copy.py`).
+Run by Ben with `run.ps1` on a Windows laptop with 32 GB RAM; Sage
+0.15.0-beta.2 built at the pinned rev. Input sha256: mzML
+`460cd316cb95f0db468dfdbcdaeabcb195ba51eff585a1af2ae861f37575512e`, FASTA
+`75cc5a96a489a04b385e07a3d4caa223cf361a3727b267c8961b86211c14c922`. Full output of
+`summarize.py` is in `results.md`.
+
+| | vanilla | recon-guided | change |
+|---|---|---|---|
+| PSMs (spectrum q <= 0.01) | 24,005 | 24,160 | +155 (+0.6 %) |
+| peptides (peptide q <= 0.01) | 18,320 | 18,574 | +254 (+1.4 %) |
+| stripped sequences | 15,185 | 15,310 | +125 (+0.8 %) |
+| protein groups | 1,396 | 1,432 | +36 (+2.6 %) |
+| wall time | 63 s | 355 s | 5.7x |
+| peak memory | 10.0 GB | 22.3 GB | 2.2x |
+
+- Run-to-run noise is zero: the vanilla repeat gave identical results (0
+  sequences differ). So the gain is attributable to recon's guidance.
+- Sequences: 14,796 shared, 514 found only with guidance, 389 only with vanilla.
+- The added modifications carry real signal that vanilla cannot see: Fe[III] on
+  D and E (407 PSMs), Met-loss+Acetylation (273), pyro-Glu from peptide N-term E
+  (36).
+
+**Verdict.** The criterion's first half is met: the guided search identifies
+more sequences than vanilla, beyond run-to-run noise. The cost half is not
+recon's call, and the note should say so (Ben, 2026-09-25). recon reports that
+a modification is present in the sample at a level worth searching for,
+sometimes one the user did not expect. Whether to pay the compute cost is the
+user's decision, weighed against their search engine and resources. Here the
+guidance gave a modest identification gain (about 1-3 %) and showed about 700
+PSMs of chemistry the vanilla search missed, for 5.7x the time and 2.2x the
+memory, most of it from Fe[III] on the common residues D and E.
