@@ -1,8 +1,8 @@
 {
   "schema_version": "2.0.0",
-  "generated_at": "2026-09-24T22:37:41.340872Z",
-  "tool_version": "0.1.3",
-  "git_commit": "ba4d30e",
+  "generated_at": "2026-09-25T10:06:55.423499Z",
+  "tool_version": "0.2.0",
+  "git_commit": "372765c",
   "source_file": "10mg_1_A_1.mzML.gz",
   "effective_params": "liver_search/pass2/pass2-effective-params.json",
   "subset_fasta": "liver_search/pass2/subset_identified_proteins.fasta",
@@ -21,46 +21,46 @@
       "pct": 17.57666417352281
     },
     "ragged_n": {
-      "numerator": 742,
+      "numerator": 744,
       "denominator": 10696,
-      "pct": 6.93717277486911
+      "pct": 6.955871353777113
     },
     "ragged_c": {
-      "numerator": 340,
+      "numerator": 339,
       "denominator": 10696,
-      "pct": 3.1787584143605088
+      "pct": 3.1694091249065073
     },
     "ragged_total": {
-      "numerator": 1082,
+      "numerator": 1083,
       "denominator": 10696,
-      "pct": 10.115931189229618
+      "pct": 10.12528047868362
     },
     "non_enzymatic_count": 0,
     "non_enzymatic_note": "NOT MEASURED as a rate. Pass 2 runs semi_enzymatic, so Sage only generates candidates with ONE non-specific terminus and a fully non-tryptic peptide is never scored. Preview obtains its 0.1 % from a separate non-enzymatic search, which recon does not run. The count here is residual classifier disagreement, not a measurement.",
     "decoy_corrected": {
       "decoys_fully_enzymatic": 14,
-      "decoys_ragged_n": 82,
+      "decoys_ragged_n": 81,
       "decoys_ragged_c": 18,
-      "class_fdr_fully_enzymatic_pct": 0.14562096941959643,
-      "class_fdr_semi_enzymatic_pct": 9.242144177449168,
-      "cleavage_completeness_pct": 82.54583254583255,
+      "class_fdr_fully_enzymatic_pct": 0.14563611775720378,
+      "class_fdr_semi_enzymatic_pct": 9.141274238227147,
+      "cleavage_completeness_pct": 82.54748181045072,
       "missed_cleavage": {
         "numerator": 1847,
-        "denominator": 10582,
-        "pct": 17.454167454167454
+        "denominator": 10583,
+        "pct": 17.452518189549277
       },
       "ragged_n": {
-        "numerator": 660,
-        "denominator": 10582,
-        "pct": 6.237006237006237
+        "numerator": 663,
+        "denominator": 10583,
+        "pct": 6.2647642445431355
       },
       "ragged_c": {
-        "numerator": 322,
-        "denominator": 10582,
-        "pct": 3.042903042903043
+        "numerator": 321,
+        "denominator": 10583,
+        "pct": 3.033166398941699
       },
       "n_c_assignment_note": "Decoys carry no N/C label; Sage's per-peptide reversal preserves the first and last residue, so the side is inferred from the last residue. Validated at 96.63 % against known target classes."
     }
   },
-  "pass2_search_seconds": 11.449452333
+  "pass2_search_seconds": 21.580119709
 }

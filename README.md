@@ -427,7 +427,7 @@ and non-enzymatic peptides excluded from the denominator. Those are Byonic
 Preview's own denominators, read from its report for NIST liver RM 8461. Counts
 are decoy-subtracted per specificity class, as Preview does, which matters: on
 the liver reference the class FDR is 0.15 % for fully-tryptic peptides against
-9.15 % for semi-tryptic, so a global 1 % cut is carried by the fully-tryptic
+9.23 % for semi-tryptic, so a global 1 % cut is carried by the fully-tryptic
 majority.
 
 Three boundaries on this number are worth stating in advance.
@@ -456,8 +456,8 @@ decide.
 
 ## Example output
 
-Two complete reports ship in this repository. They were made on 2026-09-24 by
-a development build at commit `ba4d30e`, which still reports version 0.1.3.
+Two complete reports ship in this repository. They were made on 2026-09-25 by
+version 0.2.0 at commit `372765c`, which is not yet a release.
 They use main report schema 4.0.0 and Pass 2 schema 2.0.0. The v0.1.3
 release binary writes schemas 3.2.0 and 1.1.0, so its output does not match
 these copies.
@@ -487,11 +487,8 @@ tryptic, 41,788 MS/MS scans), also ships here:
 
 Two independent surfaces are maintained, and they cover different things.
 
-**Unit and integration tests: 207 tests; with all local test data present,
-206 pass and 1 fails** (`cargo test` in `recon-tool`, 2026-09-24). The failure
-is `protein_context_moves_exactly_three_decisions`: its assumption that the
-protein context adds one near-zero p-value to the Benjamini-Hochberg sweep no
-longer holds on the larger peak lists, and it is open for review.
+**Unit and integration tests: 208 tests; with all local test data present,
+all 208 pass** (`cargo test` in `recon-tool`, 2026-09-25).
 These cover mass and formula arithmetic, the analyzer-class table against the
 PSI-MS controlled vocabulary, tolerance quantization in both the ppm and the
 Dalton regime, enzyme-rule parsing for all fourteen presets and the custom-rule

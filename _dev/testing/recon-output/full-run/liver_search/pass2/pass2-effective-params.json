@@ -31,7 +31,7 @@
     "sign_note": "precursor_tol is INVERTED relative to the delta mass it produces; measured on serum 2026-08-29. See src/pass2.rs.",
     "subset_fasta": "testing/recon-output/full-run/liver_search/pass2/subset_identified_proteins.fasta",
     "subset_proteins": 1700,
-    "template": "<bundled pass-2 default, recon 0.1.3>",
+    "template": "<bundled pass-2 default, recon 0.2.0>",
     "template_fragment_tol": {
       "ppm": [
         -20.0,

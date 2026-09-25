@@ -11583,3 +11583,42 @@ candidate is present.
 **Rejected alternative:** repin the count to seven. That repeats the failure: the
 next peak-list change moves it again, and a count cannot tell an explained move
 from an unexplained one.
+
+### Version 0.2.0 and the liver and examples regeneration (2026-09-25)
+
+Ben's call. **recon is 0.2.0** (`372765c`): `Cargo.toml`, the `recon-tool`
+entry in `Cargo.lock`, `CITATION.cff` (was 0.1.2, one release behind) and the
+README version line and citation. Main schema 4.0.0 and Pass 2 schema 2.0.0
+are breaking changes, so the minor number moves. `CODEMETA.yaml` has no version
+field; nothing to change. ⚠ `CITATION.cff` `date-released` still reads
+2026-09-08. Set it when 0.2.0 is tagged. Not tagged, not pushed. README release
+links still name v0.1.3, the latest published release.
+
+**Scope: liver and `examples/` only** (Ben: liver is the test file; serum,
+bcell and b1906 are development files). One release build at `372765c` from a
+clean tree (untracked `claim-test/` only; `build.rs` ignores untracked files).
+Runs were made in a scratch mirror with the same relative paths, then copied
+in. Sage `results.json` paths are redacted to `file:///path/to/sageRecon/` as
+before. `examples/serum.mzML.gz` had to be a real file (an APFS clone), not a
+symlink: Sage resolves the link, the TSV then names `2019-4-9_909c_0311.mzML.gz`,
+and the provenance guard stops the run. That is the guard working.
+
+**Regenerated:** `full-run/liver.{json,html}`, `liver_pass2.json`, and
+`liver_search/` (the tracked params and `results.json`, plus the gitignored
+TSVs the digestion test reads); `examples/liver.*` and `examples/serum.*`.
+All carry `tool_version 0.2.0`, `git_commit 372765c`, no `-dirty`.
+
+**Liver headline, `full-run/`.** The main report is unchanged except version,
+commit, times and `polymer.total_pct_tic` in the 16th digit: Pass 1 PSMs
+31489, 183 peaks, MS1 bias -1.4076 ppm, MAD 0.6267 ppm, clean subset 7177,
+recommended MS1 / MS2 10 / 10 ppm. Pass 2 is a new draw (q jitter, expected):
+peptides 10697 -> 10696, missed cleavage 17.58 -> 17.59 %, ragged-N 6.946 ->
+6.947 %, ragged-C 3.17 -> 3.18 %, semi-enzymatic class FDR 9.15 -> 9.23 %,
+fully-enzymatic 0.146 % unchanged. README now quotes 9.23 %. Runtimes are
+longer (135.3 s against 85.9 s) because a claim-test Sage search ran at the
+same time; runtime is not a measurement here.
+
+**Not regenerated:** `full-run/` serum, bcell and b1906 still read 0.1.3 at
+`ba4d30e`. No gate needs them: `run_validation.py` strips `tool_version` and
+`git_commit` before comparing. `_dev/liver-benchmark/recon/` stays the dated
+`ba4d30e` snapshot its README names.

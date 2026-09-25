@@ -1,13 +1,13 @@
 {
   "schema_version": "4.0.0",
-  "runtime_seconds": 85.931115375,
-  "generated_at": "2026-09-24T22:30:43.515956Z",
-  "tool_version": "0.1.3",
-  "git_commit": "ba4d30e",
+  "runtime_seconds": 135.266383792,
+  "generated_at": "2026-09-25T10:04:08.697226Z",
+  "tool_version": "0.2.0",
+  "git_commit": "372765c",
   "input": {
     "mzml_file": "testing/inputs/10mg_1_A_1.mzML.gz",
     "sage_tsv": "testing/recon-output/full-run/liver_search/results.sage.tsv",
-    "unimod_file": "<compiled into recon 0.1.3>",
+    "unimod_file": "<compiled into recon 0.2.0>",
     "ms1_spectra": 11973,
     "ms2_spectra": 56949,
     "fasta_file": "testing/inputs/uniprot_sprot_iso_human-2018_06.fasta",
@@ -4954,7 +4954,7 @@
     }
   },
   "polymer": {
-    "total_pct_tic": 0.6952893556643674,
+    "total_pct_tic": 0.6952893556643676,
     "contamination_level": "Moderate (0.1-1%)",
     "top_polymers": [
       {
