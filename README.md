@@ -128,7 +128,7 @@ which `recon` does not use.
 
 ### Getting the binary
 
-**Three archives are attached to the v0.1.3 release** on this repository's
+**Four archives are attached to the v0.2.0 release** on this repository's
 Releases page:
 
 | Archive | Platform |
@@ -136,6 +136,7 @@ Releases page:
 | `recon-windows-64.zip` | Windows x86-64 |
 | `recon-apple-silicon.zip` | macOS, Apple Silicon |
 | `recon-apple-intel.zip` | macOS, Intel (10.12 Sierra or later) |
+| `recon-linux-64.tar.gz` | Linux x86-64 |
 
 Each holds the binary, `README.md`, `THIRD_PARTY_LICENSES.md` and `unimod.xml`.
 Unzip it and run the binary; there is nothing to install.
@@ -159,14 +160,9 @@ Every measured value in the two reports agrees; the only difference is the input
 path each was given. We take that as evidence the numbers do not depend on the
 platform, though we have tested one file rather than a panel.
 
-**Linux is not attached.** Build it from source, described below. The build is
-one command and needs only a Rust toolchain, so this is a distribution limit
-rather than a portability one.
-
-We intend to publish all four. The workflow that produces them is committed at
-`.github/workflows/build.yml` and builds every target on a version tag. GitHub
-Actions is not available for this organization, so it cannot run here, and all three
-attached archives were built by hand to the same layout.
+All four archives were built by GitHub Actions from the `v0.2.0` tag, with
+`.github/workflows/build.yml`. The Linux build is new in 0.2.0. It passed the
+same build checks as the others, but we have not yet run it on a real file.
 
 If you redistribute the binary, keep `README.md`, `THIRD_PARTY_LICENSES.md` and
 `unimod.xml` with it. The last two are Design Science License Section 3
@@ -625,10 +621,6 @@ These are ordered by how much they would change what a user can trust.
    flags presence without identification), and an automated residue-mass
    degeneracy pass, to be activated if a future file's flanking check returns
    glycine-context peptides.
-5. **A prebuilt binary for Linux.** Windows, macOS Intel and macOS Apple Silicon
-   are released; Linux builds from source today. The four-target workflow is
-   written and committed, so this is blocked on GitHub Actions being available
-   for this organization rather than on work we have not done.
 6. **Stratified FDR by terminus class**, so Pass 2 semi-enzymatic rates can be
    reported with proper error control.
 7. **Grow the file panel past four**, which would allow finer recommendation tiers
