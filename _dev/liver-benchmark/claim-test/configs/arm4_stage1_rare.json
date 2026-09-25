@@ -1,0 +1,64 @@
+{
+  "database": {
+    "enzyme": {
+      "missed_cleavages": 2,
+      "min_len": 7,
+      "max_len": 50,
+      "cleave_at": "KR",
+      "restrict": "P",
+      "c_terminal": true,
+      "semi_enzymatic": false
+    },
+    "static_mods": {
+      "C": 57.021464
+    },
+    "variable_mods": {
+      "M": [
+        15.994915,
+        -32.008456
+      ],
+      "N": [
+        0.984016
+      ],
+      "Q": [
+        0.984016
+      ],
+      "^Q": [
+        -17.026549
+      ],
+      "[M": [
+        -89.02992
+      ],
+      "K": [
+        27.994915
+      ],
+      "^E": [
+        -18.010565
+      ],
+      "[": [
+        42.010565
+      ],
+      "W": [
+        3.994915
+      ]
+    },
+    "max_variable_mods": 2,
+    "generate_decoys": true
+  },
+  "precursor_tol": {
+    "ppm": [
+      -10.0,
+      10.0
+    ]
+  },
+  "fragment_tol": {
+    "ppm": [
+      -10.0,
+      10.0
+    ]
+  },
+  "precursor_charge": [
+    2,
+    4
+  ]
+}

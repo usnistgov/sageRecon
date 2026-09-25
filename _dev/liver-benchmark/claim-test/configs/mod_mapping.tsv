@@ -1,0 +1,14 @@
+role	recon_label	sage_keys	unimod_title	unimod_mass	recon_measured_delta	diff_Da	recon_psm_count
+fixed	Carbamidomethyl on C	C	Carbamidomethyl	57.021464	57.020747	-0.000717	1233
+variable	Oxidation on M	M	Oxidation	15.994915	15.994455	-0.000460	1691
+variable	Deamidation	N Q	Deamidated	0.984016	0.983327	-0.000689	544
+variable	Gln->pyro-Glu	^Q	Gln->pyro-Glu	-17.026549	-17.025954	+0.000595	169
+variable	Fe[III]	D E	Cation:Fe[III]	52.911464	52.910479	-0.000985	155
+variable	Trioxidation	C	Trioxidation	47.984744	47.984447	-0.000297	131
+variable	Met-loss+Acetylation	[M	Met-loss+Acetyl	-89.029920	-89.030294	-0.000374	73
+variable	Dehydroalanine	C	Cys->Dha	-33.987721	-33.989020	-0.001299	42
+variable	Formylation	K	Formyl	27.994915	27.995239	+0.000324	26
+variable	Water Loss (Glu->pyro-Glu)	^E	Glu->pyro-Glu	-18.010565	-18.010399	+0.000166	22
+variable	Acetylation	[	Acetyl	42.010565	42.007892	-0.002673	15
+variable	Oxidation to Kynurenine	W	Trp->Kynurenin	3.994915	3.998904	+0.003989	12
+variable	Oxidation and then loss of oxidized M side chain	M	Met->AspSA	-32.008456	-32.007367	+0.001089	9
