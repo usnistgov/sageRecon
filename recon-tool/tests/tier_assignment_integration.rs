@@ -571,7 +571,7 @@ fn both_arms(
         .collect();
     let floor = peaks.iter().map(|(_, c)| *c).max().unwrap() as f64 * 0.20;
 
-    // I2 / I3 — the two structural guards, printed per file.
+    // I2 / I3: the two structural guards, printed per file.
     let (resolved, total) = index.resolution(&psms);
     let frac = resolved as f64 / total as f64;
     let nterm = psms
@@ -591,12 +591,12 @@ fn both_arms(
     );
     assert!(
         frac >= recon_tool::protein_index::MIN_RESOLVED_FRACTION,
-        "{key}: only {:.2}% of target PSMs resolve — wrong FASTA?",
+        "{key}: only {:.2}% of target PSMs resolve; wrong FASTA?",
         100.0 * frac
     );
     assert!(
         nterm_pct < 5.0,
-        "{key}: {nterm_pct:.3}% at protein position 0 — the lookup is matching \
+        "{key}: {nterm_pct:.3}% at protein position 0; the lookup is matching \
          too much and the positional test would carry no information"
     );
 
@@ -618,7 +618,7 @@ fn both_arms(
     )
 }
 
-/// I1 — supplying the protein index changes only EXPLAINED decisions.
+/// I1: supplying the protein index changes only EXPLAINED decisions.
 ///
 /// Run the same three files with and without the index and diff the decisions.
 /// Every changed decision must be explained by `explain_change`: either the
