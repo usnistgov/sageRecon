@@ -51,8 +51,12 @@ protein list. Byonic Preview emits a parameter file. Neither emits a prevalence 
 4. **Two tiers first, not five.** Resolution can increase when the file panel grows past
    three. Two tiers that hold beat five that need tuning.
 5. **The unannotated tail is listed, never tiered.** Recon's ability to report deltas
-   with no Unimod match is the capability the commercial tools lack. Suppressing it to
-   make a clean recommendation would discard the differentiator.
+   with no Unimod match is part of what recon offers. Suppressing it to make a clean
+   recommendation would discard it. ⚠ Corrected 2026-09-25: this said the commercial
+   tools lack the capability. Byonic Preview does not: its assay A7 runs a wild-card
+   search (any integer mass, -50 to +150 Da by default) and reports unrecognized
+   modifications in a spreadsheet. The difference is narrower: integer-mass
+   resolution and a smaller default range. See `byonic-preview-methodology.md`.
 6. **User knowledge enters as an override, never as a default.** An expert will want to
    add modifications they know are biologically real for their sample — acetyl protein
    N-term is the standard example. That belongs in the workflow, not in the tool's
@@ -310,5 +314,5 @@ rank-agreement gate. Do not substitute a pass mark.
 | Restricting recommendations to evidence above a significance floor | Mascot ET's pass-1 selection rule, applied to modifications rather than proteins |
 | Floor as a percentage of a reference peak | Mascot error-tolerant working practice (keep anything above ~10% of the alkylation count) |
 | Using the top non-zero peak as the reference instead of the alkylation peak | Original — removes the sample-prep assumption and needs no user input |
-| Reporting the unannotated tail | Original, and the differentiator; both vendors are limited to named modifications (Mascot to Unimod, Preview to ~60 common mods) |
+| Reporting the unannotated tail | Not unique to recon. Preview's A7 wild-card search reports unrecognized modifications at integer mass, -50 to +150 Da by default (`byonic-preview-methodology.md`, corrected 2026-09-24). Recon reports the tail as a peak list at -100 to +500 Da. The earlier "Preview to ~60 common mods" is not in the Preview paper and is withdrawn (2026-09-25) |
 | Refusing to score sample quality | Carried from the dropped digestion score (NOTES, known permanent limitations) |
