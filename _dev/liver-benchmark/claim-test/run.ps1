@@ -12,6 +12,14 @@ param(
 $ErrorActionPreference = 'Stop'
 $Here = Split-Path -Parent $MyInvocation.MyCommand.Path
 New-Item -ItemType Directory -Force -Path $Work | Out-Null
+$Work = (Resolve-Path $Work).Path
+# Sage parses every path as a URL, so a Windows drive letter ("c:") is read as a
+# URL scheme and the file is not found. Pass file:/// URLs instead, as recon does.
+function To-FileUrl([string]$path) { ([System.Uri](Resolve-Path $path).Path).AbsoluteUri }
+function Dir-To-FileUrl([string]$path) {
+  New-Item -ItemType Directory -Force -Path $path | Out-Null
+  ([System.Uri](Resolve-Path $path).Path).AbsoluteUri
+}
 & $Sage --version | Tee-Object -FilePath (Join-Path $Work 'sage_version.txt')
 Get-FileHash -Algorithm SHA256 $Mzml, $Fasta | Format-Table -AutoSize | Out-String |
   Tee-Object -FilePath (Join-Path $Work 'inputs.sha256')
@@ -20,7 +28,7 @@ foreach ($arm in 'vanilla', 'recon_guided', 'vanilla_repeat') {
   Write-Host "== $arm $(Get-Date)"
   $sw = [Diagnostics.Stopwatch]::StartNew()
   $p = Start-Process -FilePath $Sage -NoNewWindow -PassThru `
-    -ArgumentList @($cfg, '--disable-telemetry-i-dont-want-to-improve-sage', '-f', $Fasta, '-o', (Join-Path $Work $arm), $Mzml) `
+    -ArgumentList @((To-FileUrl $cfg), '--disable-telemetry-i-dont-want-to-improve-sage', '-f', (To-FileUrl $Fasta), '-o', (Dir-To-FileUrl (Join-Path $Work $arm)), (To-FileUrl $Mzml)) `
     -RedirectStandardError (Join-Path $Work "$arm.stderr.log")
   # Reading the handle now is required: without it, ExitCode is empty after exit.
   $null = $p.Handle
