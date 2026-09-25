@@ -412,7 +412,7 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 
 ### Deferred / open — none of this is forgotten
 
-* **NEXT RELEASE: seven changes from the write-up review (2026-09-24).** The
+* **DONE 2026-09-25, for release 0.2.0: seven changes from the write-up review (2026-09-24).** The
   list is in `_dev/writeup/technote-material.md`, Appendix B, "Planned for the
   next release". In short:
   1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
@@ -424,9 +424,13 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
   3. prominence uses the nearest higher bin (DONE 2026-09-24; schema 3.3.0);
   4. screen tolerances from the measured error (DONE 2026-09-24; schema
      3.4.0), and a glyco expert reviews the oxonium rule (OPEN);
-  5. remove the vestigial JSON blocks (a MAJOR schema change);
-  6. the documentation fixes;
-  7. the Fe[III] claim test on liver.
+  5. remove the vestigial JSON blocks (DONE 2026-09-24; schema 4.0.0 / pass-2 2.0.0);
+  6. the documentation fixes (DONE 2026-09-24);
+  7. the claim test on liver (DONE 2026-09-25, redesigned as vanilla against
+     recon-guided; see `_dev/liver-benchmark/claim-test/README.md`).
+
+  The one item left is external: a glycoproteomics expert (Nick Riley or
+  Chris Ashwood) reviews the oxonium rule.
 
   **2026-09-24: committed outputs REGENERATED for items 1 to 6** (examples,
   `full-run/`, Tier 3 snapshots, liver benchmark TSV, five-tool report) at

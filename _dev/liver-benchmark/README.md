@@ -24,7 +24,7 @@ Each setting below was read from the file named in the last column.
 
 | tool | version | key settings | source file |
 |---|---|---|---|
-| recon | 0.1.3 (`git_commit: ba4d30e`), Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin, 1 missed cleavage, minimum length 8. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
+| recon | 0.2.0 (`git_commit: 372765c`), Sage 0.15.0-beta.2 | Both passes search with no fixed and no variable mods, so alkylation is discovered. Enzyme trypsin, 1 missed cleavage, minimum length 8. | `_dev/testing/recon-output/full-run/liver.json`, `liver_search/results.json` |
 | PTM-Shepherd | FragPipe 23.1, MSFragger 4.4.1, PTM-Shepherd 3.0.2 | FragPipe Open workflow (the operator's description) with all fixed and variable mods removed (`add_C_cysteine` is commented out; all 29 `add_*` lines are 0.0; no `variable_mod` line is active). Precursor -150 to +500 Da. Fragment 20 ppm. `calibrate_mass = 2`. `num_enzyme_termini = 2` (fully tryptic). `allowed_missed_cleavage_1 = 2`. `isotope_error = 0`. | `ptm-shepherd/liverShepherd/fragger.params`, `fragpipe.workflow`, log |
 | MetaMorpheus | 1.1.7 | Three tasks: Calibrate, G-PTM-D, Search. `ListOfModsFixed` and `ListOfModsVariable` are empty in all three. The G-PTM-D list holds Carbamidomethyl on C (Common Fixed) and Oxidation on M (Common Variable), so +57 is discovered. Calibrate: MS1 10 ppm, MS2 30 ppm. Search: MS1 5 ppm, MS2 20 ppm. `SpecificProtease = "trypsin"`, 2 missed cleavages. | `metamorpheus/liverMetaMorpheus/Task Settings/*.toml`, `allResults.txt` |
 | Mascot | 2.6.0 (see note) | Error-tolerant search (`ERRORTOLERANT=1`). `MODS=` and `IT_MODS=` are empty, so its Carbamidomethyl is a discovery. MS1 10 ppm, MS2 20 ppm. Trypsin, `PFA=1`. | `mascot/error-tolerant/Human_ertol-2018.par` |
@@ -64,8 +64,9 @@ The other files are settings and provenance. They are not read by a script.
 
 ## Values this folder reproduces
 
-Run on 2026-09-24 from this repository. recon side: Sage v0.15.0-beta.2,
-`full-run/liver.json` at `git_commit` `ba4d30e`.
+Run on 2026-09-25 from this repository. recon side: recon 0.2.0, Sage
+v0.15.0-beta.2, `full-run/liver.json` at `git_commit` `372765c`. The recon
+pass-2 file in `recon/pass2/` is the same 0.2.0 run.
 
 Mod rank agreement, recon against each tool:
 
@@ -79,7 +80,7 @@ Digestion, distinct peptides, one classifier for every tool:
 
 | tool | missed cleavage | ragged-N | ragged-C |
 |---|---|---|---|
-| recon pass 2 | 17.58 % | 6.95 % | 3.17 % |
+| recon pass 2 | 17.59 % | 6.95 % | 3.18 % |
 | PTM-Shepherd | 19.64 % | 1.64 % | 0.51 % |
 | MetaMorpheus | 17.84 % | 0.54 % | 0.45 % |
 | Byonic Preview | 15.90 % | 8.60 % | 1.30 % |

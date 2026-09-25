@@ -431,17 +431,15 @@ pub const PASS2_MS2_DA_MULTIPLIER: f64 = 2.0;
 ///
 /// **Changed 500 -> 600 on 2026-09-24.** 600 is the point the 2026-08-28 design
 /// discussion intended. The old comment said most fragments fall at 400-600 m/z,
-/// with 500 as the midpoint. The data contradicts that. On serum (Sage v0.15,
-/// 10,511 PSMs at q <= 0.01, 154,842 matched fragments), the matched fragments
-/// have a median m/z of 652 and an intensity-weighted median of 732, and only
-/// 17.6 % fall in 400-600. Source: `_dev/writeup/technote-material.md`, which
-/// records a measurement by `serum_window_and_fragments.py` in the private
-/// archive. That script is NOT in this repository, and the numbers were not
-/// re-measured here.
+/// with 500 as the midpoint. The data contradicts that. On the liver benchmark
+/// file (stock Sage v0.15, 18,865 rank-1 target PSMs at q <= 0.01, 250,882
+/// matched fragments), the matched fragments have a median m/z of 605 and an
+/// intensity-weighted median of 726, and only 17.3 % fall in 400-600. Source:
+/// `_dev/liver-benchmark/sage-window-check/` (`window_and_fragments.py`, and its
+/// `summary.txt`).
 ///
-/// 600 is still BELOW both medians. At the median fragment (652) it
-/// under-converts by about 8 %, and at the intensity-weighted median (732) by
-/// about 18 %. [`PASS2_MS2_DA_MULTIPLIER`] (x2) covers that gap. The conversion
+/// 600 sits at the median fragment (605). At the intensity-weighted median
+/// (726) it under-converts by about 17 %. [`PASS2_MS2_DA_MULTIPLIER`] (x2) covers that gap. The conversion
 /// is exact only at 600: at 400 it over-estimates the Da width by 50 %. Per-
 /// fragment m/z would need `sage --annotate-matches` (declined, see NOTES "MS2
 /// stays absolute").
