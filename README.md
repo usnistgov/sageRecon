@@ -64,9 +64,9 @@ that property", Kil et al. 2011). We adopted that basis deliberately so the two
 reports sit on the same axis, though we have not run Preview and recon on the
 same file and then reconciled the figures line by line.
 
-**It is fast enough to run routinely.** Our serum test file contains 41,788 MS/MS
-scans and completed in 46.8 seconds with a v0.1.3 build (commit `ba4d30e`) on
-a standard work computer, with no performance tuning applied. Critically, that is one file on one
+**It is fast enough to run routinely.** The liver example file contains 56,949
+MS/MS scans and completed in 85.9 seconds (commit `ba4d30e`, whose code matches
+v0.2.0 apart from the version string) on an 8 GB laptop, with no performance tuning applied. Critically, that is one file on one
 machine and not a controlled benchmark: we have measured no comparative timing
 against any other tool, and we make no speed claim relative to one. What the
 figure supports is narrower and still useful: a survey at this cost can be run on
@@ -81,7 +81,7 @@ evidence base does and does not cover.
 
 1. **Download** the binary for your platform — see the table under
    [Getting the binary](#getting-the-binary) — from the
-   [v0.1.3 release](https://github.com/usnistgov/sageRecon/releases/tag/v0.1.3).
+   [v0.2.0 release](https://github.com/usnistgov/sageRecon/releases/tag/v0.2.0).
 2. **macOS only:** the binary is not code-signed, so the first run is
    blocked by Gatekeeper. Do the unblock step in
    [Installation](#installation) below before running it.
@@ -149,10 +149,10 @@ right-click the file and choose Put Back, or download the archive again. Then
 run this once on the unzipped folder, and run `recon` normally after that:
 
 ```
-xattr -dr com.apple.quarantine recon-apple-silicon-v0.1.3
+xattr -dr com.apple.quarantine recon-apple-silicon-v0.2.0
 ```
 
-For the Intel archive, the folder is `recon-apple-intel-v0.1.3`.
+For the Intel archive, the folder is `recon-apple-intel-v0.2.0`.
 
 The Windows and Intel builds were checked against each other on the same file.
 Every measured value in the two reports agrees; the only difference is the input
@@ -457,10 +457,9 @@ decide.
 ## Example output
 
 Two complete reports ship in this repository. They were made on 2026-09-25 by
-version 0.2.0 at commit `372765c`, which is not yet a release.
-They use main report schema 4.0.0 and Pass 2 schema 2.0.0. The v0.1.3
-release binary writes schemas 3.2.0 and 1.1.0, so its output does not match
-these copies.
+version 0.2.0 at commit `372765c`, the code of the v0.2.0 release.
+They use main report schema 4.0.0 and Pass 2 schema 2.0.0. Releases before
+0.2.0 wrote schemas 3.x and 1.x, so their output does not match these copies.
 
 The file demonstrated in [Quick start](#quick-start) is the NIST Candidate RM
 8461 human liver reference material (Orbitrap Fusion Lumos, tryptic; Davis,

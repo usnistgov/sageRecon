@@ -10,7 +10,7 @@ abstract: >-
   cysteine, so the observed cysteine chemistry is reported rather than presumed.
 type: software
 version: 0.2.0
-date-released: "2026-09-08"
+date-released: "2026-09-25"
 authors:
   - family-names: Neely
     given-names: Benjamin A.
