@@ -50,8 +50,12 @@ identify more than Ben's "vanilla" search, on the liver file?
 - recon's recommendations: `_dev/testing/recon-output/full-run/liver.json`,
   SHA-1 `5428838c90e291bc30aac249dfa0f3efe4551868`, `generated_at`
   2026-09-24T22:30:43Z, recon 0.1.3, `git_commit` `ba4d30e`. The
-  configs were built from this file. A later regeneration (recon 0.2.0)
-  may change the file; rerun `build_configs.py` and compare.
+  configs were built from this file. The file was then regenerated at
+  recon 0.2.0 (SHA-1 `7865d79e9636dc7991f53dc395f5a939fd558b7e`,
+  `generated_at` 2026-09-25T10:04:08Z, `git_commit` `372765c`).
+  `build_configs.py` on the new file gives byte-identical configs and
+  `mod_mapping.tsv` (`git diff --quiet` on `configs/`), and `liver.html`
+  still prints 10 / 10 ppm.
 - Engine: stock Sage v0.15.0-beta.2, rev
   `df9219951cc9a54cf4cd55d76541af24b687bd3d` (the recon pin), built from
   source with `cargo build --release`. Telemetry off.
@@ -165,9 +169,13 @@ as a ratio. If memory scales with it, arms 3 and 4 need about 7 times arm
 
 ## How to run it (the run kit)
 
-Use one machine for every arm, so the runtimes compare. Suggested: 64 GB
-of RAM or more (arm 1 needs about 17 GB; arms 3 and 4 hold about 7 times
-as many peptide forms, see above). Close other heavy work while it runs;
+Use one machine for every arm, so the runtimes compare. It needs at
+least 128 GB of RAM: arm 1 needs about 17 GB, and arms 3 and 4 hold about
+6.8 times as many peptide forms (see above), so roughly 115 GB if memory
+scales with them. On a smaller machine arms 3 and 4 swap, and the runtime
+gate then measures the machine, not recon. `analyze.py` marks an arm
+"swap-suspect" when its peak RSS is above 80 % of the RAM in
+`machine.tsv`. Close other heavy work while it runs;
 the script records the load average before each arm.
 
 ### 1. Get Sage at the pinned rev
@@ -240,10 +248,21 @@ memory), PSMs per mass shift, the PTM-Shepherd / MetaMorpheus / Mascot
 counts for each recon-only mod, arm 1 against `laptop-arm1/`, and the
 verdict against the criterion above.
 
-To commit the run: copy `results.md`, `machine.tsv`, `runs.tsv`, and each
-arm's `results.json`, `run_meta.json` and `sage.log` into
-`claim-test/results/<arm>/`. Redact personal paths as
-`_dev/liver-benchmark/README.md` does. Do not commit the TSVs (each is
+To commit the run (`results.md` is already in `claim-test/`), copy the
+small files with personal paths redacted, then check nothing is left:
+
+```bash
+W=/path/to/claim-work; D=_dev/liver-benchmark/claim-test
+python3 $D/redact_copy.py $D/results $W/machine.tsv $W/runs.tsv
+for o in $W/out_*/; do
+  python3 $D/redact_copy.py $D/results/$(basename $o) \
+    $o/results.json $o/run_meta.json $o/sage.log
+done
+grep -rn -e '/Users/' -e '/home/' -e '/private/tmp' $D/results && echo "STOP: paths left"
+```
+
+`redact_copy.py` uses the rule of `_dev/liver-benchmark/README.md` and
+also replaces temporary work folders. Do not commit the TSVs (each is
 tens of MB).
 
 ## Files
@@ -256,5 +275,8 @@ tens of MB).
   PTM-Shepherd / MetaMorpheus / Mascot liver counts for each recon-only
   mod (parsers imported from `_dev/testing/scripts/compare_4way.py`).
 - `estimate_forms.py`: the peptide-form count behind the memory estimate.
-- `laptop-arm1/`: the laptop arm 1 run: `counts.json`, the sorted
-  peptide list, Sage's `results.json`, `sage.log` and `run_meta.json`.
+- `redact_copy.py`: copies text files with personal paths redacted.
+- `capture_laptop_arm1.sh`: writes `laptop-arm1/` from the laptop run.
+- `laptop-arm1/` (added when the laptop run finishes): `counts.json`,
+  the sorted peptide list, Sage's `results.json`, `sage.log` and
+  `run_meta.json`.

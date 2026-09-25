@@ -69,8 +69,11 @@ def mod_sites(pep):
 
 def load(outdir):
     psms, peps, forms, groups = [], set(), set(), set()
+    all_psm = 0  # targets + decoys at spectrum_q <= 0.01, for the log tripwire
     with open(os.path.join(outdir, "results.sage.tsv"), newline="") as fh:
         for r in csv.DictReader(fh, delimiter="\t"):
+            if float(r["spectrum_q"]) <= Q:
+                all_psm += 1
             if r["label"] != "1":
                 continue
             if float(r["spectrum_q"]) <= Q:
@@ -80,7 +83,30 @@ def load(outdir):
                 forms.add(r["peptide"])
             if float(r["protein_group_q"]) <= Q:
                 groups.add(r["protein_groups"])
+    # Tripwire: Sage's own log line counts targets AND decoys at 1 % FDR
+    # (benchmark README: 19052 = 18865 targets + 187 decoys).
+    lp = os.path.join(outdir, "sage.log")
+    log = open(lp, errors="replace").read() if os.path.exists(lp) else ""
+    if not log:
+        print(f"WARNING: {outdir}: no sage.log, PSM tripwire not applied", file=sys.stderr)
+    m = re.search(r"discovered (\d+) target peptide-spectrum matches at 1% FDR", log)
+    if m and int(m.group(1)) != all_psm:
+        sys.exit(f"STOP: {outdir}: Sage log says {m.group(1)} PSMs at 1 % FDR, "
+                 f"the TSV gives {all_psm} (targets + decoys, spectrum_q <= 0.01)")
     return psms, peps, forms, groups
+
+
+def machine_ram_bytes(work):
+    path = os.path.join(work, "machine.tsv")
+    if not os.path.exists(path):
+        return None
+    for line in open(path):
+        k, _, v = line.rstrip("\n").partition("\t")
+        if k == "mem_bytes":
+            return int(v)
+        if k == "mem_kB":
+            return int(v) * 1024
+    return None
 
 
 def mod_counts(psms):
@@ -212,6 +238,7 @@ def main():
             continue
         res[arm] = (desc, meta, load(d))
 
+    ram = machine_ram_bytes(work)
     base = res["arm1_vanilla"][2]
     L = []
     L.append("| arm | PSMs | peptides (stripped) | modified forms | protein groups | "
@@ -221,6 +248,8 @@ def main():
         rss = meta["peak_rss_bytes_time_l"]
         fp = meta.get("peak_footprint_bytes_time_l")
         rss_s = (f"{rss / 1e9:.2f}" if rss else "n/a") + " / " + (f"{fp / 1e9:.2f}" if fp else "n/a")
+        if rss and ram and rss > 0.8 * ram:
+            rss_s += " (swap-suspect)"
         if data is None:
             L.append(f"| {desc} | failed: {meta['killed_by_watchdog'] or meta['returncode']} "
                      f"| | | | | | {meta['wall_seconds']} | {rss_s} | {meta['loadavg_before'][0]} |")
