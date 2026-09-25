@@ -17,7 +17,7 @@ who wants an unbiased first look before committing to a search strategy.
 recon run <MZML> <FASTA> --enzyme <ENZYME>
 ```
 
-Version 0.1.3. Everything the tool needs is compiled into one binary: the
+Version 0.2.0. Everything the tool needs is compiled into one binary: the
 [Sage](#third-party-software) search engine, the Unimod element table, and the
 curated modification list. There is no search engine to install, no path to
 configure, and no network call at search time.
@@ -648,7 +648,7 @@ These are ordered by how much they would change what a user can trust.
 If you use `recon` in published work, please cite the software:
 
 > Neely, B.A. (2026). *sageRecon: a Sage-based proteomics reconnaissance tool*
-> (Version 0.1.3) [Computer software]. National Institute of Standards and
+> (Version 0.2.0) [Computer software]. National Institute of Standards and
 > Technology. https://github.com/usnistgov/sageRecon
 
 Cite the version you ran, not the repository in general, because the

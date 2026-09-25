@@ -9,7 +9,7 @@ abstract: >-
   open search assumes no fixed modification, including carbamidomethyl on
   cysteine, so the observed cysteine chemistry is reported rather than presumed.
 type: software
-version: 0.1.2
+version: 0.2.0
 date-released: "2026-09-08"
 authors:
   - family-names: Neely
