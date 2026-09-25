@@ -50,6 +50,12 @@ bash sageRecon/_dev/liver-benchmark/claim-test/run.sh \
   claim-work
 ```
 
+On Windows (no bash), use PowerShell instead of the last command:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File sageRecon\_dev\liver-benchmark\claim-test\run.ps1 -Sage sage-df92199\target\release\sage.exe -Mzml C:\path\to\10mg_1_A_1.mzML.gz -Fasta sageRecon\examples\uniprot_sprot_iso_human-2018_06.fasta -Work claim-work
+```
+
 - mzML: `10mg_1_A_1.mzML.gz` (NIST RM 8461 liver, PRIDE PXD013608).
 - FASTA: `examples/uniprot_sprot_iso_human-2018_06.fasta` in this repo.
 - `run.sh` records the Sage version and the input sha256, runs vanilla,
