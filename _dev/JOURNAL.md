@@ -1,3 +1,57 @@
+# Debrief — 2026-10-06 (shutdown): the deferred list re-checked, one residual explained and parked
+
+**Landed after the second-pass entry below:** `c9422ca` (the "Deferred past
+v0.1.0" list re-checked item by item), `a000439` (Ben dropped the wide x fully
+tryptic comparison), `f209ec6` (the cause of the Deamidation residual, with an
+evidence script), `f1edbe9` (Ben parked it), and this shutdown commit. **No
+code, test, report or derived number changed. The tripwires were not re-run.**
+
+The whole day, in order: the tech note became `docs/design-and-evidence.md`;
+the records were brought to v0.2.0; a leftover worktree was removed; README
+now states the liver comparison with Preview; PLAN was cut to one status
+entry; Step 5 was closed; the deferred list was checked.
+
+## Q1. What am I least confident about, and what would settle it?
+
+- **The background estimate in the Deamidation entry** (383 of 724 PSMs on
+  bcell). It comes from one flank and assumes a flat background. It is labelled
+  an estimate in NOTES. It is parked, so nothing settles it now.
+- **The cause itself is solid.** The script rebuilds count and mass exactly on
+  all four files with no fold applied, and the apex sits at 0.984 on three of
+  them. A reader can run the script if the pass-1 TSVs are present.
+- **The Step 5 ticks and the reframed wording**, as stated in the two entries
+  below. Ben's read settles both.
+
+## Q2. What did I assume without stating it?
+
+- That the style guide covers `docs/` as well as README. Ben named it for
+  README and paper material.
+- That the committed reports for serum, bcell and b1906 (0.1.3) describe the
+  same peak behaviour as 0.2.0. The peak code did not change between them, but
+  I did not check that by diff.
+
+## Q3. What is the biggest thing you are missing?
+
+The peak count and `delta_mass` in every report are window statistics. The
+record now says so. No user-facing text says so. That is parked with the rest.
+
+## Q4. What could you have done differently?
+
+I went past the scope. Ben asked for a look at one residual; I answered it and
+then recommended more measurement. Ben stopped it: the session was a document
+move and a tidy-up, not analysis. The correct end was the finding and a parked
+line. I should have asked before I wrote options into PLAN.
+
+## Q5. What would I suggest to improve?
+
+- Give the style guide path at the start of a session that will write README
+  or `docs/` prose. It is now in my memory for this project.
+- The three hands-on checks are still the cheapest open items: the
+  browser-download test of the macOS archives, one run of the `linux-64`
+  binary, and the oxonium review.
+
+---
+
 # Debrief — 2026-10-06 (second pass): PLAN tightened, and the README states the Preview comparison
 
 **Landed:** `4b3f579` (README states the liver comparison with Preview) and

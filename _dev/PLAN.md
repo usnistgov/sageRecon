@@ -15,7 +15,7 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-10-06 (end of session, second pass). Read this block and the
+**Updated 2026-10-06 (end of session, shutdown). Read this block and the
 "Deferred / open" list that follows it. They are the only current status.**
 Older status entries are in "Status history" at the end of this file. They were
 moved there word for word on 2026-10-06. They are history, and many of their
@@ -52,6 +52,13 @@ statements are superseded.
   background document, or moved to "Deferred / open". See Step 5.
 - PLAN keeps one status entry at the top. The older entries moved to "Status
   history".
+- "Deferred past v0.1.0" was re-checked item by item (`c9422ca`). Nothing in
+  it is built. Ben dropped the wide x fully tryptic comparison (`a000439`).
+- The Deamidation residual on bcell and b1906 has a known cause: the report
+  prints a window mean, not an apex (`f209ec6`, evidence script
+  `_dev/testing/scripts/deamidation_residual_check.py`). Ben PARKED it
+  (`f1edbe9`). The numbers stand. This session was documentation, not
+  analysis. Do not restart the analysis without Ben.
 
 **Source change today: comments only** (`f4e5ed8`). `calibration.rs`,
 `report.rs` and `oxonium.rs` name the new document path. `cargo fmt --check`

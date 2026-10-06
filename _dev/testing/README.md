@@ -77,6 +77,7 @@ from `testing/`) except the digestion/semi configs which use absolute paths.
 | `explore_delta_mass.py` | Exploratory delta-mass analysis (informed Phase 1 schema) |
 | `run-semi-enzymatic.ps1` | Runs the semi-enzymatic Sage search |
 | `analyze-semi-enzymatic.ps1` | Post-run analysis of the semi-enzymatic output |
+| `deamidation_residual_check.py` | Rebuilds the Deamidation peak from the pass-1 TSVs and shows that its low `delta_mass` is a window mean, not a mass error (2026-10-06). Needs the gitignored `full-run/*_search/results.sage.tsv` |
 
 Note: the Python scripts are prototypes; the production digestion logic is being
 ported to Rust in `recon-tool` (see `reference-notes/digestion-port-plan.md`).
