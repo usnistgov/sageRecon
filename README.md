@@ -61,8 +61,13 @@ rate is printed with its numerator and denominator, and those denominators count
 distinct peptides, which is the basis Preview states for its own percentages
 ("the number of peptides with the property divided by the number that could have
 that property", Kil et al. 2011). We adopted that basis deliberately so the two
-reports sit on the same axis, though we have not run Preview and recon on the
-same file and then reconciled the figures line by line.
+reports sit on the same axis. Both tools have processed one file in common, the
+liver reference run `10mg_1_A_1`: Preview v3.2.0 reports 15.9 % missed
+cleavage, 8.6 % ragged-N and 1.3 % ragged-C over 2,008 peptides, against
+17.59 %, 6.95 % and 3.18 % over 10,696 peptides from `recon`. Preview's figures
+are quoted from its own summary report. Its peptide list is not among the
+benchmark files, so the two sets of figures have not been reconciled peptide by
+peptide.
 
 **It is fast enough to run routinely.** The liver example file contains 56,949
 MS/MS scans and completed in 85.9 seconds (commit `ba4d30e`, whose code matches
@@ -73,9 +78,14 @@ figure supports is narrower and still useful: a survey at this cost can be run o
 every unfamiliar file rather than reserved for problem cases.
 
 Several of the points above are design intent rather than demonstrated
-superiority. We have not run a head-to-head study against Preview or against any
-other survey tool, and the [Limitations](#limitations) section states what our
-evidence base does and does not cover.
+superiority. We have not run a controlled head-to-head study against Preview or
+against any other tool. What we do have is a comparison on a single file: the
+liver reference run was processed by `recon` and by four other tools (Byonic
+Preview, PTM-Shepherd, MetaMorpheus and Mascot error-tolerant). The inputs are
+published in [`_dev/liver-benchmark/`](_dev/liver-benchmark/), and its README
+names the scripts that read them.
+The [Limitations](#limitations) section states what our evidence base does and
+does not cover.
 
 The design of each pipeline phase, the prior art it draws on, and the evidence
 behind it are set out in

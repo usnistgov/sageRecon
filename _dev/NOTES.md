@@ -11694,3 +11694,21 @@ Rejected alternatives:
 
 Still open, unchanged: the oxonium-rule review by a glycoproteomics expert
 (Nick Riley or Chris Ashwood).
+
+### README no longer says that Preview and recon share no file (2026-10-06, Ben)
+
+README "Why this exists" said "we have not run Preview and recon on the same
+file" and "We have not run a head-to-head study against Preview or against any
+other survey tool". The first was false since the liver benchmark: both tools
+processed `10mg_1_A_1`. README now quotes both digestion rows. Preview: 15.9 /
+8.6 / 1.3 % over 2008 peptides, read from
+`_dev/liver-benchmark/preview/10mg_1_A_1/result_summary.html`, at the one
+decimal that page prints. recon: 17.59 / 6.95 / 3.18 % over 10696 peptides,
+from `full-run/liver_pass2.json`. README still says that there is no
+controlled head-to-head study, and that the figures are not reconciled peptide
+by peptide, because Preview's peptide list is not in the benchmark files.
+
+The same pass reframed four more "the note" phrases in
+`docs/design-and-evidence.md` that a line-by-line search had missed, because
+the phrase wrapped across two lines or sat in a table. One Sources row now
+names `metamorpheus-mass-error-calibration.md` ("JASMS").
