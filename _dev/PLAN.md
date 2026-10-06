@@ -15,53 +15,865 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-10-06 (end of session). Read this block, then the "Deferred /
-open" list below. Everything above them in this file is roadmap history.**
+**Updated 2026-10-06 (end of session, second pass). Read this block and the
+"Deferred / open" list that follows it. They are the only current status.**
+Older status entries are in "Status history" at the end of this file. They were
+moved there word for word on 2026-10-06. They are history, and many of their
+statements are superseded.
 
-### ▶ 2026-10-06: v0.2.0 is released. No technical note. The write-up is now a background document.
+### ▶ 2026-10-06: v0.2.0 is released. No technical note. PLAN was tightened.
 
-**State. Each fact below was read on 2026-10-06 from the file or command named.**
+**State. Each fact was read on 2026-10-06 from the file or command named.**
 - recon is 0.2.0 (`recon-tool/Cargo.toml`; version commit `372765c`). Tag
   `v0.2.0` is on the remote at `eeb0ba9` (`git ls-remote --tags origin`).
 - The v0.2.0 Release is published (`gh release view v0.2.0`: published
   2026-09-25, not a draft). It holds four archives: `recon-apple-silicon.zip`,
   `recon-apple-intel.zip`, `recon-windows-64.zip`, `recon-linux-64.tar.gz`.
   README says that Actions built them from the tag.
-- Main schema 4.0.0 and Pass 2 schema 2.0.0 (NOTES "Version 0.2.0 and the
-  liver and examples regeneration").
-- The seven changes from the write-up review are done. See "Deferred / open"
-  below.
+- Main schema 4.0.0 and Pass 2 schema 2.0.0 (the four `full-run/*.json`
+  reports read `schema_version 4.0.0`).
+- `full-run/liver.json` is at `tool_version 0.2.0`. `serum`, `bcell` and
+  `b1906` are at 0.1.3. NOTES "Version 0.2.0 and the liver and examples
+  regeneration" gives the reason: liver is the test file, and no gate reads
+  the version field.
 - Gates, as NOTES records them for 2026-09-25: `cargo test` 208 of 208 with
   all data, `run_validation.py` 17/17. This is a record. The gates were NOT
   run again today.
+- This clone's `origin` is the public repository. A plain `git push` publishes.
 
-**Decided today (Ben).** No technical note will be submitted. The source
-material stays as the background document of the software. It moved from
-`_dev/writeup/technote-material.md` to `docs/design-and-evidence.md`. Only its
-wording changed. Section order, appendix letters and item numbers are frozen,
-because NOTES, `result-schema.md` and three source comments cite them. README
-links to it. See NOTES "The tech note became a background document".
+**Decided today (Ben).**
+- No technical note will be submitted. The source material is now the
+  background document `docs/design-and-evidence.md`. Only its wording changed.
+  Its section order, appendix letters and item numbers are frozen. See NOTES
+  "The tech note became a background document".
+- README states the liver comparison with Preview (`4b3f579`). See NOTES
+  "README no longer says that Preview and recon share no file".
+- Step 5 is closed as a manuscript step. Its boxes were ticked against the
+  background document, or moved to "Deferred / open". See Step 5.
+- PLAN keeps one status entry at the top. The older entries moved to "Status
+  history".
 
-The liver five-tool comparison and the claim test are in
-`_dev/liver-benchmark/`. Claim test result (`claim-test/results.md`):
-recon-guided 15310 stripped sequences and 1432 protein groups, vanilla 15185
-and 1396, and the vanilla repeat differs by 0 sequences.
-
-**Source change today: comments only.** `calibration.rs`, `report.rs` and
-`oxonium.rs` each name the new document path. `cargo fmt --check` and
-`cargo build` pass. No test, output or derived number changed, so the
+**Source change today: comments only** (`f4e5ed8`). `calibration.rs`,
+`report.rs` and `oxonium.rs` name the new document path. `cargo fmt --check`
+and `cargo build` passed. No test, output or derived number changed, so the
 tripwires were not re-run.
 
-**Open.** One item, and it is external: a glycoproteomics expert (Nick Riley
-or Chris Ashwood) reviews the oxonium rule and its tolerance.
+**Writing registers.** README and `docs/` are written in the manuscript
+register of Ben's style guide (a file outside this repository; it forbids
+em-dashes). PLAN, NOTES and JOURNAL stay in ASD-STE100.
 
-**Not recorded. Do not assume either one.**
-- JOURNAL has no debrief between 2026-09-10 and 2026-10-06. The sessions of
-  2026-09-15 to 2026-09-25 are recorded in PLAN, NOTES and the commits only.
-- No record says that the `linux-64` binary was run. The 2026-09-16 entry
-  below says it was unrun.
+**Settled decisions** are in `dev_AGENTS.md` and NOTES. The old "Settled"
+table is in "Status history".
 
-**Next action.** The oxonium review. There is no manuscript work.
+**Not recorded. Do not assume it.** JOURNAL has no debrief between 2026-09-10
+and 2026-10-06. The sessions of 2026-09-15 to 2026-09-25 are recorded in PLAN
+history, NOTES and the commits only.
+
+**Next action.** The oxonium review (external). There is no manuscript work.
+All other open work is in the list below, and none of it is started.
+
+### Deferred / open — none of this is forgotten
+
+Each item was checked against the repository on 2026-10-06.
+
+* **External: the oxonium rule needs a glycoproteomics review** (Nick Riley or
+  Chris Ashwood). The rule and its tolerance are in
+  `docs/design-and-evidence.md`, Phase 6 and Appendix B. It is the one item
+  left from the seven changes of the 2026-09-24 write-up review. The other six
+  are done (see "Status history", "Closed items").
+
+* **The `linux-64` binary has not been run on a real file.** CI builds it
+  since 2026-09-16. README says the same.
+
+* ⚠ **macOS DOWNLOADS ARE BLOCKED BY GATEKEEPER (2026-09-10).** Only Developer
+  ID signing plus Apple notarization removes the block. That needs a paid Apple
+  Developer account, and Ben decided not to get one for now. The README gives
+  the `xattr -dr` workaround. `build.yml` now ad-hoc signs the macOS binary and
+  verifies it inside the extracted zip. That is hygiene. It does NOT remove the
+  block. Four gaps stay open:
+  1. **Download and test the CI macOS archives.** (Reworded 2026-10-06: the
+     trigger was "when Actions runs". Actions runs since 2026-09-16, and no
+     record shows that this test was done.) Download
+     them from the Releases page THROUGH A BROWSER, so the quarantine attribute
+     is set. Record four results: what the block looks like, whether the README
+     `xattr -dr` command clears it, whether `recon --version` then runs, and
+     whether `codesign --verify --strict` passes on the extracted binary. ⚠ The
+     new signing and zip-check steps have NEVER run on a runner. Only
+     `actionlint` and a local rehearsal on two test binaries checked them.
+  2. **Confirm the form of the xattr command.** `recon` ships as a bare binary
+     in a folder, not as a `.app` bundle, so the README runs the command on the
+     folder. Ben asked whether `xattr -dr com.apple.quarantine "recon.app"` is
+     needed. The `.app` form is sagegui's. Check it on the downloaded archive.
+     Do not assume.
+  3. **Two records disagree on what the block looks like.** The v0.1.0 smoke
+     test (2026-09-02) saw `zsh: killed` and no dialog. A check from the sagegui
+     repo on the v0.1.2 archives (2026-09-10) saw no output, no exit after 20 s,
+     and a "recon Not Opened" dialog. The README states both. Settle it with
+     gap 1, then correct NOTES and README in place.
+  4. **The hand-built v0.1.2 macOS binaries were not re-signed.** The same
+     2026-09-10 check found the Intel binary unsigned and the arm64 binary
+     linker-signed ad-hoc. It did not re-check that locally: no archive was
+     downloaded here. The Intel binary still runs once the quarantine is
+     removed, so v0.1.2 is not re-cut. Use the manual release checklist in NOTES
+     "Actions is disabled by the organization" for the next release.
+
+* **Nothing has run on a non-tryptic or ion-trap file.** The whole evidence base
+  is four tryptic Orbitrap files. This is the biggest gap in the project. These
+  items wait for such a file:
+  - The 13 non-trypsin enzyme presets are transcribed from Mascot and are not
+    run on real data.
+  - The ion-trap Da path (ppm at m/z 600, doubled, rounded up to 0.1 Da; m/z 500
+    until 2026-09-24) is curated, never measured.
+  - The INPUT of the Da recommendation is not settled.
+    `ms2_user_recommendation` feeds both branches the measured fragment SPREAD
+    (`ms1_calibration.ms2_tolerance_high_ppm`), and the doc of
+    `PASS2_MS2_DA_MULTIPLIER` derives its constant against the median
+    `|error|`. The 0.1 Da step makes the stakes small. See NOTES "The three
+    tolerance regimes". (Moved here from "Next, in order" item (a).)
+  - `decoy_ragged_side` is validated at 96.63 % ON TRYPSIN and inverts for
+    N-terminal cleavers with nothing measured behind it. Ben: test after
+    release.
+* **`ms1_user_recommendation` is NOT analyzer-aware. DELIBERATE, a stated
+  limitation.** A trap or quadrupole MS1 gets a ppm number. Ben's call
+  (2026-09-03): not worth a schema change. Do not "fix" it without Ben.
+* Alkylation beyond carbamidomethyl: the reagent table belongs in recon's own
+  code cited to Unimod, NOT in `Mods.txt`. Ben decides the list.
+* **`notable_unannotated` is UNEXERCISED, not broken.** ⚠ Corrected 2026-09-03;
+  this used to read "reads 0 on serum while 19 un-curated peaks exist", which
+  implied a defect. Measured across all four committed reports: it is **0 on
+  every file**, and every un-curated peak on every file carries reason
+  `below_floor_uncurated` — there are **zero above-floor un-curated rows
+  anywhere** (28-30 below-floor ones per file). So the section is CORRECTLY
+  empty and the code path has never been exercised by real data. That is a
+  coverage gap to state in the write-up, not a bug to fix.
+  Re-measured 2026-10-06 on the four `full-run/*.json` reports at schema 4.0.0:
+  `notable_unannotated` holds 0 rows in each. The reasons of the un-curated
+  rows were not re-read.
+* **Open boxes in the completed steps below.** They stay where they are:
+  - Step 2.5: verify the NME / NAT references. No code depends on them, and
+    `docs/design-and-evidence.md` does not cite them (word search for NME and
+    NAT, 2026-10-06: no hit).
+  - Step 4: baseline benchmarks per Sage version (Ben's idea, 2026-08-28).
+* **From Step 5, not covered by the background document:**
+  - The four items of the assumptions ledger in
+    `reference-notes/ms1-tolerance-recommendation-rationale.md` were not
+    checked one by one against the document's limitations.
+  - The Option-C ceiling proof of concept is not named in the document. C1/C2
+    and satellite folding are.
+* See also "Deferred past v0.1.0" below. That list is older and was not
+  re-checked item by item today.
+
+---
+
+## Conventions
+- Keep README.md in sync with what's actually live.
+- Move settled decisions to NOTES.md; mark them `(locked)`. Open questions
+  stay here, not in NOTES.
+- Check off phases below as completed. Don't delete finished items.
+- When a phase finishes: move non-obvious rationale to NOTES first, then
+  collapse the phase to one line under Completed.
+- Batched atomic commits, authored as Benjamin A. Neely (see AGENTS.md). One
+  commit reads as one coherent decision.
+- Each phase below ends in a checkpoint: tests pass, commit, stop — not a
+  segue straight into the next phase in the same breath.
+
+---
+
+## ✓ Completed
+- Phase 0 — Repo & environment setup.
+- Phase 1 — Result struct / JSON schema.
+- Phase 2 — Sage integration baseline.
+- Phase 3 — Mod discovery / PTM scoping engine.
+- Phase 4 — Signal fate accounting (3-tier chimeric scan classification).
+- Phase 5A — MS2 spectrum counting & identification rate (72% ID rate on test set).
+- Phase 5B — MS1 precursor intensity, polymer %TIC, oxonium screening.
+- Phase 6 — Digestion and minimal QC.
+- Phase 6B — Digestion efficiency via separate closed semi-enzymatic search.
+- Phase 6C — Two-pass digestion efficiency probe (opt-in).
+- Phase 6D — MS1 signal fate integration.
+- Phase 6E — Three-layer MS1 signal fate.
+- Phase 6F — Integration & measurement baseline.
+- Phase 7 — Report output.
+- Phase 7B — Mod discovery pipeline fixes (pre-validation).
+- Phase 7C — Mod discovery pipeline correction.
+- Phase 7D — Residue-mass degeneracy check — deferred by evidence, not built.
+- Phase 8 — Validation pass. **14/14 again as of 2026-08-25, after the harness
+  itself was repaired — Tier 3 was a no-op and two gates tested a stale premise.
+  See NOTES.**
+- Phase 8.5 — MS1 mass-accuracy metric (signed MS1 vs FragPipe: b1906
+  +0.53/+0.53 exact, serum +2.46/+2.51, bcell −0.22/−0.00).
+- C1/C2 — m/z-dependent mass calibration — CLOSED, negative. All three arms
+  (ppm-constant, carpet-mandate, Option-C ceiling POC) exhausted by
+  evidence; do not re-open. Fold-tolerance follow-on question parked
+  separately below, not C1/C2.
+- Compile + on-disk timing test (2026-07-17) — release exe builds clean,
+  analysis time scales with spectrum count, not PSM count.
+- Unified MS1 mass-error report in `analyze` (2026-07-16) — apex_offset
+  (wide) and signed MS1 (closed) reported side by side; `mass_error_ppm`
+  hardcoded-1000-Da bug fixed.
+- Cross-tool mod-discovery benchmark — PTM-Shepherd, reallyOpen, and Mascot
+  all done and agree on real PTMs; Byonic Preview still pending (data-gated).
+- Recon no-fixed-mods run (2026-07-24) — +57 surfaces at rank 2, matching
+  reallyOpen's rank.
+- `run_validation` harness (2026-08-17, repaired 2026-08-25) — **14/14.** Tier 3
+  now regenerates from the pinned TSV and diffs against the baseline.
+  `testing/scripts/run_validation.py`.
+- MS1 clean-subset calibration wired into `analyze` (2026-08-19) — signed
+  median, MAD, asymmetric user recommendation, bias-centered Pass-2 window
+  design (Pass 2 now deferred — see below), MS2 tolerance from `fragment_ppm`.
+- Sage version pinning + TSV schema validator (2026-08-19) — SAGE_VERSION 0.14.7.
+- First MetaMorpheus workflow review (2026-08-19) — surfaced the
+  ground-truth provenance questions that ship-track step 1 now resolves;
+  treat its comparison numbers as provisional until then.
+
+## Ship track — five steps to v0.1.0
+
+Each step ends in a commit. Do not start the next one in the same session.
+
+---
+
+## ✓ Step 1 — Lock the truth  — COMPLETE 2026-08-24
+
+Re-run the reference measurements on all three files, then freeze them. Every
+number the write-up cites is measured against this. Doing it once, properly,
+removes the provenance questions that have accumulated across five sessions.
+
+- [x] **Re-run MSFragger tight on all three files.** Matched settings, recorded
+      config. Two outputs: known-PTM prevalence, and MS1/MS2 error. This
+      replaces the ±10 vs ±20 ppm ambiguity rather than adjudicating it.
+      Done 2026-08-24 — `testing/reference-data/msfragger/{strictTryp,semiTryp}/`,
+      NOTES "MSFragger tight re-run — step 1 ground truth, part A". Ground truth
+      locked: precursor 20 ppm / fragment 20→10 ppm calibrated; Ox(M), N-term-Ac,
+      and semi-tryptic-rate tables per file. Does NOT cover +57 (Cys was FIXED in
+      this config) — see the next checkbox.
+- [x] **Re-run recon as needed** so its numbers come from the current build,
+      not a mix of builds across sessions. Done 2026-08-24, commit `75a1d8d` —
+      `testing/recon-output/full-run/{serum,bcell,b1906}.json`, alkylation-agnostic
+      `-nofixedmods` configs, current build.
+- [x] **Reconcile the +57 PSM counts** — fully resolved, both sides. JOURNAL
+      2026-07-24 gives bcell 3311 / serum 1125 / b1906 1253 at 4.50 / 7.31 /
+      4.47%; JOURNAL 2026-08-21 gives 187 / 86 / 60 at the same percentages.
+      **Use the 2026-07-24 counts — the fresh recon re-run reproduces them
+      exactly.** Independent verification via a variable-+57 MSFragger tight
+      search (strict trypsin, Cys+57 moved from fixed to variable, `52203dc`)
+      now done too: the true recon-vs-verified gap is **~1.2x (serum) to ~3x
+      (bcell/b1906)**, not the 35–58x figure from 2026-08-21. See NOTES "+57
+      PSM count reconciliation" (both entries) for the full tables. **Do not
+      carry the 48.4x/35.1x/57.7x ratios, the 2.7x recomputation, or the
+      35–58x framing forward — use the 1.2–3x table.**
+- [x] **Document the clean-subset PSM floor.** 200 is currently unexplained.
+      Run `testing/scripts/psm_count_sensitivity.py`, pick a value, record the
+      provenance (MetaMorpheus's own >=16/40/80 floor is the reference point).
+      Done 2026-08-24 — **keep 200, unchanged, now explained.** It gates the
+      60% hyperscore trim ("don't discard 40% of a small subset"), not median
+      precision. Bootstrap data in `testing/recon-output/psm-sensitivity/`;
+      reasoning in NOTES "Clean-subset PSM floor (200) — explained, keep
+      as-is". Surfaced a bigger finding — see the tolerance-recommendation
+      item in step 3.
+- [x] **Write three NOTES entries** — write-up content, not housekeeping:
+      prevalence currency (four different quantities across four tools);
+      Option-C elimination (recalibration ruled out as the mechanism behind the
+      ~0.4x +57 gap; narrow-first-pass and localization-aware rescoring remain);
+      ground-truth population differences (MetaMorpheus Task1 zero mods,
+      FragPipe closed with Met-ox + N-term-acetyl, recon near-zero-delta filter).
+      All three written 2026-08-24 and marked `(locked)`.
+
+**Checkpoint — MET, with one stated exclusion.** One frozen ground-truth set per
+file, configs committed, every write-up number sourced. Canonical values live in
+NOTES "Ground-truth reference values — the single source"; superseded numbers are
+marked in place.
+
+**Excluded from the freeze:** recon's own MS1/MS2 bias and MAD, and everything
+derived from them (tolerance recommendation, Pass 2 window). These are computed
+from Sage's absolute `precursor_ppm` and are wrong on any file where the bias is
+not much larger than the scatter. Confirmed on all three files. The fix is the
+first item of step 3, after which `testing/recon-output/full-run/` must be
+regenerated. Nothing else in the frozen set depends on those columns.
+
+---
+
+## ✓ Step 2 — PTM stratification — COMPLETE 2026-08-26
+
+Depends on step 1. Design: `reference-notes/ptm-stratification-design.md`.
+This is the tiered search-parameter recommendation — distinct from the parked
+per-run ranking confidence flag, which is a different feature.
+
+- [x] Define the "non-zero" exclusion precisely. Must cover the Δ≈0 population
+      AND everything fold-to-zero drained into it, not just the zero bin.
+- [x] Test the floor: `X% of the top non-zero delta peak` at X = 5, 10, 15, 20,
+      all three files, from committed JSONs. **DONE 2026-08-25 — X=20%.** Gate 1
+      0/0/0 and gate 4 0 once the +58.02 satellite is demoted, on a 2-tool and a
+      3-tool panel. Cost is thin tiers (tier1/tier2 = 2/1, 2/1, 3/1). X is
+      CONDITIONAL on the satellite treatment, so decide that first. NOTES
+      "Step 2 unblocked".
+- [x] **DONE — floor asserted above the ±1/±2 Da carpet, margins +172.0 / +279.2 /
+      +138.6.** `tier_assignment::carpet_margin`, asserted by
+      `tier_assignment_integration::floor_sits_above_the_carpet_on_all_three_files`
+      on real committed reports with the numbers printed. **RESTATED AND SCOPED 2026-08-26
+      — the wording work is DONE, the assert is not.** The floor governs ONLY the
+      peaks the abundance path decides: unspecific acceptors and uncurated masses.
+      Residue-specific peaks are decided by presence (Fisher), never by amount, so
+      the floor has no jurisdiction over them and Deamidated stops being a
+      counterexample. Both earlier wordings are marked superseded in place, in NOTES
+      "The carpet invariant — RESTATED AND SCOPED" and in
+      `ptm-stratification-design.md`. **The old +115.8 / +113.6 / +75.9 margins were
+      measured over the patched peak set, NOT the scoped one — re-measure, do not
+      copy them forward.**
+- [x] Implement two tiers plus the unranked tail. **Decision rule settled
+      2026-08-25 — route by specificity.** Residue-specific acceptors are decided
+      by Fisher/odds-ratio/BH; unspecific ones by the X=20% floor; satellites are
+      demoted first; uncurated peaks go to the tail. Prototype and numbers:
+      `testing/scripts/tier_report_prototype.py`. NOTES "Step 2 decision rule".
+      **Read the validation caveat with it** — gate 1's surface shrinks to one peak,
+      and the 21/21 corroboration figure is not a gate.
+- [x] Fixed-vs-variable rule — **SETTLED 2026-08-26: recon makes no judgement.**
+      The proposed occupancy rule was measured and does NOT work (CAM occupies
+      23.5 / 53.4 / 50.7% of Cys PSMs vs Ox(M) at 6.8 / 7.8 / 13.0% — separated, but
+      nowhere near "approaches total occurrence", and it cannot get there because an
+      open search assigns one delta per PSM). Ship MetaMorpheus's `MT` label
+      instead, passed through as INHERITED guidance for how to set the mod in the
+      user's FINAL search, with its origin stated. Implemented as
+      `RecommendedMod.role`; caveat text sharpened 2026-08-26 to say inherited-label,
+      not measurement. NOTES "Step 2 decision rule".
+- [x] Add the currency NOTE to the report output. Four caveats ship inside
+      `recommendations.caveats`.
+- [x] **DONE — validated by a corroboration RATE, not a binary gate.** 18/21
+      corroborated, ranks AA1 28 / AA2 4 / AA3 2. Gate 1 retired (surface fell to one
+      peak); Gate 5 built, run, hypothesis-tested, revised twice on evidence, control
+      verified firing, then **retired as pass/fail because the pre-commitment compared
+      two different quantities** — recon reports an un-localized delta mass plus a
+      population enrichment, the references report per-PSM localization. The three
+      divergences (Gln->pyro-Glu on Q vs Ammonia loss on N) are a stated limitation.
+      **Step 2 has no binary gate on residue assignment — recorded as a cost in
+      `limitations-and-future-work.md`.** NOTES "GATE 5 RETIRED AS A PASS/FAIL". Routing by specificity shrank gate 1's surface to ONE peak across three
+      files, and the 21/21 corroboration figure was designed after seeing the data.
+      Gate 5 tests the claim the routing rule actually makes: for every
+      statistics-path recommendation, the reference tool's top-localized residue must
+      sit inside recon's `sites`. **Threshold zero violations, pre-committed in NOTES
+      2026-08-26 BEFORE the gate was run** — if it later misbehaves, investigate the
+      gate, do not retune the threshold. Masses no reference localizes are counted
+      neither way and reported as uncovered surface. Negative control: serum +57 must
+      localize to C, never Gly. Two instruments, not equivalent — PTM-Shepherd
+      `global.profile.tsv` AA1/AA2/AA3 is POOLED across the three files;
+      MetaMorpheus `AllPSMs.psmtsv` (gitignored here) is per-file. Gate 1 stays for
+      the abundance path and the report says how little it covers.
+- [x] Negative control: serum's +57 is proven over-alkylation, not added Gly
+      (Phase 8 Gate 3, 0 of 26 peptides with Gly flanking context). A tier that
+      recommends Gly on that file fails.
+
+**Checkpoint — MET 2026-08-26, with a stated cost.** Tier assignments printed for all
+three files with actual numbers: 6 / 8 / 8 recommendations, floors 225.0 / 662.2 /
+250.6, carpet margins +172.0 / +279.2 / +138.6, corroboration 18/21. No pass marks
+without values — the corroboration script prints "NOT A PASS MARK" in its own output.
+**The cost: no binary gate on residue assignment. Written into the limitations note.**
+
+---
+
+## Step 2.5 — Met-loss protein N-term  ✅ COMPLETE 2026-08-27
+
+- [x] FASTA lookup proving a peptide starts at protein position 0 —
+      `recon-tool/src/protein_index.rs`, reached by `analyze --fasta`.
+- [x] One new `peptide_hits` branch, covering BOTH protein-terminal `PP` values.
+- [x] Its own validation: I1 (one decision moves, pre-committed), the
+      resolution / rarity / decoy guards, and a committed evidence script.
+- [ ] Verify the supplied NME / NAT references before the write-up cites them.
+      **Deferred to step 5 deliberately** — they are recorded UNVERIFIED in NOTES
+      and no code path depends on them.
+
+**Checkpoint MET.** 116 tests (recorded as 114, re-measured 2026-08-28),
+`run_validation` 14/14, `full-run/` regenerated at
+1.4.0 under an asserted invariant. See NOTES "Step 2.5 BUILT".
+
+---
+
+## Step 3 — Wire Pass 2 into `run`
+
+Pass 2 is how semi-tryptic numbers are produced. Semi-tryptic rate is a core
+recon output, and the search is cheap because it runs on a subset FASTA.
+
+- [x] **DONE 2026-08-28 — the |error| bias bug is fixed for MS1.**
+      `PsmSummary::from_psm` now populates `precursor_ppm_signed` from
+      `calibration::signed_precursor_ppm` (`delta_mass_corrected / calcmass × 1e6`).
+      **The invariant is asserted in code and it fired**: bcell reports
+      **−0.2357 ppm**, a sign flip from the +0.7028 it reported before. serum
+      +2.4278 -> +2.4215 (latent, as predicted) and b1906 +0.7804 -> +0.4403.
+      All three match `ms1_bias_sign_check.py` to four decimals — two independent
+      implementations, not a self-check. Tests in
+      `recon-tool/tests/ms1_calibration_integration.rs`, including the control
+      that asserts Sage's raw column still holds zero negatives. Schema 1.5.0.
+      **MS2 is NOT fixed** — see the next item.
+      ⚠ **`testing/recon-output/full-run/` is now BEHIND the code** and its
+      calibration block is stale. Regenerating it is a separate, enumerated step.
+- [x] ✅ **MS2 story DECIDED 2026-08-28: stays ABSOLUTE, labelled honestly.**
+      The correction cannot change what recon recommends — the MS2 tolerance is a
+      bucket, and on all three files the requirement is 2.9-4.4 ppm against a
+      10 ppm ladder step while the signed correction moves it by **0.027 ppm**.
+      The MS2 window is symmetric about zero and never reads the bias, unlike
+      MS1's bias-centred Pass 2 window. `--annotate-matches` is NOT wired: an
+      8.5 MB side file per run and a schema change, against a tool whose goal is
+      fast recon. `ms2_bias_ppm`'s false "signed" claim is withdrawn in place.
+      ⚠ Carries a write-up cost — recon has no signed MS2 number for the
+      four-tool benchmark table. Settle that in step 5. Locked in NOTES
+      "MS2 stays absolute".
+      Superseded description of the probe follows.
+- [x] ~~Decide the MS2 story.~~ THE PROBE WAS RUN, AND IT WORKS — 2026-08-28.
+      Sage v0.14.7 was built natively for arm64 from the pinned commit and the
+      closed serum search re-run with `--annotate-matches`. The observed schema
+      matches the source read exactly. **Signed MS2 on serum = +1.0049 ppm
+      (per-fragment median), against MSFragger +0.96 and MetaMorpheus +1.059 —
+      it lands BETWEEN them, while Sage's absolute column (+1.2602) sits outside
+      both.** 23.16% of fragments are negative. The convention was confirmed by
+      recomputing `fragment_ppm` from the fragment rows to 0.041 ppm: it is an
+      INTENSITY-WEIGHTED MEAN of |error|. Truncation quantified — only 0.649% of
+      fragments sit within 1 ppm of the ±10 ppm wall, so the median is not shaped
+      by it. Full numbers in NOTES.
+      **What is left is the BUILD DECISION, not the investigation:** wire it in
+      (one Sage flag, a second output file — 8.5 MB / 210309 rows for ONE file, a
+      `psm_id` field on `Psm`, and a join), or relabel and defer. The locked "no
+      new fragment-ion computation" does not need reopening, and the v0.15.x
+      fallback is not needed.
+- [x] ✅ **DONE — superseded by the four-file 1.7.0 regeneration of 2026-08-31.**
+      `testing/recon-output/full-run/` now holds serum, bcell, b1906 AND liver at
+      schema 1.7.0, and the calibration block carries SIGNED values: liver reads
+      `bias_ppm -1.4193`, which a median of |error| could never produce.
+      (⚠ this box sat unticked while Step 3 was declared COMPLETE — reconciled
+      2026-09-01.)
+- [x] ✅ **DONE 2026-08-28 — MS1 tolerance recommendation quantized.**
+      `smallest rung in {10,20,50,100} ppm >= |bias| + 5×MAD`. **The pre-committed
+      gate passed: all three files land on ±10 ppm**, requirements 4.844 / 3.602 /
+      3.862 ppm, matching the rationale note's §12 predictions (4.84 / 3.60 / 3.86)
+      to three decimals — the test asserts against the PREDICTIONS, not against the
+      code's own output. Schema 1.6.0. The superseded asymmetric window and its
+      retired rationale are recorded in place. 129 tests pass.
+      Superseded description follows.
+- [x] ~~Fix the MS1 tolerance recommendation — quantize to buckets.~~ Evidence
+      and assumptions ledger: `reference-notes/ms1-tolerance-recommendation-rationale.md`;
+      summary in NOTES. Current output (±2–4 ppm) is 3–5x too tight against
+      three independent lines of evidence. Replace `bias + p95(|dev|)` with
+      `smallest bucket in {10,20,50,100} ppm >= |bias| + 5×MAD`. Keep reporting
+      bias separately — it is a different number. Lead with the check: assert
+      all three test files land on the 10 ppm bucket.
+- [x] ✅ **DONE 2026-08-28 — Pass 2 windows sized by COVERAGE.**
+      ⚠ **This item's own premise was wrong.** "3×MAD clips ~5%" measured as
+      **80.82 / 87.46 / 80.77 % covered** — it was discarding ~1 real peptide in 5.
+      And no MAD multiple transfers: 99% coverage needs 18.3× / 12.1× / 11.0× MAD
+      across three same-class instruments. **New rule: the ladder rung, centred on
+      the measured bias** — deleting the `k` and the floor rather than adding
+      constants. Coverage **99.32 / 99.92 / 99.94 %**. MS2 companion
+      `ms2_pass2_tolerance` is built and unit-safe (5× median for ppm analyzers,
+      measured; Ben's ppm→Da-at-500-then-double for ion trap, a curated
+      assumption), but is NOT wired into the report until Pass 2 runs — see NOTES.
+      Superseded text follows.
+- [x] ~~Fix the Pass 2 window, same root cause.~~ `bias ± 3×MAD` ≈ ±1.2–1.5 ppm
+      on our files; 3×MAD ≈ 2σ clips ~5% of true peptides. Widen it as part of
+      wiring Pass 2, where it can be tested end-to-end. The ±100 ppm cap is a
+      separate locked backstop — do not touch it.
+      **Design settled 2026-08-28:** carry pass-1's MEASURED MS1 and MS2 errors
+      forward with CUSHION ("measure 2 ppm, use 5 or 10"). Pass 2 searches a
+      subset FASTA (~45x smaller space), so a generous window is nearly free —
+      and a generous window makes bias-CENTRING unnecessary, since ±10 ppm
+      swallows bcell's −0.24 ppm bias. That removes the mis-centring failure mode
+      instead of fixing it. See NOTES "The three tolerance regimes".
+- [x] **Run the named test behind the mechanism claim.** Done 2026-08-24 —
+      clean subset understates the wider population's scatter by 1.16–1.28x
+      against matched closed searches, all three files. Promoted from INFERRED
+      to MEASURED in the rationale note. (The originally-stated version of this
+      test was ill-posed — it needs a CLOSED search, not the open one.)
+- [x] ✅ **Analyzer-aware MS2 tolerance — BUILT 2026-08-28** (parallel session).
+      Pass-1 MS2 tolerance now comes from the MS2 analyzer, read from the mzML
+      before the search. `run` applies it and prints it. (The `detect-analyzer`
+      subcommand that also exposed it was removed 2026-09-24.)
+      **The old body of this item is corrected in place below — do not read the
+      superseded numbers as current.**
+      * ~~`fragment_tol` appears in NO Rust source file~~ — TRUE WHEN WRITTEN, no
+        longer. It is now decided in `mzml.rs` and applied in `sage_runner.rs`.
+      * ~~Mapping: MS2 Orbitrap 10–20 ppm; MS2 ion trap 0.5–1.0 Da~~ — SUPERSEDED.
+        Those were typical-performance figures. Pass 1 must assume the instrument
+        is out of calibration, so the shipped windows are deliberately looser:
+        **Orbitrap/FT-ICR and Astral ±50 ppm, legacy TOF ±100 ppm, ion trap and
+        quadrupole ±1.0 Da**, fallback ±20 ppm. Curated by Ben; derived table in
+        `reference-notes/ms2-analyzer-tolerance-table.md`.
+      * ~~none of our three files exercises this~~ — STILL TRUE for the ion-trap,
+        TOF and Astral buckets. But the FTMS branch now HAS a real regression case:
+        MSFragger read the RAW files and reported `MS2 ITMS = false; MS2 FTMS =
+        true` on all three, which the tests pin against.
+      What shipped:
+      * Analyzer read from the per-scan filter string (`MS:1000512`), falling back
+        to the `instrumentConfiguration` CV term. The filter string is preferred
+        because it is per-scan and immune to the ThermoRawFileParser <1.4.4 FTICR
+        mislabel that affects bcell.
+      * The 12 mass-analyzer terms are DERIVED from a pinned HUPO-PSI `psi-ms.obo`
+        snapshot (`data-version 4.1.259`) by
+        `testing/scripts/psi_ms_analyzer_terms.py`, which is Tier 4 of
+        `run_validation.py`.
+      * `run` OVERRIDES the template's hardcoded `fragment_tol` and writes
+        `<search-dir>/effective-params.json` with a provenance block.
+      * **recon never refuses to search on analyzer grounds.** Unknown analyzer,
+        no bucket, or a mid-run detector change all fall back to ±20 ppm, flag the
+        assumption, and report the detectors seen.
+      REMAINING, deferred on purpose: the detected analyzers are not yet in the
+      JSON report. Folded into the `full-run/` regeneration (schema 1.7.0) because
+      that step already forces a bump — one bump and one regeneration, not two.
+- [~] **Ladder top-rung justification** (was: "±100 ppm cap measurement").
+      ⚠ **NOT CLOSEABLE BY MEASUREMENT — moved to a STEP 5 write-up item
+      2026-09-01.** It sat as an open Step 3 box while Step 3 was declared
+      complete, which is why the two disagreed. All four files land on the FIRST
+      rung, so rungs 2-4 have no evidence and no amount of work on this data can
+      create any. It ships as a CURATED ceiling with that stated.
+      ⚠ **REPOINTED 2026-08-28 — the cap it named is RETIRED.**
+      `PASS2_HALF_WIDTH_CAP_PPM` became unreachable when the Pass 2 width started
+      coming from the ladder, whose top rung is also 100; deleting it left its own
+      test passing, so that test could not fail. Both are fixed — see NOTES.
+      What survives is the real question: **is 100 ppm the right TOP RUNG?**
+      ⚠ **It cannot be answered with current data.** All three files land on the
+      FIRST rung, so rungs 2–4 have no evidence at all. Same gap as the ion-trap
+      case. Expected honest outcome: record the ceiling as CURATED, sourced from
+      the TOF reasoning (50–80 ppm out of the box, so a ±15–20 ppm ceiling would
+      systematically clip), and state in the write-up that it is unmeasured.
+- [x] ✅ **Pass-2 half-width rounding table — SATISFIED 2026-08-28 by the ladder.**
+      `temp-flowChart.md` asked to "round the half-width UP to a clean step, never
+      use the raw computed number", with a proposed-but-TBD table of 5/10/20/30
+      then by 10s. **`MS1_TOLERANCE_LADDER_PPM` {10,20,50,100} IS that table**, and
+      it is measured rather than TBD — coverage 99.32 / 99.92 / 99.94%.
+      Two parts of that same proposal are SUPERSEDED and are corrected in place
+      there: "half-width: MAD" (a MAD multiple was measured unable to do the job —
+      11.0x to 18.3x needed across three same-class instruments) and the separate
+      "±100 ppm hard cap" (retired; the ladder's top rung is the ceiling).
+      **Bias-centring is KEPT**, and for the proposal's own reason: a drifted
+      instrument with a window centred at zero misses real peptides.
+- [x] ✅ **Paired target-decoy selection — DECIDED 2026-08-28: NOT BUILT, on
+      purpose.** Mascot's rule exists to protect a pass-2 FDR estimate, because
+      Mascot's ET pass reports PTM findings. Recon's Pass 2 reports enzyme
+      performance only, runs with no variable mods, and nothing quotes a Pass 2
+      q-value as FDR-controlled — so there is no estimate to protect. The size
+      property is free under Sage anyway. Measured cost of building it would have
+      been +33 proteins (454 -> 487, +7.3%) selected on what is by definition the
+      false-positive tail. Locked, with the rejected alternative and the reopening
+      condition, in NOTES "Paired target-decoy selection — DELIBERATELY NOT
+      BUILT". The write-up states the divergence from Mascot.
+- [x] ✅ **DONE 2026-08-29 — ported, verified against the Python on real data
+      (52405 / 2514 / 937 exact), all three guards falsified before believed.**
+      Port `digestion_efficiency` to Rust, inline. `subset` ->
+      `run_run_command`, `annotate` -> `digestion.rs`. **SETTLED 2026-08-28:
+      `digestion_efficiency` is the SOLE port target.** The two files this list
+      used to name — `annotate_termini` and `subset_fasta` — were both headed
+      "superseded by `digestion_efficiency`" and are now DELETED (recoverable
+      from git). A reviewed draft port exists at
+      `testing/scripts/digestion_efficiency.rs`, verified against its Python on
+      real data: `subset` byte-identical, `annotate` TSV identical, JSON identical
+      after two fixes. See NOTES.
+      Carry these into the inline version:
+      * the whole-FASTA-into-a-`Vec` read should stream, as the Python did;
+      * `find(peptide)` takes only the FIRST occurrence in a protein;
+      * classification uses only the FIRST protein of a `;`-separated list;
+      * emit LF, and never byte-compare against a Python-produced CRLF TSV.
+- [x] ✅ **DONE 2026-08-29.** Wire it: bias-centered tight window → subset FASTA →
+      semi-tryptic Sage search → terminus annotation → Search-1-prediction vs
+      Pass-2-observed comparison block. Writes a SEPARATE `<output>_pass2.json`
+      (schema 1.0.0) so the pending `full-run/` regeneration does not move on one
+      more axis. `--no-pass2` skips it.
+      ⚠ The "prediction vs observed" framing is corrected in the artifact itself:
+      pass 1 is fully tryptic and CANNOT generate a ragged peptide, so its rate is
+      a CONTROL near 0, not a prediction. Different denominators, different search
+      spaces; the difference is not a delta.
+- [x] ✅ **DONE 2026-08-29, and "cheap" was WRONG.** Timing on all three files.
+      Pass 2 cost scales with how many proteins pass 1 identified, which is a
+      property of the SAMPLE. Before optimisation: serum 7.9 s (472 proteins),
+      bcell **2437 s** (6485 proteins). After: 5.0 / 128.1 / 30.4 s. Totals
+      90.0 / 333.5 / 183.8 s.
+
+**Checkpoint:** tests green, run on all three files, prediction-vs-observed
+comparison reviewed. Commit.
+
+---
+
+## Step 4 — Fresh checkout, packaging, release
+
+- [x] ✅ **THE SCIENTIFIC HALF IS DONE 2026-08-31 — and done more strongly than
+      this item asked.** The fix is NOT in the template. `write_effective_params`
+      (pass 1) and `write_pass2_params` (pass 2) both STRIP
+      `static_mods`/`variable_mods` and ASSERT the result is empty, so no template
+      passed with `--params` can reintroduce a fixed mod. 17 configs under
+      `testing/configs/` still carry `static_mods {C: 57.0215}`, which is exactly
+      why a template-only fix was rejected. `open-search-params.json` was corrected
+      too, but the guard is what holds. Measured cost of the bug on bcell: the
+      +57 peak reads 146 with a fixed C, 3311 without — the largest peak in the
+      file. See NOTES "PASS 1 AND PASS 2 NEVER SEARCH WITH MODIFICATIONS".
+- [x] ✅ **DONE 2026-09-01 — THE PACKAGING HALF.** `recon-tool/src/defaults.rs`
+      compiles in BOTH templates (path-free) and the curated mod list, ~20 KB via
+      `include_str!`. `write_effective_params_from_text` /
+      `write_pass2_params_from_text` take text + an origin label; the path-taking
+      forms remain as wrappers so every existing guard is untouched.
+      `CuratedDb::load` delegates to `load_from_sources`, so both routes share ONE
+      parser. Anti-drift guard asserts the bundled copy equals the committed
+      template on every field (falsified). Curated equivalence MEASURED: 99
+      entries, 0 skipped, identical entry-for-entry. See NOTES "STEP 4 PART 1".
+      ⚠ NOT bundled: `unimod.xml` and any FASTA — still CLI arguments.
+- [x] ✅ **DONE 2026-09-01, MINIMALLY AND ON PURPOSE** — `DEFAULT_SAGE_PATHS` now
+      tries the four known vendored layouts instead of one Windows path, which
+      re-enabled `the_vendored_binary_reports_exactly_sage_version` (dead on the
+      Mac, now reports 0.14.6). ⚠ **The FULL job was deliberately NOT built** —
+      executable-relative resolution, PATH lookup, release layout — because
+      **A1 deletes all of it.** See NOTES "SAGE AS A LIBRARY".
+- [x] ✅ **Bundling done — see above.**
+- [x] ✅ **DONE 2026-09-01 — LIVER IS IN `run_validation.py`.** `FILES` now
+      includes liver; 15/15 -> 17/17 (Gates 1 and 3). Gate 2 reports NOT CHECKED
+      via a new channel counted as neither pass nor fail, because no independent
+      liver anchor exists. See NOTES "LIVER IS IN THE STANDING TRIPWIRE".
+⚠ **THE REMAINING STEP-4 ITEMS ARE RESHAPED BY A1 (Ben, 2026-09-01).** The release
+zip stops being `recon` + `sage` + docs and becomes ONE executable; the
+platform-binary fetching disappears. **Do not build the recon+sage zip.** CI that
+runs `cargo test` survives A1 and is worth having now; cross-platform RELEASE
+builds should wait for the A1 landings. See NOTES "SAGE AS A LIBRARY".
+- [x] ✅ **DONE 2026-09-02 — four targets build green in CI.**
+      `windows-64`, `linux-64`, `apple-intel`, `apple-silicon`, each on its own
+      native runner. Architectures verified with `file`, not assumed.
+      ⚠ **THE TEXT BELOW WAS WRONG AND IS CORRECTED IN PLACE.** It said "No
+      compilation of Sage is needed... Step 4 is a PACKAGING problem, not a build
+      problem", and named upstream v0.14.7 binaries. That stopped being true when
+      Sage became a Cargo git DEPENDENCY on 2026-09-01. **Sage is compiled from
+      source in every CI build, on every target**, which is most of the build
+      time. There are no upstream binaries in play.
+      ⚠ **Read NOTES "Sage output is NOT bit-reproducible across builds" first.**
+      Raw measurements are bit-identical across platforms; the rescoring layer and
+      all three q-values are not, and PSM membership at q<0.01 moves by ~0.1%.
+      Committed reference data must record which platform's binary made it.
+- [x] ✅ **DONE 2026-08-28, then SUPERSEDED 2026-09-01 — the version guard no
+      longer exists.** ⚠ Corrected in place 2026-09-02; the text below described a
+      function and a version that are both gone.
+      When Sage became a library there was no external binary to interrogate, so
+      `verify_sage_version` and the whole runtime handshake were DELETED. Read
+      `SAGE_VERSION` in `sage_runner.rs` for the current value — it is
+      `0.15.0-beta.2`, not the `0.14.6` this entry used to assert. The
+      authoritative pin is now the git rev in `Cargo.toml` plus `Cargo.lock`; a
+      test asserts `Cargo.lock` names the same rev as `SAGE_COMMIT`.
+- [ ] **Baseline benchmarks per Sage version, for controlled edits.** Ben's
+      idea, 2026-08-28: freeze a per-version reference set so any future change —
+      a Sage upgrade, a recon edit — is diffed against a known baseline rather
+      than eyeballed. Note what NOTES "Sage output is NOT bit-reproducible across
+      builds" requires of it: the baseline must record the PLATFORM as well as the
+      version, compare raw columns exactly, and allow ~0.1% movement on any
+      q-derived count. SUPERSEDED-BY-DESIGN note: this is the general form of what
+      `assert_regeneration_invariants.py` does for one regeneration.
+- [x] ~~Resolve the version guard BEFORE packaging.~~ (done above)
+      Original text kept for the record: `SAGE_VERSION` is
+      `"0.14.7"` but every v0.14.7 binary reports **`0.14.6`** — upstream never
+      bumped the crate version at that tag. Confirmed four ways: the crate
+      manifests at the tag, every committed `results.json`, a local build, and
+      the official `aarch64-apple-darwin` release artifact. Today the guard is a
+      no-op because `extract_sage_version` reads stderr and the check sits inside
+      `if let Some(..)`; if it ever fires it REJECTS the correct binary.
+      Recommended: set `SAGE_VERSION = "0.14.6"` to match what the tool reports
+      and keep `SAGE_COMMIT` as the precise identity. This is a PIN edit — record
+      it deliberately.
+- [x] ✅ **DONE 2026-09-02 — CI build (GitHub Actions).**
+      `.github/workflows/build.yml`. Push to main, PRs, and `v*` tags. Gates are
+      `cargo fmt --check`, `cargo test`, `cargo build --release`. No clippy gate.
+      ⚠ Green CI is NOT the numerical tripwire — 25 data-dependent assertions
+      skip themselves on a CI checkout, and `run_validation.py` cannot run there.
+- [x] ✅ **DONE 2026-09-02 — release archive.** Contents are `recon` +
+      `README.md` + `THIRD_PARTY_LICENSES.md` + `unimod.xml`.
+      ⚠ **`sage` is NOT in the archive** and the line below is corrected: Sage is
+      compiled INTO `recon`, so there is no second binary to ship.
+      The staging step asserts all four files are present and fails the build
+      otherwise, so the licence obligation is enforced in CI, not just in prose.
+      ⚠ **This is now a LICENCE OBLIGATION, not just good practice (2026-09-01).**
+      Unimod is under the Design Science License, whose Section 3 requires a copy
+      of the License to be distributed along with the Work. The full text lives in
+      `THIRD_PARTY_LICENSES.md`, so that file MUST be in the archive.
+      ⚠ **Also ship `unimod.xml` itself** once it is compiled into the binary —
+      DSL Section 3 allows the Object Form only when the Source Data accompanies
+      it (3a) or a written offer does (3b). See NOTES.
+- [x] ✅ **DONE 2026-09-02 — tagged and released, TWICE.** `gh release list`
+      shows `v0.1.0` (2026-09-02T21:48Z) and `v0.1.1` (2026-09-02T23:00Z,
+      Latest). ⚠ This box sat unticked until 2026-09-03 while both releases were
+      public, which is the same PLAN-versus-repo drift the start-of-session check
+      exists to catch. **v0.1.0 is DEFECTIVE — point people at v0.1.1**, and read
+      the release-staleness warning in the status block before pointing them at
+      either.
+
+**Checkpoint:** a downloaded zip runs on a machine that has never seen the repo,
+on each platform built. Commit.
+
+---
+
+## Step 5 — Write-up  ✅ CLOSED 2026-10-06 as a manuscript step
+
+⚠ **REFRAMED 2026-10-06 (Ben): no technical note will be submitted.** The
+write-up is the background document `docs/design-and-evidence.md`. The boxes
+below were written for a manuscript. On 2026-10-06 each box was checked
+against the document and README (Ben's rule: tick what is covered, defer the
+rest). Each tick names its evidence. The two parts that are not covered are in
+"Deferred / open".
+
+Draft of the limitations and future-work sections already exists at
+`reference-notes/limitations-and-future-work.md` — update it as steps 1–4
+change what is true, rather than writing it from scratch at the end.
+
+- [x] (2026-10-06: `docs/design-and-evidence.md` section 0, and README.)
+      **What it is.** Stage-1 reconnaissance. Two Sage searches, one report.
+      What question each report section answers.
+- [x] (2026-10-06: `docs/design-and-evidence.md` Phases 1 to 8.)
+      **Each step, and why.** Every processing stage: what it does, the
+      assumption it rests on, and the evidence for that assumption. Sources:
+      NOTES `(locked)` entries and JOURNAL debriefs.
+- [x] (2026-10-06: `docs/design-and-evidence.md` sections S, P and C, and
+      `THIRD_PARTY_LICENSES.md`.)
+      **Attribution**, split two ways. Code taken: Sage (Lazear, MIT),
+      mzSniffer (Fondrie, Apache 2.0). Method inspiration, no code taken:
+      Mascot error-tolerant, Byonic Preview (Kil et al. 2011), MetaMorpheus
+      calibration formula, PTM-Shepherd peak calling and annotation tolerance,
+      Crystal-C (Phase 7D method reference, never built).
+- [x] (2026-10-06: SUPERSEDED as written. The evidence is five tools on one
+      file, liver: `docs/design-and-evidence.md` sections D and V, and
+      `_dev/liver-benchmark/`. The "~25–50x" figure was withdrawn 2026-09-04;
+      see the document's Appendix A. Do not cite it.)
+      **Benchmarks.** Four tools, three files, agreement on rank. The ~25–50x
+      speed result. Currency caveat attached to every percentage.
+- [x] (2026-10-06: the N-terminomics gap, 0 against 137 on b1906, is in
+      `docs/design-and-evidence.md` Phase 5 and in README "Limitations".)
+      **Limitations** — from the draft note. **MUST include the protein
+      N-terminomics gap**, with the recon-vs-MSFragger table: recon recommends
+      0 protein-N-term peaks on b1906 while MSFragger finds 137 N-term acetyl
+      PSMs there, and captures ~1/3 of the population on bcell. Recon attempts
+      the feature; it does not close it. Deferred deliberately — closing it
+      needs the PTM-Shepherd / MetaMorpheus quantity comparison, which is a
+      research question, not an implementation task.
+- [x] (2026-10-06: the argument is in `docs/design-and-evidence.md` Phase 4.
+      NOT checked: the four assumptions-ledger items. That part is in
+      "Deferred / open".)
+      **The tolerance-recommendation argument.** Why a recon tool should emit a
+      quantized bucket, not a continuous number: the user is picking a search
+      setting from an effectively discrete set, so precision beyond the bucket
+      is unusable, and a bucket is robust to constants we cannot derive. Source:
+      `reference-notes/ms1-tolerance-recommendation-rationale.md`, including its
+      assumptions ledger — carry all four items into the limitations section.
+- [x] (2026-10-06: C1/C2 is in `docs/design-and-evidence.md` section R, and
+      satellite folding is in Phase 3. The Option-C POC is not named there.
+      That part is in "Deferred / open".)
+      **Negative results as results.** C1/C2 closed across three arms. Option-C
+      ceiling POC. Satellite folding disabled by design. These are deliverables.
+- [x] (2026-10-06: README "Future work". The background document has no
+      future-work section.)
+      **Future work** — from the draft note.
+- [x] README rewritten to match what shipped. (2026-10-06: the status
+      history records the rewrite on 2026-09-04. README names v0.2.0.)
+
+**Checkpoint:** a reader who has not seen the repo can state what the tool does,
+what it does not do, and why each number means what it means.
+
+---
+
+## Deferred past v0.1.0
+
+- `satellite_fraction` as a computed tier input. No decided use beyond write-up
+  discussion of why open-search peaks split. Discuss it; do not build it.
+- Per-run ranking confidence flag (beta). Separate feature from step 2's tiers.
+- Byonic Preview adapter — data-gated. Insert if the data arrives.
+  (2026-10-06: Preview data for liver arrived. It is in
+  `_dev/liver-benchmark/preview/`, and `liver_5way_mods.py` reads it. No
+  adapter exists inside recon.)
+- Fold-tolerance question (bcell's residual 2.3 mDa) — separate from C1/C2.
+- Verbose logging INFO→DEBUG.
+- Wide x fully tryptic x subset FASTA delta-mass comparison. Interesting; not
+  ship-blocking. Cheap to fold into step 3's timing pass if convenient.
+- **Prevalence fudge factor — REJECTED, not deferred.** On serum the reference
+  platforms disagree with each other by 1.37x on the same mod (PTM-Shepherd
+  17.92% vs MetaMorpheus 24.51%). A factor cannot be more precise than its
+  target's spread. Step 2 is the answer. Do not revisit.
+
+---
+
+**Language:** Rust. **Attribution:** ports MIT-licensed code from Sage
+(Michael Lazear) and mzSniffer (William E. Fondrie) — preserve license
+headers and credit both.
+
+---
+
+## Status history
+
+⚠ **Everything in this section is HISTORY. Do not act on it.** The entries were
+moved here word for word from the top status block on 2026-10-06, newest
+first, so that the headings other files cite still resolve. The status before
+2026-09-02 is in `_archive/plan-status-history-2026-09-02.md`. That file is in
+the private archive (`gitlab.nist.gov/gitlab/ban/sageRecon`), not in the public
+repository.
+
+These statements below are superseded. Each one misled a cold start before:
+- "To publish again, repeat the squash" (2026-09-08). This clone's `origin` is
+  the public repository. A plain `git push` publishes.
+- "The last release is v0.1.1" and the RELEASE STALENESS warning. The last
+  release is v0.2.0.
+- "CI IS BLOCKED ON BILLING" and "Actions is disabled". Actions runs since
+  2026-09-16, on `v*` tags and manual dispatch only.
+- "211 tests", "Schema 3.2.0". The record is 208 tests and schema 4.0.0.
+- "Linux, deferred to a work VM". CI builds Linux. The binary is still unrun.
+- "four-target coverage on every push" in the Settled table. Plain pushes to
+  `main` trigger nothing since 2026-09-16.
+- "STEP 5, the write-up, is unstarted". No technical note will be submitted.
+- `signal_fate` "MUST BE REMOVED". It was removed 2026-09-24.
+
+### Closed items, moved from "Deferred / open" on 2026-10-06
+
+* **DONE 2026-09-25, for release 0.2.0: seven changes from the write-up review (2026-09-24).** The
+  list is in `docs/design-and-evidence.md`, Appendix B, "Planned for the
+  next release". In short:
+  1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
+  2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
+     the passes consistent (DONE 2026-09-24: tested, KEPT at 1 and 8, see
+     NOTES "Pass 2 digestion settings stay at 1 and 8"; Pass 1 then MOVED
+     to 1 and 8, so both passes align, see NOTES "Pass 1 digestion settings
+     align with Pass 2");
+  3. prominence uses the nearest higher bin (DONE 2026-09-24; schema 3.3.0);
+  4. screen tolerances from the measured error (DONE 2026-09-24; schema
+     3.4.0), and a glyco expert reviews the oxonium rule (OPEN);
+  5. remove the vestigial JSON blocks (DONE 2026-09-24; schema 4.0.0 / pass-2 2.0.0);
+  6. the documentation fixes (DONE 2026-09-24);
+  7. the claim test on liver (DONE 2026-09-25, redesigned as vanilla against
+     recon-guided; see `_dev/liver-benchmark/claim-test/README.md`).
+
+  The one item left is external: a glycoproteomics expert (Nick Riley or
+  Chris Ashwood) reviews the oxonium rule.
+
+  **2026-09-24: committed outputs REGENERATED for items 1 to 6** (examples,
+  `full-run/`, Tier 3 snapshots, liver benchmark TSV, five-tool report) at
+  `ba4d30e`. `run_validation.py` 17/17. `cargo test` with all data: 206 of
+  207 pass. `protein_context_moves_exactly_three_decisions`
+  failed because its one-near-zero-p premise is false on the larger peak
+  lists. RESOLVED 2026-09-25: replaced by
+  `protein_context_moves_only_explained_decisions`, which asserts the
+  mechanism. See NOTES "Change-regenerate after the 2026-09-24 behaviour
+  changes".
+
+  `docs/design-and-evidence.md` (the former technical-note material)
+  describes the shipped v0.2.0 behaviour since `c5fd45c`. Corrected
+  2026-10-06: this paragraph said that it described v0.1.3.
+
+⚠ **DONE 2026-09-24.** `signal_fate` and the other vestigial blocks were
+removed (schema 4.0.0). See NOTES "Vestigial output and code removed". The
+original item follows.
+
+* ⚠ **VESTIGIAL CODE MUST BE REMOVED, starting with `signal_fate` (Ben,
+  2026-09-04).** Ben's words: it "made no sense in retrospect." It survives as a
+  serialised JSON block and an `ID Rate` line printed by `print_report_summary`
+  (`main.rs:2070`), but it has NO section in the HTML report and it is not
+  something a user is asked to act on. It is a leftover of the three-layer MS1
+  work, which was itself removed from recon and now lives in
+  `_dev/extracted/three-layer-ms1/` for sageGUI. **Removed from the README
+  entirely, 2026-09-04**, and listed there as future work.
+  ⚠ **This is a CLASS, not one function.** Audit for other functions built
+  during development, kept as the design moved, and never retired. A field in
+  the output is a claim the tool is making. Removing `signal_fate` is a schema
+  change, so it needs a version bump and the usual downstream trace.
+
+* **✅ DONE 2026-09-04 — the repo was renamed to `sageRecon`** (from
+  `sagePreview`). Ben's call to go ahead despite NIST hosting still being
+  unsettled, rather than wait — accepting the risk of a second rename later
+  if the tool moves to a NIST GitHub org. `README`/`AGENTS.md`/`PLAN.md` URLs
+  updated in the same pass. See NOTES "Report footer name" for the original
+  locked naming call.
+
+### Status entries, moved from the top block on 2026-10-06
 
 ### ▶ 2026-09-16: GitHub Actions works. Found and fixed three real bugs on its first run.
 
@@ -461,107 +1273,6 @@ printed-report strings (MS1 line under MASS ACCURACY, and the hardcoded
 reads "NOT a mass accuracy in an open search — see below," and the version
 string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 
-### Deferred / open — none of this is forgotten
-
-* **DONE 2026-09-25, for release 0.2.0: seven changes from the write-up review (2026-09-24).** The
-  list is in `docs/design-and-evidence.md`, Appendix B, "Planned for the
-  next release". In short:
-  1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
-  2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
-     the passes consistent (DONE 2026-09-24: tested, KEPT at 1 and 8, see
-     NOTES "Pass 2 digestion settings stay at 1 and 8"; Pass 1 then MOVED
-     to 1 and 8, so both passes align, see NOTES "Pass 1 digestion settings
-     align with Pass 2");
-  3. prominence uses the nearest higher bin (DONE 2026-09-24; schema 3.3.0);
-  4. screen tolerances from the measured error (DONE 2026-09-24; schema
-     3.4.0), and a glyco expert reviews the oxonium rule (OPEN);
-  5. remove the vestigial JSON blocks (DONE 2026-09-24; schema 4.0.0 / pass-2 2.0.0);
-  6. the documentation fixes (DONE 2026-09-24);
-  7. the claim test on liver (DONE 2026-09-25, redesigned as vanilla against
-     recon-guided; see `_dev/liver-benchmark/claim-test/README.md`).
-
-  The one item left is external: a glycoproteomics expert (Nick Riley or
-  Chris Ashwood) reviews the oxonium rule.
-
-  **2026-09-24: committed outputs REGENERATED for items 1 to 6** (examples,
-  `full-run/`, Tier 3 snapshots, liver benchmark TSV, five-tool report) at
-  `ba4d30e`. `run_validation.py` 17/17. `cargo test` with all data: 206 of
-  207 pass. `protein_context_moves_exactly_three_decisions`
-  failed because its one-near-zero-p premise is false on the larger peak
-  lists. RESOLVED 2026-09-25: replaced by
-  `protein_context_moves_only_explained_decisions`, which asserts the
-  mechanism. See NOTES "Change-regenerate after the 2026-09-24 behaviour
-  changes".
-
-  `docs/design-and-evidence.md` (the former technical-note material)
-  describes the shipped v0.2.0 behaviour since `c5fd45c`. Corrected
-  2026-10-06: this paragraph said that it described v0.1.3.
-
-* ⚠ **macOS DOWNLOADS ARE BLOCKED BY GATEKEEPER (2026-09-10).** Only Developer
-  ID signing plus Apple notarization removes the block. That needs a paid Apple
-  Developer account, and Ben decided not to get one for now. The README gives
-  the `xattr -dr` workaround. `build.yml` now ad-hoc signs the macOS binary and
-  verifies it inside the extracted zip. That is hygiene. It does NOT remove the
-  block. Four gaps stay open:
-  1. **When Actions runs, download and test the CI macOS archives.** Download
-     them from the Releases page THROUGH A BROWSER, so the quarantine attribute
-     is set. Record four results: what the block looks like, whether the README
-     `xattr -dr` command clears it, whether `recon --version` then runs, and
-     whether `codesign --verify --strict` passes on the extracted binary. ⚠ The
-     new signing and zip-check steps have NEVER run on a runner. Only
-     `actionlint` and a local rehearsal on two test binaries checked them.
-  2. **Confirm the form of the xattr command.** `recon` ships as a bare binary
-     in a folder, not as a `.app` bundle, so the README runs the command on the
-     folder. Ben asked whether `xattr -dr com.apple.quarantine "recon.app"` is
-     needed. The `.app` form is sagegui's. Check it on the downloaded archive.
-     Do not assume.
-  3. **Two records disagree on what the block looks like.** The v0.1.0 smoke
-     test (2026-09-02) saw `zsh: killed` and no dialog. A check from the sagegui
-     repo on the v0.1.2 archives (2026-09-10) saw no output, no exit after 20 s,
-     and a "recon Not Opened" dialog. The README states both. Settle it with
-     gap 1, then correct NOTES and README in place.
-  4. **The hand-built v0.1.2 macOS binaries were not re-signed.** The same
-     2026-09-10 check found the Intel binary unsigned and the arm64 binary
-     linker-signed ad-hoc. It did not re-check that locally: no archive was
-     downloaded here. The Intel binary still runs once the quarantine is
-     removed, so v0.1.2 is not re-cut. Use the manual release checklist in NOTES
-     "Actions is disabled by the organization" for the next release.
-
-* **Nothing has run on a non-tryptic or ion-trap file.** The whole evidence base
-  is four tryptic Orbitrap files. This is the biggest gap in the project.
-* ⚠ **VESTIGIAL CODE MUST BE REMOVED, starting with `signal_fate` (Ben,
-  2026-09-04).** Ben's words: it "made no sense in retrospect." It survives as a
-  serialised JSON block and an `ID Rate` line printed by `print_report_summary`
-  (`main.rs:2070`), but it has NO section in the HTML report and it is not
-  something a user is asked to act on. It is a leftover of the three-layer MS1
-  work, which was itself removed from recon and now lives in
-  `_dev/extracted/three-layer-ms1/` for sageGUI. **Removed from the README
-  entirely, 2026-09-04**, and listed there as future work.
-  ⚠ **This is a CLASS, not one function.** Audit for other functions built
-  during development, kept as the design moved, and never retired. A field in
-  the output is a claim the tool is making. Removing `signal_fate` is a schema
-  change, so it needs a version bump and the usual downstream trace.
-* `decoy_ragged_side` is validated at 96.63 % ON TRYPSIN and inverts for
-  N-terminal cleavers with nothing measured behind it. Ben: test after release.
-* The ion-trap Da path (ppm at m/z 600, doubled; m/z 500 until 2026-09-24) is
-  curated, never measured.
-* Alkylation beyond carbamidomethyl — reagent table belongs in recon's own code
-  cited to Unimod, NOT in `Mods.txt`. Ben decides the list.
-* **✅ DONE 2026-09-04 — the repo was renamed to `sageRecon`** (from
-  `sagePreview`). Ben's call to go ahead despite NIST hosting still being
-  unsettled, rather than wait — accepting the risk of a second rename later
-  if the tool moves to a NIST GitHub org. `README`/`AGENTS.md`/`PLAN.md` URLs
-  updated in the same pass. See NOTES "Report footer name" for the original
-  locked naming call.
-* **`notable_unannotated` is UNEXERCISED, not broken.** ⚠ Corrected 2026-09-03;
-  this used to read "reads 0 on serum while 19 un-curated peaks exist", which
-  implied a defect. Measured across all four committed reports: it is **0 on
-  every file**, and every un-curated peak on every file carries reason
-  `below_floor_uncurated` — there are **zero above-floor un-curated rows
-  anywhere** (28-30 below-floor ones per file). So the section is CORRECTLY
-  empty and the code path has never been exercised by real data. That is a
-  coverage gap to state in the write-up, not a bug to fix.
-
 ### Two traps this session set for the next one
 
 * **q-derived counts JITTER.** Seven runs of one binary gave bcell pass-1 PSMs of
@@ -569,606 +1280,11 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 * **Reading artifacts is not reading code.** Three wrong claims this session came
   from inferring behaviour from output. Audit the function.
 
----
+### Handoff prompt for Step 3 (written 2026-08-27). SUPERSEDED.
 
-## Conventions
-- Keep README.md in sync with what's actually live.
-- Move settled decisions to NOTES.md; mark them `(locked)`. Open questions
-  stay here, not in NOTES.
-- Check off phases below as completed. Don't delete finished items.
-- When a phase finishes: move non-obvious rationale to NOTES first, then
-  collapse the phase to one line under Completed.
-- Batched atomic commits, authored as Benjamin A. Neely (see AGENTS.md). One
-  commit reads as one coherent decision.
-- Each phase below ends in a checkpoint: tests pass, commit, stop — not a
-  segue straight into the next phase in the same breath.
-
----
-
-## ✓ Completed
-- Phase 0 — Repo & environment setup.
-- Phase 1 — Result struct / JSON schema.
-- Phase 2 — Sage integration baseline.
-- Phase 3 — Mod discovery / PTM scoping engine.
-- Phase 4 — Signal fate accounting (3-tier chimeric scan classification).
-- Phase 5A — MS2 spectrum counting & identification rate (72% ID rate on test set).
-- Phase 5B — MS1 precursor intensity, polymer %TIC, oxonium screening.
-- Phase 6 — Digestion and minimal QC.
-- Phase 6B — Digestion efficiency via separate closed semi-enzymatic search.
-- Phase 6C — Two-pass digestion efficiency probe (opt-in).
-- Phase 6D — MS1 signal fate integration.
-- Phase 6E — Three-layer MS1 signal fate.
-- Phase 6F — Integration & measurement baseline.
-- Phase 7 — Report output.
-- Phase 7B — Mod discovery pipeline fixes (pre-validation).
-- Phase 7C — Mod discovery pipeline correction.
-- Phase 7D — Residue-mass degeneracy check — deferred by evidence, not built.
-- Phase 8 — Validation pass. **14/14 again as of 2026-08-25, after the harness
-  itself was repaired — Tier 3 was a no-op and two gates tested a stale premise.
-  See NOTES.**
-- Phase 8.5 — MS1 mass-accuracy metric (signed MS1 vs FragPipe: b1906
-  +0.53/+0.53 exact, serum +2.46/+2.51, bcell −0.22/−0.00).
-- C1/C2 — m/z-dependent mass calibration — CLOSED, negative. All three arms
-  (ppm-constant, carpet-mandate, Option-C ceiling POC) exhausted by
-  evidence; do not re-open. Fold-tolerance follow-on question parked
-  separately below, not C1/C2.
-- Compile + on-disk timing test (2026-07-17) — release exe builds clean,
-  analysis time scales with spectrum count, not PSM count.
-- Unified MS1 mass-error report in `analyze` (2026-07-16) — apex_offset
-  (wide) and signed MS1 (closed) reported side by side; `mass_error_ppm`
-  hardcoded-1000-Da bug fixed.
-- Cross-tool mod-discovery benchmark — PTM-Shepherd, reallyOpen, and Mascot
-  all done and agree on real PTMs; Byonic Preview still pending (data-gated).
-- Recon no-fixed-mods run (2026-07-24) — +57 surfaces at rank 2, matching
-  reallyOpen's rank.
-- `run_validation` harness (2026-08-17, repaired 2026-08-25) — **14/14.** Tier 3
-  now regenerates from the pinned TSV and diffs against the baseline.
-  `testing/scripts/run_validation.py`.
-- MS1 clean-subset calibration wired into `analyze` (2026-08-19) — signed
-  median, MAD, asymmetric user recommendation, bias-centered Pass-2 window
-  design (Pass 2 now deferred — see below), MS2 tolerance from `fragment_ppm`.
-- Sage version pinning + TSV schema validator (2026-08-19) — SAGE_VERSION 0.14.7.
-- First MetaMorpheus workflow review (2026-08-19) — surfaced the
-  ground-truth provenance questions that ship-track step 1 now resolves;
-  treat its comparison numbers as provisional until then.
-
-## Ship track — five steps to v0.1.0
-
-Each step ends in a commit. Do not start the next one in the same session.
-
----
-
-## ✓ Step 1 — Lock the truth  — COMPLETE 2026-08-24
-
-Re-run the reference measurements on all three files, then freeze them. Every
-number the write-up cites is measured against this. Doing it once, properly,
-removes the provenance questions that have accumulated across five sessions.
-
-- [x] **Re-run MSFragger tight on all three files.** Matched settings, recorded
-      config. Two outputs: known-PTM prevalence, and MS1/MS2 error. This
-      replaces the ±10 vs ±20 ppm ambiguity rather than adjudicating it.
-      Done 2026-08-24 — `testing/reference-data/msfragger/{strictTryp,semiTryp}/`,
-      NOTES "MSFragger tight re-run — step 1 ground truth, part A". Ground truth
-      locked: precursor 20 ppm / fragment 20→10 ppm calibrated; Ox(M), N-term-Ac,
-      and semi-tryptic-rate tables per file. Does NOT cover +57 (Cys was FIXED in
-      this config) — see the next checkbox.
-- [x] **Re-run recon as needed** so its numbers come from the current build,
-      not a mix of builds across sessions. Done 2026-08-24, commit `75a1d8d` —
-      `testing/recon-output/full-run/{serum,bcell,b1906}.json`, alkylation-agnostic
-      `-nofixedmods` configs, current build.
-- [x] **Reconcile the +57 PSM counts** — fully resolved, both sides. JOURNAL
-      2026-07-24 gives bcell 3311 / serum 1125 / b1906 1253 at 4.50 / 7.31 /
-      4.47%; JOURNAL 2026-08-21 gives 187 / 86 / 60 at the same percentages.
-      **Use the 2026-07-24 counts — the fresh recon re-run reproduces them
-      exactly.** Independent verification via a variable-+57 MSFragger tight
-      search (strict trypsin, Cys+57 moved from fixed to variable, `52203dc`)
-      now done too: the true recon-vs-verified gap is **~1.2x (serum) to ~3x
-      (bcell/b1906)**, not the 35–58x figure from 2026-08-21. See NOTES "+57
-      PSM count reconciliation" (both entries) for the full tables. **Do not
-      carry the 48.4x/35.1x/57.7x ratios, the 2.7x recomputation, or the
-      35–58x framing forward — use the 1.2–3x table.**
-- [x] **Document the clean-subset PSM floor.** 200 is currently unexplained.
-      Run `testing/scripts/psm_count_sensitivity.py`, pick a value, record the
-      provenance (MetaMorpheus's own >=16/40/80 floor is the reference point).
-      Done 2026-08-24 — **keep 200, unchanged, now explained.** It gates the
-      60% hyperscore trim ("don't discard 40% of a small subset"), not median
-      precision. Bootstrap data in `testing/recon-output/psm-sensitivity/`;
-      reasoning in NOTES "Clean-subset PSM floor (200) — explained, keep
-      as-is". Surfaced a bigger finding — see the tolerance-recommendation
-      item in step 3.
-- [x] **Write three NOTES entries** — write-up content, not housekeeping:
-      prevalence currency (four different quantities across four tools);
-      Option-C elimination (recalibration ruled out as the mechanism behind the
-      ~0.4x +57 gap; narrow-first-pass and localization-aware rescoring remain);
-      ground-truth population differences (MetaMorpheus Task1 zero mods,
-      FragPipe closed with Met-ox + N-term-acetyl, recon near-zero-delta filter).
-      All three written 2026-08-24 and marked `(locked)`.
-
-**Checkpoint — MET, with one stated exclusion.** One frozen ground-truth set per
-file, configs committed, every write-up number sourced. Canonical values live in
-NOTES "Ground-truth reference values — the single source"; superseded numbers are
-marked in place.
-
-**Excluded from the freeze:** recon's own MS1/MS2 bias and MAD, and everything
-derived from them (tolerance recommendation, Pass 2 window). These are computed
-from Sage's absolute `precursor_ppm` and are wrong on any file where the bias is
-not much larger than the scatter. Confirmed on all three files. The fix is the
-first item of step 3, after which `testing/recon-output/full-run/` must be
-regenerated. Nothing else in the frozen set depends on those columns.
-
----
-
-## ✓ Step 2 — PTM stratification — COMPLETE 2026-08-26
-
-Depends on step 1. Design: `reference-notes/ptm-stratification-design.md`.
-This is the tiered search-parameter recommendation — distinct from the parked
-per-run ranking confidence flag, which is a different feature.
-
-- [x] Define the "non-zero" exclusion precisely. Must cover the Δ≈0 population
-      AND everything fold-to-zero drained into it, not just the zero bin.
-- [x] Test the floor: `X% of the top non-zero delta peak` at X = 5, 10, 15, 20,
-      all three files, from committed JSONs. **DONE 2026-08-25 — X=20%.** Gate 1
-      0/0/0 and gate 4 0 once the +58.02 satellite is demoted, on a 2-tool and a
-      3-tool panel. Cost is thin tiers (tier1/tier2 = 2/1, 2/1, 3/1). X is
-      CONDITIONAL on the satellite treatment, so decide that first. NOTES
-      "Step 2 unblocked".
-- [x] **DONE — floor asserted above the ±1/±2 Da carpet, margins +172.0 / +279.2 /
-      +138.6.** `tier_assignment::carpet_margin`, asserted by
-      `tier_assignment_integration::floor_sits_above_the_carpet_on_all_three_files`
-      on real committed reports with the numbers printed. **RESTATED AND SCOPED 2026-08-26
-      — the wording work is DONE, the assert is not.** The floor governs ONLY the
-      peaks the abundance path decides: unspecific acceptors and uncurated masses.
-      Residue-specific peaks are decided by presence (Fisher), never by amount, so
-      the floor has no jurisdiction over them and Deamidated stops being a
-      counterexample. Both earlier wordings are marked superseded in place, in NOTES
-      "The carpet invariant — RESTATED AND SCOPED" and in
-      `ptm-stratification-design.md`. **The old +115.8 / +113.6 / +75.9 margins were
-      measured over the patched peak set, NOT the scoped one — re-measure, do not
-      copy them forward.**
-- [x] Implement two tiers plus the unranked tail. **Decision rule settled
-      2026-08-25 — route by specificity.** Residue-specific acceptors are decided
-      by Fisher/odds-ratio/BH; unspecific ones by the X=20% floor; satellites are
-      demoted first; uncurated peaks go to the tail. Prototype and numbers:
-      `testing/scripts/tier_report_prototype.py`. NOTES "Step 2 decision rule".
-      **Read the validation caveat with it** — gate 1's surface shrinks to one peak,
-      and the 21/21 corroboration figure is not a gate.
-- [x] Fixed-vs-variable rule — **SETTLED 2026-08-26: recon makes no judgement.**
-      The proposed occupancy rule was measured and does NOT work (CAM occupies
-      23.5 / 53.4 / 50.7% of Cys PSMs vs Ox(M) at 6.8 / 7.8 / 13.0% — separated, but
-      nowhere near "approaches total occurrence", and it cannot get there because an
-      open search assigns one delta per PSM). Ship MetaMorpheus's `MT` label
-      instead, passed through as INHERITED guidance for how to set the mod in the
-      user's FINAL search, with its origin stated. Implemented as
-      `RecommendedMod.role`; caveat text sharpened 2026-08-26 to say inherited-label,
-      not measurement. NOTES "Step 2 decision rule".
-- [x] Add the currency NOTE to the report output. Four caveats ship inside
-      `recommendations.caveats`.
-- [x] **DONE — validated by a corroboration RATE, not a binary gate.** 18/21
-      corroborated, ranks AA1 28 / AA2 4 / AA3 2. Gate 1 retired (surface fell to one
-      peak); Gate 5 built, run, hypothesis-tested, revised twice on evidence, control
-      verified firing, then **retired as pass/fail because the pre-commitment compared
-      two different quantities** — recon reports an un-localized delta mass plus a
-      population enrichment, the references report per-PSM localization. The three
-      divergences (Gln->pyro-Glu on Q vs Ammonia loss on N) are a stated limitation.
-      **Step 2 has no binary gate on residue assignment — recorded as a cost in
-      `limitations-and-future-work.md`.** NOTES "GATE 5 RETIRED AS A PASS/FAIL". Routing by specificity shrank gate 1's surface to ONE peak across three
-      files, and the 21/21 corroboration figure was designed after seeing the data.
-      Gate 5 tests the claim the routing rule actually makes: for every
-      statistics-path recommendation, the reference tool's top-localized residue must
-      sit inside recon's `sites`. **Threshold zero violations, pre-committed in NOTES
-      2026-08-26 BEFORE the gate was run** — if it later misbehaves, investigate the
-      gate, do not retune the threshold. Masses no reference localizes are counted
-      neither way and reported as uncovered surface. Negative control: serum +57 must
-      localize to C, never Gly. Two instruments, not equivalent — PTM-Shepherd
-      `global.profile.tsv` AA1/AA2/AA3 is POOLED across the three files;
-      MetaMorpheus `AllPSMs.psmtsv` (gitignored here) is per-file. Gate 1 stays for
-      the abundance path and the report says how little it covers.
-- [x] Negative control: serum's +57 is proven over-alkylation, not added Gly
-      (Phase 8 Gate 3, 0 of 26 peptides with Gly flanking context). A tier that
-      recommends Gly on that file fails.
-
-**Checkpoint — MET 2026-08-26, with a stated cost.** Tier assignments printed for all
-three files with actual numbers: 6 / 8 / 8 recommendations, floors 225.0 / 662.2 /
-250.6, carpet margins +172.0 / +279.2 / +138.6, corroboration 18/21. No pass marks
-without values — the corroboration script prints "NOT A PASS MARK" in its own output.
-**The cost: no binary gate on residue assignment. Written into the limitations note.**
-
----
-
-## Step 2.5 — Met-loss protein N-term  ✅ COMPLETE 2026-08-27
-
-- [x] FASTA lookup proving a peptide starts at protein position 0 —
-      `recon-tool/src/protein_index.rs`, reached by `analyze --fasta`.
-- [x] One new `peptide_hits` branch, covering BOTH protein-terminal `PP` values.
-- [x] Its own validation: I1 (one decision moves, pre-committed), the
-      resolution / rarity / decoy guards, and a committed evidence script.
-- [ ] Verify the supplied NME / NAT references before the write-up cites them.
-      **Deferred to step 5 deliberately** — they are recorded UNVERIFIED in NOTES
-      and no code path depends on them.
-
-**Checkpoint MET.** 116 tests (recorded as 114, re-measured 2026-08-28),
-`run_validation` 14/14, `full-run/` regenerated at
-1.4.0 under an asserted invariant. See NOTES "Step 2.5 BUILT".
-
----
-
-## Step 3 — Wire Pass 2 into `run`
-
-Pass 2 is how semi-tryptic numbers are produced. Semi-tryptic rate is a core
-recon output, and the search is cheap because it runs on a subset FASTA.
-
-- [x] **DONE 2026-08-28 — the |error| bias bug is fixed for MS1.**
-      `PsmSummary::from_psm` now populates `precursor_ppm_signed` from
-      `calibration::signed_precursor_ppm` (`delta_mass_corrected / calcmass × 1e6`).
-      **The invariant is asserted in code and it fired**: bcell reports
-      **−0.2357 ppm**, a sign flip from the +0.7028 it reported before. serum
-      +2.4278 -> +2.4215 (latent, as predicted) and b1906 +0.7804 -> +0.4403.
-      All three match `ms1_bias_sign_check.py` to four decimals — two independent
-      implementations, not a self-check. Tests in
-      `recon-tool/tests/ms1_calibration_integration.rs`, including the control
-      that asserts Sage's raw column still holds zero negatives. Schema 1.5.0.
-      **MS2 is NOT fixed** — see the next item.
-      ⚠ **`testing/recon-output/full-run/` is now BEHIND the code** and its
-      calibration block is stale. Regenerating it is a separate, enumerated step.
-- [x] ✅ **MS2 story DECIDED 2026-08-28: stays ABSOLUTE, labelled honestly.**
-      The correction cannot change what recon recommends — the MS2 tolerance is a
-      bucket, and on all three files the requirement is 2.9-4.4 ppm against a
-      10 ppm ladder step while the signed correction moves it by **0.027 ppm**.
-      The MS2 window is symmetric about zero and never reads the bias, unlike
-      MS1's bias-centred Pass 2 window. `--annotate-matches` is NOT wired: an
-      8.5 MB side file per run and a schema change, against a tool whose goal is
-      fast recon. `ms2_bias_ppm`'s false "signed" claim is withdrawn in place.
-      ⚠ Carries a write-up cost — recon has no signed MS2 number for the
-      four-tool benchmark table. Settle that in step 5. Locked in NOTES
-      "MS2 stays absolute".
-      Superseded description of the probe follows.
-- [ ] ~~Decide the MS2 story.~~ THE PROBE WAS RUN, AND IT WORKS — 2026-08-28.
-      Sage v0.14.7 was built natively for arm64 from the pinned commit and the
-      closed serum search re-run with `--annotate-matches`. The observed schema
-      matches the source read exactly. **Signed MS2 on serum = +1.0049 ppm
-      (per-fragment median), against MSFragger +0.96 and MetaMorpheus +1.059 —
-      it lands BETWEEN them, while Sage's absolute column (+1.2602) sits outside
-      both.** 23.16% of fragments are negative. The convention was confirmed by
-      recomputing `fragment_ppm` from the fragment rows to 0.041 ppm: it is an
-      INTENSITY-WEIGHTED MEAN of |error|. Truncation quantified — only 0.649% of
-      fragments sit within 1 ppm of the ±10 ppm wall, so the median is not shaped
-      by it. Full numbers in NOTES.
-      **What is left is the BUILD DECISION, not the investigation:** wire it in
-      (one Sage flag, a second output file — 8.5 MB / 210309 rows for ONE file, a
-      `psm_id` field on `Psm`, and a join), or relabel and defer. The locked "no
-      new fragment-ion computation" does not need reopening, and the v0.15.x
-      fallback is not needed.
-- [x] ✅ **DONE — superseded by the four-file 1.7.0 regeneration of 2026-08-31.**
-      `testing/recon-output/full-run/` now holds serum, bcell, b1906 AND liver at
-      schema 1.7.0, and the calibration block carries SIGNED values: liver reads
-      `bias_ppm -1.4193`, which a median of |error| could never produce.
-      (⚠ this box sat unticked while Step 3 was declared COMPLETE — reconciled
-      2026-09-01.)
-- [x] ✅ **DONE 2026-08-28 — MS1 tolerance recommendation quantized.**
-      `smallest rung in {10,20,50,100} ppm >= |bias| + 5×MAD`. **The pre-committed
-      gate passed: all three files land on ±10 ppm**, requirements 4.844 / 3.602 /
-      3.862 ppm, matching the rationale note's §12 predictions (4.84 / 3.60 / 3.86)
-      to three decimals — the test asserts against the PREDICTIONS, not against the
-      code's own output. Schema 1.6.0. The superseded asymmetric window and its
-      retired rationale are recorded in place. 129 tests pass.
-      Superseded description follows.
-- [ ] ~~Fix the MS1 tolerance recommendation — quantize to buckets.~~ Evidence
-      and assumptions ledger: `reference-notes/ms1-tolerance-recommendation-rationale.md`;
-      summary in NOTES. Current output (±2–4 ppm) is 3–5x too tight against
-      three independent lines of evidence. Replace `bias + p95(|dev|)` with
-      `smallest bucket in {10,20,50,100} ppm >= |bias| + 5×MAD`. Keep reporting
-      bias separately — it is a different number. Lead with the check: assert
-      all three test files land on the 10 ppm bucket.
-- [x] ✅ **DONE 2026-08-28 — Pass 2 windows sized by COVERAGE.**
-      ⚠ **This item's own premise was wrong.** "3×MAD clips ~5%" measured as
-      **80.82 / 87.46 / 80.77 % covered** — it was discarding ~1 real peptide in 5.
-      And no MAD multiple transfers: 99% coverage needs 18.3× / 12.1× / 11.0× MAD
-      across three same-class instruments. **New rule: the ladder rung, centred on
-      the measured bias** — deleting the `k` and the floor rather than adding
-      constants. Coverage **99.32 / 99.92 / 99.94 %**. MS2 companion
-      `ms2_pass2_tolerance` is built and unit-safe (5× median for ppm analyzers,
-      measured; Ben's ppm→Da-at-500-then-double for ion trap, a curated
-      assumption), but is NOT wired into the report until Pass 2 runs — see NOTES.
-      Superseded text follows.
-- [ ] ~~Fix the Pass 2 window, same root cause.~~ `bias ± 3×MAD` ≈ ±1.2–1.5 ppm
-      on our files; 3×MAD ≈ 2σ clips ~5% of true peptides. Widen it as part of
-      wiring Pass 2, where it can be tested end-to-end. The ±100 ppm cap is a
-      separate locked backstop — do not touch it.
-      **Design settled 2026-08-28:** carry pass-1's MEASURED MS1 and MS2 errors
-      forward with CUSHION ("measure 2 ppm, use 5 or 10"). Pass 2 searches a
-      subset FASTA (~45x smaller space), so a generous window is nearly free —
-      and a generous window makes bias-CENTRING unnecessary, since ±10 ppm
-      swallows bcell's −0.24 ppm bias. That removes the mis-centring failure mode
-      instead of fixing it. See NOTES "The three tolerance regimes".
-- [x] **Run the named test behind the mechanism claim.** Done 2026-08-24 —
-      clean subset understates the wider population's scatter by 1.16–1.28x
-      against matched closed searches, all three files. Promoted from INFERRED
-      to MEASURED in the rationale note. (The originally-stated version of this
-      test was ill-posed — it needs a CLOSED search, not the open one.)
-- [x] ✅ **Analyzer-aware MS2 tolerance — BUILT 2026-08-28** (parallel session).
-      Pass-1 MS2 tolerance now comes from the MS2 analyzer, read from the mzML
-      before the search. `run` applies it and prints it. (The `detect-analyzer`
-      subcommand that also exposed it was removed 2026-09-24.)
-      **The old body of this item is corrected in place below — do not read the
-      superseded numbers as current.**
-      * ~~`fragment_tol` appears in NO Rust source file~~ — TRUE WHEN WRITTEN, no
-        longer. It is now decided in `mzml.rs` and applied in `sage_runner.rs`.
-      * ~~Mapping: MS2 Orbitrap 10–20 ppm; MS2 ion trap 0.5–1.0 Da~~ — SUPERSEDED.
-        Those were typical-performance figures. Pass 1 must assume the instrument
-        is out of calibration, so the shipped windows are deliberately looser:
-        **Orbitrap/FT-ICR and Astral ±50 ppm, legacy TOF ±100 ppm, ion trap and
-        quadrupole ±1.0 Da**, fallback ±20 ppm. Curated by Ben; derived table in
-        `reference-notes/ms2-analyzer-tolerance-table.md`.
-      * ~~none of our three files exercises this~~ — STILL TRUE for the ion-trap,
-        TOF and Astral buckets. But the FTMS branch now HAS a real regression case:
-        MSFragger read the RAW files and reported `MS2 ITMS = false; MS2 FTMS =
-        true` on all three, which the tests pin against.
-      What shipped:
-      * Analyzer read from the per-scan filter string (`MS:1000512`), falling back
-        to the `instrumentConfiguration` CV term. The filter string is preferred
-        because it is per-scan and immune to the ThermoRawFileParser <1.4.4 FTICR
-        mislabel that affects bcell.
-      * The 12 mass-analyzer terms are DERIVED from a pinned HUPO-PSI `psi-ms.obo`
-        snapshot (`data-version 4.1.259`) by
-        `testing/scripts/psi_ms_analyzer_terms.py`, which is Tier 4 of
-        `run_validation.py`.
-      * `run` OVERRIDES the template's hardcoded `fragment_tol` and writes
-        `<search-dir>/effective-params.json` with a provenance block.
-      * **recon never refuses to search on analyzer grounds.** Unknown analyzer,
-        no bucket, or a mid-run detector change all fall back to ±20 ppm, flag the
-        assumption, and report the detectors seen.
-      REMAINING, deferred on purpose: the detected analyzers are not yet in the
-      JSON report. Folded into the `full-run/` regeneration (schema 1.7.0) because
-      that step already forces a bump — one bump and one regeneration, not two.
-- [~] **Ladder top-rung justification** (was: "±100 ppm cap measurement").
-      ⚠ **NOT CLOSEABLE BY MEASUREMENT — moved to a STEP 5 write-up item
-      2026-09-01.** It sat as an open Step 3 box while Step 3 was declared
-      complete, which is why the two disagreed. All four files land on the FIRST
-      rung, so rungs 2-4 have no evidence and no amount of work on this data can
-      create any. It ships as a CURATED ceiling with that stated.
-      ⚠ **REPOINTED 2026-08-28 — the cap it named is RETIRED.**
-      `PASS2_HALF_WIDTH_CAP_PPM` became unreachable when the Pass 2 width started
-      coming from the ladder, whose top rung is also 100; deleting it left its own
-      test passing, so that test could not fail. Both are fixed — see NOTES.
-      What survives is the real question: **is 100 ppm the right TOP RUNG?**
-      ⚠ **It cannot be answered with current data.** All three files land on the
-      FIRST rung, so rungs 2–4 have no evidence at all. Same gap as the ion-trap
-      case. Expected honest outcome: record the ceiling as CURATED, sourced from
-      the TOF reasoning (50–80 ppm out of the box, so a ±15–20 ppm ceiling would
-      systematically clip), and state in the write-up that it is unmeasured.
-- [x] ✅ **Pass-2 half-width rounding table — SATISFIED 2026-08-28 by the ladder.**
-      `temp-flowChart.md` asked to "round the half-width UP to a clean step, never
-      use the raw computed number", with a proposed-but-TBD table of 5/10/20/30
-      then by 10s. **`MS1_TOLERANCE_LADDER_PPM` {10,20,50,100} IS that table**, and
-      it is measured rather than TBD — coverage 99.32 / 99.92 / 99.94%.
-      Two parts of that same proposal are SUPERSEDED and are corrected in place
-      there: "half-width: MAD" (a MAD multiple was measured unable to do the job —
-      11.0x to 18.3x needed across three same-class instruments) and the separate
-      "±100 ppm hard cap" (retired; the ladder's top rung is the ceiling).
-      **Bias-centring is KEPT**, and for the proposal's own reason: a drifted
-      instrument with a window centred at zero misses real peptides.
-- [x] ✅ **Paired target-decoy selection — DECIDED 2026-08-28: NOT BUILT, on
-      purpose.** Mascot's rule exists to protect a pass-2 FDR estimate, because
-      Mascot's ET pass reports PTM findings. Recon's Pass 2 reports enzyme
-      performance only, runs with no variable mods, and nothing quotes a Pass 2
-      q-value as FDR-controlled — so there is no estimate to protect. The size
-      property is free under Sage anyway. Measured cost of building it would have
-      been +33 proteins (454 -> 487, +7.3%) selected on what is by definition the
-      false-positive tail. Locked, with the rejected alternative and the reopening
-      condition, in NOTES "Paired target-decoy selection — DELIBERATELY NOT
-      BUILT". The write-up states the divergence from Mascot.
-- [x] ✅ **DONE 2026-08-29 — ported, verified against the Python on real data
-      (52405 / 2514 / 937 exact), all three guards falsified before believed.**
-      Port `digestion_efficiency` to Rust, inline. `subset` ->
-      `run_run_command`, `annotate` -> `digestion.rs`. **SETTLED 2026-08-28:
-      `digestion_efficiency` is the SOLE port target.** The two files this list
-      used to name — `annotate_termini` and `subset_fasta` — were both headed
-      "superseded by `digestion_efficiency`" and are now DELETED (recoverable
-      from git). A reviewed draft port exists at
-      `testing/scripts/digestion_efficiency.rs`, verified against its Python on
-      real data: `subset` byte-identical, `annotate` TSV identical, JSON identical
-      after two fixes. See NOTES.
-      Carry these into the inline version:
-      * the whole-FASTA-into-a-`Vec` read should stream, as the Python did;
-      * `find(peptide)` takes only the FIRST occurrence in a protein;
-      * classification uses only the FIRST protein of a `;`-separated list;
-      * emit LF, and never byte-compare against a Python-produced CRLF TSV.
-- [x] ✅ **DONE 2026-08-29.** Wire it: bias-centered tight window → subset FASTA →
-      semi-tryptic Sage search → terminus annotation → Search-1-prediction vs
-      Pass-2-observed comparison block. Writes a SEPARATE `<output>_pass2.json`
-      (schema 1.0.0) so the pending `full-run/` regeneration does not move on one
-      more axis. `--no-pass2` skips it.
-      ⚠ The "prediction vs observed" framing is corrected in the artifact itself:
-      pass 1 is fully tryptic and CANNOT generate a ragged peptide, so its rate is
-      a CONTROL near 0, not a prediction. Different denominators, different search
-      spaces; the difference is not a delta.
-- [x] ✅ **DONE 2026-08-29, and "cheap" was WRONG.** Timing on all three files.
-      Pass 2 cost scales with how many proteins pass 1 identified, which is a
-      property of the SAMPLE. Before optimisation: serum 7.9 s (472 proteins),
-      bcell **2437 s** (6485 proteins). After: 5.0 / 128.1 / 30.4 s. Totals
-      90.0 / 333.5 / 183.8 s.
-
-**Checkpoint:** tests green, run on all three files, prediction-vs-observed
-comparison reviewed. Commit.
-
----
-
-## Step 4 — Fresh checkout, packaging, release
-
-- [x] ✅ **THE SCIENTIFIC HALF IS DONE 2026-08-31 — and done more strongly than
-      this item asked.** The fix is NOT in the template. `write_effective_params`
-      (pass 1) and `write_pass2_params` (pass 2) both STRIP
-      `static_mods`/`variable_mods` and ASSERT the result is empty, so no template
-      passed with `--params` can reintroduce a fixed mod. 17 configs under
-      `testing/configs/` still carry `static_mods {C: 57.0215}`, which is exactly
-      why a template-only fix was rejected. `open-search-params.json` was corrected
-      too, but the guard is what holds. Measured cost of the bug on bcell: the
-      +57 peak reads 146 with a fixed C, 3311 without — the largest peak in the
-      file. See NOTES "PASS 1 AND PASS 2 NEVER SEARCH WITH MODIFICATIONS".
-- [x] ✅ **DONE 2026-09-01 — THE PACKAGING HALF.** `recon-tool/src/defaults.rs`
-      compiles in BOTH templates (path-free) and the curated mod list, ~20 KB via
-      `include_str!`. `write_effective_params_from_text` /
-      `write_pass2_params_from_text` take text + an origin label; the path-taking
-      forms remain as wrappers so every existing guard is untouched.
-      `CuratedDb::load` delegates to `load_from_sources`, so both routes share ONE
-      parser. Anti-drift guard asserts the bundled copy equals the committed
-      template on every field (falsified). Curated equivalence MEASURED: 99
-      entries, 0 skipped, identical entry-for-entry. See NOTES "STEP 4 PART 1".
-      ⚠ NOT bundled: `unimod.xml` and any FASTA — still CLI arguments.
-- [x] ✅ **DONE 2026-09-01, MINIMALLY AND ON PURPOSE** — `DEFAULT_SAGE_PATHS` now
-      tries the four known vendored layouts instead of one Windows path, which
-      re-enabled `the_vendored_binary_reports_exactly_sage_version` (dead on the
-      Mac, now reports 0.14.6). ⚠ **The FULL job was deliberately NOT built** —
-      executable-relative resolution, PATH lookup, release layout — because
-      **A1 deletes all of it.** See NOTES "SAGE AS A LIBRARY".
-- [x] ✅ **Bundling done — see above.**
-- [x] ✅ **DONE 2026-09-01 — LIVER IS IN `run_validation.py`.** `FILES` now
-      includes liver; 15/15 -> 17/17 (Gates 1 and 3). Gate 2 reports NOT CHECKED
-      via a new channel counted as neither pass nor fail, because no independent
-      liver anchor exists. See NOTES "LIVER IS IN THE STANDING TRIPWIRE".
-⚠ **THE REMAINING STEP-4 ITEMS ARE RESHAPED BY A1 (Ben, 2026-09-01).** The release
-zip stops being `recon` + `sage` + docs and becomes ONE executable; the
-platform-binary fetching disappears. **Do not build the recon+sage zip.** CI that
-runs `cargo test` survives A1 and is worth having now; cross-platform RELEASE
-builds should wait for the A1 landings. See NOTES "SAGE AS A LIBRARY".
-- [x] ✅ **DONE 2026-09-02 — four targets build green in CI.**
-      `windows-64`, `linux-64`, `apple-intel`, `apple-silicon`, each on its own
-      native runner. Architectures verified with `file`, not assumed.
-      ⚠ **THE TEXT BELOW WAS WRONG AND IS CORRECTED IN PLACE.** It said "No
-      compilation of Sage is needed... Step 4 is a PACKAGING problem, not a build
-      problem", and named upstream v0.14.7 binaries. That stopped being true when
-      Sage became a Cargo git DEPENDENCY on 2026-09-01. **Sage is compiled from
-      source in every CI build, on every target**, which is most of the build
-      time. There are no upstream binaries in play.
-      ⚠ **Read NOTES "Sage output is NOT bit-reproducible across builds" first.**
-      Raw measurements are bit-identical across platforms; the rescoring layer and
-      all three q-values are not, and PSM membership at q<0.01 moves by ~0.1%.
-      Committed reference data must record which platform's binary made it.
-- [x] ✅ **DONE 2026-08-28, then SUPERSEDED 2026-09-01 — the version guard no
-      longer exists.** ⚠ Corrected in place 2026-09-02; the text below described a
-      function and a version that are both gone.
-      When Sage became a library there was no external binary to interrogate, so
-      `verify_sage_version` and the whole runtime handshake were DELETED. Read
-      `SAGE_VERSION` in `sage_runner.rs` for the current value — it is
-      `0.15.0-beta.2`, not the `0.14.6` this entry used to assert. The
-      authoritative pin is now the git rev in `Cargo.toml` plus `Cargo.lock`; a
-      test asserts `Cargo.lock` names the same rev as `SAGE_COMMIT`.
-- [ ] **Baseline benchmarks per Sage version, for controlled edits.** Ben's
-      idea, 2026-08-28: freeze a per-version reference set so any future change —
-      a Sage upgrade, a recon edit — is diffed against a known baseline rather
-      than eyeballed. Note what NOTES "Sage output is NOT bit-reproducible across
-      builds" requires of it: the baseline must record the PLATFORM as well as the
-      version, compare raw columns exactly, and allow ~0.1% movement on any
-      q-derived count. SUPERSEDED-BY-DESIGN note: this is the general form of what
-      `assert_regeneration_invariants.py` does for one regeneration.
-- [ ] ~~Resolve the version guard BEFORE packaging.~~ (done above)
-      Original text kept for the record: `SAGE_VERSION` is
-      `"0.14.7"` but every v0.14.7 binary reports **`0.14.6`** — upstream never
-      bumped the crate version at that tag. Confirmed four ways: the crate
-      manifests at the tag, every committed `results.json`, a local build, and
-      the official `aarch64-apple-darwin` release artifact. Today the guard is a
-      no-op because `extract_sage_version` reads stderr and the check sits inside
-      `if let Some(..)`; if it ever fires it REJECTS the correct binary.
-      Recommended: set `SAGE_VERSION = "0.14.6"` to match what the tool reports
-      and keep `SAGE_COMMIT` as the precise identity. This is a PIN edit — record
-      it deliberately.
-- [x] ✅ **DONE 2026-09-02 — CI build (GitHub Actions).**
-      `.github/workflows/build.yml`. Push to main, PRs, and `v*` tags. Gates are
-      `cargo fmt --check`, `cargo test`, `cargo build --release`. No clippy gate.
-      ⚠ Green CI is NOT the numerical tripwire — 25 data-dependent assertions
-      skip themselves on a CI checkout, and `run_validation.py` cannot run there.
-- [x] ✅ **DONE 2026-09-02 — release archive.** Contents are `recon` +
-      `README.md` + `THIRD_PARTY_LICENSES.md` + `unimod.xml`.
-      ⚠ **`sage` is NOT in the archive** and the line below is corrected: Sage is
-      compiled INTO `recon`, so there is no second binary to ship.
-      The staging step asserts all four files are present and fails the build
-      otherwise, so the licence obligation is enforced in CI, not just in prose.
-      ⚠ **This is now a LICENCE OBLIGATION, not just good practice (2026-09-01).**
-      Unimod is under the Design Science License, whose Section 3 requires a copy
-      of the License to be distributed along with the Work. The full text lives in
-      `THIRD_PARTY_LICENSES.md`, so that file MUST be in the archive.
-      ⚠ **Also ship `unimod.xml` itself** once it is compiled into the binary —
-      DSL Section 3 allows the Object Form only when the Source Data accompanies
-      it (3a) or a written offer does (3b). See NOTES.
-- [x] ✅ **DONE 2026-09-02 — tagged and released, TWICE.** `gh release list`
-      shows `v0.1.0` (2026-09-02T21:48Z) and `v0.1.1` (2026-09-02T23:00Z,
-      Latest). ⚠ This box sat unticked until 2026-09-03 while both releases were
-      public, which is the same PLAN-versus-repo drift the start-of-session check
-      exists to catch. **v0.1.0 is DEFECTIVE — point people at v0.1.1**, and read
-      the release-staleness warning in the status block before pointing them at
-      either.
-
-**Checkpoint:** a downloaded zip runs on a machine that has never seen the repo,
-on each platform built. Commit.
-
----
-
-## Step 5 — Write-up
-
-⚠ **REFRAMED 2026-10-06 (Ben): no technical note will be submitted.** The
-write-up is the background document `docs/design-and-evidence.md`. The boxes
-below were written for a manuscript. They are not ticked here, because Ben
-decides which of them the background document closes.
-
-Draft of the limitations and future-work sections already exists at
-`reference-notes/limitations-and-future-work.md` — update it as steps 1–4
-change what is true, rather than writing it from scratch at the end.
-
-- [ ] **What it is.** Stage-1 reconnaissance. Two Sage searches, one report.
-      What question each report section answers.
-- [ ] **Each step, and why.** Every processing stage: what it does, the
-      assumption it rests on, and the evidence for that assumption. Sources:
-      NOTES `(locked)` entries and JOURNAL debriefs.
-- [ ] **Attribution**, split two ways. Code taken: Sage (Lazear, MIT),
-      mzSniffer (Fondrie, Apache 2.0). Method inspiration, no code taken:
-      Mascot error-tolerant, Byonic Preview (Kil et al. 2011), MetaMorpheus
-      calibration formula, PTM-Shepherd peak calling and annotation tolerance,
-      Crystal-C (Phase 7D method reference, never built).
-- [ ] **Benchmarks.** Four tools, three files, agreement on rank. The ~25–50x
-      speed result. Currency caveat attached to every percentage.
-- [ ] **Limitations** — from the draft note. **MUST include the protein
-      N-terminomics gap**, with the recon-vs-MSFragger table: recon recommends
-      0 protein-N-term peaks on b1906 while MSFragger finds 137 N-term acetyl
-      PSMs there, and captures ~1/3 of the population on bcell. Recon attempts
-      the feature; it does not close it. Deferred deliberately — closing it
-      needs the PTM-Shepherd / MetaMorpheus quantity comparison, which is a
-      research question, not an implementation task.
-- [ ] **The tolerance-recommendation argument.** Why a recon tool should emit a
-      quantized bucket, not a continuous number: the user is picking a search
-      setting from an effectively discrete set, so precision beyond the bucket
-      is unusable, and a bucket is robust to constants we cannot derive. Source:
-      `reference-notes/ms1-tolerance-recommendation-rationale.md`, including its
-      assumptions ledger — carry all four items into the limitations section.
-- [ ] **Negative results as results.** C1/C2 closed across three arms. Option-C
-      ceiling POC. Satellite folding disabled by design. These are deliverables.
-- [ ] **Future work** — from the draft note.
-- [ ] README rewritten to match what shipped.
-
-**Checkpoint:** a reader who has not seen the repo can state what the tool does,
-what it does not do, and why each number means what it means.
-
----
-
-## Deferred past v0.1.0
-
-- `satellite_fraction` as a computed tier input. No decided use beyond write-up
-  discussion of why open-search peaks split. Discuss it; do not build it.
-- Per-run ranking confidence flag (beta). Separate feature from step 2's tiers.
-- Byonic Preview adapter — data-gated. Insert if the data arrives.
-- Fold-tolerance question (bcell's residual 2.3 mDa) — separate from C1/C2.
-- Verbose logging INFO→DEBUG.
-- Wide x fully tryptic x subset FASTA delta-mass comparison. Interesting; not
-  ship-blocking. Cheap to fold into step 3's timing pass if convenient.
-- **Prevalence fudge factor — REJECTED, not deferred.** On serum the reference
-  platforms disagree with each other by 1.37x on the same mod (PTM-Shepherd
-  17.92% vs MetaMorpheus 24.51%). A factor cannot be more precise than its
-  target's spread. Step 2 is the answer. Do not revisit.
-
----
-
-**Language:** Rust. **Attribution:** ports MIT-licensed code from Sage
-(Michael Lazear) and mzSniffer (William E. Fondrie) — preserve license
-headers and credit both.
+Step 3 is complete. The prompt is kept as written, in an HTML comment. Its one
+standing rule, "Do not edit past JOURNAL entries; corrections get their own",
+is now in `dev_AGENTS.md`, shutdown step 5.
 
 <!-- Handoff → next session
 Start prompt:
@@ -1216,10 +1332,3 @@ Start prompt:
 >
 > Do not edit past JOURNAL entries; corrections get their own.
 -->
-
----
-## Status history
-
-Superseded. Moved to `_archive/plan-status-history-2026-09-02.md` on 2026-09-02,
-because it carried a second `## Status` heading and this file then had two status
-blocks. **The block at the top of this file is the only status.**

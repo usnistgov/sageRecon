@@ -4884,6 +4884,12 @@ re-parsed at a loose threshold so production, test and prototype agree.** Lesson
 pipeline-filtered PSM list is not a neutral starting population — check what has already
 been applied to it.
 
+(2026-10-06: HISTORY. This list is not live status. Items 1 and 2 closed on
+2026-09-03: see PLAN "Status history", the "Settled" table, rows "HTML report
+layout port" and "`full-run/` regeneration". Item 3 closed on 2026-09-01: see
+PLAN Step 4, "THE PACKAGING HALF". Open work is tracked in PLAN
+"Deferred / open" only.)
+
 **Outstanding, carried to the next session (also in PLAN's status block):**
 1. **HTML rendering** — the block is in the JSON, `generate_html_report` does not draw it.
 2. **Regenerate `full-run/` at 1.3.0** — rewrites the frozen ground truth, so it needs a
@@ -6598,7 +6604,8 @@ lints — `sort_by_key`, `RangeInclusive::contains`, a deprecated `NEUTRON_MASS`
 Every one of those is a REAL code edit that touches logic. In a project whose
 credibility rests on numbers not moving, they must be judged one at a time
 against the tripwires, not applied in bulk to turn a gate green.
-*Still open:* work the clippy list in its own session.
+*Still open:* work the clippy list in its own session. (CLOSED 2026-09-03: the
+list is at zero. See "The clippy pass".)
 
 **3. `dtolnay/rust-toolchain@stable` replaces `actions-rs/toolchain@v1`.** The
 actions-rs organisation archived its actions, so the parent workflow depends on
@@ -8201,6 +8208,10 @@ Extract precursor info for flagged spectra → enables mzSniffer-style analysis 
 ---
 
 ## Phase 5B Future TODOs
+
+(2026-10-06: HISTORY. This list dates from Phase 5B and is not tracked as open
+work. Open work is in PLAN "Deferred / open" only. Items 5 and 6 concern
+signal fate, which was removed from recon on 2026-09-24.)
 
 The following improvements were identified during Phase 5B implementation and deferred:
 
@@ -11692,8 +11703,7 @@ Rejected alternatives:
   v0.2.0 tag. Rejected: the comments would point at a file that does not
   exist.
 
-Still open, unchanged: the oxonium-rule review by a glycoproteomics expert
-(Nick Riley or Chris Ashwood).
+The oxonium-rule review is tracked in PLAN "Deferred / open".
 
 ### README no longer says that Preview and recon share no file (2026-10-06, Ben)
 
@@ -11712,3 +11722,52 @@ The same pass reframed four more "the note" phrases in
 `docs/design-and-evidence.md` that a line-by-line search had missed, because
 the phrase wrapped across two lines or sat in a table. One Sources row now
 names `metamorpheus-mass-error-calibration.md` ("JASMS").
+
+## PLAN keeps one status entry; history sits at its end (2026-10-06, Ben)
+
+Ben asked for a hygiene check: PLAN in tight shape, and no leakage between
+NOTES, JOURNAL and PLAN.
+
+**Chosen.** The top of PLAN holds one dated status entry and the "Deferred /
+open" list. Every older status entry, the "Settled" table, "Next, in order",
+"The route Ben set", "Two traps" and the Step 3 handoff prompt moved word for
+word to "Status history" at the end of PLAN, under a warning that lists the
+statements that are superseded. No text was deleted. The top block went from
+about 550 lines to about 170.
+
+**Rejected.** (1) Markers only, with no move: PLAN stays long, and a cold start
+reads v0.1.1 and a billing block before it reads the state. (2) A separate
+`_dev/PLAN-history.md`: seven quoted references to PLAN headings in this file
+would then point at the wrong file. Before the move, 7 of 9 quoted
+references resolved. After it, the same 7 resolve, and so do the 4 that this
+pass added. The two that do not ("Default recon", "3×MAD clips ~5% of
+true peptides") were dead before this change.
+
+**The roles, so that the files do not leak into each other (locked):**
+- PLAN: the current state, the open items and the next action. Open work is
+  tracked in PLAN "Deferred / open" ONLY.
+- NOTES: what the project concluded. A NOTES entry does not carry a live "next
+  action". Three old lists that read as live status now carry a HISTORY or
+  CLOSED marker ("Outstanding, carried to the next session", the clippy "Still
+  open", "Phase 5B Future TODOs"). Older dated entries that say "not yet done"
+  are records of their day and were not all marked.
+- JOURNAL: debriefs. Past entries are not edited; a correction gets its own
+  entry. That rule is now in `dev_AGENTS.md`, shutdown step 5.
+
+**Step 5 closed as a manuscript step.** Each box was checked against
+`docs/design-and-evidence.md` and README, and each tick names its evidence.
+The "Benchmarks" box is superseded as written: the evidence is five tools on
+one file, and the "~25–50x" figure is withdrawn. Two parts are not covered and
+are in PLAN "Deferred / open": the four assumptions-ledger items, and the
+Option-C proof of concept.
+
+**Open items, each checked on 2026-10-06.** `signal_fate` is removed (one
+history comment in `report.rs`). `notable_unannotated` holds 0 rows in all four
+`full-run` reports. README still says that the Linux binary is unrun and still
+gives both descriptions of the Gatekeeper block, so those gaps stay open. No
+record shows a browser-download test of the CI macOS archives.
+
+**Writing registers.** README and `docs/` follow Ben's style guide (manuscript
+register, first-person plural, no em-dashes). The guide is a file outside this
+repository. PLAN, NOTES and JOURNAL stay in ASD-STE100. The background
+document keeps its existing register: Ben chose a wording-only reframe.

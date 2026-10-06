@@ -1,3 +1,34 @@
+# Debrief — 2026-10-06 (second pass): PLAN tightened, and the README states the Preview comparison
+
+**Landed:** `4b3f579` (README states the liver comparison with Preview) and
+this commit (PLAN restructure, NOTES markers, Step 5 closed). The leftover
+agent worktree and its merged branch were removed; nothing was lost. **No code,
+test or derived number changed in this pass; the tripwires were not re-run.**
+
+This entry also corrects the entry below. It lists the worktree and the README
+wording as open suggestions. Both are done.
+
+## Q1. What am I least confident about, and what would settle it?
+
+- **The Step 5 ticks.** Each tick rests on a grep that found the topic in the
+  document. A grep shows that a topic is present. It does not show that the
+  treatment is complete. Ben's read of the document settles it.
+- **The moved history.** A line-by-line comparison shows that every old PLAN
+  line is still in the file, except the lines that were rewritten on purpose
+  (the same-day status entry and five open items). I did not check the old
+  entries for further stale statements beyond the eight listed in the warning.
+- **"Deferred past v0.1.0".** It was not re-checked item by item.
+
+## Q5. What would I suggest to improve?
+
+- Run the browser-download test of the v0.2.0 macOS archives. It closes
+  Gatekeeper gaps 1 to 3 in one sitting.
+- Run the `linux-64` binary on the liver file.
+- Decide whether the two uncovered Step 5 parts (the assumptions ledger and
+  Option-C) need text in the background document, or can be dropped.
+
+---
+
 # Debrief — 2026-10-06: the tech note became a background document, and the records caught up with v0.2.0
 
 **Landed:** one commit. `_dev/writeup/technote-material.md` moved to

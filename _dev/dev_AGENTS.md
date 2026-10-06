@@ -339,7 +339,8 @@ silently skipped — a prose "done!" hides gaps; an itemized report surfaces the
    Do not append a correction and leave the wrong text standing.** Superseded
    numbers must be marked where they sit, not only in a new section.
 4. Update `README.md` if anything it describes changed (say "no change" if not).
-5. Run the debrief and append it to the TOP of `JOURNAL.md`.
+5. Run the debrief and append it to the TOP of `JOURNAL.md`. Do not edit past
+   JOURNAL entries. A correction gets its own entry.
 6. Commit AND push, with a plain `git push`. Report the commit hash and confirm
    the remote accepted the push — these are two separate operations and
    "committed" is not "pushed." One remote only; see "Remote" above.
