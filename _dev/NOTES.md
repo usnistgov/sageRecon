@@ -7207,9 +7207,12 @@ disable: a motivated line investigated properly and closed with evidence, not a 
   next). The POC removed the "maybe our own cal was too weak" ambiguity by substituting a
   validated one. C1/C2 closed.
 
-- (2026-10-06: read PLAN "Deferred past v0.1.0" with this entry. The residual
-  is also on b1906, and `enable_satellite_folding` defaults to `false`, so
-  "fold-driven" does not fit the shipped code. The cause is not known.)
+- ⚠ **CORRECTED 2026-10-06: the entry below is WRONG about the cause.** The
+  residual is not fold-driven, and it is not a mass error. It is the statistic
+  that the report prints. See "The Deamidation peak reads low because of the
+  window, not the mass" at the end of this file. The entry is kept as written,
+  because its calibration result (flat under gold-standard calibration) is
+  correct and agrees with the new finding.
 - **bcell's residual 2.3 mDa — fold-driven, strongly indicated (NOT fold-instrumented).**
   It's flat under gold-standard calibration, so calibration is provably not the lever. That
   strongly indicates the fold stage sets it, but this was **not** directly confirmed by
@@ -11774,3 +11777,76 @@ record shows a browser-download test of the CI macOS archives.
 register, first-person plural, no em-dashes). The guide is a file outside this
 repository. PLAN, NOTES and JOURNAL stay in ASD-STE100. The background
 document keeps its existing register: Ben chose a wording-only reframe.
+
+## The Deamidation peak reads low because of the window, not the mass (2026-10-06)
+
+Ben asked for a look at the Deamidation residual on bcell and b1906 (PLAN
+"Deferred past v0.1.0", the fold-tolerance item). Evidence script:
+`_dev/testing/scripts/deamidation_residual_check.py`. It reads the pass-1 TSVs
+in `full-run/`, which are gitignored. All numbers below are its output, run
+2026-10-06 on the committed `full-run/` reports (bcell, b1906, serum at 0.1.3;
+liver at 0.2.0).
+
+**The symptom.** The report gives the Deamidation peak a `delta_mass` of
+0.98191 on bcell and 0.98190 on b1906, against 0.984016 for Unimod. That is
+2.1 mDa low. Liver reads 0.7 mDa low and serum 0.2 mDa high.
+
+**The invariant, asserted in the script.** The script rebuilds the peak from
+the TSV with recon's own rules and stops unless the count and the mass equal
+the report. They do, on all four files: 724 / 0.98191, 223 / 0.98190,
+544 / 0.98333, 193 / 0.98417.
+
+**The cause.** `delta_mass` is the intensity-weighted MEAN of the PSMs in the
+window [0.97, 0.99] (`detect_peaks_with_prominence`: bin centre 0.98, merge
+tolerance 0.01 Da). It is not an apex. Two things then push it low:
+1. The window is fixed to the 0.01 Da bin grid, so it is not centred on the
+   peak. Against the true mass it runs from -14.0 to +6.0 mDa.
+2. The low 11 mDa of the window holds background PSMs, not Deamidation.
+
+| file | apex, 1 mDa histogram | window mean (the report) | members below 0.981 | background per mDa, 0.955-0.970 |
+|---|---|---|---|---|
+| bcell | 0.984 | 0.98191 | 253 of 724 (35 %) | 19.1 |
+| b1906 | 0.984 | 0.98190 | 70 of 223 (31 %) | 6.1 |
+| liver | 0.984 | 0.98333 | 104 of 544 (19 %) | 4.2 |
+| serum | 0.983 | 0.98417 | 11 of 193 (6 %) | 0.8 |
+
+The apex is at the true mass on bcell, b1906 and liver, to the 1 mDa step of
+the histogram. The size of the residual follows the background: the two files
+with the most background in the window have the 2.1 mDa residual.
+
+**What this rules out.**
+- The fold stage. The rebuild applies no fold and still equals the report.
+  The neutron fold removes deltas from 0.99136 to 1.01536, which is outside
+  the window. Satellite folding is off. The older entry "bcell's residual
+  2.3 mDa — fold-driven" is corrected in place.
+- Calibration. The apex is on target. This agrees with the older result that
+  the residual stayed flat under gold-standard calibration.
+
+**What it means for the report.**
+- The Deamidation annotation is safe. The match tolerance is 0.01 Da
+  (`DEFAULT_MATCH_TOLERANCE_DA`), and the residual is 2.1 mDa.
+- `mass_error_da` and `mass_error_ppm` on the annotation (bcell: -2.1 mDa,
+  -3.2 ppm) are NOT a mass error of the instrument. They are the offset of a
+  window mean. Do not read them as accuracy.
+- ⚠ **The peak COUNT includes the background too.** ESTIMATE, from one flank
+  only (0.955 to 0.970) and a flat background: 383 of 724 PSMs on bcell, 121 of
+  223 on b1906, 84 of 544 on liver, 16 of 193 on serum. This is not measured on
+  the high side, where the tail of the 1.003 peak begins, so it is a bound to
+  check, not a result. It applies to every peak, not only to Deamidation: each
+  peak takes all PSMs within 0.01 Da of its bin centre.
+- Deamidation is not the only peak with an offset of this size. The top peaks
+  of bcell read: Carbamidomethyl +0.44 mDa, Oxidation +0.36, Deamidated -2.10.
+  Peaks whose true mass sits near the middle of a bin are affected least.
+
+**Not known.** What the background PSMs between 0.90 and 0.98 Da are. On bcell
+the level is 13.2 per mDa at 0.90-0.95 and 11.7 at 1.03-1.08, so it is not
+local to Deamidation. NOTES calls a similar feature "the carpet" (see
+Dead-ends). This was not looked into.
+
+**Not changed.** No code changed. A fix changes a derived number in every
+report, so it is a change-regenerate and Ben's decision. The options seen:
+(a) leave the number and document it as a window mean; (b) report the apex
+(the mode, or a median of the core) in place of the mean, which changes
+`delta_mass` and the annotation error fields; (c) subtract a local background
+from the count, which changes counts, percentages and possibly the
+recommendations. Options (b) and (c) are independent.

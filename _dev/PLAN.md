@@ -160,10 +160,16 @@ Each item was checked against the repository on 2026-10-06.
     checked one by one against the document's limitations.
   - The Option-C ceiling proof of concept is not named in the document. C1/C2
     and satellite folding are.
+* **Decision for Ben: a peak's `delta_mass` and count are window statistics.**
+  Found 2026-10-06 from the Deamidation residual. `delta_mass` is the mean of a
+  20 mDa window on the bin grid, not an apex, and the count includes the local
+  background in that window (ESTIMATE from one flank: 383 of 724 Deamidation
+  PSMs on bcell). Options: document it; report the apex; subtract a local
+  background. The last two change derived numbers in every report, so they
+  are a change-regenerate. See NOTES "The Deamidation peak reads low because
+  of the window, not the mass". Nothing is started.
 * See also "Deferred past v0.1.0" below. It was re-checked item by item on
-  2026-10-06. Nothing in it is built. One finding: the deamidation mass
-  residual is on two files, not one, and its recorded cause (the fold stage)
-  does not fit, because folding is off.
+  2026-10-06. Nothing in it is built.
 
 ---
 
@@ -795,8 +801,14 @@ text is in "Status history", "Closed items".
   0.98417, 0.2 mDa high. So bcell is not the only file. ⚠ The name of this
   item may be wrong. NOTES records the residual as "fold-driven, strongly
   indicated", but `enable_satellite_folding` defaults to `false`
-  (`mod_discovery.rs`), so the fold stage does not run. Nobody has
-  instrumented it. The cause is NOT known. Do not chase it without Ben.)
+  (`mod_discovery.rs`), so the fold stage does not run.)
+  **CAUSE FOUND 2026-10-06 (Ben asked for the look). It is not the fold and
+  not a mass error.** `delta_mass` is the intensity-weighted mean of the
+  window [0.97, 0.99]. The window is off-centre (-14 to +6 mDa against the
+  true mass), and its low side holds background PSMs. The apex is at 0.984 on
+  bcell, b1906 and liver. See NOTES "The Deamidation peak reads low because
+  of the window, not the mass" and `deamidation_residual_check.py`. No code
+  changed. What is left is a decision, now in "Deferred / open".
 - Verbose logging INFO→DEBUG.
   (2026-10-06: not done. `main.rs` sets the default log filter to `info`.
   `recon-tool/src` holds 25 `info!` calls, 20 of them in `mod_discovery.rs`,
