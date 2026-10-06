@@ -7,7 +7,7 @@
 - `recon-tool/` — the product. Rust source, Cargo manifest, compiled
   resources.
 - `docs/` — generated and curated public documentation (e.g.
-  `curated-modifications.md`, `AI_USAGE.md`).
+  `curated-modifications.md`, `design-and-evidence.md`, `AI_USAGE.md`).
 - `examples/` — pre-computed example reports.
 - `_dev/` — the development record: design decisions, test data, and the
   full internal operating protocol. Not needed to build or run the tool.

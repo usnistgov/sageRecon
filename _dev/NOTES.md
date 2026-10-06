@@ -9997,7 +9997,7 @@ m/z, with 500 as the midpoint. The data contradicts that. On serum (Sage v0.15,
 10,511 PSMs at q <= 0.01, 154,842 matched fragments) the median fragment m/z is
 652, the intensity-weighted median is 732, and only 17.6 % fall in 400-600.
 600 is the point the 2026-08-28 design discussion intended. These numbers are
-copied from `_dev/writeup/technote-material.md`. The script that made them
+copied from `docs/design-and-evidence.md`. The script that made them
 (`serum_window_and_fragments.py`) is in the private archive, not in this
 repository, and they were not re-measured for this change. 600 is still below
 both medians; the ×2 multiplier covers the gap. Rejected alternative: 652 (the
@@ -11222,7 +11222,7 @@ snapshots and every committed report; both were regenerated 2026-09-24 (see
 
 ## Vestigial output and code removed (2026-09-24, Ben, technote Appendices C and D)
 
-Ben approved the removal list in `_dev/writeup/technote-material.md`
+Ben approved the removal list in `docs/design-and-evidence.md`
 Appendix D. Each item was checked against the code before it was removed.
 
 **Hidden subcommands.** Ten of the eleven were removed: `parse`,
@@ -11400,7 +11400,7 @@ trace. Every regenerated report must carry that `git_commit` with no `-dirty`.
 - `nofixedmods/`, `psm-sensitivity/`, `calibration-benchmark/`,
   `2026-08-25-checks/`, `tier2_peg_*.json`, `step0_expected_anchors.json`:
   frozen or independent fixtures.
-- `_dev/writeup/technote-material.md`: a source record with its own
+- `docs/design-and-evidence.md`: a source record with its own
   superseded-value table. Not edited here.
 
 **Expected liver values, written before the run.** Source: the (1, 8) arm of
@@ -11521,7 +11521,7 @@ new); b1906 +42.0104 (26), -89.0296 (17, new), +14.0153 (19, new, moves to
 **Not regenerated, as the trace said:** `comparison/recon_vs_*.md`,
 `recon_nofixedmods_*.md`, `fourway_comparison.md`, `BENCHMARK-SUMMARY.md`,
 `satellite_check_corrected.md`, `LIVER-FOUR-TOOL-2026-09-01.*`,
-`LIVER-FIVE-TOOL-MODS-2026-09-01.*`, `_dev/writeup/technote-material.md`.
+`LIVER-FIVE-TOOL-MODS-2026-09-01.*`, `docs/design-and-evidence.md`.
 They now describe older recon output.
 
 **Small checks, same day.**
@@ -11542,7 +11542,7 @@ They now describe older recon output.
   wild-card search, -50 to +150 Da. Both corrected in the note.
   `ptm-stratification-design.md` lines 54 and 313 still make the claim
   ("the commercial tools lack", "Preview to ~60 common mods"). Corrected
-  2026-09-25 to match this note. README, `docs/` and `technote-material.md` do not make it.
+  2026-09-25 to match this note. README and `docs/` (which holds `design-and-evidence.md` since 2026-10-06) do not make it.
 
 ### The protein-context test asserts the mechanism (2026-09-25)
 
@@ -11590,9 +11590,11 @@ Ben's call. **recon is 0.2.0** (`372765c`): `Cargo.toml`, the `recon-tool`
 entry in `Cargo.lock`, `CITATION.cff` (was 0.1.2, one release behind) and the
 README version line and citation. Main schema 4.0.0 and Pass 2 schema 2.0.0
 are breaking changes, so the minor number moves. `CODEMETA.yaml` has no version
-field; nothing to change. ⚠ `CITATION.cff` `date-released` still reads
-2026-09-08. Set it when 0.2.0 is tagged. Not tagged, not pushed. README release
-links still name v0.1.3, the latest published release.
+field; nothing to change. `CITATION.cff` `date-released` reads 2026-09-25,
+tag `v0.2.0` is on the remote at `eeb0ba9`, and the README release links name
+v0.2.0. Corrected 2026-10-06: at `372765c` this entry said "Not tagged, not
+pushed", a `date-released` of 2026-09-08 and README links to v0.1.3. All three
+were true then and were closed by `eeb0ba9`.
 
 **Scope: liver and `examples/` only** (Ben: liver is the test file; serum,
 bcell and b1906 are development files). One release build at `372765c` from a
@@ -11653,3 +11655,42 @@ D/E 407, Met-loss+Acetylation 273, pyro-Glu E 36. Cost: 5.7x wall time (63 s to
 says what is in the sample at a level worth searching for; the compute trade-off
 is the user's call for their engine and resources. See
 `_dev/liver-benchmark/claim-test/README.md`.
+
+## The tech note became a background document (2026-10-06, Ben)
+
+Ben's call. No technical note will be submitted. The source material stays,
+as the background document a reader expects with software.
+
+- `_dev/writeup/technote-material.md` moved to `docs/design-and-evidence.md`
+  with `git mv`. `_dev/writeup/` is gone. README and root `AGENTS.md` name the
+  new file.
+- **"technote" in older entries and headings of this file means
+  `docs/design-and-evidence.md`.** Those headings were NOT renamed, because
+  other files cite NOTES by heading.
+- **The document's section order, appendix letters (A to E), Appendix B item
+  numbers and Appendix E row numbers are frozen (locked).** NOTES headings,
+  `reference-notes/result-schema.md` and comments in `calibration.rs`,
+  `report.rs` and `oxonium.rs` cite them. Change wording, never the numbering.
+- Only wording changed in the move: the title, the status paragraph, "the
+  note" became "this document", "Candidate claims of novelty" became "What
+  recon does differently", and Appendix A is now titled "Superseded figures".
+  No measured value, citation, commit hash or date was edited.
+- Three lines in the Sources table said "the note" and meant a reference
+  note. They now name the file: `mascot-error-tolerant-methodology.md`,
+  `unimod-decomposition.md`, `deltamass-methodology.md`.
+- The three source comments changed in the same commit. Comments only.
+  `cargo fmt --check` and `cargo build` passed. No tripwire was re-run,
+  because no test, output or derived number changed.
+
+Rejected alternatives:
+- Keep it in `_dev/` under a new name. Rejected: a background document
+  belongs with the public documentation.
+- Restructure it for a software reader, or split it into a short "how it
+  works" and a design record. Rejected for now: both move sections, and the
+  citations above depend on the numbering.
+- Leave the source comments alone, so `recon-tool/` stays identical to the
+  v0.2.0 tag. Rejected: the comments would point at a file that does not
+  exist.
+
+Still open, unchanged: the oxonium-rule review by a glycoproteomics expert
+(Nick Riley or Chris Ashwood).

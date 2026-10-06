@@ -1,6 +1,7 @@
 # Sage-Based Proteomics Reconnaissance Tool — Roadmap
 
-Repo: **gitlab.nist.gov/gitlab/ban/sageRecon**
+Repo: **github.com/usnistgov/sageRecon** (published, PUBLIC). Private archive:
+**gitlab.nist.gov/gitlab/ban/sageRecon**. See `dev_AGENTS.md`, "Remote".
 
 **Purpose:** A fast, free, alkylation-agnostic reconnaissance tool for unfamiliar
 mass-spec data — one Sage open search, one report on what mods are present,
@@ -14,8 +15,53 @@ closed/localized search — that's a human decision downstream of this report.
 
 ## Status
 
-**Updated 2026-09-16 (end of session). Read this block, then the "Deferred /
+**Updated 2026-10-06 (end of session). Read this block, then the "Deferred /
 open" list below. Everything above them in this file is roadmap history.**
+
+### ▶ 2026-10-06: v0.2.0 is released. No technical note. The write-up is now a background document.
+
+**State. Each fact below was read on 2026-10-06 from the file or command named.**
+- recon is 0.2.0 (`recon-tool/Cargo.toml`; version commit `372765c`). Tag
+  `v0.2.0` is on the remote at `eeb0ba9` (`git ls-remote --tags origin`).
+- The v0.2.0 Release is published (`gh release view v0.2.0`: published
+  2026-09-25, not a draft). It holds four archives: `recon-apple-silicon.zip`,
+  `recon-apple-intel.zip`, `recon-windows-64.zip`, `recon-linux-64.tar.gz`.
+  README says that Actions built them from the tag.
+- Main schema 4.0.0 and Pass 2 schema 2.0.0 (NOTES "Version 0.2.0 and the
+  liver and examples regeneration").
+- The seven changes from the write-up review are done. See "Deferred / open"
+  below.
+- Gates, as NOTES records them for 2026-09-25: `cargo test` 208 of 208 with
+  all data, `run_validation.py` 17/17. This is a record. The gates were NOT
+  run again today.
+
+**Decided today (Ben).** No technical note will be submitted. The source
+material stays as the background document of the software. It moved from
+`_dev/writeup/technote-material.md` to `docs/design-and-evidence.md`. Only its
+wording changed. Section order, appendix letters and item numbers are frozen,
+because NOTES, `result-schema.md` and three source comments cite them. README
+links to it. See NOTES "The tech note became a background document".
+
+The liver five-tool comparison and the claim test are in
+`_dev/liver-benchmark/`. Claim test result (`claim-test/results.md`):
+recon-guided 15310 stripped sequences and 1432 protein groups, vanilla 15185
+and 1396, and the vanilla repeat differs by 0 sequences.
+
+**Source change today: comments only.** `calibration.rs`, `report.rs` and
+`oxonium.rs` each name the new document path. `cargo fmt --check` and
+`cargo build` pass. No test, output or derived number changed, so the
+tripwires were not re-run.
+
+**Open.** One item, and it is external: a glycoproteomics expert (Nick Riley
+or Chris Ashwood) reviews the oxonium rule and its tolerance.
+
+**Not recorded. Do not assume either one.**
+- JOURNAL has no debrief between 2026-09-10 and 2026-10-06. The sessions of
+  2026-09-15 to 2026-09-25 are recorded in PLAN, NOTES and the commits only.
+- No record says that the `linux-64` binary was run. The 2026-09-16 entry
+  below says it was unrun.
+
+**Next action.** The oxonium review. There is no manuscript work.
 
 ### ▶ 2026-09-16: GitHub Actions works. Found and fixed three real bugs on its first run.
 
@@ -56,6 +102,9 @@ docs -- both hold the same history in parallel, this is not a git rewrite,
 just pointing NIST readers at NIST's own copy. See NOTES "AGENTS.md split"
 region is unaffected; see the "Remote" section in `dev_AGENTS.md` for the
 corrected identity.
+
+⚠ **SUPERSEDED 2026-10-06: v0.2.0 is released and no technical note is
+planned. See the 2026-10-06 entry above. The text below is history.**
 
 **Next action.** ✅ Windows CI binary downloaded and verified by Ben,
 2026-09-16. **Linux is the only CI-built binary still unrun anywhere** --
@@ -369,7 +418,9 @@ A cold start that re-plans any of them is going backwards.
 
 ### ▶ THE ROUTE BEN SET, 2026-09-03 — work it in this order
 
-1. **STEP 5, THE WRITE-UP.** This is the next piece of real work. Nine open
+1. ⚠ **SUPERSEDED 2026-10-06 (Ben): no technical note will be submitted. The
+   material is `docs/design-and-evidence.md`. The text below is history.**
+   **STEP 5, THE WRITE-UP.** This is the next piece of real work. Nine open
    boxes, none started, and the source material already exists — the 379-line
    `reference-notes/limitations-and-future-work.md` draft plus the `(locked)`
    entries in NOTES. It is assembly, not research.
@@ -413,7 +464,7 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
 ### Deferred / open — none of this is forgotten
 
 * **DONE 2026-09-25, for release 0.2.0: seven changes from the write-up review (2026-09-24).** The
-  list is in `_dev/writeup/technote-material.md`, Appendix B, "Planned for the
+  list is in `docs/design-and-evidence.md`, Appendix B, "Planned for the
   next release". In short:
   1. ppm-to-Da at m/z 600, not 500 (DONE 2026-09-24);
   2. test Pass 2 at (2 missed cleavages, length 7) against (1, 8), then make
@@ -442,8 +493,9 @@ string reads `crate::sage_runner::SAGE_VERSION` instead of a literal.
   mechanism. See NOTES "Change-regenerate after the 2026-09-24 behaviour
   changes".
 
-  The technical note describes the shipped v0.1.3 behaviour and says these are
-  coming.
+  `docs/design-and-evidence.md` (the former technical-note material)
+  describes the shipped v0.2.0 behaviour since `c5fd45c`. Corrected
+  2026-10-06: this paragraph said that it described v0.1.3.
 
 * ⚠ **macOS DOWNLOADS ARE BLOCKED BY GATEKEEPER (2026-09-10).** Only Developer
   ID signing plus Apple notarization removes the block. That needs a paid Apple
@@ -1052,6 +1104,11 @@ on each platform built. Commit.
 ---
 
 ## Step 5 — Write-up
+
+⚠ **REFRAMED 2026-10-06 (Ben): no technical note will be submitted.** The
+write-up is the background document `docs/design-and-evidence.md`. The boxes
+below were written for a manuscript. They are not ticked here, because Ben
+decides which of them the background document closes.
 
 Draft of the limitations and future-work sections already exists at
 `reference-notes/limitations-and-future-work.md` — update it as steps 1–4

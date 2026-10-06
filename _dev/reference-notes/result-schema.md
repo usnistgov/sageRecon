@@ -881,7 +881,7 @@ This schema follows semantic versioning:
 ## Changelog
 
 - **4.0.0** (2026-09-24): **BREAKING. Four blocks REMOVED from `<output>.json`.**
-  Ben approved the list (technote Appendix D). A field in the output implies a
+  Ben approved the list (`docs/design-and-evidence.md` Appendix D). A field in the output implies a
   claim, and these four made claims the tool does not stand behind.
   * `alkylation` removed. It counted Cys PSMs at -57 Da and printed
     `fixed_mod_assumed: "Carbamidomethyl (+57.02 Da) on C"`, which contradicts

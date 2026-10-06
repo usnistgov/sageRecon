@@ -176,8 +176,8 @@ use serde::{Deserialize, Serialize};
 /// measured error".
 ///
 /// ⚠ **4.0.0, 2026-09-24: BREAKING. Four blocks REMOVED, one field moved, one
-/// added.** Ben approved the removals (technote Appendix D; NOTES "Vestigial
-/// output and code removed"). A field in the output implies a claim, and these
+/// added.** Ben approved the removals (`docs/design-and-evidence.md` Appendix D;
+/// NOTES "Vestigial output and code removed"). A field in the output implies a claim, and these
 /// four made claims the tool does not stand behind:
 /// * `alkylation` REMOVED. It searched for a -57 Da shift on Cys and printed
 ///   `fixed_mod_assumed: Carbamidomethyl`, which contradicts the

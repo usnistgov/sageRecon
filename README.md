@@ -77,6 +77,10 @@ superiority. We have not run a head-to-head study against Preview or against any
 other survey tool, and the [Limitations](#limitations) section states what our
 evidence base does and does not cover.
 
+The design of each pipeline phase, the prior art it draws on, and the evidence
+behind it are set out in
+[`docs/design-and-evidence.md`](docs/design-and-evidence.md).
+
 ## Quick start
 
 1. **Download** the binary for your platform — see the table under

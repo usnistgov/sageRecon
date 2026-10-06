@@ -1,3 +1,69 @@
+# Debrief — 2026-10-06: the tech note became a background document, and the records caught up with v0.2.0
+
+**Landed:** one commit. `_dev/writeup/technote-material.md` moved to
+`docs/design-and-evidence.md` and was reframed: no technical note will be
+submitted (Ben). Every path that pointed at the old file was repointed. Three
+source comments name the new path. The PLAN status block, PLAN Step 5 and one
+NOTES entry were brought up to v0.2.0. **Comments are the only source change.
+No test, output or derived number changed; the tripwires were not re-run.**
+`cargo fmt --check` and `cargo build` passed.
+
+⚠ **This is the first debrief since 2026-09-10.** The sessions of 2026-09-15
+to 2026-09-25 (v0.1.3, Actions, the 2026-09-24 changes, v0.2.0, the claim
+test) have no debrief here. Their record is PLAN, NOTES and the commits. No
+debrief was written for them after the fact, because this session did not see
+them.
+
+## Q1. What am I least confident about, and what would settle it?
+
+- **The reframed wording, about 35 lines.** A script replaced each phrase and
+  stopped unless the phrase matched exactly once. A second check compared the
+  numbers on removed and added lines: none was removed, and the only additions
+  are `0.2.0` and the date `2026-10-06`. That proves the numbers. It does not
+  prove that each sentence still reads correctly. A read of `git show` on the
+  document settles it.
+- **Which reference note three Sources-table rows mean.** I matched each one
+  by a grep for its quoted phrase: `mascot-error-tolerant-methodology.md`
+  ("peer-reviewed methods paper"), `unimod-decomposition.md` ("Kong et al."),
+  `deltamass-methodology.md` (its `PMID:` line holds a PMC number). Each grep
+  gave one file. Ben wrote the rows and can confirm.
+- **The Step 5 checkboxes.** They are still open. I do not know which of them
+  the background document closes.
+
+## Q2. What did I assume without stating it?
+
+- That "technote Appendix ..." in dated NOTES headings can stay as written,
+  with one NOTES entry that says what "technote" now means.
+- That the gate results NOTES records for 2026-09-25 still hold. I quoted
+  them as a record and did not run them.
+
+## Q3. What is the biggest thing you are missing?
+
+README "Why this exists" says "we have not run Preview and recon on the same
+file and then reconciled the figures line by line" and "We have not run a
+head-to-head study against Preview or against any other survey tool". The new
+README link, two paragraphs later, points at a document with a five-tool
+comparison on the liver file, Preview included. The two statements may both
+be true, because a comparison of committed outputs is not a controlled study.
+A reader can still see a conflict. I did not edit those sentences.
+
+## Q4. What could you have done differently?
+
+Nothing blocked the work. The first plan covered the stale records only; the
+change of direction on the tech note came with the review of that plan.
+
+## Q5. What would I suggest to improve?
+
+- Decide the Step 5 boxes, then tick them or remove them.
+- Decide whether the README sentences in Q3 need a pointer to the liver
+  benchmark.
+- Remove the leftover worktree `.claude/worktrees/agent-a52d4ad0fb29b34fd`
+  (commit `615239f`). It is git-excluded, but it holds an old copy of the
+  document, and a repo-wide grep hits it.
+- Record whether the `linux-64` binary was run. No record says so.
+
+---
+
 # Debrief — 2026-09-10: macOS Gatekeeper guidance, signing checks, and a report link that renders
 
 **Landed:** two commits, both pushed. `b330721` adds ad-hoc signing and a

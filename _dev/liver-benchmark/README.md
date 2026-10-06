@@ -33,7 +33,7 @@ Each setting below was read from the file named in the last column.
 Notes on the table:
 
 - No vendored Mascot file states a version. The 2.6.0 comes from the
-  operator's record in `_dev/writeup/technote-material.md`. `MascotErrorTol-liver.txt` is the modification summary copied
+  operator's record in `docs/design-and-evidence.md`. `MascotErrorTol-liver.txt` is the modification summary copied
   by hand from the Mascot report.
 - Both Preview HTML pages say v3.2.0. The title bar of `preview-ui.jpg` says
   v3.6.0. We report v3.2.0, from the pages that hold the results. The

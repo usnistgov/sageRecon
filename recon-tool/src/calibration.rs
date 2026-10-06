@@ -617,8 +617,8 @@ pub fn polymer_screen_tolerance(ms1_requirement_ppm: Option<f64>) -> ScreenToler
 ///
 /// ⚠ The MS2 error is measured on PEPTIDE fragments. Oxonium ions sit at
 /// 138-366 m/z, below most of them. The ppm error there is not measured and
-/// may be larger. Flagged for the glycoproteomics review (technote Appendix B
-/// item 4).
+/// may be larger. Flagged for the glycoproteomics review
+/// (`docs/design-and-evidence.md` Appendix B item 4).
 ///
 /// Fallback: `oxonium::OXONIUM_FALLBACK_TOLERANCE_PPM` (20 ppm) when the MS2
 /// error was not measured, or when the MS2 analyzer was not detected so the

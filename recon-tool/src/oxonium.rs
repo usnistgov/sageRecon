@@ -64,8 +64,9 @@ pub const OXONIUM_IONS: &[OxoniumIon] = &[
 ];
 
 /// The fixed oxonium tolerance, used when the run's MS2 error is not measured.
-/// Unsourced (technote Appendix E, row 8). Kept as the fallback so a run with
-/// no calibration screens exactly as it did before 2026-09-24.
+/// Unsourced (`docs/design-and-evidence.md` Appendix E, row 8). Kept as the
+/// fallback so a run with no calibration screens exactly as it did before
+/// 2026-09-24.
 pub const OXONIUM_FALLBACK_TOLERANCE_PPM: f64 = 20.0;
 
 /// Configuration for oxonium ion screening

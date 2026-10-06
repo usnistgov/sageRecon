@@ -4,8 +4,8 @@
 
 **Public source (checked 2026-09-24):** https://codeberg.org/pwilmart/Detecting_Deamidation_Guide,
 MIT license, latest commit `0a1cab5b` (2026-09-15). The README reproduces the deck
-slide by slide. Cite this, not the private deck. Two claims used by the
-technical note were checked against the README text itself: wide-tolerance
+slide by slide. Cite this, not the private deck. Two claims used by
+`docs/design-and-evidence.md` were checked against the README text itself: wide-tolerance
 searches at ±1.25 Da, and "the doublet at 0.984-Da and 1.003-Da should be just
 baseline resolved at a resolution of 120,000", with poorer separation at 60,000
 for 3+ and 4+ ions.

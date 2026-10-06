@@ -1,12 +1,14 @@
-# recon tech note: source material
+# recon: design, prior art and evidence
 
-**Status:** working material for a J. Proteome Res. technical note, not
-manuscript text. Organized by pipeline phase in execution order. Each phase says
+**Status:** the background document for recon v0.2.0. It was first gathered as
+source material for a technical note. No journal submission is planned (Ben,
+2026-10-06), so it is kept as the record of how recon works and why.
+Organized by pipeline phase in execution order. Each phase says
 what recon implements, what is distinct about it, how existing tools handle the
 same step, which tested assumptions shaped the design, and what evidence
 supports it. Nothing is left open. Every point raised while building this is
 closed in Appendix B: as a decision (with its commit and measured effect), as a
-limitation the note states, or, in one case, as an external expert review
+limitation this document states, or, in one case, as an external expert review
 (Appendix B, "External action").
 
 **Updated 2026-09-25** to describe recon v0.2.0 (the code as of `372765c`;
@@ -15,7 +17,11 @@ messages only). The 2026-09-24 version of this
 file described v0.1.3; every change since is listed in Appendix B, and the
 numbers it replaced are in Appendix A.
 
-**Scope of evidence.** The note's evidence is the liver file (NIST RM 8461,
+**Reframed 2026-10-06.** This file was `_dev/writeup/technote-material.md`.
+The move to `docs/` changed wording only. No measured value, citation, section
+order, appendix letter or item number changed.
+
+**Scope of evidence.** The evidence in this document is the liver file (NIST RM 8461,
 `10mg_1_A_1`), because it is the only file with results from all five tools:
 recon, Byonic Preview, PTM-Shepherd, MetaMorpheus and Mascot. The other three
 files (serum, bcell, b1906) were development test files, chosen because they
@@ -68,7 +74,7 @@ run in process, and each value is measured from the file's own data. The closest
 prior art is Byonic Preview (Kil et al. 2011), a commercial survey tool that recon
 succeeds in intent as an open, scriptable equivalent.
 
-Candidate claims of novelty, each developed in its phase below:
+What recon does differently, each developed in its phase below:
 1. An **alkylation-agnostic open search** in which the alkylation chemistry is
    discovered as a delta peak rather than assumed as a fixed mod (Phase 2).
 2. **Self-calibrated tolerances from the open search itself**. Recon uses a
@@ -152,7 +158,7 @@ enzyme help). MSFragger instead sweeps the fragment tolerance empirically
   measurements (Appendix E, row 6). The code comment on the TOF constant now
   gives that rationale (about 30 ppm typical, timsTOF up to about 60, padded to
   100; `9417e1d`).
-- Limitation for the note: the 13 non-trypsin presets are transcribed from
+- Limitation: the 13 non-trypsin presets are transcribed from
   Mascot and have not been run on real data.
 
 ---
@@ -305,7 +311,7 @@ handling is a post-search fold, with a conservation invariant asserted in code.
   files, MSFragger / recon = 1.23 / 2.98 / 2.22× for +57. The reference tools
   also disagree with each other (serum +57: PTM-Shepherd 17.92 % vs MetaMorpheus
   24.51 %), because each reports a different quantity. *Design:* the report
-  presents the percentage as a rank statistic, and the note should compare
+  presents the percentage as a rank statistic, and this document compares
   ranks, never percentages.
 - *Assumed:* recon's prominence matched PTM-Shepherd's, since the 0.3 ratio was
   taken from it. *Evidence:* the old code took the first higher bin within
@@ -343,8 +349,8 @@ handling is a post-search fold, with a conservation invariant asserted in code.
   - MSFragger-calibrated mzML fed to Sage lost PSMs (−185 / −208 / −1,592) and
     left the bcell deamidation apex unchanged.
 
-  *Design:* a single Da-scalar offset. This is a clean null result, worth
-  stating plainly in the note.
+  *Design:* a single Da-scalar offset. This is a clean null result, and it is
+  stated plainly here.
 
 - *Assumed:* the open-search histogram can separate deamidation (+0.984) from a
   mis-called ¹³C peak (+1.003). A good deal of development time went here: the
@@ -388,7 +394,7 @@ handling is a post-search fold, with a conservation invariant asserted in code.
   In short: the 0.3 prominence ratio and its topographic definition are
   PTM-Shepherd's, and so is the 500-peak cap. The bin width, count floor and
   roll-up were set by the coding agent (Cline, 2026-07-07 and 2026-07-14) and
-  never compared with alternatives; the note states them as choices.
+  never compared with alternatives; this document states them as choices.
 - There is no two-mod Unimod decomposition. The declared but unused
   `"combination"` source was removed (`b2a4c07`); an unannotated peak is
   reported as unannotated.
@@ -438,8 +444,8 @@ arbitrary decimal.
   bias is −0.2357 ppm, where the column's median gave +0.7028, and the MAD was
   understated by 37 % (bcell) and 28 % (b1906). Serum masked the error because
   its bias (2.42 ppm) far exceeds its scatter (0.48). *Design:* signed ppm is
-  rebuilt from masses and never read from the column. This is the note's
-  clearest example of checking a column's convention and not only its name.
+  rebuilt from masses and never read from the column. This is the
+  clearest example here of checking a column's convention and not only its name.
 - *Assumed:* an asymmetric bias + p95 window is the right user recommendation.
   *Evidence:* it came out 3–5× narrower than field practice (10 ppm) and than
   MSFragger's 20 ppm first search on the same files. *Design:* a ladder rung.
@@ -482,7 +488,7 @@ arbitrary decimal.
   recon. Possible explanations, none tested: Preview works from its own
   `.mgf` conversion and may re-determine precursor m/z; its population is much
   smaller (~1,800 precursors vs 7,177 PSMs); or its "before recal" figure
-  already includes an internal correction. The note should not use Preview as
+  already includes an internal correction. Preview is not used here as
   the MS1 reference.
 - **Liver MS2:** the signed MS2 error agrees across the three tools that report
   a sign: Preview −3.1, MSFragger −3.02, MetaMorpheus −2.99 ppm. recon reports
@@ -493,7 +499,7 @@ arbitrary decimal.
     (`ms1_calibration.ms2_all_psms_median_abs_ppm`; it was
     `mass_accuracy.fragment_median_ppm` until schema 4.0.0).
 
-  Preview's |error| is 3.5 ppm. The note compares Preview with the all-PSM
+  Preview's |error| is 3.5 ppm. This document compares Preview with the all-PSM
   value, 3.38 ppm, as NOTES records (the field was kept at schema 4.0.0 for
   this reason), and names the population.
 
@@ -608,7 +614,7 @@ q = 0.0048), it is not part of a typical default search, and PTM-Shepherd
 error-tolerant list does not.
 
 **Stated limitations**
-- Limitation for the note: the 20 % floor was chosen by passing the step-2 gates
+- Limitation: the 20 % floor was chosen by passing the step-2 gates
   on the three development files, so it is fitted, not derived. The 0.95
   saturation cut has a statistical reason, and the carpet windows are a
   diagnostic only (Appendix E, row 7). On liver no recommendation is decided by
@@ -666,7 +672,7 @@ error-tolerant list does not.
     still counts.
 
 **What is distinct:** little. These are reused screens that give the user
-context in the same report. State that plainly in the note.
+context in the same report.
 
 **Evidence it works:** the polymer port differs from mzSniffer by 0.00 % on all
 16 original polymers (validation harness), at mzSniffer's 10 ppm, which is now
@@ -695,12 +701,12 @@ since every committed file is Orbitrap.
   own ppm error is not measured.
 - **External action (the only one outside the code):** the oxonium rule and
   its tolerance are to be reviewed by a glycoproteomics expert (Nick Riley or
-  Chris Ashwood). Until then the note presents the rule as an assumption and the
+  Chris Ashwood). Until then this document presents the rule as an assumption and the
   glycopeptide share as a screen, not a measurement.
 - **Polymer screen.** The Low / Moderate / High cut-offs (< 0.1 / < 1 / < 5 %
   TIC) are recon's own display bands, since mzSniffer reports no levels. They
   have no source, and they conflict with an older note (< 5 / 5–15 / > 15 %);
-  the note presents them as recon's own.
+  this document presents them as recon's own.
 
 ---
 
@@ -756,7 +762,7 @@ own calibration, and the definition is traceable to one primary source.
   dependent (56 % on liver, 3,909 → 1,721 proteins, and 10.7 % on bcell, both
   measured 2026-08-31 with Pass 1 at (2, 7)), so do not quote one figure.
   Sage v0.15 adds its own protein grouping, on by default; recon's templates
-  set `protein_grouping: false`, and recon uses its own parsimony. The note
+  set `protein_grouping: false`, and recon uses its own parsimony. This document
   describes that shipped behaviour.
   Bourgon-style independent filtering was rejected as the justification.
 - *Assumed:* a tryptic N-terminus exists only at protein position 0.
@@ -842,7 +848,7 @@ away from the one below.)
 - The Preview comparison uses Preview's own liver report
   (`_dev/liver-benchmark/preview/10mg_1_A_1/result_summary.html`), not Davis
   2019 Table 3.
-- The note quotes one semi-enzymatic class FDR: 9.23 % on liver (fully
+- This document quotes one semi-enzymatic class FDR: 9.23 % on liver (fully
   enzymatic 0.15 %), from `full-run/liver_pass2.json` v0.2.0, as README does.
   Other values in the record (9.58, 9.15, 10.10, 9.42, 10.32 %, and 9.14 % in
   `examples/liver_pass2.json`) come from earlier builds or another draw.
@@ -935,7 +941,7 @@ the guidance gave a modest identification gain (0.6–2.6 % across the four
 measures) and 716 PSMs of chemistry the vanilla search missed, for 5.7× the
 time and 2.2× the memory.
 
-**Caveats the note states**
+**Caveats**
 - The arms differ in both mods and tolerances. The gain belongs to the
   guidance as a whole; the test does not separate the two.
 - Fe[III] on the common residues D and E probably accounts for much of the
@@ -952,7 +958,7 @@ time and 2.2× the memory.
   one); the stock Sage CLI on Windows may order work differently from Sage
   embedded in recon on macOS; or ties near the q threshold may simply not
   occur in this search. Caution: one identical repeat shows that noise was
-  small in this run, not that it is always zero, so the note compares the
+  small in this run, not that it is always zero, so this document compares the
   +125 gain with that one repeat and says so.
 
 ---
@@ -1000,7 +1006,7 @@ time and 2.2× the memory.
   - Mascot error-tolerant;
   - Byonic Preview v3.2.0 (liver only, run 2019-03-14).
 - Versions, read from the run logs in the private repo's
-  `_dev/testing/reference-data/`: liver PTM-Shepherd run on FragPipe 23.1,
+  `_dev/testing/reference-data/` (withheld from the public repository): liver PTM-Shepherd run on FragPipe 23.1,
   MSFragger 4.4.1, PTM-Shepherd 3.0.2; MetaMorpheus 1.1.7; Byonic Preview
   v3.2.0; Mascot 2.6.0, error-tolerant, with its bundled Unimod (circa 2018;
   Unimod changes slowly).
@@ -1009,7 +1015,7 @@ time and 2.2× the memory.
   `655c1b0`), with the user part of each personal path redacted and the
   redaction rule stated in its README. The development files' reference
   outputs stay in the withheld `_dev/testing/reference-data/`.
-- Evidence base: one tryptic Orbitrap file (liver) for the note, and three
+- Evidence base: one tryptic Orbitrap file (liver) for this document, and three
   more tryptic Orbitrap files in development. Nothing has been run on a
   non-tryptic digest or an ion trap. This is the headline limitation.
 
@@ -1026,7 +1032,7 @@ time and 2.2× the memory.
   cross-tool results. A gate is not done until a
   deliberately wrong input has made it fail. A structured debrief closes every
   session.
-- Several episodes above are *caught* errors, which is the note's evidence that
+- Several episodes above are *caught* errors, which is the evidence here that
   the process works:
   - the |error| median;
   - the fixed-C regeneration;
@@ -1086,18 +1092,18 @@ Verified means confirmed against a vendored PDF or by lookup on 2026-09-24
 | Chick JM et al. *Nat Biotechnol* 2015, 33(7):743–749. doi:10.1038/nbt.3267 | ±500 Da precedent; b1906 | verified. Cite the published title, "A mass-tolerant database search identifies a large proportion of unassigned spectra in shotgun proteomics as modified peptides"; the vendored author manuscript carries an earlier title. |
 | Davis WC, Kilpatrick LE, Ellisor DL, Neely BA. *Sci Data* 2019, 6:324. doi:10.1038/s41597-019-0336-7 | liver RM | verified (PDF) |
 | Mouchahoir T, Schiel JE. *Anal Bioanal Chem* 2018, 410:2111–2126. doi:10.1007/s00216-018-0848-6 | digestion metrics | verified (PDF) |
-| Creasy DM, Cottrell JS. Error tolerant searching… *Proteomics* 2002, 2:1426–1434 | Mascot ET | verified. It corrects the note that says "no peer-reviewed methods paper". |
+| Creasy DM, Cottrell JS. Error tolerant searching… *Proteomics* 2002, 2:1426–1434 | Mascot ET | verified. It corrects the reference note (`mascot-error-tolerant-methodology.md`) that says "no peer-reviewed methods paper". |
 | Creasy DM, Cottrell JS. Unimod. *Proteomics* 2004, 4:1534–1536 | annotation | verified (cited in Kil 2011) |
 | Kong AT et al. MSFragger. *Nat Methods* 2017, 14:513–520. doi:10.1038/nmeth.4256 | comparison | verified |
-| Geiszler DJ et al. PTM-Shepherd. *Mol Cell Proteomics* 2021, 20:100018 | Phase 3 prior art | verified. The note wrongly says "Kong et al." |
-| Avtonomov DM, Kong AT, Nesvizhskii AI. DeltaMass. *J Proteome Res* 2019, 18(2):715–720. doi:10.1021/acs.jproteome.8b00728 | Phase 3 | verified. The note labels a PMCID as a PMID. |
+| Geiszler DJ et al. PTM-Shepherd. *Mol Cell Proteomics* 2021, 20:100018 | Phase 3 prior art | verified. The reference note (`unimod-decomposition.md`) wrongly says "Kong et al." |
+| Avtonomov DM, Kong AT, Nesvizhskii AI. DeltaMass. *J Proteome Res* 2019, 18(2):715–720. doi:10.1021/acs.jproteome.8b00728 | Phase 3 | verified. The reference note (`deltamass-methodology.md`) labels a PMCID as a PMID. |
 | Chang HY et al. Crystal-C. *J Proteome Res* 2020, 19(6):2511. doi:10.1021/acs.jproteome.0c00119 | artifact context | verified |
 | Solntsev SK, Shortreed MR, Frey BL, Smith LM. *J Proteome Res* 2018, 17(5):1844–1851. doi:10.1021/acs.jproteome.7b00873 | calibration prior art; curated mods | verified. The note wrongly says "JASMS". |
 | Rad R et al. Monocle. *J Proteome Res* 2021, 20:591–598. doi:10.1021/acs.jproteome.0c00563 | satellite folding kept off | verified |
 | Mayer G et al. PSI-MS CV. *Database* 2013, bat009. doi:10.1093/database/bat009 | analyzer classes | verified |
 | Hulstaert N et al. ThermoRawFileParser. *J Proteome Res* 2020, 19(1):537–542. doi:10.1021/acs.jproteome.9b00328 | analyzer mislabel | verified |
 | Keller BO et al. *Anal Chim Acta* 2008, 627:71–81 | contaminant background (not in shipped code) | verified |
-| Müller T, Winter D. *Mol Cell Proteomics* 2017 (PMID 28539326) | over-alkylation (reference note only) | not cited by the note: the alkylation check it supported was removed at schema 4.0.0 |
+| Müller T, Winter D. *Mol Cell Proteomics* 2017 (PMID 28539326) | over-alkylation (reference note only) | not cited by this document: the alkylation check it supported was removed at schema 4.0.0 |
 | Benjamini Y, Hochberg Y. Controlling the false discovery rate: a practical and powerful approach to multiple testing. *J R Stat Soc B* 1995, 57(1):289–300. doi:10.1111/j.2517-6161.1995.tb02031.x | Phase 5 | verified (publisher page) |
 | mzSniffer (Fondrie), github.com/wfondrie/mzsniffer | polymer port | verified. Upstream's last commit is `e6c3317d` (2023-03-13), so the July 2026 port is of that commit |
 | MetaMorpheus @ `7e453540` | curated mods | verified (THIRD_PARTY_LICENSES) |
@@ -1109,7 +1115,7 @@ Verified means confirmed against a vendored PDF or by lookup on 2026-09-24
 
 ---
 
-## Appendix A. Figures not to cite
+## Appendix A. Superseded figures
 
 | Figure | Reason |
 |---|---|
@@ -1132,10 +1138,10 @@ Verified means confirmed against a vendored PDF or by lookup on 2026-09-24
 | Liver polymer ±4.55 ppm, 0.696 % TIC; oxonium ±16.37 ppm | the one-TSV measurement for `615239f`; v0.2.0 is ±4.54 ppm, 0.695 %, ±16.34 ppm |
 | Liver unmodified 51.28 %, 49 or 50 peaks | earlier builds (cap 50, Pass 1 at (2, 7)); v0.2.0 is 48.65 %, 183 peaks |
 | Liver Pass 1 PSMs at ≥2 missed cleavages 2.1 % (`examples/liver.json` `digestion`) | the block was removed at 4.0.0 and the class is no longer searched; the measured value, 2.13 % at (2, 7), is in NOTES |
-| Serum fragment m/z 652 / 732 / 17.6 % | development file; the note uses liver 605 / 726 / 17.27 % |
+| Serum fragment m/z 652 / 732 / 17.6 % | development file; this document uses liver 605 / 726 / 17.27 % |
 | Liver runtime 135.3 s (v0.2.0 full-run) | a claim-test Sage search ran at the same time; runtime is not a measurement there. The last clean liver run was 85.9 s at `ba4d30e` |
 | "Do not present recon's MS1 bias as corroborated" (NOTES) | superseded: MSFragger −1.43 and MetaMorpheus −1.57 agree with recon −1.41; Preview is the outlier |
-| Serum runtime 95.2 s (README) vs 93.2 s (NOTES) | superseded: README now quotes 46.8 s at `ba4d30e`; a development file, not cited by the note |
+| Serum runtime 95.2 s (README) vs 93.2 s (NOTES) | superseded: README now quotes 46.8 s at `ba4d30e`; a development file, not cited by this document |
 | Liver parsimony saving "56 %" as a general figure | file-dependent (bcell 10.7 %), and measured with Pass 1 at (2, 7) |
 
 ## Appendix B. Closing ledger (settled with Ben, 2026-09-24; updated 2026-09-25)
@@ -1144,7 +1150,7 @@ Every point raised while building this material ends in one of three places:
 decided, stated as a limitation, or the one external action.
 
 **Decided**
-- The note's evidence is the liver file; the other three files are
+- The evidence in this document is the liver file; the other three files are
   development history.
 - Commit hashes: history before the public repository (2026-09-08) is a
   private working record and is not cited; public usnistgov commits are cited.
@@ -1181,7 +1187,7 @@ decided, stated as a limitation, or the one external action.
   statistics came out of the same kind of exchange. Both are disclosed in
   `docs/AI_USAGE.md`.
 - Sage v0.15 protein grouping stays off (`protein_grouping: false` in both
-  templates); recon uses its own parsimony, and the note describes that.
+  templates); recon uses its own parsimony, and this document describes that.
 
 **Decided and done, 2026-09-24/25** (the former "Planned for the next release"
 list; each item with its commit and measured effect on liver)
@@ -1230,9 +1236,9 @@ list; each item with its commit and measured effect on liver)
 **External action (outside the code; it changes nothing in recon)**
 - Review of the oxonium rule (≥2 of 8 ions in the top 10 %, HexNAc 204.0867
   required) and its tolerance by a glycoproteomics expert (Nick Riley or Chris
-  Ashwood). The note presents the rule as an assumption until then (Phase 6).
+  Ashwood). This document presents the rule as an assumption until then (Phase 6).
 
-**Stated as limitations in the note**
+**Stated as limitations**
 - The evidence base is tryptic Orbitrap data. The 13 other enzyme presets and
   the Da regime are unexercised on real files.
 - The floor (20 %) was fitted on the development files.
@@ -1261,7 +1267,7 @@ regeneration (`0f0c3ac`, `ee5d34d`: every report carries a clean
 `git_commit`). One standing caveat, not a defect: reference notes produced
 with Perplexity are secondary digests, and their links are leads, not sources
 (`VENDOR-CHECKLIST.md` names them). Two keep unresolved `[cite:N]` placeholders
-(`mass-error-reporting.md`, `incomplete-alkylation-detection.md`); the note
+(`mass-error-reporting.md`, `incomplete-alkylation-detection.md`); this document
 cites neither.
 
 ## Appendix D. Vestigial code and JSON
