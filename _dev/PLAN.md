@@ -769,8 +769,9 @@ what it does not do, and why each number means what it means.
 ## Deferred past v0.1.0
 
 Re-checked item by item on 2026-10-06. Each dated note below gives what was
-read. No item changed state: nothing here is built, and nothing here is
-started.
+read. Nothing here is built, and nothing here is started. Ben dropped one
+item the same day, the wide x fully tryptic x subset FASTA comparison. Its
+text is in "Status history", "Closed items".
 
 - `satellite_fraction` as a computed tier input. No decided use beyond write-up
   discussion of why open-search peaks split. Discuss it; do not build it.
@@ -800,11 +801,6 @@ started.
   (2026-10-06: not done. `main.rs` sets the default log filter to `info`.
   `recon-tool/src` holds 25 `info!` calls, 20 of them in `mod_discovery.rs`,
   and 3 `debug!` calls.)
-- Wide x fully tryptic x subset FASTA delta-mass comparison. Interesting; not
-  ship-blocking. Cheap to fold into step 3's timing pass if convenient.
-  (2026-10-06: no record shows that it ran. Its only other mention is the
-  2026-08-24 JOURNAL entry that proposed it. Step 3 is complete, so there is
-  no timing pass to fold it into. Ben decides if it stays.)
 - **Prevalence fudge factor — REJECTED, not deferred.** On serum the reference
   platforms disagree with each other by 1.37x on the same mod (PTM-Shepherd
   17.92% vs MetaMorpheus 24.51%). A factor cannot be more precise than its
@@ -902,6 +898,15 @@ original item follows.
   if the tool moves to a NIST GitHub org. `README`/`AGENTS.md`/`PLAN.md` URLs
   updated in the same pass. See NOTES "Report footer name" for the original
   locked naming call.
+
+**Dropped from "Deferred past v0.1.0" on 2026-10-06:**
+
+- Wide x fully tryptic x subset FASTA delta-mass comparison. Interesting; not
+  ship-blocking. Cheap to fold into step 3's timing pass if convenient.
+  (2026-10-06: no record shows that it ran. Its only other mention is the
+  2026-08-24 JOURNAL entry that proposed it. Step 3 is complete, so there is
+  no timing pass to fold it into. Ben decides if it stays.)
+  **DROPPED 2026-10-06 (Ben).** It never ran. It is not open work.
 
 ### Status entries, moved from the top block on 2026-10-06
 
