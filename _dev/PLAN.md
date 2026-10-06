@@ -160,14 +160,10 @@ Each item was checked against the repository on 2026-10-06.
     checked one by one against the document's limitations.
   - The Option-C ceiling proof of concept is not named in the document. C1/C2
     and satellite folding are.
-* **Decision for Ben: a peak's `delta_mass` and count are window statistics.**
-  Found 2026-10-06 from the Deamidation residual. `delta_mass` is the mean of a
-  20 mDa window on the bin grid, not an apex, and the count includes the local
-  background in that window (ESTIMATE from one flank: 383 of 724 Deamidation
-  PSMs on bcell). Options: document it; report the apex; subtract a local
-  background. The last two change derived numbers in every report, so they
-  are a change-regenerate. See NOTES "The Deamidation peak reads low because
-  of the window, not the mass". Nothing is started.
+* **PARKED (Ben, 2026-10-06): a peak's `delta_mass` and count are window
+  statistics.** The cause of the Deamidation residual is known, the numbers
+  stand as they are, and no work is planned unless Ben reopens it. See NOTES
+  "The Deamidation peak reads low because of the window, not the mass".
 * See also "Deferred past v0.1.0" below. It was re-checked item by item on
   2026-10-06. Nothing in it is built.
 
@@ -808,7 +804,7 @@ text is in "Status history", "Closed items".
   true mass), and its low side holds background PSMs. The apex is at 0.984 on
   bcell, b1906 and liver. See NOTES "The Deamidation peak reads low because
   of the window, not the mass" and `deamidation_residual_check.py`. No code
-  changed. What is left is a decision, now in "Deferred / open".
+  changed. PARKED by Ben the same day; see "Deferred / open".
 - Verbose logging INFO→DEBUG.
   (2026-10-06: not done. `main.rs` sets the default log filter to `info`.
   `recon-tool/src` holds 25 `info!` calls, 20 of them in `mod_discovery.rs`,

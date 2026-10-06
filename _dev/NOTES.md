@@ -11843,8 +11843,13 @@ the level is 13.2 per mDa at 0.90-0.95 and 11.7 at 1.03-1.08, so it is not
 local to Deamidation. NOTES calls a similar feature "the carpet" (see
 Dead-ends). This was not looked into.
 
+**PARKED (Ben, 2026-10-06).** The numbers stand as they are. No work is
+planned, and no further measurement, unless Ben reopens it. The session's
+scope was documentation, not analysis.
+
 **Not changed.** No code changed. A fix changes a derived number in every
-report, so it is a change-regenerate and Ben's decision. The options seen:
+report, so it is a change-regenerate and Ben's decision. The options seen,
+kept for the record only:
 (a) leave the number and document it as a window mean; (b) report the apex
 (the mode, or a median of the core) in place of the mean, which changes
 `delta_mass` and the annotation error fields; (c) subtract a local background
