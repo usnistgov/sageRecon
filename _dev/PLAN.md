@@ -160,8 +160,10 @@ Each item was checked against the repository on 2026-10-06.
     checked one by one against the document's limitations.
   - The Option-C ceiling proof of concept is not named in the document. C1/C2
     and satellite folding are.
-* See also "Deferred past v0.1.0" below. That list is older and was not
-  re-checked item by item today.
+* See also "Deferred past v0.1.0" below. It was re-checked item by item on
+  2026-10-06. Nothing in it is built. One finding: the deamidation mass
+  residual is on two files, not one, and its recorded cause (the fold stage)
+  does not fit, because folding is off.
 
 ---
 
@@ -766,21 +768,49 @@ what it does not do, and why each number means what it means.
 
 ## Deferred past v0.1.0
 
+Re-checked item by item on 2026-10-06. Each dated note below gives what was
+read. No item changed state: nothing here is built, and nothing here is
+started.
+
 - `satellite_fraction` as a computed tier input. No decided use beyond write-up
   discussion of why open-search peaks split. Discuss it; do not build it.
+  (2026-10-06: not built. `recon-tool/src` has no `satellite_fraction`. Its
+  design is in `reference-notes/ptm-stratification-design.md`.
+  `docs/design-and-evidence.md` discusses satellites in Phases 3 and 5, and
+  does not name this quantity.)
 - Per-run ranking confidence flag (beta). Separate feature from step 2's tiers.
+  (2026-10-06: not built. No such field is in `recon-tool/src`. The design
+  and its evidence are in NOTES "Per-run ranking confidence flag". That
+  evidence is the serum Spearman result of 2026-08-17, and it was not measured
+  again at v0.2.0.)
 - Byonic Preview adapter — data-gated. Insert if the data arrives.
   (2026-10-06: Preview data for liver arrived. It is in
   `_dev/liver-benchmark/preview/`, and `liver_5way_mods.py` reads it. No
   adapter exists inside recon.)
 - Fold-tolerance question (bcell's residual 2.3 mDa) — separate from C1/C2.
+  (2026-10-06: the residual is still in the committed reports. The
+  Deamidation peak `delta_mass`, against 0.984016 for Unimod: bcell 0.98191
+  and b1906 0.98190, both 2.1 mDa low; liver 0.98333, 0.7 mDa low; serum
+  0.98417, 0.2 mDa high. So bcell is not the only file. ⚠ The name of this
+  item may be wrong. NOTES records the residual as "fold-driven, strongly
+  indicated", but `enable_satellite_folding` defaults to `false`
+  (`mod_discovery.rs`), so the fold stage does not run. Nobody has
+  instrumented it. The cause is NOT known. Do not chase it without Ben.)
 - Verbose logging INFO→DEBUG.
+  (2026-10-06: not done. `main.rs` sets the default log filter to `info`.
+  `recon-tool/src` holds 25 `info!` calls, 20 of them in `mod_discovery.rs`,
+  and 3 `debug!` calls.)
 - Wide x fully tryptic x subset FASTA delta-mass comparison. Interesting; not
   ship-blocking. Cheap to fold into step 3's timing pass if convenient.
+  (2026-10-06: no record shows that it ran. Its only other mention is the
+  2026-08-24 JOURNAL entry that proposed it. Step 3 is complete, so there is
+  no timing pass to fold it into. Ben decides if it stays.)
 - **Prevalence fudge factor — REJECTED, not deferred.** On serum the reference
   platforms disagree with each other by 1.37x on the same mod (PTM-Shepherd
   17.92% vs MetaMorpheus 24.51%). A factor cannot be more precise than its
   target's spread. Step 2 is the answer. Do not revisit.
+  (2026-10-06: stands. The same two figures are in NOTES and in
+  `docs/design-and-evidence.md`, Phase 3.)
 
 ---
 

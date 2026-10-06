@@ -7207,6 +7207,9 @@ disable: a motivated line investigated properly and closed with evidence, not a 
   next). The POC removed the "maybe our own cal was too weak" ambiguity by substituting a
   validated one. C1/C2 closed.
 
+- (2026-10-06: read PLAN "Deferred past v0.1.0" with this entry. The residual
+  is also on b1906, and `enable_satellite_folding` defaults to `false`, so
+  "fold-driven" does not fit the shipped code. The cause is not known.)
 - **bcell's residual 2.3 mDa — fold-driven, strongly indicated (NOT fold-instrumented).**
   It's flat under gold-standard calibration, so calibration is provably not the lever. That
   strongly indicates the fold stage sets it, but this was **not** directly confirmed by
