@@ -82,11 +82,8 @@ NIST software documentation checklist: a new `CHANGELOG.md`, and a status and
 support section, a memory note and a schema link in the README (`7e9a75c`).
 The facts in this status block were checked again on 2026-10-27: tag `v0.2.0`
 at `eeb0ba9`, the four release assets, and the schema and tool versions of the
-four `full-run` reports. NOTES and JOURNAL were not updated. ⚠ Open: this file
-and `dev_AGENTS.md` name `gitlab.nist.gov/gitlab/ban/sageRecon` as the private
-archive. The Mac checkout's `origin` is `github.com/neely/sageRecon`, and its
-older `AGENTS.md` names that repository as the archive. Ben decides which is
-correct.
+four `full-run` reports. NOTES and JOURNAL were not updated. The two private archives are to be
+removed. See "Deferred / open", "Private archive removal".
 
 **Next action.** The oxonium review (external). There is no manuscript work.
 All other open work is in the list below, and none of it is started.
@@ -183,6 +180,29 @@ Each item was checked against the repository on 2026-10-06.
   statistics.** The cause of the Deamidation residual is known, the numbers
   stand as they are, and no work is planned unless Ben reopens it. See NOTES
   "The Deamidation peak reads low because of the window, not the mass".
+* **Private archive removal (Ben, 2026-10-27). NOT DONE YET.** Ben plans to
+  delete both private archives: `gitlab.nist.gov/gitlab/ban/sageRecon` and
+  `github.com/neely/sageRecon`. Deletion cannot be undone.
+  - **Before deletion:** make a `git clone --mirror` of the GitLab archive and
+    keep it. Rescue `serum_window_and_fragments.py`. It is only in the archive,
+    and `docs/design-and-evidence.md` cites it as the source of the serum
+    fragment numbers. Commit `61eebcb` is only in the archive too. The Mac
+    clone of the archive (341 commits, to about 2026-09-04) has neither.
+  - **After deletion, correct these in place:** `dev_AGENTS.md` "Remote"
+    (it says to keep the archive); the header of this file; NOTES "stays as the
+    private archive" (near line 10375) and the script note (near line 10018);
+    `docs/design-and-evidence.md`, the history sentence (line 39) and the
+    script citation (line 468). Do not edit dated JOURNAL or "Status history"
+    entries. Commit `a4f09b9`, cited in `dev_AGENTS.md`, is not in the public
+    history.
+  - **Keep `github.com/neely/sage`.** sageGUI commits from before 2026-09-23
+    pin it.
+* **Dependabot: 5 alerts, all through the pinned Sage** (NOTES, 2026-09-22).
+  Upstream `lazear/sage` has new commits since 2026-10-21. One of them,
+  `f61a75c`, moves `sage-cloudpath` to reqwest 0.12, and that can clear the
+  `rustls-webpki` alerts. This is not checked. A move to a later Sage is a
+  change-regenerate: Ben must ask for it, and the NOTES upgrade checklist and
+  a local `run_validation.py` run apply.
 * **Better user guides (Ben, 2026-10-27).** The README holds the Quick start,
   Usage and the report description. `docs/design-and-evidence.md` is background,
   not a guide. A guide could walk through a first report from start to finish.
