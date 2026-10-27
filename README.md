@@ -130,6 +130,9 @@ pre-computed copy of this report ships in the repo; see
   This is needed only to build from source; a release binary needs no toolchain.
 - An mzML file (`.mzML` or `.mzML.gz`) and the protein FASTA the file should be
   searched against.
+- Memory: the liver example file (56,949 MS/MS scans) ran on an 8 GB laptop
+  (see [Why this exists](#why-this-exists)). We have not measured peak memory
+  use, so we cannot state a minimum.
 
 No Sage binary is required. Sage v0.15.0-beta.2 is a Cargo git dependency
 compiled into `recon`, pinned to commit
@@ -240,6 +243,10 @@ With `--output NAME` (or the default base name):
 | `NAME.html` | The same report as a self-contained page for a human reader. |
 | `NAME_pass2.json` | The semi-enzymatic digestion measurement, schema version 2.0.0. Absent with `--no-pass2`. |
 | `NAME_search/` | Sage's own outputs (`results.sage.tsv`, `results.json`) plus `effective-params.json`, the exact configuration the search ran with. |
+
+[`_dev/reference-notes/result-schema.md`](_dev/reference-notes/result-schema.md)
+maps the top level of both JSON files. The field-by-field definition is the
+`ReconReport` and `Pass2Report` structs in `recon-tool/src/report.rs`.
 
 Two usage notes are worth stating before they cost you a run.
 
@@ -645,6 +652,15 @@ These are ordered by how much they would change what a user can trust.
    development subcommands) were removed at schema 4.0.0. New fields should
    meet the same test.
 
+## Status and support
+
+`recon` is under active development. We want feedback on its performance and
+usability, and especially on data outside the four files our evidence comes from
+(see [Limitations](#limitations)). Report a problem or ask a question in
+[GitHub Issues](https://github.com/usnistgov/sageRecon/issues), or by email to
+the contact below. We answer on a best-effort basis and cannot promise a
+response time.
+
 ## Citation
 
 If you use `recon` in published work, please cite the software:
@@ -657,6 +673,7 @@ Cite the version you ran, not the repository in general, because the
 recommendations a report makes depend on the pinned search engine and on the
 curated modification list, and both move between versions. `recon --version`
 prints the version, and every report records it.
+[CHANGELOG.md](CHANGELOG.md) lists what changed in each version.
 
 A `CITATION.cff` file is included, so GitHub's "Cite this repository" control
 produces the same reference in BibTeX or APA.
