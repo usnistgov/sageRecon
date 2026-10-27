@@ -698,6 +698,29 @@ and Technology. See [LICENSE.md](LICENSE.md) for the NIST Software Licensing
 Statement. Third-party components retain their original licences; see
 [THIRD_PARTY_LICENSES.md](THIRD_PARTY_LICENSES.md).
 
+## Disclaimers
+
+### Use of generative AI
+
+This software was developed with the assistance of Claude (Opus and Sonnet
+models), developed by Anthropic, and Perplexity, developed by Perplexity AI.
+Claude was used through Claude Code and through the Cline extension for Visual
+Studio Code. These tools were used to write code and unit tests, draft
+documentation and reference notes, and take part in design discussions, in
+accordance with the author's instructions. All content,
+scientific claims, and conclusions have been reviewed and verified by the
+author to ensure accuracy and originality. [docs/AI_USAGE.md](docs/AI_USAGE.md)
+records which tool was used for each task, and when.
+
+### Commercial products
+
+Certain instruments, software, or materials are identified in this repository
+and its documentation in order to specify the experimental procedure
+adequately. Such identification is not intended to imply recommendation or
+endorsement of any product or service by NIST, nor is it intended to imply that
+the instruments, software, or materials identified are necessarily the best
+available for the purpose.
+
 ## Contact
 
 Benjamin A. Neely
