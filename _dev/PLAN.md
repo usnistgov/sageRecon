@@ -76,6 +76,18 @@ table is in "Status history".
 and 2026-10-06. The sessions of 2026-09-15 to 2026-09-25 are recorded in PLAN
 history, NOTES and the commits only.
 
+**2026-10-27, documentation only.** A NIST review asked for disclaimers. The
+README now has the generative AI and product disclaimers (`b8d7f72`). From the
+NIST software documentation checklist: a new `CHANGELOG.md`, and a status and
+support section, a memory note and a schema link in the README (`7e9a75c`).
+The facts in this status block were checked again on 2026-10-27: tag `v0.2.0`
+at `eeb0ba9`, the four release assets, and the schema and tool versions of the
+four `full-run` reports. NOTES and JOURNAL were not updated. ⚠ Open: this file
+and `dev_AGENTS.md` name `gitlab.nist.gov/gitlab/ban/sageRecon` as the private
+archive. The Mac checkout's `origin` is `github.com/neely/sageRecon`, and its
+older `AGENTS.md` names that repository as the archive. Ben decides which is
+correct.
+
 **Next action.** The oxonium review (external). There is no manuscript work.
 All other open work is in the list below, and none of it is started.
 
@@ -171,6 +183,10 @@ Each item was checked against the repository on 2026-10-06.
   statistics.** The cause of the Deamidation residual is known, the numbers
   stand as they are, and no work is planned unless Ben reopens it. See NOTES
   "The Deamidation peak reads low because of the window, not the mass".
+* **Better user guides (Ben, 2026-10-27).** The README holds the Quick start,
+  Usage and the report description. `docs/design-and-evidence.md` is background,
+  not a guide. A guide could walk through a first report from start to finish.
+  The scope is not decided. Do sageGUI's guide at the same time.
 * See also "Deferred past v0.1.0" below. It was re-checked item by item on
   2026-10-06. Nothing in it is built.
 
